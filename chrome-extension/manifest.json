@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsPlatform Admin Extension",
+  "version": "1.0",
+  "description": "Admin extension for WhatsPlatform to manage omnichannel chats",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"]
+    }
+  ]
+}
