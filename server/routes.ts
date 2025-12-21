@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { aiOrchestrator } from "./services/ai_orchestrator";
+import { registerChatRoutes } from "./replit_integrations/chat";
+import { registerImageRoutes } from "./replit_integrations/image";
 
 // Simple SSE implementation
 let clients: { id: number; res: any }[] = [];
@@ -18,6 +20,10 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  // Register OpenAI integrations
+  registerChatRoutes(app);
+  registerImageRoutes(app);
 
   // Seed data
   const channels = await storage.getChannels();
