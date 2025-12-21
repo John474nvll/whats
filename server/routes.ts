@@ -6,6 +6,10 @@ import { z } from "zod";
 import { aiOrchestrator } from "./services/ai_orchestrator";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
+import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
+import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
+import { loginSchema, registerSchema } from "@shared/schema";
+import { authMiddleware, type AuthRequest } from "./middleware/auth";
 
 // Simple SSE implementation
 let clients: { id: number; res: any }[] = [];
@@ -254,6 +258,80 @@ export async function registerRoutes(
       }
     }
     res.json(channel);
+  });
+
+  // Auth endpoints
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { username, password } = registerSchema.parse(req.body);
+      const user = await registerUser(username, password);
+      const token = generateToken({ userId: user.id, username: user.username });
+      res.status(201).json({ token, user: { id: user.id, username: user.username } });
+    } catch (error) {
+      res.status(400).json({ error: error instanceof Error ? error.message : "Registration failed" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = loginSchema.parse(req.body);
+      const user = await loginUser(username, password);
+      const token = generateToken({ userId: user.id, username: user.username });
+      res.json({ token, user: { id: user.id, username: user.username } });
+    } catch (error) {
+      res.status(401).json({ error: error instanceof Error ? error.message : "Invalid credentials" });
+    }
+  });
+
+  // Social accounts endpoints
+  app.get("/api/social-accounts", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const accounts = await storage.getSocialAccounts(req.userId!);
+      res.json(accounts);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch accounts" });
+    }
+  });
+
+  app.post("/api/social-accounts/connect", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const account = await storage.createSocialAccount({
+        userId: req.userId!,
+        platform: req.body.platform,
+        accountId: req.body.accountId,
+        accountName: req.body.accountName,
+        accessToken: req.body.accessToken,
+        refreshToken: req.body.refreshToken,
+      });
+      res.status(201).json(account);
+    } catch {
+      res.status(500).json({ error: "Failed to connect account" });
+    }
+  });
+
+  // Publish endpoint
+  app.post("/api/publish", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const { platform, content, image } = req.body;
+      const account = await storage.getSocialAccount(req.userId!, platform);
+      
+      if (!account) {
+        return res.status(404).json({ error: "Account not connected" });
+      }
+
+      let result;
+      if (platform === "instagram") {
+        result = await publishToInstagram(account.accessToken, account.accountId, { content, image });
+      } else if (platform === "facebook") {
+        result = await publishToFacebook(account.accessToken, account.accountId, { content, image });
+      } else if (platform === "whatsapp") {
+        result = await sendWhatsAppMessage(account.accessToken, account.accountId, "", content);
+      }
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error instanceof Error ? error.message : "Publishing failed" });
+    }
   });
 
   return httpServer;

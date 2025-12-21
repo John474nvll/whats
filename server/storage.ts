@@ -1,11 +1,12 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
-  type ChannelConfig, type InsertChannelConfig
+  type ChannelConfig, type InsertChannelConfig,
+  type SocialAccount, type InsertSocialAccount
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -37,6 +38,13 @@ export interface IStorage {
   getChannel(platform: string): Promise<ChannelConfig | undefined>;
   updateChannel(platform: string, config: Partial<InsertChannelConfig>): Promise<ChannelConfig>;
   createChannel(config: InsertChannelConfig): Promise<ChannelConfig>;
+
+  // Social Accounts
+  getSocialAccounts(userId: string): Promise<SocialAccount[]>;
+  getSocialAccount(userId: string, platform: string): Promise<SocialAccount | undefined>;
+  createSocialAccount(account: InsertSocialAccount): Promise<SocialAccount>;
+  updateSocialAccount(id: number, updates: Partial<InsertSocialAccount>): Promise<SocialAccount>;
+  deleteSocialAccount(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -169,6 +177,34 @@ export class DatabaseStorage implements IStorage {
   async createChannel(config: InsertChannelConfig): Promise<ChannelConfig> {
     const [newConfig] = await db.insert(channelConfigs).values(config).returning();
     return newConfig;
+  }
+
+  // Social Accounts
+  async getSocialAccounts(userId: string): Promise<SocialAccount[]> {
+    return await db.select().from(socialAccounts).where(eq(socialAccounts.userId, userId));
+  }
+
+  async getSocialAccount(userId: string, platform: string): Promise<SocialAccount | undefined> {
+    const [account] = await db.select().from(socialAccounts)
+      .where((acc) => eq(acc.userId, userId) && eq(acc.platform, platform));
+    return account;
+  }
+
+  async createSocialAccount(account: InsertSocialAccount): Promise<SocialAccount> {
+    const [newAccount] = await db.insert(socialAccounts).values(account).returning();
+    return newAccount;
+  }
+
+  async updateSocialAccount(id: number, updates: Partial<InsertSocialAccount>): Promise<SocialAccount> {
+    const [updated] = await db.update(socialAccounts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(socialAccounts.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteSocialAccount(id: number): Promise<void> {
+    await db.delete(socialAccounts).where(eq(socialAccounts.id, id));
   }
 }
 

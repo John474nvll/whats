@@ -51,6 +51,20 @@ export const channelConfigs = pgTable("channel_configs", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const socialAccounts = pgTable("social_accounts", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  platform: text("platform").notNull(), // 'instagram', 'facebook', 'whatsapp'
+  accountId: text("account_id").notNull(),
+  accountName: text("account_name").notNull(),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  metadata: jsonb("metadata"), // Store profile data, permissions, etc
+  isConnected: boolean("is_connected").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const contactsRelations = relations(contacts, ({ many }) => ({
@@ -79,6 +93,7 @@ export const insertContactSchema = createInsertSchema(contacts).omit({ id: true,
 export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, lastMessageAt: true, createdAt: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, updatedAt: true });
+export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -97,4 +112,22 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type ChannelConfig = typeof channelConfigs.$inferSelect;
 export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
+export type SocialAccount = typeof socialAccounts.$inferSelect;
+export type InsertSocialAccount = z.infer<typeof insertSocialAccountSchema>;
+
 export type MessageWithDetails = Message & { conversation?: Conversation };
+
+// Auth schemas
+export const loginSchema = z.object({
+  username: z.string().min(3),
+  password: z.string().min(6),
+});
+
+export const registerSchema = z.object({
+  username: z.string().min(3),
+  password: z.string().min(6),
+  email: z.string().email().optional(),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;
+export type RegisterInput = z.infer<typeof registerSchema>;
