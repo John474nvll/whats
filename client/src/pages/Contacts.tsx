@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
 import { useContacts, useCreateContact } from "@/hooks/use-contacts";
 import { Plus, Search, User, Phone, Instagram, Facebook } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -41,10 +40,8 @@ export default function Contacts() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <div className="flex-1 overflow-auto bg-[url('/grid-pattern.svg')]">
-        <div className="p-8 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background">
+      <div className="p-8 max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-display font-bold text-foreground">Contacts</h1>
@@ -167,7 +164,6 @@ export default function Contacts() {
               ))}
             </div>
           )}
-        </div>
       </div>
     </div>
   );

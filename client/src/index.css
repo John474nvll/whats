@@ -74,3 +74,35 @@
 .glass-card {
   @apply bg-card/50 backdrop-blur-sm border border-white/5 hover:bg-card/70 transition-colors duration-300;
 }
+
+/* Gradient Background */
+.gradient-bg {
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--card)) 100%);
+}
+
+/* Elevated utilities */
+@layer utilities {
+  .hover-elevate {
+    @apply transition-shadow duration-200;
+  }
+  
+  .hover-elevate:hover {
+    @apply shadow-lg;
+  }
+
+  .active-elevate-2 {
+    @apply transition-shadow duration-150;
+  }
+
+  .active-elevate-2:active {
+    @apply shadow-2xl;
+  }
+
+  .toggle-elevate {
+    @apply transition-all duration-200;
+  }
+
+  .toggle-elevated {
+    @apply shadow-lg;
+  }
+}
