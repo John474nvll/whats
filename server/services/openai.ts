@@ -5,7 +5,7 @@ const openai = new OpenAI({
 });
 
 export async function generateContent(prompt: string): Promise<string> {
-  const message = await openai.messages.create({
+  const message = await (openai.chat.completions.create as any)({
     model: "gpt-4-turbo",
     max_tokens: 1024,
     messages: [
@@ -16,8 +16,8 @@ export async function generateContent(prompt: string): Promise<string> {
     ],
   });
 
-  const content = message.content[0];
-  return content.type === "text" ? content.text : "";
+  const content = message.choices[0].message.content;
+  return typeof content === "string" ? content : "";
 }
 
 export async function generateCaption(topic: string, platform: "instagram" | "facebook" | "whatsapp"): Promise<string> {
@@ -54,5 +54,5 @@ export async function generateImage(prompt: string): Promise<string> {
     size: "1024x1024",
   });
 
-  return image.data[0].url || "";
+  return image.data[0]?.url || "";
 }

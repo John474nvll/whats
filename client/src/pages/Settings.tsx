@@ -58,82 +58,88 @@ export default function Settings() {
             </TabsContent>
 
             <TabsContent value="advanced" className="space-y-6">
-            {['whatsapp', 'instagram'].map((platform) => {
-              const config = channels?.find(c => c.platform === platform);
-              return (
-                <Card key={platform} className="bg-card/50 backdrop-blur-sm border-border/50">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <CardTitle className="capitalize font-display text-xl">{platform} Integration</CardTitle>
-                        <CardDescription>Manage credentials for {platform} Business API</CardDescription>
+              {['whatsapp', 'instagram', 'facebook'].map((platform) => {
+                const config = channels?.find(c => c.platform === platform);
+                return (
+                  <Card key={platform} className="bg-card/50 backdrop-blur-sm border-border/50">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                          <CardTitle className="capitalize font-display text-xl">{platform} Integration</CardTitle>
+                          <CardDescription>Gestiona credenciales para {platform} Business API</CardDescription>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Label htmlFor={`active-${platform}`} className="text-sm">Activo</Label>
+                          <Switch 
+                            id={`active-${platform}`} 
+                            checked={config?.isActive ?? true} 
+                            onCheckedChange={(checked) => handleUpdate(platform, { isActive: checked })}
+                          />
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Label htmlFor={`active-${platform}`} className="text-sm">Active</Label>
-                        <Switch 
-                          id={`active-${platform}`} 
-                          checked={config?.isActive ?? true} 
-                          onCheckedChange={(checked) => handleUpdate(platform, { isActive: checked })}
-                        />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor={`access-${platform}`}>Access Token</Label>
-                      <Input 
-                        id={`access-${platform}`} 
-                        type="password" 
-                        defaultValue={config?.accessToken}
-                        className="bg-background/50 font-mono text-xs"
-                        placeholder={`Enter ${platform} access token`}
-                        onBlur={(e) => {
-                          if (e.target.value !== config?.accessToken) {
-                            handleUpdate(platform, { accessToken: e.target.value });
-                          }
-                        }}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor={`verify-${platform}`}>Verify Token (Webhook)</Label>
-                      <Input 
-                        id={`verify-${platform}`} 
-                        defaultValue={config?.verifyToken}
-                        className="bg-background/50 font-mono text-xs"
-                        placeholder="Your custom verify token"
-                        onBlur={(e) => {
-                          if (e.target.value !== config?.verifyToken) {
-                            handleUpdate(platform, { verifyToken: e.target.value });
-                          }
-                        }}
-                      />
-                    </div>
-                    {platform === 'whatsapp' && (
+                    </CardHeader>
+                    <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <Label htmlFor={`phone-${platform}`}>Phone Number ID</Label>
+                        <Label htmlFor={`access-${platform}`}>Access Token</Label>
                         <Input 
-                          id={`phone-${platform}`} 
-                          defaultValue={config?.phoneNumberId || ''}
+                          id={`access-${platform}`} 
+                          type="password" 
+                          defaultValue={config?.accessToken}
                           className="bg-background/50 font-mono text-xs"
-                          placeholder="WhatsApp Phone Number ID"
+                          placeholder={`Ingresa tu access token para ${platform}`}
                           onBlur={(e) => {
-                            if (e.target.value !== config?.phoneNumberId) {
-                              handleUpdate(platform, { phoneNumberId: e.target.value });
+                            if (e.target.value !== config?.accessToken) {
+                              handleUpdate(platform, { accessToken: e.target.value });
                             }
                           }}
                         />
                       </div>
-                    )}
-                    <div className="flex justify-end">
-                      <Button variant="outline" className="gap-2" onClick={() => toast({ title: "Saved" })}>
-                        <Save className="h-4 w-4" /> Save Changes
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor={`verify-${platform}`}>Token de Verificación (Webhook)</Label>
+                        <Input 
+                          id={`verify-${platform}`} 
+                          defaultValue={config?.verifyToken}
+                          className="bg-background/50 font-mono text-xs"
+                          placeholder="Tu token de verificación personalizado"
+                          onBlur={(e) => {
+                            if (e.target.value !== config?.verifyToken) {
+                              handleUpdate(platform, { verifyToken: e.target.value });
+                            }
+                          }}
+                        />
+                      </div>
+                      {platform === 'whatsapp' && (
+                        <div className="grid gap-2">
+                          <Label htmlFor={`phone-${platform}`}>Phone Number ID</Label>
+                          <Input 
+                            id={`phone-${platform}`} 
+                            defaultValue={config?.phoneNumberId || ''}
+                            className="bg-background/50 font-mono text-xs"
+                            placeholder="ID de número de teléfono de WhatsApp"
+                            onBlur={(e) => {
+                              if (e.target.value !== config?.phoneNumberId) {
+                                updateChannel.mutate(
+                                  { platform, phoneNumberId: e.target.value },
+                                  {
+                                    onSuccess: () => toast({ title: "Guardado" }),
+                                  }
+                                );
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex justify-end">
+                        <Button variant="outline" className="gap-2" onClick={() => toast({ title: "Guardado" })}>
+                          <Save className="h-4 w-4" /> Guardar Cambios
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </TabsContent>
+          </Tabs>
       </div>
     </div>
   );
