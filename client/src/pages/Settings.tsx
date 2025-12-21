@@ -7,6 +7,9 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, Save } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { PlatformIntegration } from "@/components/PlatformIntegration";
+import { AIContentGenerator } from "@/components/AIContentGenerator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Settings() {
   const { data: channels, isLoading } = useChannels();
@@ -17,8 +20,8 @@ export default function Settings() {
     updateChannel.mutate(
       { platform, ...data },
       {
-        onSuccess: () => toast({ title: "Settings saved successfully" }),
-        onError: () => toast({ title: "Failed to save settings", variant: "destructive" }),
+        onSuccess: () => toast({ title: "Configuración guardada correctamente" }),
+        onError: () => toast({ title: "Error al guardar configuración", variant: "destructive" }),
       }
     );
   };
@@ -33,13 +36,28 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="p-8 max-w-4xl mx-auto space-y-8">
+      <div className="p-8 max-w-6xl mx-auto space-y-8">
           <div>
-            <h1 className="text-3xl font-display font-bold text-foreground">Channel Settings</h1>
-            <p className="text-muted-foreground mt-1">Configure your integration tokens and credentials.</p>
+            <h1 className="text-3xl font-display font-bold text-foreground">Configuración</h1>
+            <p className="text-muted-foreground mt-1">Gestiona integraciones, tokens y herramientas de IA.</p>
           </div>
 
-          <div className="space-y-6">
+          <Tabs defaultValue="platforms" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="platforms">Plataformas</TabsTrigger>
+              <TabsTrigger value="ai">Herramientas IA</TabsTrigger>
+              <TabsTrigger value="advanced">Avanzado</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="platforms" className="space-y-6">
+              <PlatformIntegration />
+            </TabsContent>
+
+            <TabsContent value="ai" className="space-y-6">
+              <AIContentGenerator />
+            </TabsContent>
+
+            <TabsContent value="advanced" className="space-y-6">
             {['whatsapp', 'instagram'].map((platform) => {
               const config = channels?.find(c => c.platform === platform);
               return (
