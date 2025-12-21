@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "env": {
+    "DATABASE_URL": "@socialhub_database_url",
+    "META_ACCESS_TOKEN": "@meta_access_token",
+    "META_VERIFY_TOKEN": "@meta_verify_token",
+    "META_PHONE_NUMBER_ID": "@meta_phone_number_id",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "SESSION_SECRET": "@session_secret",
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "server/index.ts": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}

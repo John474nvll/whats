@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,7 +8,7 @@
   --font-body: 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
 
-  /* Modern Deep Blue/Slate Palette */
+  /* Modern Deep Blue/Slate Palette with Vibrant Accents */
   --background: 222 47% 11%;
   --foreground: 210 40% 98%;
 
@@ -44,6 +44,11 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-body);
+    background: 
+      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 40% 13%) 50%, hsl(217 40% 12%) 100%),
+      radial-gradient(circle at 20% 50%, hsl(217 91% 60% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(217 91% 60% / 0.03) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
