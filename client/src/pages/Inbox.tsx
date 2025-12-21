@@ -59,9 +59,9 @@ export default function Inbox() {
         </div>
         
         <div className="flex-1 bg-card rounded-lg border border-border overflow-hidden flex flex-col">
-          {selectedId && activeConversation ? (
+          {selectedId && activeConversation && messages ? (
             <ChatInterface 
-              conversation={activeConversation}
+              conversation={activeConversation as any}
               messages={messages || []}
               botEnabled={!!activeConversation.botStatus}
               onToggleBot={handleToggleBot}
