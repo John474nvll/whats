@@ -9,6 +9,8 @@ import Dashboard from "@/pages/Dashboard";
 import Inbox from "@/pages/Inbox";
 import Contacts from "@/pages/Contacts";
 import Settings from "@/pages/Settings";
+import Analytics from "@/pages/Analytics";
+import AIGenerator from "@/pages/AIGenerator";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -18,6 +20,8 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/inbox" component={Inbox} />
       <Route path="/contacts" component={Contacts} />
+      <Route path="/analytics" component={Analytics} />
+      <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>

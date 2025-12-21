@@ -94,26 +94,22 @@ export async function batchProcess<T, R>(
   let completed = 0;
 
   const promises = items.map((item, index) =>
-    limit(() =>
-      pRetry(
-        async () => {
-          try {
-            const result = await processor(item, index);
-            completed++;
-            onProgress?.(completed, items.length, item);
-            return result;
-          } catch (error: unknown) {
-            if (isRateLimitError(error)) {
-              throw error; // Rethrow to trigger p-retry
-            }
-            // For non-rate-limit errors, abort immediately
-            const err = error instanceof Error ? error : new Error(String(error));
-            throw Object.assign(err, { retries: 0 }); // Mark to abort retries
-          }
-        },
-        { retries, minTimeout, maxTimeout, factor: 2 }
-      )
-    )
+    limit(async () => {
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+          const result = await processor(item, index);
+          completed++;
+          onProgress?.(completed, items.length, item);
+          return result;
+        } catch (error: unknown) {
+          if (!isRateLimitError(error)) throw error;
+          if (attempt === retries) throw error;
+          const delay = minTimeout * Math.pow(2, attempt);
+          await new Promise(r => setTimeout(r, Math.min(delay, maxTimeout)));
+        }
+      }
+      throw new Error("Batch processing failed");
+    })
   );
 
   return Promise.all(promises);
