@@ -41,6 +41,18 @@ export async function registerRoutes(
     console.log("Seeded WhatsApp channel config");
   }
 
+  // Seed demo user
+  const existingUser = await storage.getUserByUsername("admin");
+  if (!existingUser) {
+    const hashedPassword = await (await import("./services/auth")).hashPassword("admin123");
+    await storage.createUser({
+      id: "admin-user-id",
+      username: "admin",
+      password: hashedPassword
+    });
+    console.log("Seeded admin user");
+  }
+
   // SSE Endpoint
   app.get('/api/sse', (req, res) => {
     const headers = {
