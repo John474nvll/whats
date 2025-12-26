@@ -43,7 +43,8 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(user));
 
       toast({ title: "Success", description: isLogin ? "Login successful!" : "Account created!" });
-      navigate("/");
+      // Force reload to update App state and trigger redirection
+      window.location.href = "/";
     } catch (error) {
       toast({ title: "Error", description: error instanceof Error ? error.message : "Auth failed", variant: "destructive" });
     } finally {

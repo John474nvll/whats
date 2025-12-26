@@ -57,16 +57,25 @@ function AppContent() {
 }
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-    setLoading(false);
-  }, []);
-
-  if (loading) return null;
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem("token"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    // Poll for changes in case storage event doesn't fire (same tab)
+    const interval = setInterval(() => {
+      const token = !!localStorage.getItem("token");
+      if (token !== isAuthenticated) {
+        setIsAuthenticated(token);
+      }
+    }, 500);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [isAuthenticated]);
 
   return (
     <QueryClientProvider client={queryClient}>
