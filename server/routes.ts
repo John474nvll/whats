@@ -448,6 +448,28 @@ export async function registerRoutes(
     }
   });
 
+  // Artist & Music Endpoints
+  app.get("/api/artists", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const artists = await storage.getArtists(req.userId!);
+      res.json(artists);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch artists" });
+    }
+  });
+
+  app.post("/api/artists", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const artist = await storage.createArtist({
+        ...req.body,
+        userId: req.userId!
+      });
+      res.status(201).json(artist);
+    } catch {
+      res.status(500).json({ error: "Failed to create artist profile" });
+    }
+  });
+
   app.post("/api/social-accounts/connect", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
       const account = await storage.createSocialAccount({
