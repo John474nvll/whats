@@ -41,8 +41,16 @@ export default function AccountLinks() {
   const connectAccount = async (platform: string) => {
     setConnecting(true);
     try {
-      const accountId = `${platform}_${Date.now()}`;
-      const accountName = `${platform} Account`;
+      // In a real scenario, this would trigger an OAuth flow
+      // For this expansion, we facilitate manual linking with a prompt for details
+      const accountId = prompt(`Enter your ${platform} Account ID/Page ID:`, `${platform}_id`);
+      const accountName = prompt(`Enter a nickname for this ${platform} account:`, `${platform} Account`);
+      const accessToken = prompt(`Enter your ${platform} Access Token:`, `demo_token`);
+
+      if (!accountId || !accessToken) {
+        toast({ title: "Cancelled", description: "Connection details are required." });
+        return;
+      }
       
       const token = localStorage.getItem("token");
       const response = await fetch("/api/social-accounts/connect", {
@@ -55,12 +63,12 @@ export default function AccountLinks() {
           platform,
           accountId,
           accountName,
-          accessToken: `demo_token_${Date.now()}`,
+          accessToken,
         }),
       });
 
       if (response.ok) {
-        toast({ title: "Success", description: `${platform} account connected!` });
+        toast({ title: "Success", description: `${platform} account linked successfully!` });
         fetchAccounts();
       }
     } catch {

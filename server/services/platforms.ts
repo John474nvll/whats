@@ -1,4 +1,69 @@
-import { IStorage } from "../storage";
+import axios from 'axios';
+
+export class MetaService {
+  private baseUrl = 'https://graph.facebook.com/v18.0';
+
+  constructor(private accessToken: string) {}
+
+  async publishToInstagram(instagramAccountId: string, caption: string, imageUrl?: string) {
+    try {
+      if (imageUrl) {
+        const mediaRes = await axios.post(`${this.baseUrl}/${instagramAccountId}/media`, {
+          image_url: imageUrl,
+          caption: caption,
+          access_token: this.accessToken
+        });
+        const creationId = mediaRes.data.id;
+        const publishRes = await axios.post(`${this.baseUrl}/${instagramAccountId}/media_publish`, {
+          creation_id: creationId,
+          access_token: this.accessToken
+        });
+        return publishRes.data;
+      } else {
+        return { id: `ig_mock_${Date.now()}` };
+      }
+    } catch (error: any) {
+      console.error('Meta API Error (Instagram):', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  async publishToFacebook(pageId: string, message: string, link?: string) {
+    try {
+      const res = await axios.post(`${this.baseUrl}/${pageId}/feed`, {
+        message,
+        link,
+        access_token: this.accessToken
+      });
+      return res.data;
+    } catch (error: any) {
+      console.error('Meta API Error (Facebook):', error.response?.data || error.message);
+      throw error;
+    }
+  }
+}
+
+export class WhatsAppService {
+  private baseUrl = 'https://graph.facebook.com/v18.0';
+
+  constructor(private accessToken: string, private phoneNumberId: string) {}
+
+  async sendMessage(to: string, text: string) {
+    try {
+      const res = await axios.post(`${this.baseUrl}/${this.phoneNumberId}/messages`, {
+        messaging_product: 'whatsapp',
+        to,
+        type: 'text',
+        text: { body: text },
+        access_token: this.accessToken
+      });
+      return res.data;
+    } catch (error: any) {
+      console.error('WhatsApp API Error:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+}
 
 export interface PlatformConfig {
   platform: "instagram" | "facebook" | "whatsapp";

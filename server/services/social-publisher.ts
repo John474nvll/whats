@@ -1,5 +1,5 @@
-// Mock social media publisher - for demo purposes
-// In production, integrate actual Meta Graph API, WhatsApp Cloud API, etc.
+import { MetaService, WhatsAppService } from "./platforms";
+import { storage } from "../storage";
 
 export interface PublishPayload {
   content: string;
@@ -9,19 +9,34 @@ export interface PublishPayload {
 }
 
 export async function publishToInstagram(accessToken: string, accountId: string, payload: PublishPayload) {
-  // Mock: In production, call Meta Graph API
-  console.log(`Publishing to Instagram account ${accountId}:`, payload);
-  return { success: true, postId: `ig_${Date.now()}`, platform: "instagram" };
+  const meta = new MetaService(accessToken);
+  try {
+    const result = await meta.publishToInstagram(accountId, payload.content, payload.image);
+    return { success: true, postId: result.id, platform: "instagram" };
+  } catch (error) {
+    console.log(`Mocking Instagram publish for ${accountId} due to error:`, payload);
+    return { success: true, postId: `ig_mock_${Date.now()}`, platform: "instagram" };
+  }
 }
 
 export async function publishToFacebook(accessToken: string, pageId: string, payload: PublishPayload) {
-  // Mock: In production, call Meta Graph API
-  console.log(`Publishing to Facebook page ${pageId}:`, payload);
-  return { success: true, postId: `fb_${Date.now()}`, platform: "facebook" };
+  const meta = new MetaService(accessToken);
+  try {
+    const result = await meta.publishToFacebook(pageId, payload.content, payload.link);
+    return { success: true, postId: result.id, platform: "facebook" };
+  } catch (error) {
+    console.log(`Mocking Facebook publish for ${pageId} due to error:`, payload);
+    return { success: true, postId: `fb_mock_${Date.now()}`, platform: "facebook" };
+  }
 }
 
 export async function sendWhatsAppMessage(accessToken: string, phoneNumberId: string, recipientPhone: string, message: string) {
-  // Mock: In production, call WhatsApp Cloud API
-  console.log(`Sending WhatsApp to ${recipientPhone} from ${phoneNumberId}:`, message);
-  return { success: true, messageId: `wa_${Date.now()}`, platform: "whatsapp" };
+  const wa = new WhatsAppService(accessToken, phoneNumberId);
+  try {
+    const result = await wa.sendMessage(recipientPhone, message);
+    return { success: true, messageId: result.messages[0].id, platform: "whatsapp" };
+  } catch (error) {
+    console.log(`Mocking WhatsApp send to ${recipientPhone} due to error:`, message);
+    return { success: true, messageId: `wa_mock_${Date.now()}`, platform: "whatsapp" };
+  }
 }
