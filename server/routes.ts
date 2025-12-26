@@ -31,22 +31,33 @@ export async function registerRoutes(
   registerImageRoutes(app);
 
   // Auto-register admin user for demo purposes if not exists
-  const adminUsername = "admin";
-  const adminPassword = "password123";
-  const existingAdmin = await storage.getUserByUsername(adminUsername);
-  if (!existingAdmin) {
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    await storage.createUser({
-      id: "admin-uuid-fixed",
-      username: adminUsername,
-      password: hashedPassword
-    });
-    console.log(`Auto-registered ${adminUsername} user with password: ${adminPassword}`);
-  } else {
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    await storage.updateUser(existingAdmin.id, { password: hashedPassword });
-    console.log(`Updated ${adminUsername} password to: ${adminPassword}`);
-  }
+  const setupAdmin = async () => {
+    const adminUsername = "admin";
+    const adminPassword = "password123";
+    try {
+      const existingAdmin = await storage.getUserByUsername(adminUsername);
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      
+      if (!existingAdmin) {
+        await storage.createUser({
+          id: "admin-uuid-fixed",
+          username: adminUsername,
+          password: hashedPassword,
+          role: "admin"
+        });
+        console.log(`Auto-registered ${adminUsername} user with password: ${adminPassword}`);
+      } else {
+        await storage.updateUser(existingAdmin.id, { 
+          password: hashedPassword,
+          role: "admin" 
+        });
+        console.log(`Updated ${adminUsername} credentials to: ${adminPassword}`);
+      }
+    } catch (e) {
+      console.error("Error setting up default admin:", e);
+    }
+  };
+  setupAdmin();
 
   // Seed data
   const channels = await storage.getChannels();
