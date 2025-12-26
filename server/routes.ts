@@ -29,6 +29,15 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
 
+  // Auto-register admin user for demo purposes if not exists
+  const adminUsername = "admin";
+  const adminPassword = "password123";
+  const existingAdmin = await storage.getUserByUsername(adminUsername);
+  if (!existingAdmin) {
+    await registerUser(adminUsername, adminPassword);
+    console.log(`Auto-registered ${adminUsername} user`);
+  }
+
   // Seed data
   const channels = await storage.getChannels();
   if (channels.length === 0) {
