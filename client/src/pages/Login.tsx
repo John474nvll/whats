@@ -55,14 +55,18 @@ export default function Login() {
 
   // Demo credentials
   const demoCredentials = () => {
-    setFormData({ username: "admin", password: "password123" });
+    setFormData({ username: "socialadmin", password: "SocialPass2025" });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader className="text-center space-y-4">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md relative">
+        <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
+        
+        <Card className="bg-black/40 border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+          <CardHeader className="text-center space-y-4 pt-8">
             <div className="flex justify-center">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center overflow-hidden">
                 <img src={logoImage} alt="SocialHub" className="w-full h-full object-cover" />
@@ -146,10 +150,18 @@ export default function Login() {
           </CardContent>
         </Card>
 
-        <div className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700 text-center text-sm text-slate-400">
-          <p className="font-semibold mb-2">Demo Credentials</p>
-          <p>Username: <code className="bg-slate-900 px-2 py-1 rounded">admin</code></p>
-          <p>Password: <code className="bg-slate-900 px-2 py-1 rounded">password123</code></p>
+        <div className="mt-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center text-sm text-slate-300 shadow-xl">
+          <p className="font-bold text-white mb-3 uppercase tracking-widest text-xs">V2 Access Credentials</p>
+          <div className="space-y-2">
+            <p className="flex justify-between items-center px-4 py-2 bg-black/20 rounded-lg">
+              <span className="text-slate-400">User:</span>
+              <code className="text-blue-400 font-mono">socialadmin</code>
+            </p>
+            <p className="flex justify-between items-center px-4 py-2 bg-black/20 rounded-lg">
+              <span className="text-slate-400">Pass:</span>
+              <code className="text-purple-400 font-mono">SocialPass2025</code>
+            </p>
+          </div>
         </div>
       </div>
     </div>

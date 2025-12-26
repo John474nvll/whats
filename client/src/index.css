@@ -8,39 +8,39 @@
   --font-body: 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
 
-  /* SocialHub Premium Dark Palette */
-  --background: 217 33% 10%;
+  /* SocialHub Premium Dark Palette V2 */
+  --background: 230 40% 5%;
   --foreground: 210 40% 98%;
 
-  --card: 217 33% 15%;
+  --card: 230 40% 8%;
   --card-foreground: 210 40% 98%;
 
-  --popover: 217 33% 15%;
+  --popover: 230 40% 8%;
   --popover-foreground: 210 40% 98%;
 
   --primary: 217 91% 60%;
-  --primary-foreground: 217 33% 10%;
+  --primary-foreground: 210 40% 98%;
 
-  --secondary: 217 33% 20%;
+  --secondary: 217 33% 15%;
   --secondary-foreground: 210 40% 98%;
 
-  --muted: 217 33% 20%;
+  --muted: 217 33% 15%;
   --muted-foreground: 215 20% 65%;
 
   --accent: 262 95% 60%;
-  --accent-foreground: 217 33% 10%;
+  --accent-foreground: 210 40% 98%;
 
   --destructive: 0 62% 30%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 217 33% 25%;
-  --input: 217 33% 18%;
+  --border: 217 33% 20%;
+  --input: 217 33% 15%;
   --ring: 262 95% 60%;
 
-  --radius: 0.75rem;
+  --radius: 1.25rem;
   
   /* Social Platform Colors */
-  --whatsapp: 31 95% 52%;
+  --whatsapp: 142 70% 45%;
   --instagram: 334 86% 54%;
   --facebook: 221 58% 52%;
 }
