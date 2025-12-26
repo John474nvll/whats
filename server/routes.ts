@@ -309,15 +309,48 @@ export async function registerRoutes(
       // Ensure we always have the demo accounts for all platforms if none exist
       if (accounts.length === 0) {
         const demoAccounts = [
-          { platform: "whatsapp", accountName: "Demo WhatsApp", id: "demo_wa", isConnected: true },
-          { platform: "instagram", accountName: "Demo Instagram", id: "demo_ig", isConnected: true },
-          { platform: "facebook", accountName: "Demo Facebook", id: "demo_fb", isConnected: true }
+          { id: 100, platform: "whatsapp", accountName: "Demo WhatsApp", accountId: "demo_wa", isConnected: true, userId: req.userId! },
+          { id: 101, platform: "instagram", accountName: "Demo Instagram", accountId: "demo_ig", isConnected: true, userId: req.userId! },
+          { id: 102, platform: "facebook", accountName: "Demo Facebook", accountId: "demo_fb", isConnected: true, userId: req.userId! }
         ];
         return res.json(demoAccounts);
       }
       res.json(accounts);
     } catch {
       res.status(500).json({ error: "Failed to fetch accounts" });
+    }
+  });
+
+  // Widgets endpoints
+  app.get("/api/widgets", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      let widgets = await storage.getWidgets(req.userId!);
+      if (widgets.length === 0) {
+        // Create default widgets for new user
+        const defaults = [
+          { userId: req.userId!, type: "stats", title: "Estadísticas Generales", position: 0 },
+          { userId: req.userId!, type: "social_feed", title: "Feed Reciente", position: 1 },
+          { userId: req.userId!, type: "activity", title: "Actividad del Bot", position: 2 },
+          { userId: req.userId!, type: "quick_actions", title: "Acciones Rápidas", position: 3 },
+        ];
+        for (const w of defaults) {
+          await storage.createWidget(w);
+        }
+        widgets = await storage.getWidgets(req.userId!);
+      }
+      res.json(widgets);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch widgets" });
+    }
+  });
+
+  app.patch("/api/widgets/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const widget = await storage.updateWidget(id, req.body);
+      res.json(widget);
+    } catch {
+      res.status(500).json({ error: "Failed to update widget" });
     }
   });
 

@@ -9,7 +9,20 @@ export const users = pgTable("users", {
   id: text("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  role: text("role").default("user"), // 'admin', 'user'
+  avatar: text("avatar"),
+  settings: jsonb("settings").default({}),
   createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const widgets = pgTable("widgets", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // 'stats', 'activity', 'social_feed', 'quick_actions'
+  title: text("title").notNull(),
+  config: jsonb("config").default({}),
+  position: integer("position").default(0),
+  isVisible: boolean("is_visible").default(true),
 });
 
 export const contacts = pgTable("contacts", {
@@ -94,6 +107,7 @@ export const insertConversationSchema = createInsertSchema(conversations).omit({
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, updatedAt: true });
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertWidgetSchema = createInsertSchema(widgets).omit({ id: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -114,6 +128,9 @@ export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
 export type SocialAccount = typeof socialAccounts.$inferSelect;
 export type InsertSocialAccount = z.infer<typeof insertSocialAccountSchema>;
+
+export type Widget = typeof widgets.$inferSelect;
+export type InsertWidget = z.infer<typeof insertWidgetSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 

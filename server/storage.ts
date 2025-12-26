@@ -1,12 +1,13 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type ChannelConfig, type InsertChannelConfig,
-  type SocialAccount, type InsertSocialAccount
+  type SocialAccount, type InsertSocialAccount,
+  type Widget, type InsertWidget
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -46,6 +47,12 @@ export interface IStorage {
   createSocialAccount(account: InsertSocialAccount): Promise<SocialAccount>;
   updateSocialAccount(id: number, updates: Partial<InsertSocialAccount>): Promise<SocialAccount>;
   deleteSocialAccount(id: number): Promise<void>;
+
+  // Widgets
+  getWidgets(userId: string): Promise<Widget[]>;
+  createWidget(widget: InsertWidget): Promise<Widget>;
+  updateWidget(id: number, updates: Partial<InsertWidget>): Promise<Widget>;
+  deleteWidget(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -214,6 +221,28 @@ export class DatabaseStorage implements IStorage {
 
   async deleteSocialAccount(id: number): Promise<void> {
     await db.delete(socialAccounts).where(eq(socialAccounts.id, id));
+  }
+
+  // Widgets
+  async getWidgets(userId: string): Promise<Widget[]> {
+    return await db.select().from(widgets).where(eq(widgets.userId, userId)).orderBy(widgets.position);
+  }
+
+  async createWidget(widget: InsertWidget): Promise<Widget> {
+    const [newWidget] = await db.insert(widgets).values(widget).returning();
+    return newWidget;
+  }
+
+  async updateWidget(id: number, updates: Partial<InsertWidget>): Promise<Widget> {
+    const [updated] = await db.update(widgets)
+      .set(updates)
+      .where(eq(widgets.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteWidget(id: number): Promise<void> {
+    await db.delete(widgets).where(eq(widgets.id, id));
   }
 }
 
