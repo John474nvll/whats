@@ -1,6 +1,6 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -9,6 +9,7 @@ import {
   type SocialAccount, type InsertSocialAccount,
   type Widget, type InsertWidget,
   type SalesFunnel, type InsertSalesFunnel,
+  type Campaign, type InsertCampaign,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -60,6 +61,12 @@ export interface IStorage {
   createFunnel(funnel: InsertSalesFunnel): Promise<SalesFunnel>;
   updateFunnel(id: number, updates: Partial<InsertSalesFunnel>): Promise<SalesFunnel>;
   deleteFunnel(id: number): Promise<void>;
+
+  // Campaigns
+  getCampaigns(userId: string): Promise<Campaign[]>;
+  createCampaign(campaign: InsertCampaign): Promise<Campaign>;
+  updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign>;
+  deleteCampaign(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -272,6 +279,28 @@ export class DatabaseStorage implements IStorage {
 
   async deleteFunnel(id: number): Promise<void> {
     await db.delete(salesFunnels).where(eq(salesFunnels.id, id));
+  }
+
+  // Campaigns
+  async getCampaigns(userId: string): Promise<Campaign[]> {
+    return await db.select().from(campaigns).where(eq(campaigns.userId, userId)).orderBy(desc(campaigns.createdAt));
+  }
+
+  async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
+    const [newCampaign] = await db.insert(campaigns).values(campaign).returning();
+    return newCampaign;
+  }
+
+  async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign> {
+    const [updated] = await db.update(campaigns)
+      .set(updates)
+      .where(eq(campaigns.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCampaign(id: number): Promise<void> {
+    await db.delete(campaigns).where(eq(campaigns.id, id));
   }
 }
 

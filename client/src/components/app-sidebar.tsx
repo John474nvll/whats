@@ -17,6 +17,7 @@ import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 const menuItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Messages", url: "/inbox", icon: MessageSquare },
+  { title: "Campañas", url: "/campaigns", icon: Megaphone },
   { title: "Funnels", url: "/funnels", icon: GitFork },
   { title: "Contacts", url: "/contacts", icon: Users },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },

@@ -406,6 +406,48 @@ export async function registerRoutes(
     }
   });
 
+  // Campaigns endpoints
+  app.get("/api/campaigns", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const campaigns = await storage.getCampaigns(req.userId!);
+      res.json(campaigns);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch campaigns" });
+    }
+  });
+
+  app.post("/api/campaigns", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const campaign = await storage.createCampaign({
+        ...req.body,
+        userId: req.userId!
+      });
+      res.status(201).json(campaign);
+    } catch {
+      res.status(500).json({ error: "Failed to create campaign" });
+    }
+  });
+
+  app.patch("/api/campaigns/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const campaign = await storage.updateCampaign(id, req.body);
+      res.json(campaign);
+    } catch {
+      res.status(500).json({ error: "Failed to update campaign" });
+    }
+  });
+
+  app.delete("/api/campaigns/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCampaign(id);
+      res.sendStatus(204);
+    } catch {
+      res.status(500).json({ error: "Failed to delete campaign" });
+    }
+  });
+
   app.post("/api/social-accounts/connect", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
       const account = await storage.createSocialAccount({

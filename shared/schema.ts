@@ -88,7 +88,27 @@ export const salesFunnels = pgTable("sales_funnels", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const campaigns = pgTable("campaigns", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  platform: text("platform").notNull(), // 'all', 'whatsapp', etc
+  status: text("status").notNull().default("draft"), // 'draft', 'active', 'completed'
+  content: text("content"),
+  aiGenerated: boolean("ai_generated").default(false),
+  metrics: jsonb("metrics").default({}),
+  scheduledAt: timestamp("scheduled_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === RELATIONS ===
+
+export const campaignsRelations = relations(campaigns, ({ one }) => ({
+  user: one(users, {
+    fields: [campaigns.userId],
+    references: [users.id],
+  }),
+}));
 
 export const funnelsRelations = relations(salesFunnels, ({ one }) => ({
   user: one(users, {
@@ -126,6 +146,7 @@ export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWidgetSchema = createInsertSchema(widgets).omit({ id: true });
 export const insertFunnelSchema = createInsertSchema(salesFunnels).omit({ id: true, createdAt: true });
+export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true, createdAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -152,6 +173,9 @@ export type InsertWidget = z.infer<typeof insertWidgetSchema>;
 
 export type SalesFunnel = typeof salesFunnels.$inferSelect;
 export type InsertSalesFunnel = z.infer<typeof insertFunnelSchema>;
+
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 
