@@ -532,16 +532,22 @@ export async function registerRoutes(
 
   app.post("/api/social-accounts/connect", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
+      const { platform, accountId, accountName, accessToken, refreshToken, profilePicture, bio, followersCount, followingCount, postsCount } = req.body;
       const account = await storage.createSocialAccount({
         userId: req.userId!,
-        platform: req.body.platform,
-        accountId: req.body.accountId,
-        accountName: req.body.accountName,
-        accessToken: req.body.accessToken,
-        refreshToken: req.body.refreshToken,
+        platform,
+        accountId,
+        accountName,
+        accessToken,
+        refreshToken,
+        profilePicture,
+        bio,
+        followersCount,
+        followingCount,
+        postsCount,
       });
       res.status(201).json(account);
-    } catch {
+    } catch (error) {
       res.status(500).json({ error: "Failed to connect account" });
     }
   });
