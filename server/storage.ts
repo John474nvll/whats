@@ -1,6 +1,5 @@
-import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, artistProfiles, musicContent,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -10,6 +9,8 @@ import {
   type Widget, type InsertWidget,
   type SalesFunnel, type InsertSalesFunnel,
   type Campaign, type InsertCampaign,
+  type ArtistProfile, type InsertArtistProfile,
+  type MusicContent, type InsertMusicContent,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -67,6 +68,12 @@ export interface IStorage {
   createCampaign(campaign: InsertCampaign): Promise<Campaign>;
   updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign>;
   deleteCampaign(id: number): Promise<void>;
+
+  // Artists & Music
+  getArtists(userId: string): Promise<ArtistProfile[]>;
+  createArtist(artist: InsertArtistProfile): Promise<ArtistProfile>;
+  getMusicContent(artistId: number): Promise<MusicContent[]>;
+  createMusicContent(content: InsertMusicContent): Promise<MusicContent>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -135,9 +142,6 @@ export class DatabaseStorage implements IStorage {
       },
     });
     if (!conversation) return undefined;
-    
-    // Reverse messages to be chronological for chat UI if needed, but usually UI handles it.
-    // Let's keep desc for now as it's efficient for "latest".
     return conversation as (Conversation & { messages: Message[] });
   }
 
@@ -177,12 +181,9 @@ export class DatabaseStorage implements IStorage {
 
   async createMessage(message: InsertMessage): Promise<Message> {
     const [newMessage] = await db.insert(messages).values(message).returning();
-    
-    // Update conversation lastMessageAt
     await db.update(conversations)
       .set({ lastMessageAt: new Date() })
       .where(eq(conversations.id, message.conversationId));
-
     return newMessage;
   }
 
@@ -302,6 +303,27 @@ export class DatabaseStorage implements IStorage {
   async deleteCampaign(id: number): Promise<void> {
     await db.delete(campaigns).where(eq(campaigns.id, id));
   }
+
+  // Artists & Music
+  async getArtists(userId: string): Promise<ArtistProfile[]> {
+    return await db.select().from(artistProfiles).where(eq(artistProfiles.userId, userId));
+  }
+
+  async createArtist(artist: InsertArtistProfile): Promise<ArtistProfile> {
+    const [newArtist] = await db.insert(artistProfiles).values(artist).returning();
+    return newArtist;
+  }
+
+  async getMusicContent(artistId: number): Promise<MusicContent[]> {
+    return await db.select().from(musicContent).where(eq(musicContent.artistId, artistId));
+  }
+
+  async createMusicContent(content: InsertMusicContent): Promise<MusicContent> {
+    const [newContent] = await db.insert(musicContent).values(content).returning();
+    return newContent;
+  }
 }
+
+export const storage = new DatabaseStorage();
 
 export const storage = new DatabaseStorage();
