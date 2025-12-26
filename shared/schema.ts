@@ -67,7 +67,7 @@ export const channelConfigs = pgTable("channel_configs", {
 export const socialAccounts = pgTable("social_accounts", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  platform: text("platform").notNull(), // 'instagram', 'facebook', 'whatsapp'
+  platform: text("platform").notNull(), // 'instagram', 'facebook', 'whatsapp', 'spotify', 'youtube'
   accountId: text("account_id").notNull(),
   accountName: text("account_name").notNull(),
   accessToken: text("access_token").notNull(),
@@ -76,6 +76,28 @@ export const socialAccounts = pgTable("social_accounts", {
   isConnected: boolean("is_connected").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const artistProfiles = pgTable("artist_profiles", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  artistName: text("artist_name").notNull(),
+  genre: text("genre"),
+  bio: text("bio"),
+  spotifyArtistId: text("spotify_artist_id"),
+  youtubeChannelId: text("youtube_channel_id"),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const musicContent = pgTable("music_content", {
+  id: serial("id").primaryKey(),
+  artistId: integer("artist_id").notNull().references(() => artistProfiles.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  type: text("type").notNull(), // 'track', 'album', 'video'
+  status: text("status").notNull().default("draft"), // 'draft', 'uploading', 'published'
+  platformLinks: jsonb("platform_links").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const salesFunnels = pgTable("sales_funnels", {
@@ -117,6 +139,21 @@ export const funnelsRelations = relations(salesFunnels, ({ one }) => ({
   }),
 }));
 
+export const artistRelations = relations(artistProfiles, ({ one, many }) => ({
+  user: one(users, {
+    fields: [artistProfiles.userId],
+    references: [users.id],
+  }),
+  content: many(musicContent),
+}));
+
+export const musicContentRelations = relations(musicContent, ({ one }) => ({
+  artist: one(artistProfiles, {
+    fields: [musicContent.artistId],
+    references: [artistProfiles.id],
+  }),
+}));
+
 export const contactsRelations = relations(contacts, ({ many }) => ({
   conversations: many(conversations),
 }));
@@ -147,6 +184,8 @@ export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit
 export const insertWidgetSchema = createInsertSchema(widgets).omit({ id: true });
 export const insertFunnelSchema = createInsertSchema(salesFunnels).omit({ id: true, createdAt: true });
 export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true, createdAt: true });
+export const insertArtistProfileSchema = createInsertSchema(artistProfiles).omit({ id: true, createdAt: true });
+export const insertMusicContentSchema = createInsertSchema(musicContent).omit({ id: true, createdAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -176,6 +215,12 @@ export type InsertSalesFunnel = z.infer<typeof insertFunnelSchema>;
 
 export type Campaign = typeof campaigns.$inferSelect;
 export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
+
+export type ArtistProfile = typeof artistProfiles.$inferSelect;
+export type InsertArtistProfile = z.infer<typeof insertArtistProfileSchema>;
+
+export type MusicContent = typeof musicContent.$inferSelect;
+export type InsertMusicContent = z.infer<typeof insertMusicContentSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 
