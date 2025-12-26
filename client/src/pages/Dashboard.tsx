@@ -14,8 +14,12 @@ import {
   Plus,
   Search,
   Megaphone,
-  GitFork
+  GitFork,
+  Music,
+  Send,
+  Zap
 } from "lucide-react";
+import { SiSpotify } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -71,7 +75,7 @@ export default function Dashboard() {
             {[
               { label: "WhatsApp Leads", value: "48", icon: MessageCircle, color: "bg-green-500", change: "+15%" },
               { label: "Instagram Reach", value: "12.2K", icon: Instagram, color: "bg-pink-500", change: "+8%" },
-              { label: "Funnels Activos", value: "3", icon: GitFork, color: "bg-indigo-500", change: "+1" },
+              { label: "Spotify Streams", value: "4.5K", icon: Music, color: "bg-green-600", change: "+22%" },
               { label: "Engagement Rate", value: "5.2%", icon: TrendingUp, color: "bg-amber-500", change: "+2.1%" },
             ].map((stat, i) => (
               <motion.div
@@ -102,11 +106,16 @@ export default function Dashboard() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <CardTitle className="text-xl font-black tracking-tight flex items-center gap-2">
                 <Layout className="h-5 w-5 text-primary" />
-                {widget.title}
+                Administrador de Mensajes & Social
               </CardTitle>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <SettingsIcon className="h-4 w-4" />
-              </Button>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" className="rounded-full gap-2">
+                  <Zap className="h-4 w-4" /> Auto-Reply
+                </Button>
+                <Button size="sm" variant="primary" className="rounded-full gap-2">
+                  <Send className="h-4 w-4" /> Masivo
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -114,20 +123,28 @@ export default function Dashboard() {
                   { name: "John Cloudy", platform: "Instagram", msg: "Loved the new post! Check DM", time: "2 min", icon: Instagram, color: "text-pink-500", url: "https://www.instagram.com/johnncloudy" },
                   { name: "Facebook User", platform: "Facebook", msg: "Interested in your latest share", time: "10 min", icon: Facebook, color: "text-blue-500", url: "https://www.facebook.com/share/1N72uj6t9U/" },
                   { name: "Admin (3197368698)", platform: "WhatsApp", msg: "New lead from Bogotá", time: "45 min", icon: MessageCircle, color: "text-green-500", url: "https://wa.me/3197368698" },
+                  { name: "New Follower", platform: "Spotify", msg: "Started following your playlist", time: "1h", icon: Music, color: "text-green-400", url: "#" },
                 ].map((item, i) => (
-                  <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:bg-muted/40 transition-colors cursor-pointer">
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:bg-muted/40 transition-colors group">
                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold">
                       {item.name.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-foreground">{item.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-bold text-foreground">{item.name}</p>
+                        <item.icon className={`h-3 w-3 ${item.color}`} />
+                      </div>
                       <p className="text-xs text-muted-foreground truncate">{item.msg}</p>
+                    </div>
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full">
+                        <MessageSquare className="h-4 w-4" />
+                      </Button>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-muted-foreground uppercase font-bold">{item.time}</p>
-                      <item.icon className={`h-3 w-3 ${item.color} mt-1 ml-auto`} />
                     </div>
-                  </a>
+                  </div>
                 ))}
               </div>
             </CardContent>

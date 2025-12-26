@@ -58,10 +58,14 @@ export default function Settings() {
             </TabsContent>
 
             <TabsContent value="advanced" className="space-y-6">
-              {['whatsapp', 'instagram', 'facebook'].map((platform) => {
+              {['whatsapp', 'instagram', 'facebook', 'spotify'].map((platform) => {
                 const config = channels?.find(c => c.platform === platform);
                 return (
-                  <Card key={platform} className="bg-card/50 backdrop-blur-sm border-border/50">
+                  <Card key={platform} className={`bg-card/50 backdrop-blur-sm border-border/50 border-l-4 ${
+                    platform === 'whatsapp' ? 'border-l-green-500' : 
+                    platform === 'instagram' ? 'border-l-pink-500' : 
+                    platform === 'facebook' ? 'border-l-blue-500' : 'border-l-green-400'
+                  }`}>
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
@@ -80,13 +84,13 @@ export default function Settings() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <Label htmlFor={`access-${platform}`}>Access Token</Label>
+                        <Label htmlFor={`access-${platform}`}>Access Token / API Key</Label>
                         <Input 
                           id={`access-${platform}`} 
                           type="password" 
                           defaultValue={config?.accessToken}
                           className="bg-background/50 font-mono text-xs"
-                          placeholder={`Ingresa tu access token para ${platform}`}
+                          placeholder={platform === 'spotify' ? "Ingresa tu Spotify Client Secret" : `Ingresa tu access token para ${platform}`}
                           onBlur={(e) => {
                             if (e.target.value !== config?.accessToken) {
                               handleUpdate(platform, { accessToken: e.target.value });
@@ -95,12 +99,12 @@ export default function Settings() {
                         />
                       </div>
                       <div className="grid gap-2">
-                        <Label htmlFor={`verify-${platform}`}>Token de Verificación (Webhook)</Label>
+                        <Label htmlFor={`verify-${platform}`}>{platform === 'spotify' ? 'Client ID' : 'Token de Verificación (Webhook)'}</Label>
                         <Input 
                           id={`verify-${platform}`} 
                           defaultValue={config?.verifyToken}
                           className="bg-background/50 font-mono text-xs"
-                          placeholder="Tu token de verificación personalizado"
+                          placeholder={platform === 'spotify' ? "Tu Spotify Client ID" : "Tu token de verificación personalizado"}
                           onBlur={(e) => {
                             if (e.target.value !== config?.verifyToken) {
                               handleUpdate(platform, { verifyToken: e.target.value });
