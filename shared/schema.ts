@@ -72,6 +72,11 @@ export const socialAccounts = pgTable("social_accounts", {
   accountName: text("account_name").notNull(),
   accessToken: text("access_token").notNull(),
   refreshToken: text("refresh_token"),
+  profilePicture: text("profile_picture"),
+  bio: text("bio"),
+  followersCount: integer("followers_count").default(0),
+  followingCount: integer("following_count").default(0),
+  postsCount: integer("posts_count").default(0),
   metadata: jsonb("metadata"), // Store profile data, permissions, etc
   isConnected: boolean("is_connected").default(true),
   createdAt: timestamp("created_at").defaultNow(),
