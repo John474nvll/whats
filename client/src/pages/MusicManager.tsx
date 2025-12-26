@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Music, Plus, Youtube, Disc, Loader2, Play } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Send, Zap, Settings as SettingsIcon } from "lucide-react";
 import { SiSpotify } from "react-icons/si";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
@@ -116,19 +116,34 @@ export default function MusicManager() {
                 <Button size="icon" variant="secondary" className="rounded-full w-8 h-8">
                   <Youtube className="w-4 h-4" />
                 </Button>
+                <Button size="icon" variant="primary" className="rounded-full w-8 h-8">
+                  <SettingsIcon className="w-4 h-4" />
+                </Button>
               </div>
             </div>
             <CardHeader>
-              <CardTitle>{artist.artistName}</CardTitle>
-              <p className="text-sm text-primary">{artist.genre}</p>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle>{artist.artistName}</CardTitle>
+                  <p className="text-sm text-primary">{artist.genre}</p>
+                </div>
+                <Badge variant="outline" className="text-[10px] uppercase font-bold">Admin Mode</Badge>
+              </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                {artist.bio || "Sin biografía disponible."}
-              </p>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="bg-muted/20 p-2 rounded-xl text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold">Streams</p>
+                  <p className="text-sm font-bold">12.4K</p>
+                </div>
+                <div className="bg-muted/20 p-2 rounded-xl text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold">Oyentes</p>
+                  <p className="text-sm font-bold">850</p>
+                </div>
+              </div>
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1 rounded-full">Ver Catálogo</Button>
-                <Button variant="secondary" className="flex-1 rounded-full">Lanzar</Button>
+                <Button variant="outline" size="sm" className="flex-1 rounded-full text-xs">Analytics</Button>
+                <Button variant="secondary" size="sm" className="flex-1 rounded-full text-xs">Mensajes</Button>
               </div>
             </CardContent>
           </Card>

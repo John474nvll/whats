@@ -133,12 +133,16 @@ export default function Dashboard() {
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-bold text-foreground">{item.name}</p>
                         <item.icon className={`h-3 w-3 ${item.color}`} />
+                        {item.platform === 'Spotify' && <Badge variant="secondary" className="text-[8px] h-3 px-1">ARTISTA</Badge>}
                       </div>
                       <p className="text-xs text-muted-foreground truncate">{item.msg}</p>
                     </div>
                     <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full">
+                      <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full no-default-hover-elevate">
                         <MessageSquare className="h-4 w-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full no-default-hover-elevate">
+                        <SettingsIcon className="h-4 w-4" />
                       </Button>
                     </div>
                     <div className="text-right">
