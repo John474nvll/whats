@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Link2, Trash2, Send } from "lucide-react";
+import { Loader2, Link2, Trash2, Send, Plus, Instagram, Facebook, MessageCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function AccountLinks() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [connecting, setConnecting] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<string>("");
-  const [publishContent, setPublishContent] = useState({ platform: "", content: "", image: "" });
+  const [activeAccount, setActiveAccount] = useState<any>(null);
   const { toast } = useToast();
 
   const platforms = [
@@ -30,7 +30,13 @@ export default function AccountLinks() {
       const response = await fetch("/api/social-accounts", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) setAccounts(await response.json());
+      if (response.ok) {
+        const data = await response.json();
+        setAccounts(data);
+        if (data.length > 0 && !activeAccount) {
+          setActiveAccount(data[0]);
+        }
+      }
     } catch {
       toast({ title: "Error", description: "Failed to load accounts" });
     } finally {
@@ -126,145 +132,144 @@ export default function AccountLinks() {
         <p className="text-muted-foreground">Manage your social media accounts and publish content</p>
       </div>
 
-      {/* Connected Accounts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {platforms.map((platform) => {
-          const account = accounts.find((a) => a.platform === platform.id);
-          return (
-            <Card key={platform.id} className={`${platform.color} border`}>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center justify-between">
-                  {platform.name}
-                  {account && <div className="w-3 h-3 rounded-full bg-green-500" />}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {account ? (
-                  <>
-                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted/30 border border-white/5">
-                      <img 
-                        src={account.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${account.platform}`} 
-                        alt="Profile" 
-                        className="h-12 w-12 rounded-full border-2 border-kiwi/20"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold truncate">{account.accountName}</p>
-                        <p className="text-xs text-muted-foreground truncate">{account.bio || "No bio available"}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-2 py-2">
-                      <div className="text-center p-2 rounded-xl bg-muted/20">
-                        <p className="text-xs text-muted-foreground">Followers</p>
-                        <p className="font-black text-kiwi">{account.followersCount || 0}</p>
-                      </div>
-                      <div className="text-center p-2 rounded-xl bg-muted/20">
-                        <p className="text-xs text-muted-foreground">Following</p>
-                        <p className="font-black text-cyan-neon">{account.followingCount || 0}</p>
-                      </div>
-                      <div className="text-center p-2 rounded-xl bg-muted/20">
-                        <p className="text-xs text-muted-foreground">Posts</p>
-                        <p className="font-black text-raspberry">{account.postsCount || 0}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1"
-                        onClick={() => window.open(platforms.find(p => p.id === account.platform)?.url, "_blank")}
-                      >
-                        Ver Perfil
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => {
-                          setAccounts(accounts.filter((a) => a.id !== account.id));
-                          toast({ title: "Disconnected", description: `${platform.name} disconnected` });
-                        }}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <Button
-                    onClick={() => connectAccount(platform.id)}
-                    disabled={connecting}
-                    className="w-full"
+      {/* Connected Accounts & Multi-Account Management */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1 space-y-4">
+          <Card className="glass-card rounded-[2rem] border-border/50">
+            <CardHeader>
+              <CardTitle className="text-xl font-black flex items-center gap-2">
+                <Link2 className="h-5 w-5 text-kiwi" />
+                Cuentas Conectadas
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {accounts.map((acc) => (
+                <div 
+                  key={acc.id} 
+                  onClick={() => setActiveAccount(acc)}
+                  className={`flex items-center gap-3 p-3 rounded-2xl cursor-pointer border transition-all ${
+                    activeAccount?.id === acc.id 
+                    ? "bg-primary/20 border-primary" 
+                    : "bg-muted/10 border-transparent hover:bg-muted/20"
+                  }`}
+                >
+                  <img 
+                    src={acc.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${acc.platform}`} 
+                    className="h-10 w-10 rounded-full border border-white/10"
+                    alt="Profile"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm truncate">{acc.accountName}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">{acc.platform}</p>
+                  </div>
+                  {activeAccount?.id === acc.id && (
+                    <div className="w-2 h-2 rounded-full bg-kiwi shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                  )}
+                </div>
+              ))}
+              <div className="pt-4 grid grid-cols-3 gap-2">
+                {platforms.map(p => (
+                  <Button 
+                    key={p.id}
+                    size="icon" 
+                    variant="outline" 
+                    onClick={() => connectAccount(p.id)}
+                    className="rounded-xl border-dashed hover:border-primary hover:text-primary transition-all"
                   >
-                    {connecting ? (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    ) : (
-                      <Link2 className="h-4 w-4 mr-2" />
-                    )}
-                    Connect {platform.name}
+                    <Plus className="h-4 w-4" />
                   </Button>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      {/* Publish Content */}
-      {accounts.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Publish Content</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Select Platform</label>
-              <select
-                value={publishContent.platform}
-                onChange={(e) => setPublishContent({ ...publishContent, platform: e.target.value })}
-                className="w-full mt-2 px-3 py-2 bg-card border border-border rounded-md text-foreground"
-              >
-                <option value="">Choose platform...</option>
-                {accounts.map((acc) => (
-                  <option key={acc.id} value={acc.platform}>
-                    {acc.accountName}
-                  </option>
                 ))}
-              </select>
-            </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-            <div>
-              <label className="text-sm font-medium">Content</label>
-              <Textarea
-                placeholder="Write your content..."
-                value={publishContent.content}
-                onChange={(e) => setPublishContent({ ...publishContent, content: e.target.value })}
-                className="mt-2"
-              />
-            </div>
+        <div className="lg:col-span-2 space-y-6">
+          {activeAccount ? (
+            <>
+              <Card className="glass-card rounded-[3rem] border-border/50 overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-6">
+                   <Button size="icon" variant="ghost" onClick={() => {
+                     setAccounts(accounts.filter(a => a.id !== activeAccount.id));
+                     setActiveAccount(accounts.find(a => a.id !== activeAccount.id) || null);
+                     toast({ title: "Desconectado", description: "Cuenta eliminada con éxito" });
+                   }} className="rounded-full text-destructive hover:bg-destructive/10">
+                     <Trash2 className="h-5 w-5" />
+                   </Button>
+                </div>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-6">
+                    <div className="relative">
+                      <img 
+                        src={activeAccount.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${activeAccount.platform}`} 
+                        className="h-24 w-24 rounded-[2rem] border-2 border-kiwi shadow-2xl shadow-kiwi/20"
+                        alt="Active Profile"
+                      />
+                      <div className="absolute -bottom-2 -right-2 p-1.5 bg-background rounded-xl border border-border">
+                        {activeAccount.platform === 'instagram' && <Instagram className="h-4 w-4 text-pink-500" />}
+                        {activeAccount.platform === 'facebook' && <Facebook className="h-4 w-4 text-blue-500" />}
+                        {activeAccount.platform === 'whatsapp' && <MessageCircle className="h-4 w-4 text-green-500" />}
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h2 className="text-3xl font-black tracking-tight text-foreground">{activeAccount.accountName}</h2>
+                      <p className="text-muted-foreground font-medium">{activeAccount.bio || "Gestionando redes con SocialHub v2.0"}</p>
+                      <div className="flex gap-2 pt-1">
+                        <Badge variant="secondary" className="rounded-full bg-kiwi/10 text-kiwi border-kiwi/20 uppercase text-[10px]">
+                          {activeAccount.platform} Active
+                        </Badge>
+                        <Badge variant="outline" className="rounded-full border-border/50 text-[10px]">
+                          ID: {activeAccount.accountId}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div className="p-4 rounded-[1.5rem] bg-muted/20 border border-white/5 text-center">
+                      <p className="text-xs text-muted-foreground uppercase font-black mb-1">Followers</p>
+                      <p className="text-2xl font-black text-kiwi">{activeAccount.followersCount || '0'}</p>
+                    </div>
+                    <div className="p-4 rounded-[1.5rem] bg-muted/20 border border-white/5 text-center">
+                      <p className="text-xs text-muted-foreground uppercase font-black mb-1">Following</p>
+                      <p className="text-2xl font-black text-cyan-neon">{activeAccount.followingCount || '0'}</p>
+                    </div>
+                    <div className="p-4 rounded-[1.5rem] bg-muted/20 border border-white/5 text-center">
+                      <p className="text-xs text-muted-foreground uppercase font-black mb-1">Posts</p>
+                      <p className="text-2xl font-black text-raspberry">{activeAccount.postsCount || '0'}</p>
+                    </div>
+                  </div>
 
-            <div>
-              <label className="text-sm font-medium">Image URL (optional)</label>
-              <Input
-                placeholder="https://..."
-                value={publishContent.image}
-                onChange={(e) => setPublishContent({ ...publishContent, image: e.target.value })}
-                className="mt-2"
-              />
-            </div>
-
-            <Button onClick={publishContent_fn} className="w-full bg-gradient-to-r from-blue-500 to-purple-500">
-              <Send className="h-4 w-4 mr-2" />
-              Publish Now
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      {accounts.length === 0 && (
-        <Card className="bg-muted/50 text-center py-12">
-          <p className="text-muted-foreground">No accounts connected yet. Connect a platform above to get started!</p>
-        </Card>
-      )}
+                  <div className="space-y-4">
+                    <h3 className="font-bold text-sm flex items-center gap-2">
+                      <Send className="h-4 w-4 text-kiwi" />
+                      Publicación Rápida
+                    </h3>
+                    <Textarea 
+                      placeholder={`¿Qué quieres publicar en ${activeAccount.accountName}?`}
+                      className="rounded-[1.5rem] bg-muted/10 border-border/50 min-h-[100px] focus:ring-kiwi/30"
+                    />
+                    <Button className="w-full h-12 rounded-2xl bg-kiwi text-black font-black hover:bg-kiwi/90 shadow-xl shadow-kiwi/10">
+                      Publicar Ahora
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <Card className="glass-card rounded-[3rem] border-dashed border-border/50 h-[400px] flex flex-col items-center justify-center text-center p-8">
+              <div className="p-4 rounded-full bg-muted/20 mb-4">
+                <Link2 className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h2 className="text-xl font-bold mb-2">No hay cuenta seleccionada</h2>
+              <p className="text-muted-foreground text-sm max-w-[250px]">
+                Selecciona una cuenta del panel izquierdo o conecta una nueva para empezar a gestionar.
+              </p>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
