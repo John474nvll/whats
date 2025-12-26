@@ -123,11 +123,33 @@ export const campaigns = pgTable("campaigns", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const customers = pgTable("customers", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  platform: text("platform"), // 'whatsapp', 'instagram', 'facebook'
+  platformId: text("platform_id"),
+  status: text("status").default("active"), // 'active', 'inactive', 'blocked'
+  tags: text("tags").array().default([]),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const campaignsRelations = relations(campaigns, ({ one }) => ({
   user: one(users, {
     fields: [campaigns.userId],
+    references: [users.id],
+  }),
+}));
+
+export const customersRelations = relations(customers, ({ one }) => ({
+  user: one(users, {
+    fields: [customers.userId],
     references: [users.id],
   }),
 }));
@@ -186,6 +208,7 @@ export const insertFunnelSchema = createInsertSchema(salesFunnels).omit({ id: tr
 export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true, createdAt: true });
 export const insertArtistProfileSchema = createInsertSchema(artistProfiles).omit({ id: true, createdAt: true });
 export const insertMusicContentSchema = createInsertSchema(musicContent).omit({ id: true, createdAt: true });
+export const insertCustomerSchema = createInsertSchema(customers).omit({ id: true, createdAt: true, updatedAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -221,6 +244,9 @@ export type InsertArtistProfile = z.infer<typeof insertArtistProfileSchema>;
 
 export type MusicContent = typeof musicContent.$inferSelect;
 export type InsertMusicContent = z.infer<typeof insertMusicContentSchema>;
+
+export type Customer = typeof customers.$inferSelect;
+export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 

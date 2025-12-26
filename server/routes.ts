@@ -448,6 +448,58 @@ export async function registerRoutes(
     }
   });
 
+  // Customers endpoints
+  app.get("/api/customers", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const customers = await storage.getCustomers(req.userId!);
+      res.json(customers);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch customers" });
+    }
+  });
+
+  app.get("/api/customers/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const customer = await storage.getCustomer(Number(req.params.id));
+      if (!customer) return res.sendStatus(404);
+      res.json(customer);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch customer" });
+    }
+  });
+
+  app.post("/api/customers", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const customer = await storage.createCustomer({
+        ...req.body,
+        userId: req.userId!
+      });
+      res.status(201).json(customer);
+    } catch {
+      res.status(500).json({ error: "Failed to create customer" });
+    }
+  });
+
+  app.patch("/api/customers/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const customer = await storage.updateCustomer(id, req.body);
+      res.json(customer);
+    } catch {
+      res.status(500).json({ error: "Failed to update customer" });
+    }
+  });
+
+  app.delete("/api/customers/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCustomer(id);
+      res.sendStatus(204);
+    } catch {
+      res.status(500).json({ error: "Failed to delete customer" });
+    }
+  });
+
   // Artist & Music Endpoints
   app.get("/api/artists", authMiddleware as any, async (req: AuthRequest, res) => {
     try {

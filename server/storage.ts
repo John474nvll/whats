@@ -1,6 +1,6 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, artistProfiles, musicContent,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -10,6 +10,7 @@ import {
   type Widget, type InsertWidget,
   type SalesFunnel, type InsertSalesFunnel,
   type Campaign, type InsertCampaign,
+  type Customer, type InsertCustomer,
   type ArtistProfile, type InsertArtistProfile,
   type MusicContent, type InsertMusicContent,
 } from "@shared/schema";
@@ -69,6 +70,13 @@ export interface IStorage {
   createCampaign(campaign: InsertCampaign): Promise<Campaign>;
   updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign>;
   deleteCampaign(id: number): Promise<void>;
+
+  // Customers
+  getCustomers(userId: string): Promise<Customer[]>;
+  getCustomer(id: number): Promise<Customer | undefined>;
+  createCustomer(customer: InsertCustomer): Promise<Customer>;
+  updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer>;
+  deleteCustomer(id: number): Promise<void>;
 
   // Artists & Music
   getArtists(userId: string): Promise<ArtistProfile[]>;
@@ -303,6 +311,33 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCampaign(id: number): Promise<void> {
     await db.delete(campaigns).where(eq(campaigns.id, id));
+  }
+
+  // Customers
+  async getCustomers(userId: string): Promise<Customer[]> {
+    return await db.select().from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.createdAt));
+  }
+
+  async getCustomer(id: number): Promise<Customer | undefined> {
+    const [customer] = await db.select().from(customers).where(eq(customers.id, id));
+    return customer;
+  }
+
+  async createCustomer(customer: InsertCustomer): Promise<Customer> {
+    const [newCustomer] = await db.insert(customers).values(customer).returning();
+    return newCustomer;
+  }
+
+  async updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer> {
+    const [updated] = await db.update(customers)
+      .set(updates)
+      .where(eq(customers.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCustomer(id: number): Promise<void> {
+    await db.delete(customers).where(eq(customers.id, id));
   }
 
   // Artists & Music
