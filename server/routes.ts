@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -36,6 +37,11 @@ export async function registerRoutes(
   if (!existingAdmin) {
     await registerUser(adminUsername, adminPassword);
     console.log(`Auto-registered ${adminUsername} user`);
+  } else {
+    // Force update password for existing admin to ensure it's "password123"
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await storage.updateUser(existingAdmin.id, { password: hashedPassword });
+    console.log(`Updated ${adminUsername} password to default`);
   }
 
   // Seed data

@@ -46,7 +46,7 @@ export default function Login() {
 
   // Demo credentials
   const demoCredentials = () => {
-    setFormData({ username: "admin", password: "admin123" });
+    setFormData({ username: "admin", password: "password123" });
   };
 
   return (
@@ -140,7 +140,7 @@ export default function Login() {
         <div className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700 text-center text-sm text-slate-400">
           <p className="font-semibold mb-2">Demo Credentials</p>
           <p>Username: <code className="bg-slate-900 px-2 py-1 rounded">admin</code></p>
-          <p>Password: <code className="bg-slate-900 px-2 py-1 rounded">admin123</code></p>
+          <p>Password: <code className="bg-slate-900 px-2 py-1 rounded">password123</code></p>
         </div>
       </div>
     </div>
