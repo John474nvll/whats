@@ -26,21 +26,19 @@ export default function Login() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
         let errorMessage = "Authentication failed";
-        
-        if (Array.isArray(errorData)) {
-          // Handle Zod validation errors from backend
-          errorMessage = errorData.map(err => err.message).join(", ");
-        } else if (errorData.error) {
-          errorMessage = errorData.error;
+        if (Array.isArray(data)) {
+          errorMessage = data.map(err => err.message).join(", ");
+        } else if (data.error) {
+          errorMessage = data.error;
         }
-        
         throw new Error(errorMessage);
       }
 
-      const { token, user } = await response.json();
+      const { token, user } = data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
