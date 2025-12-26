@@ -35,13 +35,17 @@ export async function registerRoutes(
   const adminPassword = "password123";
   const existingAdmin = await storage.getUserByUsername(adminUsername);
   if (!existingAdmin) {
-    await registerUser(adminUsername, adminPassword);
-    console.log(`Auto-registered ${adminUsername} user`);
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await storage.createUser({
+      id: "admin-uuid-fixed",
+      username: adminUsername,
+      password: hashedPassword
+    });
+    console.log(`Auto-registered ${adminUsername} user with password: ${adminPassword}`);
   } else {
-    // Force update password for existing admin to ensure it's "password123"
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
     await storage.updateUser(existingAdmin.id, { password: hashedPassword });
-    console.log(`Updated ${adminUsername} password to default`);
+    console.log(`Updated ${adminUsername} password to: ${adminPassword}`);
   }
 
   // Seed data
