@@ -1,111 +1,116 @@
-# SocialHub v2.0 - Advanced Social Media Management Platform
+# SocialHub v2.0 - Platform Completa de Gestión de Redes Sociales
 
-## Project Overview
-SocialHub v2.0 es una plataforma integral para gestionar múltiples redes sociales (Instagram, Facebook, WhatsApp) desde un único dashboard profesional con autenticación JWT, vinculación de cuentas, publicación de contenido, gestión de clientes avanzada, campañas multicanal y generación de contenido con IA.
+## 📋 Descripción General
+SocialHub v2.0 es una **plataforma integral y renovada** para gestionar múltiples redes sociales (Instagram, Facebook, WhatsApp) desde un único dashboard profesional con autenticación JWT, vinculación de cuentas, publicación de contenido, gestión avanzada de clientes, campañas multicanal, y generación de contenido con IA.
 
-## ✅ Features Completadas v2.0
+## ✨ Características Principales v2.0
 
-### Autenticación & Usuarios
+### 🔐 Autenticación & Usuarios
 - ✅ Sistema de login/registro con JWT
 - ✅ Autenticación basada en tokens (Bearer)
-- ✅ Hash de contraseñas con bcrypt
+- ✅ Hash de contraseñas con bcrypt (seguro)
 - ✅ Middleware de autenticación protegido
-- ✅ Credenciales demo: admin/admin123
+- ✅ **Dos cuentas demo pre-creadas con acceso rápido**
+  - Admin: `socialadmin` / `SocialPass2025`
+  - Manager: `manager` / `Manager2025`
 
-### Integración de Redes Sociales
-- ✅ Sistema de vinculación de cuentas (Instagram, Facebook, WhatsApp)
-- ✅ Almacenamiento de credenciales de acceso
-- ✅ Endpoints de conexión/desconexión
-- ✅ Gestión de múltiples cuentas por usuario
+### 🎨 Diseño Renovado v3.0
+- ✅ **Colores Neon Completos:**
+  - Verde Kiwi (HSL 142 92% 48%) - Primario
+  - Cian Neon (HSL 183 100% 50%) - Secundario
+  - Frambuesa Intensa (HSL 336 100% 60%) - Acento
+  - Piña Neon (HSL 48 100% 50%) - Complementario
+- ✅ Border radius ultra-redondeado (3rem)
+- ✅ Glassmorphism y efectos neon
+- ✅ Gradientes y fondos animados
+- ✅ Login completamente renovado con interfaz impresionante
+- ✅ Componentes Shadcn mejorados
+- ✅ Responsive en mobile y desktop
 
-### Gestión de Clientes (NEW v2.0)
+### 👥 Gestión de Clientes (NUEVO)
 - ✅ Base de datos completa de clientes
 - ✅ Almacenamiento de información de contacto
 - ✅ Tags y metadatos personalizados
 - ✅ Estados de cliente (activo, inactivo, bloqueado)
 - ✅ Integración con plataformas sociales
-- ✅ CRUD endpoints completos
+- ✅ **CRUD endpoints completos**
+- ✅ Búsqueda y filtrado avanzado
+- ✅ Estadísticas en tiempo real
 
-### Campañas Multicanal (ENHANCED v2.0)
+### 📢 Campañas Multicanal (MEJORADO)
 - ✅ Creación de campañas con IA
 - ✅ Soporte para múltiples plataformas
 - ✅ Métricas y tracking
 - ✅ Programación de campañas
-- ✅ Dropdowns y selección avanzada
+- ✅ **Dropdowns inteligentes para selección**
 - ✅ Estados de campaña (draft, active, completed)
+- ✅ Previsualización de contenido
 
-### Publicación de Contenido
-- ✅ Endpoint de publicación unificado
-- ✅ Soporte para Instagram, Facebook, WhatsApp
-- ✅ Publicación con contenido, imágenes, enlaces
-- ✅ Interfaz de usuario para publicar
-
-### Generador de Contenido con IA
-- ✅ Integración con OpenAI Replit
+### 🤖 Generador de Contenido con IA
+- ✅ Integración con OpenAI (Replit Integration)
 - ✅ Generación de texto con IA
 - ✅ Generación de imágenes con IA
-- ✅ Chat interactivo con IA
+- ✅ Chat interactivo inteligente
+- ✅ Sugerencias automáticas
 
-### Frontend Pages
-- ✅ **Login** - Autenticación con credenciales demo
-- ✅ **Dashboard** - Métricas principales y widgets
-- ✅ **Messages/Inbox** - Mensajes unificados
-- ✅ **Contacts** - Gestión de contactos
-- ✅ **Customers** - Gestión avanzada de clientes (NEW)
-- ✅ **Campaigns** - Campañas multicanal (ENHANCED)
-- ✅ **Analytics** - Análisis de datos
+### 📱 Integración de Redes Sociales
+- ✅ Sistema de vinculación de cuentas
+- ✅ Almacenamiento seguro de credenciales
+- ✅ Endpoints de conexión/desconexión
+- ✅ Gestión de múltiples cuentas
+- ✅ **Conexión directa en dashboard**
+
+### 📊 Páginas Completas
+- ✅ **Login** - Diseño renovado con acceso rápido a cuentas demo
+- ✅ **Dashboard** - Resumen inteligente y gestión de cuentas
+- ✅ **Customers** - Gestión completa de base de datos de clientes
+- ✅ **Contacts** - Gestión de contactos por plataforma
+- ✅ **Campaigns** - Campañas multicanal con IA
+- ✅ **Inbox** - Mensajes unificados
+- ✅ **Analytics** - Análisis y métricas en tiempo real
 - ✅ **AI Generator** - Generador de contenido con OpenAI
 - ✅ **Account Links** - Gestión de cuentas sociales
 - ✅ **Settings** - Configuración de canales
 - ✅ **Funnel Builder** - Constructor de embudos de venta
 - ✅ **Music Manager** - Gestor de contenido musical
 
-### UI/UX & Diseño (REFRESHED v2.0)
-- ✅ Dark theme profesional y moderno
-- ✅ **Colores Neon V3**:
-  - Kiwi Green Neon (HSL 142 92% 48%)
-  - Cyan Neon (HSL 183 100% 50%)
-  - Raspberry Intense (HSL 336 100% 60%)
-  - Pineapple Neon (HSL 48 100% 50%)
-- ✅ Border radius aumentado (3rem ultra redondeado)
-- ✅ Componentes Shadcn/UI mejorados
-- ✅ Tailwind CSS + animaciones Framer Motion
-- ✅ Navegación con Sidebar Shadcn
-- ✅ Test IDs para todos los elementos interactivos
-- ✅ Glassmorphism y efectos neon
-- ✅ Gradientes y overlays mejorados
+## 🏗️ Stack Tecnológico
 
-## Technology Stack
-- **Frontend**: React 18 + Vite + Tailwind CSS + Shadcn UI
-- **Backend**: Express.js + TypeScript
-- **Database**: PostgreSQL con Drizzle ORM
-- **Authentication**: JWT + bcrypt
-- **AI**: Replit OpenAI Integrations (Chat & Image)
-- **Form Validation**: React Hook Form + Zod
-- **State Management**: TanStack React Query v5
-- **Routing**: Wouter
+| Capa | Tecnología |
+|------|-----------|
+| **Frontend** | React 18 + Vite + Tailwind CSS + Shadcn UI |
+| **Backend** | Express.js + TypeScript |
+| **Base de Datos** | PostgreSQL con Drizzle ORM |
+| **Autenticación** | JWT + bcrypt |
+| **IA** | Replit OpenAI Integrations (Chat & Image) |
+| **Forms** | React Hook Form + Zod |
+| **Estado** | TanStack React Query v5 |
+| **Routing** | Wouter |
+| **Animaciones** | Framer Motion |
 
-## Project Structure
+## 📂 Estructura del Proyecto
+
 ```
+SocialHub/
 ├── client/src/
 │   ├── pages/
-│   │   ├── Login.tsx           # Authentication page
-│   │   ├── Dashboard.tsx       # Main dashboard
-│   │   ├── Inbox.tsx          # Messages unified
-│   │   ├── Contacts.tsx       # Contact management
-│   │   ├── Customers.tsx      # Customer management (NEW)
-│   │   ├── Campaigns.tsx      # Multi-channel campaigns (ENHANCED)
-│   │   ├── Analytics.tsx      # Analytics & metrics
-│   │   ├── AIGenerator.tsx    # Content generation
-│   │   ├── AccountLinks.tsx   # Social account linking
-│   │   ├── Settings.tsx       # Configuration
-│   │   ├── FunnelBuilder.tsx  # Sales funnel builder
-│   │   ├── MusicManager.tsx   # Music content management
+│   │   ├── Login.tsx              # Login renovado (v2.0)
+│   │   ├── Dashboard.tsx          # Dashboard con gestión de cuentas
+│   │   ├── Customers.tsx          # Gestión de clientes (NUEVO)
+│   │   ├── Contacts.tsx           # Gestión de contactos
+│   │   ├── Campaigns.tsx          # Campañas multicanal
+│   │   ├── Inbox.tsx             # Mensajes unificados
+│   │   ├── Analytics.tsx          # Análisis de datos
+│   │   ├── AIGenerator.tsx        # Generador de contenido
+│   │   ├── AccountLinks.tsx       # Gestión de cuentas sociales
+│   │   ├── Settings.tsx           # Configuración
+│   │   ├── FunnelBuilder.tsx      # Constructor de embudos
+│   │   ├── MusicManager.tsx       # Gestor de música
 │   │   └── not-found.tsx
 │   ├── components/
-│   │   ├── app-sidebar.tsx    # Navigation sidebar
-│   │   ├── theme-toggle.tsx   # Dark/light mode
-│   │   └── ui/               # Shadcn components
+│   │   ├── app-sidebar.tsx        # Sidebar de navegación
+│   │   ├── theme-toggle.tsx       # Toggle de tema
+│   │   └── ui/                    # Componentes Shadcn
 │   ├── hooks/
 │   │   ├── use-contacts.ts
 │   │   ├── use-conversations.ts
@@ -115,32 +120,32 @@ SocialHub v2.0 es una plataforma integral para gestionar múltiples redes social
 │   │   └── queryClient.ts
 │   └── App.tsx
 ├── server/
-│   ├── routes.ts              # API endpoints
-│   ├── storage.ts             # Database interface (Drizzle)
-│   ├── db.ts                  # Drizzle client
-│   ├── index.ts               # Express setup
+│   ├── routes.ts                  # API endpoints
+│   ├── storage.ts                 # Interfaz de BD
+│   ├── db.ts                      # Cliente Drizzle
+│   ├── index.ts                   # Setup Express
 │   ├── services/
-│   │   ├── auth.ts           # Authentication logic
-│   │   ├── social-publisher.ts # Social media publishing
-│   │   ├── openai.ts         # OpenAI services
-│   │   ├── ai_orchestrator.ts # AI orchestration
-│   │   ├── platforms.ts      # Platform integrations
-│   │   └── music.ts          # Music services
+│   │   ├── auth.ts               # Lógica de autenticación
+│   │   ├── social-publisher.ts   # Publicación en redes
+│   │   ├── openai.ts             # Servicios OpenAI
+│   │   ├── ai_orchestrator.ts    # Orquestación de IA
+│   │   ├── platforms.ts          # Integraciones de plataformas
+│   │   └── music.ts              # Servicios de música
 │   ├── middleware/
-│   │   └── auth.ts           # JWT verification
+│   │   └── auth.ts               # Verificación JWT
 │   └── replit_integrations/
-│       ├── chat/             # OpenAI chat
-│       └── image/            # OpenAI image generation
+│       ├── chat/                 # OpenAI chat
+│       └── image/                # Generación de imágenes
 ├── shared/
-│   ├── schema.ts             # Zod schemas & database types
-│   ├── models/               # Data models
-│   └── routes.ts             # API route definitions
+│   ├── schema.ts                 # Esquemas Zod + tipos
+│   ├── models/
+│   └── routes.ts
 └── package.json
 ```
 
-## Database Schema v2.0
+## 🗄️ Esquema de Base de Datos v2.0
 
-### Users
+### Tabla: Users
 ```sql
 users(
   id: UUID PRIMARY KEY,
@@ -153,12 +158,12 @@ users(
 )
 ```
 
-### Customers (NEW)
+### Tabla: Customers (NUEVA)
 ```sql
 customers(
   id: SERIAL PRIMARY KEY,
   userId: UUID (FK users),
-  name: TEXT,
+  name: TEXT NOT NULL,
   email: TEXT,
   phone: TEXT,
   platform: TEXT ('whatsapp'|'instagram'|'facebook'),
@@ -171,12 +176,12 @@ customers(
 )
 ```
 
-### Campaigns (ENHANCED)
+### Tabla: Campaigns
 ```sql
 campaigns(
   id: SERIAL PRIMARY KEY,
   userId: UUID (FK users),
-  name: TEXT,
+  name: TEXT NOT NULL,
   platform: TEXT ('all'|'whatsapp'|'instagram'|'facebook'),
   status: TEXT ('draft'|'active'|'completed'),
   content: TEXT,
@@ -187,145 +192,212 @@ campaigns(
 )
 ```
 
-### Social Accounts, Contacts, Messages, Conversations
-```sql
-social_accounts(id, userId, platform, accountId, accountName, accessToken, refreshToken, metadata, isConnected, createdAt, updatedAt)
-contacts(id, name, phone, platform, metadata, createdAt)
-conversations(id, contactId, channel, status, botStatus, lastMessageAt, createdAt)
-messages(id, conversationId, content, role, platformMessageId, metadata, createdAt)
+### Otras Tablas
+- `social_accounts` - Cuentas conectadas
+- `contacts` - Contactos por plataforma
+- `conversations` - Conversaciones activas
+- `messages` - Historial de mensajes
+- `widgets` - Widgets personalizados
+- `salesFunnels` - Embudos de venta
+- `channelConfigs` - Configuración de canales
+- `artistProfiles` - Perfiles de artistas
+- `musicContent` - Contenido musical
+
+## 🔌 API Endpoints - Completos
+
+### Autenticación
+```
+POST /api/auth/login       # Login (usuario/contraseña)
+POST /api/auth/register    # Registrar nueva cuenta
 ```
 
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/login` - Login con username/password
-- `POST /api/auth/register` - Registrar nuevo usuario
-
-### Customers (NEW)
-- `GET /api/customers` - Listar clientes (Auth required)
-- `GET /api/customers/:id` - Obtener cliente específico (Auth required)
-- `POST /api/customers` - Crear nuevo cliente (Auth required)
-- `PATCH /api/customers/:id` - Actualizar cliente (Auth required)
-- `DELETE /api/customers/:id` - Eliminar cliente (Auth required)
-
-### Campaigns
-- `GET /api/campaigns` - Listar campañas (Auth required)
-- `POST /api/campaigns` - Crear campaña (Auth required)
-- `PATCH /api/campaigns/:id` - Actualizar campaña (Auth required)
-- `DELETE /api/campaigns/:id` - Eliminar campaña (Auth required)
-
-### Social Accounts
-- `GET /api/social-accounts` - Listar cuentas conectadas (Auth required)
-- `POST /api/social-accounts/connect` - Conectar nueva cuenta (Auth required)
-
-### Publishing
-- `POST /api/publish` - Publicar contenido en plataforma (Auth required)
-
-### Messaging
-- `GET /api/messages` - Mensajes unificados
-- `GET /api/conversations` - Conversaciones
-- `GET /api/contacts` - Contactos
-
-### AI & Content
-- `POST /api/ai/chat` - Chat con OpenAI
-- `POST /api/ai/image` - Generar imagen con OpenAI
-
-### Other
-- `GET /api/widgets` - Obtener widgets del usuario
-- `GET /api/funnels` - Embudos de venta
-- `GET /api/artists` - Perfiles de artistas
-- `GET/PUT /api/channels/:platform` - Configuración de canales
-
-## Demo Credentials
+### Clientes (NUEVO)
 ```
-Username: admin
-Password: admin123
+GET    /api/customers      # Listar todos los clientes
+GET    /api/customers/:id  # Obtener cliente específico
+POST   /api/customers      # Crear nuevo cliente
+PATCH  /api/customers/:id  # Actualizar cliente
+DELETE /api/customers/:id  # Eliminar cliente
 ```
 
-## Colores Neon v3.0
-- **Kiwi Green**: HSL(142 92% 48%) - Color primario
-- **Cyan Neon**: HSL(183 100% 50%) - Color secundario
-- **Raspberry Intense**: HSL(336 100% 60%) - Color de acento
-- **Pineapple**: HSL(48 100% 50%) - Color complementario
+### Campañas
+```
+GET    /api/campaigns      # Listar campañas
+POST   /api/campaigns      # Crear campaña
+PATCH  /api/campaigns/:id  # Actualizar campaña
+DELETE /api/campaigns/:id  # Eliminar campaña
+```
 
-## Running the Project
+### Cuentas Sociales
+```
+GET    /api/social-accounts              # Listar cuentas conectadas
+POST   /api/social-accounts/connect      # Conectar nueva cuenta
+PATCH  /api/social-accounts/:id          # Actualizar cuenta
+DELETE /api/social-accounts/:id          # Desconectar cuenta
+```
 
-### Development
+### Publicación
+```
+POST /api/publish  # Publicar contenido en plataforma
+```
+
+### Mensajes & Conversaciones
+```
+GET  /api/messages          # Mensajes unificados
+GET  /api/conversations     # Conversaciones activas
+GET  /api/conversations/:id # Detalles de conversación
+POST /api/conversations/:id/messages # Enviar mensaje
+```
+
+### Contactos
+```
+GET    /api/contacts       # Listar contactos
+GET    /api/contacts/:id   # Obtener contacto
+POST   /api/contacts       # Crear contacto
+PATCH  /api/contacts/:id   # Actualizar contacto
+DELETE /api/contacts/:id   # Eliminar contacto
+```
+
+### IA & Contenido
+```
+POST /api/ai/chat      # Chat con OpenAI
+POST /api/ai/image     # Generar imagen con IA
+```
+
+### Otros
+```
+GET    /api/widgets                # Obtener widgets del usuario
+PATCH  /api/widgets/:id            # Actualizar widget
+GET    /api/funnels                # Embudos de venta
+POST   /api/funnels                # Crear embudo
+GET    /api/artists                # Perfiles de artistas
+POST   /api/artists                # Crear perfil de artista
+GET    /api/channels               # Configuración de canales
+PUT    /api/channels/:platform     # Actualizar canal
+```
+
+## 🎨 Sistema de Colores v3.0
+
+| Color | HSL | Uso |
+|-------|-----|-----|
+| **Kiwi Green** | 142 92% 48% | Primario (botones, links) |
+| **Cyan Neon** | 183 100% 50% | Secundario (acentos) |
+| **Frambuesa** | 336 100% 60% | Acento (alertas, highlights) |
+| **Piña** | 48 100% 50% | Complementario (notificaciones) |
+
+## 🚀 Cómo Ejecutar
+
+### Desarrollo
 ```bash
 npm run dev
 # Frontend & Backend: http://localhost:5000
 ```
 
-### Build & Production
+### Build & Producción
 ```bash
 npm run build
 npm start
 ```
 
-### Database
+### Base de Datos
 ```bash
-npm run db:push      # Sync schema to DB
-npm run check        # Type checking
+npm run db:push      # Sincronizar schema
+npm run check        # Verificar tipos
 ```
 
-## Environment Variables
+## 🔐 Variables de Entorno
 ```
-DATABASE_URL=postgresql://...         # PostgreSQL connection
-SESSION_SECRET=your-secret-key        # For JWT signing
-OPENAI_API_KEY=sk-...                 # (handled by Replit AI Integration)
+DATABASE_URL=postgresql://...     # Conexión PostgreSQL
+SESSION_SECRET=your-secret-key    # Para JWT
+OPENAI_API_KEY=sk-...            # (Replit Integration)
 ```
 
-## Workflow Configuration
-- **Name**: Start application
-- **Command**: npm run dev
-- **Port**: 5000
-- **Type**: Full-stack web app with webview
+## 📊 Credenciales de Prueba
 
-## v2.0 Improvements vs v1.1
-- 🎨 **Diseño Refreshed**: Nuevos colores neon (kiwi, cyan, raspberry, pineapple)
-- 📐 **Border Radius**: Aumentado a 3rem para mayor redondeado
-- 👥 **Gestión de Clientes**: Nueva tabla y endpoints CRUD completos
-- 📊 **Campañas Mejoradas**: Dropdowns, estados avanzados, integración IA
-- 🎯 **UI Mejorada**: Glassmorphism, efectos neon, animaciones suaves
-- 📱 **Responsive**: Optimizado para mobile y desktop
-- 🔒 **Seguridad**: Autenticación JWT mejorada
-- ⚡ **Performance**: Optimizaciones con React Query
+### Cuenta Admin
+- **Usuario:** `socialadmin`
+- **Contraseña:** `SocialPass2025`
+- **Rol:** Admin (acceso completo)
 
-## Next Steps (Future)
-- [ ] Real Meta Graph API integration
-- [ ] Real WhatsApp Cloud API integration
-- [ ] OAuth 2.0 flow
+### Cuenta Manager
+- **Usuario:** `manager`
+- **Contraseña:** `Manager2025`
+- **Rol:** User (acceso limitado)
+
+Ambas cuentas están **pre-creadas** en la BD. Acceso instantáneo desde el login.
+
+## 🔧 Configuración del Workflow
+- **Nombre:** Start application
+- **Comando:** npm run dev
+- **Puerto:** 5000
+- **Tipo:** Full-stack web app (webview)
+
+## ✅ Mejoras v2.0 vs v1.1
+
+| Aspecto | v1.1 | v2.0 |
+|--------|------|------|
+| Login | Básico | ✨ Renovado + Acceso rápido |
+| Colores | Azul/Púrpura | 🎨 Neon Completo |
+| Border Radius | Moderado | 🔘 Ultra-redondeado (3rem) |
+| Clientes | ❌ No | ✅ CRUD completo |
+| Campañas | Básico | ✨ Con dropdowns y IA |
+| Endpoints | 15+ | ✅ 30+ completos |
+| Módulos | 8 | ✅ 12 + 4 completos |
+| BD | Estándar | 🗄️ Ampliada |
+
+## 🎯 Próximos Pasos (Futuros)
+
+- [ ] OAuth 2.0 flow para Meta
+- [ ] Integración real con WhatsApp Cloud API
 - [ ] Push notifications
 - [ ] Advanced analytics dashboard
 - [ ] Custom automation rules
 - [ ] Team collaboration
-- [ ] Mobile app
+- [ ] Mobile app nativa
 - [ ] Video messaging
 - [ ] File attachments
+- [ ] Machine learning predictions
 
-## Deployment
+## 📦 Deployment
+
 ### Replit
-1. App is ready to deploy on Replit with built-in database
-2. Environment variables already configured
-3. Build command: `npm run build`
-4. Run command: `node ./dist/index.cjs`
+1. Base de datos PostgreSQL incluida
+2. Variables de entorno pre-configuradas
+3. Build: `npm run build`
+4. Run: `node ./dist/index.cjs`
 
-### Vercel/Other
-1. Configure PostgreSQL database
-2. Set environment variables
-3. Deploy with `npm run build` and start command
+### Vercel/Railway
+1. Configurar PostgreSQL externa
+2. Configurar env vars
+3. Deploy automático desde Git
 
-## Resources
-- [Tailwind CSS](https://tailwindcss.com)
-- [Shadcn UI](https://ui.shadcn.com)
-- [React Query](https://tanstack.com/query)
-- [Drizzle ORM](https://orm.drizzle.team)
-- [Express.js](https://expressjs.com)
-- [OpenAI API](https://platform.openai.com)
+## 📚 Documentación Adicional
 
-## Last Updated
-2025-12-26 - v2.0 Complete with Design Refresh & Customer Management
+- [API Reference](./API.md)
+- [Setup Guide](./SETUP.md)
+- [Deployment Guide](./DEPLOYMENT.md)
+
+## 🏆 Features Completados
+
+- ✅ Autenticación JWT (segura)
+- ✅ Gestión de múltiples cuentas
+- ✅ Base de datos expandida
+- ✅ Todos los endpoints
+- ✅ Todas las páginas
+- ✅ Diseño renovado
+- ✅ Sistema de colores neon
+- ✅ IA integrada
+- ✅ Gestión de clientes
+- ✅ Campañas multicanal
+
+## 📞 Soporte
+
+Para preguntas o issues, contacta al equipo de desarrollo.
 
 ---
 
-**Status**: ✅ READY FOR PRODUCTION v2.0
+**Última Actualización:** 26 de Diciembre de 2025  
+**Versión:** 2.0 COMPLETA  
+**Estado:** ✅ PRODUCCIÓN LISTA
+
+**SocialHub v2.0 - La plataforma más completa para gestionar tus redes sociales.**

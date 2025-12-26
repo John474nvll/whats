@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Zap, Users, Sparkles, TrendingUp } from "lucide-react";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 export default function Login() {
@@ -42,8 +42,7 @@ export default function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      toast({ title: "Success", description: isLogin ? "Login successful!" : "Account created!" });
-      // Force reload to update App state and trigger redirection
+      toast({ title: "Success", description: isLogin ? "Welcome back!" : "Account created!" });
       window.location.href = "/";
     } catch (error) {
       toast({ title: "Error", description: error instanceof Error ? error.message : "Auth failed", variant: "destructive" });
@@ -52,7 +51,6 @@ export default function Login() {
     }
   };
 
-  // Demo credentials
   const demoCredentials = (user: string = "socialadmin") => {
     const creds: Record<string, { username: string; password: string }> = {
       socialadmin: { username: "socialadmin", password: "SocialPass2025" },
@@ -62,132 +60,185 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md relative">
-        <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-        
-        <Card className="bg-black/40 border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
-          <CardHeader className="text-center space-y-4 pt-8">
-            <div className="flex justify-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center overflow-hidden">
-                <img src={logoImage} alt="SocialHub" className="w-full h-full object-cover" />
-              </div>
-            </div>
-            <div>
-              <CardTitle className="text-2xl">SocialHub</CardTitle>
-              <CardDescription className="text-slate-400">
-                {isLogin ? "Welcome back" : "Create your account"}
-              </CardDescription>
-            </div>
-          </CardHeader>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Gradients */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/30 rounded-full blur-3xl opacity-20 animate-pulse" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/30 rounded-full blur-3xl opacity-20 animate-pulse" />
+      <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-secondary/20 rounded-full blur-3xl opacity-10" />
 
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-slate-300">Username</label>
-                <Input
-                  type="text"
-                  placeholder="admin"
-                  value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  className="mt-2 bg-slate-700/50 border-slate-600 text-white"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-300">Password</label>
-                <Input
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="mt-2 bg-slate-700/50 border-slate-600 text-white"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    {isLogin ? "Signing in..." : "Creating account..."}
-                  </>
-                ) : (
-                  isLogin ? "Sign In" : "Create Account"
-                )}
-              </Button>
-            </form>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-800/50 text-slate-400">or</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => demoCredentials("socialadmin")}
-                className="border-slate-600 text-slate-300 hover:bg-slate-700"
-              >
-                Admin Account
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => demoCredentials("manager")}
-                className="border-slate-600 text-slate-300 hover:bg-slate-700"
-              >
-                Manager Account
-              </Button>
-            </div>
-
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-blue-400 hover:text-blue-300"
-              >
-                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-              </button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="mt-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center text-sm text-slate-300 shadow-xl">
-          <p className="font-bold text-white mb-3 uppercase tracking-widest text-xs">V2.0 Access Credentials</p>
-          <div className="space-y-3">
-            <div className="bg-black/20 rounded-lg p-3">
-              <p className="text-xs text-slate-400 mb-2 uppercase">Account 1 (Admin)</p>
-              <p className="flex justify-between items-center">
-                <span className="text-slate-400">User:</span>
-                <code className="text-primary font-mono">socialadmin</code>
-              </p>
-              <p className="flex justify-between items-center mt-1">
-                <span className="text-slate-400">Pass:</span>
-                <code className="text-secondary font-mono">SocialPass2025</code>
+      <div className="w-full max-w-5xl relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Left Side - Features */}
+          <div className="hidden lg:block space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
+                SocialHub v2.0
+              </h1>
+              <p className="text-xl text-muted-foreground font-semibold">
+                Gestiona todas tus redes sociales desde un único lugar
               </p>
             </div>
-            <div className="bg-black/20 rounded-lg p-3">
-              <p className="text-xs text-slate-400 mb-2 uppercase">Account 2 (Manager)</p>
-              <p className="flex justify-between items-center">
-                <span className="text-slate-400">User:</span>
-                <code className="text-primary font-mono">manager</code>
-              </p>
-              <p className="flex justify-between items-center mt-1">
-                <span className="text-slate-400">Pass:</span>
-                <code className="text-secondary font-mono">Manager2025</code>
-              </p>
+
+            <div className="space-y-4">
+              <div className="flex gap-4 items-start">
+                <div className="p-3 rounded-xl bg-primary/20 text-primary">
+                  <Zap className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Automatización Inteligente</h3>
+                  <p className="text-sm text-muted-foreground">Publica, programa y gestiona todo con IA</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="p-3 rounded-xl bg-secondary/20 text-secondary">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Gestión de Clientes</h3>
+                  <p className="text-sm text-muted-foreground">Manejo completo de contactos y segmentación</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="p-3 rounded-xl bg-accent/20 text-accent">
+                  <TrendingUp className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Analítica Avanzada</h3>
+                  <p className="text-sm text-muted-foreground">Métricas detalladas y reportes en tiempo real</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="p-3 rounded-xl bg-primary/20 text-primary">
+                  <Sparkles className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Generación con IA</h3>
+                  <p className="text-sm text-muted-foreground">Crea contenido automático con OpenAI</p>
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Right Side - Login Form */}
+          <div className="space-y-6">
+            <Card className="bg-slate-900/50 border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
+              
+              <CardHeader className="text-center space-y-4 pt-8">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center overflow-hidden shadow-lg shadow-primary/50">
+                    <img src={logoImage} alt="SocialHub" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <div>
+                  <CardTitle className="text-3xl font-black">SocialHub</CardTitle>
+                  <CardDescription className="text-slate-400 text-base">
+                    {isLogin ? "Inicia sesión en tu cuenta" : "Crea tu nueva cuenta"}
+                  </CardDescription>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-300">Usuario</label>
+                    <Input
+                      type="text"
+                      placeholder="socialadmin o manager"
+                      value={formData.username}
+                      onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                      className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 h-12 rounded-lg"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-300">Contraseña</label>
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 h-12 rounded-lg"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-primary via-secondary to-accent hover:opacity-90 text-black font-bold h-12 rounded-lg transition-all"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {isLogin ? "Entrando..." : "Creando cuenta..."}
+                      </>
+                    ) : (
+                      isLogin ? "Iniciar Sesión" : "Crear Cuenta"
+                    )}
+                  </Button>
+                </form>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-700"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-slate-900 text-slate-400">o acceso rápido</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    type="button"
+                    onClick={() => demoCredentials("socialadmin")}
+                    className="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary font-bold rounded-lg h-11"
+                  >
+                    👨‍💼 Admin
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => demoCredentials("manager")}
+                    className="bg-secondary/20 hover:bg-secondary/30 border border-secondary/30 text-secondary font-bold rounded-lg h-11"
+                  >
+                    👤 Manager
+                  </Button>
+                </div>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
+                  >
+                    {isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión"}
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Credentials Info Card */}
+            <Card className="bg-slate-900/30 border-primary/30 backdrop-blur-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" /> Credenciales de Prueba
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-xs">
+                <div className="bg-slate-900/50 rounded-lg p-3 border border-primary/20">
+                  <p className="font-bold text-primary mb-1">Admin Account</p>
+                  <p className="text-slate-400">Usuario: <code className="text-primary font-mono">socialadmin</code></p>
+                  <p className="text-slate-400">Pass: <code className="text-primary font-mono">SocialPass2025</code></p>
+                </div>
+                <div className="bg-slate-900/50 rounded-lg p-3 border border-secondary/20">
+                  <p className="font-bold text-secondary mb-1">Manager Account</p>
+                  <p className="text-slate-400">Usuario: <code className="text-secondary font-mono">manager</code></p>
+                  <p className="text-slate-400">Pass: <code className="text-secondary font-mono">Manager2025</code></p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

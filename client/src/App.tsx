@@ -10,6 +10,7 @@ import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Inbox from "@/pages/Inbox";
 import Contacts from "@/pages/Contacts";
+import Customers from "@/pages/Customers";
 import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/inbox" component={Inbox} />
       <Route path="/contacts" component={Contacts} />
+      <Route path="/customers" component={Customers} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/accounts" component={AccountLinks} />
@@ -70,7 +72,6 @@ function App() {
       setIsAuthenticated(!!localStorage.getItem("token"));
     };
     window.addEventListener("storage", handleStorageChange);
-    // Poll for changes in case storage event doesn't fire (same tab)
     const interval = setInterval(() => {
       const token = !!localStorage.getItem("token");
       if (token !== isAuthenticated) {
