@@ -1,3 +1,4 @@
+import { db } from "./db";
 import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, artistProfiles, musicContent,
   type User, type InsertUser,
@@ -323,7 +324,5 @@ export class DatabaseStorage implements IStorage {
     return newContent;
   }
 }
-
-export const storage = new DatabaseStorage();
 
 export const storage = new DatabaseStorage();

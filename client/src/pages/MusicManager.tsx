@@ -1,147 +1,199 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Music, Youtube, Plus, Trash2, Disc, Radio, ExternalLink, Sparkles } from "lucide-react";
-import { queryClient, apiRequest } from "@/lib/queryClient";
-import type { ArtistProfile, MusicContent } from "@shared/schema";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
+import { Music, Plus, Youtube, Disc, Loader2, Play } from "lucide-react";
+import { SiSpotify } from "react-icons/si";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import { motion } from "framer-motion";
 
 export default function MusicManager() {
   const { toast } = useToast();
-  const { data: artists, isLoading: artistsLoading } = useQuery<ArtistProfile[]>({
+  const [showAddArtist, setShowAddArtist] = useState(false);
+  const [newArtist, setNewArtist] = useState({ artistName: "", genre: "", bio: "" });
+
+  const { data: artists, isLoading } = useQuery({
     queryKey: ["/api/artists"],
   });
 
-  const createArtist = useMutation({
-    mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/artists", {
-        artistName: "Nuevo Artista Neon",
-        genre: "Synthwave / Electronic",
-        bio: "Explorando sonidos del futuro.",
-        metadata: {}
-      });
+  const createArtistMutation = useMutation({
+    mutationFn: async (data: typeof newArtist) => {
+      const res = await apiRequest("POST", "/api/artists", data);
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/artists"] });
-      toast({ title: "Perfil de Artista creado" });
+      toast({ title: "Artista Creado", description: "El perfil del artista se ha guardado correctamente." });
+      setShowAddArtist(false);
+      setNewArtist({ artistName: "", genre: "", bio: "" });
     },
   });
 
-  if (artistsLoading) return <div className="p-8">Cargando gestión musical...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-5xl font-black tracking-tighter text-cyan-neon">Music Studio</h1>
-          <p className="text-muted-foreground font-medium text-lg">Manejo integral de artistas, Spotify y YouTube.</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-kiwi to-cyan-neon bg-clip-text text-transparent">
+            Music Studio Pro
+          </h1>
+          <p className="text-muted-foreground mt-2">Gestiona tu carrera musical y lanzamientos desde un solo lugar.</p>
         </div>
-        <Button onClick={() => createArtist.mutate()} className="gap-2 bg-cyan-neon text-black hover:bg-cyan-neon/90 rounded-2xl h-12 px-6">
-          <Plus className="h-5 w-5" /> Registrar Artista
+        <Button onClick={() => setShowAddArtist(!showAddArtist)} className="rounded-full px-6">
+          <Plus className="w-4 h-4 mr-2" />
+          Nuevo Artista
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Spotify Section */}
-        <Card className="glass-card rounded-[2.5rem] border-primary/20 bg-primary/5">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-3 text-2xl font-black">
-              <Music className="h-6 w-6 text-primary" />
-              Spotify Connect
-            </CardTitle>
-            <Badge className="bg-primary text-black">Live</Badge>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="p-6 rounded-3xl bg-black/40 border border-white/5 space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center">
-                  <Disc className="h-8 w-8 text-primary animate-spin-slow" />
+      {showAddArtist && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="glass-card border-primary/20">
+            <CardHeader>
+              <CardTitle>Crear Perfil de Artista</CardTitle>
+              <CardDescription>Configura los detalles básicos para empezar a gestionar contenido.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Nombre del Artista</Label>
+                  <Input 
+                    value={newArtist.artistName} 
+                    onChange={e => setNewArtist({...newArtist, artistName: e.target.value})}
+                    placeholder="Ej. DJ Neon Waves" 
+                  />
                 </div>
-                <div>
-                  <h3 className="font-bold text-xl">Neon Artist</h3>
-                  <p className="text-sm text-muted-foreground">45.2K Oyentes mensuales</p>
+                <div className="space-y-2">
+                  <Label>Género</Label>
+                  <Input 
+                    value={newArtist.genre} 
+                    onChange={e => setNewArtist({...newArtist, genre: e.target.value})}
+                    placeholder="Ej. Electronic / Synthwave" 
+                  />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="text-center p-3 rounded-2xl bg-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground">Streams</p>
-                  <p className="text-lg font-black">1.2M</p>
-                </div>
-                <div className="text-center p-3 rounded-2xl bg-white/5">
-                  <p className="text-[10px] uppercase font-bold text-muted-foreground">Saves</p>
-                  <p className="text-lg font-black">89K</p>
-                </div>
+              <div className="space-y-2">
+                <Label>Biografía</Label>
+                <Textarea 
+                  value={newArtist.bio} 
+                  onChange={e => setNewArtist({...newArtist, bio: e.target.value})}
+                  placeholder="Cuéntanos un poco sobre el artista..." 
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="ghost" onClick={() => setShowAddArtist(false)}>Cancelar</Button>
+                <Button 
+                  onClick={() => createArtistMutation.mutate(newArtist)}
+                  disabled={createArtistMutation.isPending}
+                >
+                  {createArtistMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Guardar Perfil"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {artists?.map((artist: any) => (
+          <Card key={artist.id} className="glass-card hover-elevate transition-all group overflow-hidden">
+            <div className="h-32 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative">
+              <Disc className="w-16 h-16 text-primary/40 group-hover:rotate-180 transition-transform duration-700" />
+              <div className="absolute top-4 right-4 flex gap-2">
+                <Button size="icon" variant="secondary" className="rounded-full w-8 h-8">
+                  <SiSpotify className="w-4 h-4" />
+                </Button>
+                <Button size="icon" variant="secondary" className="rounded-full w-8 h-8">
+                  <Youtube className="w-4 h-4" />
+                </Button>
               </div>
             </div>
-            <Button variant="outline" className="w-full rounded-2xl border-primary/30 text-primary hover:bg-primary/10 h-12">
-              Ver en Spotify <ExternalLink className="h-4 w-4 ml-2" />
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* YouTube Section */}
-        <Card className="glass-card rounded-[2.5rem] border-raspberry/20 bg-raspberry/5">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-3 text-2xl font-black">
-              <Youtube className="h-6 w-6 text-raspberry" />
-              YouTube Studio
-            </CardTitle>
-            <Badge className="bg-raspberry text-white">Connected</Badge>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="p-6 rounded-3xl bg-black/40 border border-white/5 space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-2xl bg-raspberry/20 flex items-center justify-center">
-                  <Radio className="h-8 w-8 text-raspberry" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xl">Neon VEVO</h3>
-                  <p className="text-sm text-muted-foreground">120K Subs</p>
-                </div>
+            <CardHeader>
+              <CardTitle>{artist.artistName}</CardTitle>
+              <p className="text-sm text-primary">{artist.genre}</p>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                {artist.bio || "Sin biografía disponible."}
+              </p>
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1 rounded-full">Ver Catálogo</Button>
+                <Button variant="secondary" className="flex-1 rounded-full">Lanzar</Button>
               </div>
-              <div className="pt-4">
-                <div className="flex justify-between text-xs font-bold mb-2">
-                  <span>VIEWS (LAST 30 DAYS)</span>
-                  <span className="text-raspberry">+22%</span>
-                </div>
-                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-raspberry w-[75%]" />
-                </div>
-              </div>
-            </div>
-            <Button variant="outline" className="w-full rounded-2xl border-raspberry/30 text-raspberry hover:bg-raspberry/10 h-12">
-              Manejar Canal <Sparkles className="h-4 w-4 ml-2" />
-            </Button>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
 
-        {/* Content Management */}
-        <Card className="glass-card rounded-[2.5rem] border-cyan-neon/20 bg-cyan-neon/5 lg:col-span-1">
+        {artists?.length === 0 && !showAddArtist && (
+          <div className="col-span-full py-12 text-center border-2 border-dashed border-muted rounded-3xl">
+            <Music className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-medium">No hay artistas registrados</h3>
+            <p className="text-muted-foreground">Comienza creando tu primer perfil de artista.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+        <Card className="glass-card">
           <CardHeader>
-            <CardTitle className="text-2xl font-black flex items-center gap-3">
-              <Disc className="h-6 w-6 text-cyan-neon" />
-              Últimos Lanzamientos
+            <CardTitle className="flex items-center gap-2">
+              <Play className="w-5 h-5 text-kiwi" />
+              Próximos Lanzamientos
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                { title: "Electric Night", type: "Single", status: "Published" },
-                { title: "Neon Dreams LP", type: "Album", status: "Scheduled" },
-                { title: "Future Love", type: "Video", status: "Draft" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between p-4 rounded-3xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer border border-white/5">
-                  <div>
-                    <p className="font-bold">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">{item.type}</p>
+              {[1, 2].map((i) => (
+                <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 border border-white/5">
+                  <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
+                    <Disc className="w-6 h-6 text-primary" />
                   </div>
-                  <Badge variant="outline" className="rounded-full border-cyan-neon/30 text-cyan-neon text-[10px]">
-                    {item.status}
-                  </Badge>
+                  <div className="flex-1">
+                    <p className="font-medium">Single: Neon Nights</p>
+                    <p className="text-sm text-muted-foreground">Programado para: 15 Ene, 2026</p>
+                  </div>
+                  <Button variant="ghost" size="sm">Editar</Button>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Youtube className="w-5 h-5 text-red-500" />
+              Estado de Distribución
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4 text-sm">
+              <div className="flex justify-between items-center p-2">
+                <span>Spotify</span>
+                <span className="text-kiwi font-bold">Verificado</span>
+              </div>
+              <div className="flex justify-between items-center p-2">
+                <span>YouTube Music</span>
+                <span className="text-kiwi font-bold">Verificado</span>
+              </div>
+              <div className="flex justify-between items-center p-2">
+                <span>Apple Music</span>
+                <span className="text-pineapple font-bold">Pendiente</span>
+              </div>
+              <div className="flex justify-between items-center p-2">
+                <span>Tidal</span>
+                <span className="text-muted-foreground">No vinculado</span>
+              </div>
             </div>
           </CardContent>
         </Card>
