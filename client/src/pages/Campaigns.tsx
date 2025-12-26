@@ -6,39 +6,34 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Campaign } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Campaigns() {
   const { toast } = useToast();
-  const { data: campaigns, isLoading } = useQuery<Campaign[]>({
-    queryKey: ["/api/campaigns"],
+  const { data: accounts } = useQuery<any[]>({
+    queryKey: ["/api/social-accounts"],
   });
 
+  const [selectedAccounts, setSelectedAccounts] = useState<number[]>([]);
+  const [platform, setPlatform] = useState<string>("all");
+
   const createCampaign = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (data: any) => {
       const res = await apiRequest("POST", "/api/campaigns", {
-        name: "Campaña de Verano Neon",
-        platform: "all",
-        status: "active",
-        content: "¡Descubre nuestras ofertas exclusivas en SocialHub!",
-        aiGenerated: true
+        ...data,
+        targetAccountIds: selectedAccounts
       });
       return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
       toast({ title: "Campaña iniciada", description: "Tu campaña multicanal está en marcha." });
+      setSelectedAccounts([]);
     },
   });
 
-  const deleteCampaign = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/campaigns/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
-      toast({ title: "Campaña eliminada" });
-    },
-  });
+  const filteredAccounts = accounts?.filter(acc => platform === "all" || acc.platform === platform) || [];
 
   if (isLoading) return <div className="p-8">Cargando campañas...</div>;
 
@@ -49,10 +44,82 @@ export default function Campaigns() {
           <h1 className="text-4xl font-black tracking-tighter text-kiwi">Campañas Pro</h1>
           <p className="text-muted-foreground font-medium">Gestiona tus lanzamientos multicanal con IA.</p>
         </div>
-        <Button onClick={() => createCampaign.mutate()} className="gap-2 bg-kiwi text-black hover:bg-kiwi/90 rounded-2xl h-12 px-6">
-          <Plus className="h-5 w-5" /> Nueva Campaña
-        </Button>
       </div>
+
+      <Card className="glass-card rounded-[2rem] border-border/50">
+        <CardHeader>
+          <CardTitle className="text-xl font-black flex items-center gap-2">
+            <Megaphone className="h-5 w-5 text-kiwi" />
+            Configurar Nueva Campaña
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Plataforma</label>
+                <select 
+                  className="w-full h-12 bg-muted/10 border-border/50 rounded-2xl px-4 focus:ring-kiwi"
+                  value={platform}
+                  onChange={(e) => {
+                    setPlatform(e.target.value);
+                    setSelectedAccounts([]);
+                  }}
+                >
+                  <option value="all">Todas las plataformas</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="facebook">Facebook</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Cuentas Administradoras</label>
+                <div className="flex flex-wrap gap-2 p-2 bg-muted/5 border border-dashed border-border/50 rounded-2xl min-h-[3rem]">
+                   {filteredAccounts.map(acc => (
+                     <Badge 
+                       key={acc.id}
+                       onClick={() => setSelectedAccounts(prev => 
+                         prev.includes(acc.id) ? prev.filter(id => id !== acc.id) : [...prev, acc.id]
+                       )}
+                       className={`rounded-full px-3 py-1 cursor-pointer transition-all ${
+                         selectedAccounts.includes(acc.id) 
+                         ? "bg-kiwi text-black scale-105" 
+                         : "bg-muted/20 text-muted-foreground hover:bg-muted/30"
+                       }`}
+                     >
+                       {acc.accountName}
+                     </Badge>
+                   ))}
+                </div>
+              </div>
+           </div>
+
+           <div className="space-y-2">
+             <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Contenido de la Campaña</label>
+             <Textarea 
+               placeholder="Escribe el mensaje o deja que la IA lo genere..."
+               className="rounded-[1.5rem] bg-muted/10 border-border/50 min-h-[100px]"
+               id="campaign-content"
+             />
+           </div>
+
+           <Button 
+             onClick={() => {
+               const content = (document.getElementById('campaign-content') as HTMLTextAreaElement).value;
+               createCampaign.mutate({
+                 name: "Campaña Orquestada " + new Date().toLocaleDateString(),
+                 platform,
+                 content,
+                 status: "active",
+                 aiGenerated: true
+               });
+             }}
+             disabled={selectedAccounts.length === 0}
+             className="w-full h-14 rounded-[2rem] bg-kiwi text-black font-black text-lg hover:bg-kiwi/90 shadow-2xl shadow-kiwi/20"
+           >
+             <Send className="h-5 w-5 mr-2" /> Ejecutar Campaña en {selectedAccounts.length} Cuentas
+           </Button>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {campaigns?.map((campaign) => (

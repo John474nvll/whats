@@ -119,7 +119,8 @@ export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  platform: text("platform").notNull(), // 'all', 'whatsapp', etc
+  platform: text("platform").notNull(), // 'all', 'whatsapp', 'instagram', 'facebook'
+  targetAccountIds: integer("target_account_ids").array().default([]), // Selected social accounts
   status: text("status").notNull().default("draft"), // 'draft', 'active', 'completed'
   content: text("content"),
   aiGenerated: boolean("ai_generated").default(false),

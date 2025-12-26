@@ -78,6 +78,9 @@ export interface IStorage {
   updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer>;
   deleteCustomer(id: number): Promise<void>;
 
+  // Social Account by ID
+  getSocialAccountById(id: number): Promise<SocialAccount | undefined>;
+
   // Artists & Music
   getArtists(userId: string): Promise<ArtistProfile[]>;
   createArtist(artist: InsertArtistProfile): Promise<ArtistProfile>;
@@ -338,6 +341,11 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCustomer(id: number): Promise<void> {
     await db.delete(customers).where(eq(customers.id, id));
+  }
+
+  async getSocialAccountById(id: number): Promise<SocialAccount | undefined> {
+    const [account] = await db.select().from(socialAccounts).where(eq(socialAccounts.id, id));
+    return account;
   }
 
   // Artists & Music

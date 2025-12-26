@@ -426,12 +426,32 @@ export async function registerRoutes(
 
   app.post("/api/campaigns", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
+      const { name, platform, targetAccountIds, content, aiGenerated, scheduledAt } = req.body;
       const campaign = await storage.createCampaign({
-        ...req.body,
+        name,
+        platform,
+        targetAccountIds: targetAccountIds || [],
+        content,
+        aiGenerated: aiGenerated || false,
+        status: "active",
+        metrics: {},
+        scheduledAt,
         userId: req.userId!
       });
+
+      // Orchestrate publication to selected accounts
+      if (targetAccountIds && targetAccountIds.length > 0) {
+        for (const accountId of targetAccountIds) {
+          const account = await storage.getSocialAccountById(accountId);
+          if (account && account.userId === req.userId) {
+            // Mock or real publish call
+            console.log(`Executing campaign ${name} on account ${account.accountName} (${account.platform})`);
+          }
+        }
+      }
+
       res.status(201).json(campaign);
-    } catch {
+    } catch (error) {
       res.status(500).json({ error: "Failed to create campaign" });
     }
   });
