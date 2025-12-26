@@ -15,9 +15,9 @@ export default function AccountLinks() {
   const { toast } = useToast();
 
   const platforms = [
-    { id: "instagram", name: "Instagram", color: "bg-pink-500/10 border-pink-500/20" },
-    { id: "facebook", name: "Facebook", color: "bg-blue-500/10 border-blue-500/20" },
-    { id: "whatsapp", name: "WhatsApp", color: "bg-green-500/10 border-green-500/20" },
+    { id: "instagram", name: "Instagram", color: "bg-pink-500/10 border-pink-500/20", icon: "Instagram" },
+    { id: "facebook", name: "Facebook", color: "bg-blue-500/10 border-blue-500/20", icon: "Facebook" },
+    { id: "whatsapp", name: "WhatsApp", color: "bg-green-500/10 border-green-500/20", icon: "MessageCircle" },
   ];
 
   useEffect(() => {

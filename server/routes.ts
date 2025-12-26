@@ -287,6 +287,15 @@ export async function registerRoutes(
   app.get("/api/social-accounts", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
       const accounts = await storage.getSocialAccounts(req.userId!);
+      // Ensure we always have the demo accounts for all platforms if none exist
+      if (accounts.length === 0) {
+        const demoAccounts = [
+          { platform: "whatsapp", accountName: "Demo WhatsApp", id: "demo_wa", isConnected: true },
+          { platform: "instagram", accountName: "Demo Instagram", id: "demo_ig", isConnected: true },
+          { platform: "facebook", accountName: "Demo Facebook", id: "demo_fb", isConnected: true }
+        ];
+        return res.json(demoAccounts);
+      }
       res.json(accounts);
     } catch {
       res.status(500).json({ error: "Failed to fetch accounts" });
