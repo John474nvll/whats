@@ -27,8 +27,17 @@ export default function Login() {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Authentication failed");
+        const errorData = await response.json();
+        let errorMessage = "Authentication failed";
+        
+        if (Array.isArray(errorData)) {
+          // Handle Zod validation errors from backend
+          errorMessage = errorData.map(err => err.message).join(", ");
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const { token, user } = await response.json();
