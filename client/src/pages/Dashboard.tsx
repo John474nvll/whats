@@ -13,7 +13,8 @@ import {
   Settings as SettingsIcon,
   Plus,
   Search,
-  Megaphone
+  Megaphone,
+  GitFork
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,7 +71,7 @@ export default function Dashboard() {
             {[
               { label: "WhatsApp Leads", value: "48", icon: MessageCircle, color: "bg-green-500", change: "+15%" },
               { label: "Instagram Reach", value: "12.2K", icon: Instagram, color: "bg-pink-500", change: "+8%" },
-              { label: "Facebook Interactions", value: "3.4K", icon: Facebook, color: "bg-blue-600", change: "+5%" },
+              { label: "Funnels Activos", value: "3", icon: GitFork, color: "bg-indigo-500", change: "+1" },
               { label: "Engagement Rate", value: "5.2%", icon: TrendingUp, color: "bg-amber-500", change: "+2.1%" },
             ].map((stat, i) => (
               <motion.div

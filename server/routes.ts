@@ -364,6 +364,48 @@ export async function registerRoutes(
     }
   });
 
+  // Funnels endpoints
+  app.get("/api/funnels", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const funnels = await storage.getFunnels(req.userId!);
+      res.json(funnels);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch funnels" });
+    }
+  });
+
+  app.post("/api/funnels", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const funnel = await storage.createFunnel({
+        ...req.body,
+        userId: req.userId!
+      });
+      res.status(201).json(funnel);
+    } catch {
+      res.status(500).json({ error: "Failed to create funnel" });
+    }
+  });
+
+  app.patch("/api/funnels/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const funnel = await storage.updateFunnel(id, req.body);
+      res.json(funnel);
+    } catch {
+      res.status(500).json({ error: "Failed to update funnel" });
+    }
+  });
+
+  app.delete("/api/funnels/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteFunnel(id);
+      res.sendStatus(204);
+    } catch {
+      res.status(500).json({ error: "Failed to delete funnel" });
+    }
+  });
+
   app.post("/api/social-accounts/connect", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
       const account = await storage.createSocialAccount({

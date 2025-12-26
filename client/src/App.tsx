@@ -14,6 +14,7 @@ import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
 import AccountLinks from "@/pages/AccountLinks";
+import FunnelBuilder from "@/pages/FunnelBuilder";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/accounts" component={AccountLinks} />
+      <Route path="/funnels" component={FunnelBuilder} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>

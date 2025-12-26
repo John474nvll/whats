@@ -1,13 +1,14 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type ChannelConfig, type InsertChannelConfig,
   type SocialAccount, type InsertSocialAccount,
-  type Widget, type InsertWidget
+  type Widget, type InsertWidget,
+  type SalesFunnel, type InsertSalesFunnel,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -53,6 +54,12 @@ export interface IStorage {
   createWidget(widget: InsertWidget): Promise<Widget>;
   updateWidget(id: number, updates: Partial<InsertWidget>): Promise<Widget>;
   deleteWidget(id: number): Promise<void>;
+
+  // Funnels
+  getFunnels(userId: string): Promise<SalesFunnel[]>;
+  createFunnel(funnel: InsertSalesFunnel): Promise<SalesFunnel>;
+  updateFunnel(id: number, updates: Partial<InsertSalesFunnel>): Promise<SalesFunnel>;
+  deleteFunnel(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -243,6 +250,28 @@ export class DatabaseStorage implements IStorage {
 
   async deleteWidget(id: number): Promise<void> {
     await db.delete(widgets).where(eq(widgets.id, id));
+  }
+
+  // Funnels
+  async getFunnels(userId: string): Promise<SalesFunnel[]> {
+    return await db.select().from(salesFunnels).where(eq(salesFunnels.userId, userId)).orderBy(desc(salesFunnels.createdAt));
+  }
+
+  async createFunnel(funnel: InsertSalesFunnel): Promise<SalesFunnel> {
+    const [newFunnel] = await db.insert(salesFunnels).values(funnel).returning();
+    return newFunnel;
+  }
+
+  async updateFunnel(id: number, updates: Partial<InsertSalesFunnel>): Promise<SalesFunnel> {
+    const [updated] = await db.update(salesFunnels)
+      .set(updates)
+      .where(eq(salesFunnels.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteFunnel(id: number): Promise<void> {
+    await db.delete(salesFunnels).where(eq(salesFunnels.id, id));
   }
 }
 

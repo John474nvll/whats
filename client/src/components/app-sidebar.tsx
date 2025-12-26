@@ -10,13 +10,14 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 const menuItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Messages", url: "/inbox", icon: MessageSquare },
+  { title: "Funnels", url: "/funnels", icon: GitFork },
   { title: "Contacts", url: "/contacts", icon: Users },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "AI Generator", url: "/ai-generator", icon: Sparkles },

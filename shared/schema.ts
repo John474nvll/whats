@@ -78,7 +78,24 @@ export const socialAccounts = pgTable("social_accounts", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const salesFunnels = pgTable("sales_funnels", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  steps: jsonb("steps").notNull().default([]), // Array of steps with conditions and actions
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === RELATIONS ===
+
+export const funnelsRelations = relations(salesFunnels, ({ one }) => ({
+  user: one(users, {
+    fields: [salesFunnels.userId],
+    references: [users.id],
+  }),
+}));
 
 export const contactsRelations = relations(contacts, ({ many }) => ({
   conversations: many(conversations),
@@ -108,6 +125,7 @@ export const insertMessageSchema = createInsertSchema(messages).omit({ id: true,
 export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, updatedAt: true });
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertWidgetSchema = createInsertSchema(widgets).omit({ id: true });
+export const insertFunnelSchema = createInsertSchema(salesFunnels).omit({ id: true, createdAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 
@@ -131,6 +149,9 @@ export type InsertSocialAccount = z.infer<typeof insertSocialAccountSchema>;
 
 export type Widget = typeof widgets.$inferSelect;
 export type InsertWidget = z.infer<typeof insertWidgetSchema>;
+
+export type SalesFunnel = typeof salesFunnels.$inferSelect;
+export type InsertSalesFunnel = z.infer<typeof insertFunnelSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 
