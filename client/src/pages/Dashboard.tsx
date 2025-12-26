@@ -68,10 +68,10 @@ export default function Dashboard() {
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
             {[
-              { label: "Mensajes Nuevos", value: "24", icon: MessageCircle, color: "bg-blue-500", change: "+12%" },
-              { label: "Campañas Activas", value: "8", icon: Megaphone, color: "bg-purple-500", change: "+2" },
-              { label: "Seguidores Totales", value: "24.5K", icon: Users, color: "bg-green-500", change: "+5.2%" },
-              { label: "Engagement", value: "4.8%", icon: TrendingUp, color: "bg-amber-500", change: "+1.3%" },
+              { label: "WhatsApp Leads", value: "48", icon: MessageCircle, color: "bg-green-500", change: "+15%" },
+              { label: "Instagram Reach", value: "12.2K", icon: Instagram, color: "bg-pink-500", change: "+8%" },
+              { label: "Facebook Interactions", value: "3.4K", icon: Facebook, color: "bg-blue-600", change: "+5%" },
+              { label: "Engagement Rate", value: "5.2%", icon: TrendingUp, color: "bg-amber-500", change: "+2.1%" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -110,11 +110,11 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { name: "María López", platform: "Instagram", msg: "Pregunta sobre producto", time: "5 min", icon: Instagram, color: "text-pink-500" },
-                  { name: "Carlos R.", platform: "Facebook", msg: "Info de servicio", time: "12 min", icon: Facebook, color: "text-blue-500" },
-                  { name: "Ana García", platform: "WhatsApp", msg: "Interesada en compra", time: "1h", icon: MessageCircle, color: "text-green-500" },
+                  { name: "John Cloudy", platform: "Instagram", msg: "Loved the new post! Check DM", time: "2 min", icon: Instagram, color: "text-pink-500", url: "https://www.instagram.com/johnncloudy" },
+                  { name: "Facebook User", platform: "Facebook", msg: "Interested in your latest share", time: "10 min", icon: Facebook, color: "text-blue-500", url: "https://www.facebook.com/share/1N72uj6t9U/" },
+                  { name: "Admin (3197368698)", platform: "WhatsApp", msg: "New lead from Bogotá", time: "45 min", icon: MessageCircle, color: "text-green-500", url: "https://wa.me/3197368698" },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:bg-muted/40 transition-colors cursor-pointer">
+                  <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 border border-border/30 hover:bg-muted/40 transition-colors cursor-pointer">
                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold">
                       {item.name.charAt(0)}
                     </div>
@@ -126,7 +126,7 @@ export default function Dashboard() {
                       <p className="text-[10px] text-muted-foreground uppercase font-bold">{item.time}</p>
                       <item.icon className={`h-3 w-3 ${item.color} mt-1 ml-auto`} />
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </CardContent>

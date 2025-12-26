@@ -77,7 +77,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="text-slate-400">Connected Platforms</SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="space-y-2 px-2">
-              <Link href="/accounts">
+              <a href="https://wa.me/3197368698" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
                   className="w-full justify-start gap-2 bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20 mb-2"
@@ -85,8 +85,8 @@ export function AppSidebar() {
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                   WhatsApp
                 </Button>
-              </Link>
-              <Link href="/accounts">
+              </a>
+              <a href="https://www.instagram.com/johnncloudy?igsh=MWV1djRhb3VqMTUwaw==" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
                   className="w-full justify-start gap-2 bg-pink-500/10 border-pink-500/20 text-pink-400 hover:bg-pink-500/20 mb-2"
@@ -94,8 +94,8 @@ export function AppSidebar() {
                   <div className="w-3 h-3 rounded-full bg-pink-500" />
                   Instagram
                 </Button>
-              </Link>
-              <Link href="/accounts">
+              </a>
+              <a href="https://www.facebook.com/share/1N72uj6t9U/" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="outline"
                   className="w-full justify-start gap-2 bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/20"
@@ -103,7 +103,7 @@ export function AppSidebar() {
                   <div className="w-3 h-3 rounded-full bg-blue-500" />
                   Facebook
                 </Button>
-              </Link>
+              </a>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

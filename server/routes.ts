@@ -32,20 +32,20 @@ export async function registerRoutes(
 
   // Auto-register admin user for demo purposes if not exists
   const setupAdmin = async () => {
-    const adminUsername = "socialadmin";
-    const adminPassword = "SocialPass2025";
+    const adminUsername = "3197368698";
+    const adminPassword = "AdminPass2025";
     try {
       const existingAdmin = await storage.getUserByUsername(adminUsername);
       const hashedPassword = await bcrypt.hash(adminPassword, 10);
       
       if (!existingAdmin) {
         await storage.createUser({
-          id: "admin-v2-uuid",
+          id: "admin-whatsapp-uuid",
           username: adminUsername,
           password: hashedPassword,
           role: "admin"
         });
-        console.log(`Auto-registered ${adminUsername} user for v2`);
+        console.log(`Auto-registered ${adminUsername} user as admin`);
       } else {
         await storage.updateUser(existingAdmin.id, { 
           password: hashedPassword,
