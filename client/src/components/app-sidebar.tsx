@@ -77,27 +77,33 @@ export function AppSidebar() {
           <SidebarGroupLabel className="text-slate-400">Connected Platforms</SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="space-y-2 px-2">
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20"
-              >
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                WhatsApp
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 bg-pink-500/10 border-pink-500/20 text-pink-400 hover:bg-pink-500/20"
-              >
-                <div className="w-3 h-3 rounded-full bg-pink-500" />
-                Instagram
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2 bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/20"
-              >
-                <div className="w-3 h-3 rounded-full bg-blue-500" />
-                Facebook
-              </Button>
+              <Link href="/accounts">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2 bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20 mb-2"
+                >
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  WhatsApp
+                </Button>
+              </Link>
+              <Link href="/accounts">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2 bg-pink-500/10 border-pink-500/20 text-pink-400 hover:bg-pink-500/20 mb-2"
+                >
+                  <div className="w-3 h-3 rounded-full bg-pink-500" />
+                  Instagram
+                </Button>
+              </Link>
+              <Link href="/accounts">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2 bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/20"
+                >
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  Facebook
+                </Button>
+              </Link>
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -15,9 +15,9 @@ export default function AccountLinks() {
   const { toast } = useToast();
 
   const platforms = [
-    { id: "instagram", name: "Instagram", color: "bg-pink-500/10 border-pink-500/20", icon: "Instagram" },
-    { id: "facebook", name: "Facebook", color: "bg-blue-500/10 border-blue-500/20", icon: "Facebook" },
-    { id: "whatsapp", name: "WhatsApp", color: "bg-green-500/10 border-green-500/20", icon: "MessageCircle" },
+    { id: "instagram", name: "Instagram", color: "bg-pink-500/10 border-pink-500/20", icon: "Instagram", url: "https://www.instagram.com/replit" },
+    { id: "facebook", name: "Facebook", color: "bg-blue-500/10 border-blue-500/20", icon: "Facebook", url: "https://www.facebook.com/replit" },
+    { id: "whatsapp", name: "WhatsApp", color: "bg-green-500/10 border-green-500/20", icon: "MessageCircle", url: "https://wa.me/replit" },
   ];
 
   useEffect(() => {
@@ -126,17 +126,26 @@ export default function AccountLinks() {
                       <p>Account: {account.accountName}</p>
                       <p className="text-xs text-muted-foreground/70 mt-1">Connected</p>
                     </div>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => {
-                        setAccounts(accounts.filter((a) => a.id !== account.id));
-                        toast({ title: "Disconnected", description: `${platform.name} disconnected` });
-                      }}
-                    >
-                      <Trash2 className="h-3 w-3 mr-1" />
-                      Disconnect
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => window.open(platforms.find(p => p.id === account.platform)?.url, "_blank")}
+                      >
+                        Ver Perfil
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => {
+                          setAccounts(accounts.filter((a) => a.id !== account.id));
+                          toast({ title: "Disconnected", description: `${platform.name} disconnected` });
+                        }}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </>
                 ) : (
                   <Button
