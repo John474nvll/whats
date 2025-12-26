@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -17,8 +18,12 @@ import {
   GitFork,
   Music,
   Send,
-  Zap
+  Zap,
+  Link2,
+  Trash2,
+  LogOut
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { SiSpotify } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,8 +52,14 @@ const activityData = [
 ];
 
 export default function Dashboard() {
+  const { toast } = useToast();
+  const [showConnectModal, setShowConnectModal] = useState(false);
+  const [connectingPlatform, setConnectingPlatform] = useState("");
   const { data: widgets, isLoading } = useQuery<Widget[]>({
     queryKey: ["/api/widgets"],
+  });
+  const { data: accounts = [] } = useQuery<any[]>({
+    queryKey: ["/api/social-accounts"],
   });
 
   const updateWidget = useMutation({
@@ -60,6 +71,43 @@ export default function Dashboard() {
       queryClient.invalidateQueries({ queryKey: ["/api/widgets"] });
     },
   });
+
+  const connectAccount = async (platform: string) => {
+    setConnectingPlatform(platform);
+    try {
+      const accountId = prompt(`Enter your ${platform} Account ID:`, `${platform}_id_123`);
+      const accountName = prompt(`Account nickname:`, `My ${platform}`);
+      const accessToken = prompt(`Access Token:`, `demo_token_${platform}`);
+
+      if (!accountId || !accountName || !accessToken) {
+        toast({ title: "Cancelled", description: "All fields required" });
+        return;
+      }
+
+      const res = await apiRequest("POST", "/api/social-accounts/connect", {
+        platform,
+        accountId,
+        accountName,
+        accessToken,
+      });
+
+      if (res.ok) {
+        toast({ title: "Success!", description: `${platform} connected` });
+        queryClient.invalidateQueries({ queryKey: ["/api/social-accounts"] });
+        setShowConnectModal(false);
+      }
+    } catch (e) {
+      toast({ title: "Error", description: "Failed to connect account", variant: "destructive" });
+    } finally {
+      setConnectingPlatform("");
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
 
   if (isLoading) return (
     <div className="flex items-center justify-center h-full min-h-[400px]">
@@ -241,14 +289,62 @@ export default function Dashboard() {
             <h1 className="text-5xl font-black tracking-tighter text-foreground">SocialHub</h1>
             <p className="text-muted-foreground font-medium text-lg">Resumen inteligente de tu ecosistema digital</p>
           </div>
-          <div className="relative w-full md:w-96 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <Input
-              placeholder="Buscar actividad, mensajes..."
-              className="pl-12 h-14 rounded-2xl bg-card/50 border-border/50 focus:ring-primary/20 transition-all text-lg"
-            />
+          <div className="flex gap-3">
+            <Button size="sm" onClick={logout} variant="outline" className="gap-2 rounded-full">
+              <LogOut className="h-4 w-4" /> Logout
+            </Button>
           </div>
         </div>
+
+        {/* Quick Account Connection */}
+        <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Link2 className="h-5 w-5" /> Connected Accounts
+            </CardTitle>
+            <Button size="sm" onClick={() => setShowConnectModal(!showConnectModal)} className="rounded-full">
+              <Plus className="h-4 w-4 mr-1" /> Connect Account
+            </Button>
+          </CardHeader>
+          {showConnectModal && (
+            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {["instagram", "facebook", "whatsapp"].map((platform) => {
+                const isConnected = accounts.some((a) => a.platform === platform);
+                return (
+                  <div key={platform} className="flex flex-col gap-2">
+                    <p className="text-sm font-medium capitalize">{platform}</p>
+                    {isConnected ? (
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="secondary" className="flex-1" disabled>
+                          ✓ Connected
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        size="sm"
+                        onClick={() => connectAccount(platform)}
+                        disabled={connectingPlatform === platform}
+                        className="rounded-lg"
+                      >
+                        {connectingPlatform === platform ? "Connecting..." : "Connect"}
+                      </Button>
+                    )}
+                  </div>
+                );
+              })}
+            </CardContent>
+          )}
+          {!showConnectModal && accounts.length > 0 && (
+            <CardContent className="flex flex-wrap gap-2">
+              {accounts.map((acc) => (
+                <div key={acc.id} className="px-3 py-1 bg-primary/10 rounded-full text-sm flex items-center gap-2">
+                  <span className="capitalize">{acc.platform}</span>
+                  <span className="text-xs text-muted-foreground">({acc.accountName})</span>
+                </div>
+              ))}
+            </CardContent>
+          )}
+        </Card>
 
         {/* Widgets Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

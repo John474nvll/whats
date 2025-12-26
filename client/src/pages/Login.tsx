@@ -53,8 +53,12 @@ export default function Login() {
   };
 
   // Demo credentials
-  const demoCredentials = () => {
-    setFormData({ username: "socialadmin", password: "SocialPass2025" });
+  const demoCredentials = (user: string = "socialadmin") => {
+    const creds: Record<string, { username: string; password: string }> = {
+      socialadmin: { username: "socialadmin", password: "SocialPass2025" },
+      manager: { username: "manager", password: "Manager2025" }
+    };
+    setFormData(creds[user] || creds.socialadmin);
   };
 
   return (
@@ -128,14 +132,24 @@ export default function Login() {
               </div>
             </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={demoCredentials}
-              className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
-            >
-              Try Demo Credentials
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => demoCredentials("socialadmin")}
+                className="border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                Admin Account
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => demoCredentials("manager")}
+                className="border-slate-600 text-slate-300 hover:bg-slate-700"
+              >
+                Manager Account
+              </Button>
+            </div>
 
             <div className="text-center">
               <button
@@ -150,16 +164,30 @@ export default function Login() {
         </Card>
 
         <div className="mt-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center text-sm text-slate-300 shadow-xl">
-          <p className="font-bold text-white mb-3 uppercase tracking-widest text-xs">V2 Access Credentials</p>
-          <div className="space-y-2">
-            <p className="flex justify-between items-center px-4 py-2 bg-black/20 rounded-lg">
-              <span className="text-slate-400">User:</span>
-              <code className="text-blue-400 font-mono">socialadmin</code>
-            </p>
-            <p className="flex justify-between items-center px-4 py-2 bg-black/20 rounded-lg">
-              <span className="text-slate-400">Pass:</span>
-              <code className="text-purple-400 font-mono">SocialPass2025</code>
-            </p>
+          <p className="font-bold text-white mb-3 uppercase tracking-widest text-xs">V2.0 Access Credentials</p>
+          <div className="space-y-3">
+            <div className="bg-black/20 rounded-lg p-3">
+              <p className="text-xs text-slate-400 mb-2 uppercase">Account 1 (Admin)</p>
+              <p className="flex justify-between items-center">
+                <span className="text-slate-400">User:</span>
+                <code className="text-primary font-mono">socialadmin</code>
+              </p>
+              <p className="flex justify-between items-center mt-1">
+                <span className="text-slate-400">Pass:</span>
+                <code className="text-secondary font-mono">SocialPass2025</code>
+              </p>
+            </div>
+            <div className="bg-black/20 rounded-lg p-3">
+              <p className="text-xs text-slate-400 mb-2 uppercase">Account 2 (Manager)</p>
+              <p className="flex justify-between items-center">
+                <span className="text-slate-400">User:</span>
+                <code className="text-primary font-mono">manager</code>
+              </p>
+              <p className="flex justify-between items-center mt-1">
+                <span className="text-slate-400">Pass:</span>
+                <code className="text-secondary font-mono">Manager2025</code>
+              </p>
+            </div>
           </div>
         </div>
       </div>

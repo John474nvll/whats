@@ -30,33 +30,41 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
 
-  // Auto-register admin user for demo purposes if not exists
-  const setupAdmin = async () => {
-    const adminUsername = "3197368698";
-    const adminPassword = "AdminPass2025";
-    try {
-      const existingAdmin = await storage.getUserByUsername(adminUsername);
-      const hashedPassword = await bcrypt.hash(adminPassword, 10);
-      
-      if (!existingAdmin) {
-        await storage.createUser({
-          id: "admin-whatsapp-uuid",
-          username: adminUsername,
-          password: hashedPassword,
-          role: "admin"
-        });
-        console.log(`Auto-registered ${adminUsername} user as admin`);
-      } else {
-        await storage.updateUser(existingAdmin.id, { 
-          password: hashedPassword,
-          role: "admin" 
-        });
+  // Auto-register demo users for demo purposes if not exists
+  const setupDemoUsers = async () => {
+    const demoUsers = [
+      { username: "socialadmin", password: "SocialPass2025", role: "admin" },
+      { username: "manager", password: "Manager2025", role: "user" },
+      { username: "3197368698", password: "AdminPass2025", role: "admin" }
+    ];
+    
+    for (const demoUser of demoUsers) {
+      try {
+        const existing = await storage.getUserByUsername(demoUser.username);
+        const hashedPassword = await bcrypt.hash(demoUser.password, 10);
+        
+        if (!existing) {
+          const { randomUUID } = await import("crypto");
+          await storage.createUser({
+            id: randomUUID(),
+            username: demoUser.username,
+            password: hashedPassword,
+            role: demoUser.role
+          });
+          console.log(`Auto-registered ${demoUser.username} as ${demoUser.role}`);
+        } else {
+          await storage.updateUser(existing.id, { 
+            password: hashedPassword,
+            role: demoUser.role 
+          });
+          console.log(`Updated ${demoUser.username} credentials`);
+        }
+      } catch (e) {
+        console.error(`Error setting up ${demoUser.username}:`, e);
       }
-    } catch (e) {
-      console.error("Error setting up v2 admin:", e);
     }
   };
-  setupAdmin();
+  setupDemoUsers();
 
   // Seed data
   const channels = await storage.getChannels();
