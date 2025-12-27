@@ -64,23 +64,23 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020617] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-white dark:bg-[#020617] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pointer-events-none" 
-          style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "40px 40px" }} 
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 dark:bg-primary/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/20 dark:bg-accent/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] dark:opacity-[0.03] pointer-events-none" 
+          style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px), radial-gradient(#000000 1px, transparent 1px)", backgroundSize: "40px 40px" }} 
         />
       </div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-[3rem] overflow-hidden border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-slate-950/50 backdrop-blur-3xl relative z-10"
+        className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-[3rem] overflow-hidden border border-white/5 dark:border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.1)] dark:shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-white dark:bg-slate-950/50 dark:backdrop-blur-3xl backdrop-blur-sm relative z-10"
       >
         {/* Visual Section */}
-        <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-900 to-black relative overflow-hidden border-r border-white/5">
+        <div className="hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-slate-100 dark:from-slate-900 to-white dark:to-black relative overflow-hidden border-r border-slate-200 dark:border-white/5">
            <div className="absolute inset-0 opacity-20 pointer-events-none">
              <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] mix-blend-overlay" />
            </div>
@@ -88,38 +88,38 @@ export default function Login() {
            <div className="relative z-10">
              <div className="flex items-center gap-4 mb-12">
                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary via-secondary to-accent p-0.5 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-                 <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden">
+                 <div className="w-full h-full bg-white dark:bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden">
                     <img src={logoImage} alt="Logo" className="w-full h-full object-cover" />
                  </div>
                </div>
                <div>
-                 <h2 className="text-3xl font-black text-white tracking-tighter uppercase">Master<span className="text-kiwi">Hub</span></h2>
-                 <p className="text-xs font-bold text-kiwi/70 tracking-[0.3em] uppercase">Enterprise Edition</p>
+                 <h2 className="text-3xl font-black text-white dark:text-white tracking-tighter uppercase">Social<span className="text-kiwi">Hub</span></h2>
+                 <p className="text-xs font-bold text-kiwi/70 dark:text-kiwi/70 tracking-[0.3em] uppercase">v3.0 PWA Edition</p>
                </div>
              </div>
 
              <div className="space-y-8">
-               <h1 className="text-6xl font-black text-white leading-[0.9] tracking-tighter">
+               <h1 className="text-6xl font-black text-white dark:text-white leading-[0.9] tracking-tighter">
                  LA PRÓXIMA <br />
                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-kiwi via-cyan-neon to-raspberry">REVOLUCIÓN</span> <br />
                  SOCIAL.
                </h1>
-               <p className="text-slate-400 text-lg font-medium max-w-sm">
+               <p className="text-slate-600 dark:text-slate-400 text-lg font-medium max-w-sm">
                  Orquestación centralizada, inteligencia artificial avanzada y control total de tus activos digitales.
                </p>
              </div>
            </div>
 
            <div className="relative z-10 grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-xl">
+              <div className="p-4 rounded-3xl bg-white/5 dark:bg-white/5 border border-white/10 dark:border-white/5 backdrop-blur-xl">
                  <Zap className="h-6 w-6 text-kiwi mb-2" />
-                 <p className="text-sm font-black text-white uppercase">Ultra Rápido</p>
-                 <p className="text-xs text-slate-500">Optimizado para escala global</p>
+                 <p className="text-sm font-black text-slate-900 dark:text-white uppercase">Ultra Rápido</p>
+                 <p className="text-xs text-slate-600 dark:text-slate-500">Optimizado para escala global</p>
               </div>
-              <div className="p-4 rounded-3xl bg-white/5 border border-white/5 backdrop-blur-xl">
+              <div className="p-4 rounded-3xl bg-white/5 dark:bg-white/5 border border-white/10 dark:border-white/5 backdrop-blur-xl">
                  <ShieldCheck className="h-6 w-6 text-cyan-neon mb-2" />
-                 <p className="text-sm font-black text-white uppercase">Seguridad Pro</p>
-                 <p className="text-xs text-slate-500">Encriptación de grado militar</p>
+                 <p className="text-sm font-black text-slate-900 dark:text-white uppercase">Seguridad Pro</p>
+                 <p className="text-xs text-slate-600 dark:text-slate-500">Encriptación de grado militar</p>
               </div>
            </div>
         </div>
