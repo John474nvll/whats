@@ -7,6 +7,7 @@ import { z } from "zod";
 import { aiOrchestrator } from "./services/ai_orchestrator";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
+import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
 import { loginSchema, registerSchema } from "@shared/schema";
@@ -26,9 +27,10 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
-  // Register OpenAI integrations
+  // Register integrations
   registerChatRoutes(app);
   registerImageRoutes(app);
+  registerUnifiedPlatformRoutes(app);
 
   // Auto-register demo users for demo purposes if not exists
   const setupDemoUsers = async () => {

@@ -24,6 +24,7 @@ import SpotifyArtist from "@/pages/SpotifyArtist";
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import PlatformsHub from "@/pages/PlatformsHub";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -44,6 +45,7 @@ function Router() {
       <Route path="/links" component={CustomLinks} />
       <Route path="/music" component={MusicManager} />
       <Route path="/spotify-artist" component={SpotifyArtist} />
+      <Route path="/platforms" component={PlatformsHub} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
