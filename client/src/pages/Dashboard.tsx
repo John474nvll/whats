@@ -21,7 +21,8 @@ import {
   Zap,
   Link2,
   Trash2,
-  LogOut
+  LogOut,
+  ShoppingBag
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SiSpotify } from "react-icons/si";
@@ -123,8 +124,8 @@ export default function Dashboard() {
             {[
               { label: "WhatsApp Leads", value: "48", icon: MessageCircle, color: "bg-green-500", change: "+15%" },
               { label: "Instagram Reach", value: "12.2K", icon: Instagram, color: "bg-pink-500", change: "+8%" },
-              { label: "Spotify Streams", value: "4.5K", icon: Music, color: "bg-green-600", change: "+22%" },
-              { label: "Engagement Rate", value: "5.2%", icon: TrendingUp, color: "bg-amber-500", change: "+2.1%" },
+              { label: "Ventas Totales", value: "$4.5K", icon: ShoppingBag, color: "bg-kiwi", change: "+22%" },
+              { label: "Engagement Link", value: "5.2%", icon: Link2, color: "bg-cyan-neon", change: "+2.1%" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -257,17 +258,17 @@ export default function Dashboard() {
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider">Campaña</span>
               </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-3 rounded-2xl border-border/50 hover:bg-green-500/5 hover:border-green-500/30 transition-all">
-                <div className="p-2 rounded-lg bg-green-500/10">
-                  <Users className="h-5 w-5 text-green-500" />
+              <Button variant="outline" onClick={() => window.location.href='/products'} className="h-24 flex flex-col gap-3 rounded-2xl border-border/50 hover:bg-kiwi/5 hover:border-kiwi/30 transition-all">
+                <div className="p-2 rounded-lg bg-kiwi/10">
+                  <ShoppingBag className="h-5 w-5 text-kiwi" />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Contactos</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Productos</span>
               </Button>
-              <Button variant="outline" className="h-24 flex flex-col gap-3 rounded-2xl border-border/50 hover:bg-orange-500/5 hover:border-orange-500/30 transition-all">
-                <div className="p-2 rounded-lg bg-orange-500/10">
-                  <SettingsIcon className="h-5 w-5 text-orange-500" />
+              <Button variant="outline" onClick={() => window.location.href='/links'} className="h-24 flex flex-col gap-3 rounded-2xl border-border/50 hover:bg-cyan-neon/5 hover:border-cyan-neon/30 transition-all">
+                <div className="p-2 rounded-lg bg-cyan-neon/10">
+                  <Link2 className="h-5 w-5 text-cyan-neon" />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Ajustes</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Links</span>
               </Button>
             </CardContent>
           </Card>

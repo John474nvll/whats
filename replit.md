@@ -347,16 +347,11 @@ Ambas cuentas están **pre-creadas** en la BD. Acceso instantáneo desde el logi
 
 ## 🎯 Próximos Pasos (Futuros)
 
-- [ ] OAuth 2.0 flow para Meta
-- [ ] Integración real con WhatsApp Cloud API
-- [ ] Push notifications
-- [ ] Advanced analytics dashboard
-- [ ] Custom automation rules
-- [ ] Team collaboration
-- [ ] Mobile app nativa
-- [ ] Video messaging
-- [ ] File attachments
-- [ ] Machine learning predictions
+- ✅ **Catálogo de Productos:** CRUD completo para gestionar inventario centralizado.
+- ✅ **Tracking de Links:** Sistema de acortamiento con métricas de clics por plataforma.
+- ✅ **Orquestación Master:** Lanzamiento masivo a múltiples cuentas seleccionadas.
+- ✅ **Roles de Venta:** Dashboard optimizado para vendedoras con métricas de ROI y leads.
+- ✅ **Integración Total:** Todos los módulos conectados y funcionales en v2.0.
 
 ## 📦 Deployment
 
