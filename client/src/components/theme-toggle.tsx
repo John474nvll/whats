@@ -10,9 +10,7 @@ export function ThemeToggle() {
     setMounted(true);
     // Check localStorage first, then check system preference
     const storedTheme = localStorage.getItem("theme");
-    const isDarkMode = storedTheme 
-      ? storedTheme === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDarkMode = storedTheme === "light" ? false : true;
     
     setIsDark(isDarkMode);
     

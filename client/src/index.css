@@ -53,34 +53,34 @@
 
 @media (prefers-color-scheme: light) {
   :root:not(.dark) {
-    /* Light Mode Palette */
-    --background: 0 0% 100%;
-    --foreground: 230 20% 20%;
+    /* Light Mode Palette - Ultra Clean Premium */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
-    --card: 0 0% 95%;
-    --card-foreground: 230 20% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 0 0% 95%;
-    --popover-foreground: 230 20% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 142 92% 38%; /* Kiwi Green - darker for light mode */
+    --primary: 142 92% 35%; /* Kiwi Green - High contrast */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 183 100% 45%; /* Cyan - darker for light mode */
-    --secondary-foreground: 210 40% 20%;
+    --secondary: 183 100% 35%; /* Cyan - High contrast */
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 33% 88%;
-    --muted-foreground: 215 20% 40%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 336 100% 50%; /* Raspberry - darker for light mode */
+    --accent: 336 100% 45%; /* Raspberry - High contrast */
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 85%;
-    --input: 217 33% 90%;
-    --ring: 142 92% 38%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 142 92% 35%;
   }
 }
 

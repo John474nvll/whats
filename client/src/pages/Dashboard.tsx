@@ -155,16 +155,19 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-background/50 p-4 sm:p-6 lg:p-8 space-y-8">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-black text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground mt-2">Welcome back! Here's your business overview</p>
+            <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">Dashboard Principal</h1>
+            <p className="text-muted-foreground mt-2 font-medium">Resumen general de tu ecosistema digital</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={logout} className="rounded-lg hover:bg-destructive/10">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" className="rounded-2xl border-white/5 bg-white/5 backdrop-blur-md hidden sm:flex">
+              Descargar Reporte
+            </Button>
+            <Button variant="ghost" size="icon" onClick={logout} className="rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors">
               <LogOut className="w-5 h-5" />
             </Button>
           </div>
@@ -172,55 +175,59 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Stats Grid */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ staggerChildren: 0.1 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8"
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, i) => (
-          <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-            <StatCard {...stat} />
-          </motion.div>
+          <StatCard key={stat.label} {...stat} />
         ))}
-      </motion.div>
+      </div>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Activity Chart */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="lg:col-span-2"
-        >
-          <Card className="border-border/50 bg-gradient-to-br from-card/60 to-card/20 backdrop-blur-xl h-full">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-primary" />
-                Activity Over Time
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">Weekly message and engagement trends</p>
+        <div className="lg:col-span-8">
+          <Card className="border-border/40 bg-card/40 backdrop-blur-2xl h-full shadow-2xl">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Activity className="w-5 h-5 text-primary" />
+                  Rendimiento Semanal
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">Tendencias de mensajes y engagement</p>
+              </div>
+              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">En vivo</Badge>
             </CardHeader>
             <CardContent>
-              <div className="h-80 w-full">
+              <div className="h-[350px] w-full pt-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={activityData}>
                     <defs>
                       <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
                         <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="name" stroke="#64748b" />
-                    <YAxis stroke="#64748b" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                    <XAxis 
+                      dataKey="name" 
+                      stroke="rgba(255,255,255,0.3)" 
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis 
+                      stroke="rgba(255,255,255,0.3)" 
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                    />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        borderColor: "hsl(var(--border))",
-                        borderRadius: "12px",
+                        backgroundColor: "rgba(10, 10, 15, 0.9)",
+                        borderColor: "rgba(255, 255, 255, 0.1)",
+                        borderRadius: "16px",
+                        backdropFilter: "blur(12px)",
+                        boxShadow: "0 20px 40px rgba(0,0,0,0.5)"
                       }}
-                      itemStyle={{ color: "hsl(var(--foreground))" }}
+                      itemStyle={{ color: "hsl(var(--primary))", fontWeight: "bold" }}
                     />
                     <Area
                       type="monotone"
@@ -228,115 +235,118 @@ export default function Dashboard() {
                       stroke="hsl(var(--primary))"
                       fillOpacity={1}
                       fill="url(#colorValue)"
-                      strokeWidth={3}
+                      strokeWidth={4}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
 
         {/* Recent Activity */}
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
-          <Card className="border-border/50 bg-gradient-to-br from-card/60 to-card/20 backdrop-blur-xl h-full">
+        <div className="lg:col-span-4">
+          <Card className="border-border/40 bg-card/40 backdrop-blur-2xl h-full shadow-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Recent Activity</CardTitle>
+              <CardTitle className="text-xl">Actividad Reciente</CardTitle>
+              <p className="text-sm text-muted-foreground">Últimas interacciones registradas</p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               {[
-                { name: "Instagram Mention", time: "2 min ago", color: "bg-pink-500" },
-                { name: "WhatsApp Lead", time: "15 min ago", color: "bg-green-500" },
-                { name: "Facebook Comment", time: "1 hour ago", color: "bg-blue-500" },
-                { name: "New Follower", time: "3 hours ago", color: "bg-purple-500" },
+                { name: "Instagram Mention", time: "2 min ago", color: "bg-pink-500", icon: Instagram },
+                { name: "WhatsApp Lead", time: "15 min ago", color: "bg-green-500", icon: MessageCircle },
+                { name: "Facebook Comment", time: "1 hour ago", color: "bg-blue-500", icon: Facebook },
+                { name: "New Follower", time: "3 hours ago", color: "bg-purple-500", icon: Users },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 pb-4 border-b border-border/30 last:border-0 last:pb-0">
-                  <div className={`w-2 h-2 rounded-full ${item.color}`} />
+                <div key={i} className="flex items-center gap-4 group">
+                  <div className={`w-10 h-10 rounded-xl ${item.color}/10 flex items-center justify-center text-white transition-transform group-hover:scale-110`}>
+                    <item.icon className="w-5 h-5" />
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
+                    <p className="text-sm font-bold text-foreground truncate">{item.name}</p>
                     <p className="text-xs text-muted-foreground">{item.time}</p>
                   </div>
                 </div>
               ))}
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Quick Actions */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-        <Card className="border-border/50 bg-gradient-to-br from-card/60 to-card/20 backdrop-blur-xl mb-8">
+      {/* Lower Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Quick Actions */}
+        <Card className="border-border/40 bg-card/40 backdrop-blur-2xl shadow-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-xl">
               <Zap className="w-5 h-5 text-primary" />
-              Quick Actions
+              Acciones Rápidas
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
-                { icon: Plus, label: "New Post", color: "bg-blue-500" },
-                { icon: MessageSquare, label: "Send Message", color: "bg-green-500" },
-                { icon: Megaphone, label: "Campaign", color: "bg-purple-500" },
-                { icon: ShoppingBag, label: "Products", color: "bg-yellow-500" },
-                { icon: Music, label: "Music", color: "bg-pink-500" },
+                { icon: Plus, label: "Nuevo Post", color: "bg-blue-500" },
+                { icon: MessageSquare, label: "Mensaje", color: "bg-green-500" },
+                { icon: Megaphone, label: "Campaña", color: "bg-purple-500" },
+                { icon: ShoppingBag, label: "Productos", color: "bg-yellow-500" },
+                { icon: Music, label: "Música", color: "bg-pink-500" },
+                { icon: Send, label: "Masivo", color: "bg-cyan-500" },
               ].map((action, i) => (
                 <Button
                   key={i}
                   variant="outline"
-                  className="h-24 flex flex-col gap-2 rounded-lg hover:border-primary/50 group"
+                  className="h-28 flex flex-col gap-3 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-primary/50 group transition-all"
                 >
-                  <div className={`p-2 rounded-lg ${action.color} text-white`}>
+                  <div className={`p-3 rounded-xl ${action.color} text-white shadow-lg shadow-current/20 group-hover:scale-110 transition-transform`}>
                     <action.icon className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-semibold text-center">{action.label}</span>
+                  <span className="text-xs font-bold text-center tracking-wide">{action.label}</span>
                 </Button>
               ))}
             </div>
           </CardContent>
         </Card>
-      </motion.div>
 
-      {/* Connected Platforms */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-        <Card className="border-border/50 bg-gradient-to-br from-card/60 to-card/20 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Link2 className="w-5 h-5 text-primary" />
-              Connected Platforms
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">{accounts.length} accounts connected</p>
+        {/* Platforms Summary */}
+        <Card className="border-border/40 bg-card/40 backdrop-blur-2xl shadow-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Link2 className="w-5 h-5 text-primary" />
+                Cuentas Vinculadas
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">{accounts.length} plataformas activas</p>
+            </div>
+            <Button size="sm" variant="kiwi" className="rounded-xl">Conectar</Button>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {accounts.slice(0, 6).map((account, i) => (
-                <motion.div
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {accounts.slice(0, 4).map((account) => (
+                <div
                   key={account.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="p-4 rounded-lg border border-border/50 bg-card/30 hover:border-primary/50 transition-all"
+                  className="p-4 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all group"
                 >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0">
-                      {account.platform === "whatsapp" && <MessageCircle className="w-5 h-5 text-green-500" />}
-                      {account.platform === "instagram" && <Instagram className="w-5 h-5 text-pink-500" />}
-                      {account.platform === "facebook" && <Facebook className="w-5 h-5 text-blue-500" />}
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                      {account.platform === "whatsapp" && <MessageCircle className="w-6 h-6 text-green-500" />}
+                      {account.platform === "instagram" && <Instagram className="w-6 h-6 text-pink-500" />}
+                      {account.platform === "facebook" && <Facebook className="w-6 h-6 text-blue-500" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-foreground truncate text-sm">{account.accountName}</h4>
-                      <p className="text-xs text-muted-foreground capitalize">{account.platform}</p>
+                      <h4 className="font-bold text-foreground truncate text-sm">{account.accountName}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">Conectado</span>
+                      </div>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="w-full rounded-lg text-xs">
-                    View Details
-                  </Button>
-                </motion.div>
+                </div>
               ))}
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 }
