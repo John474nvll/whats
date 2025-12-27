@@ -522,6 +522,33 @@ export class DatabaseStorage implements IStorage {
     const [newTx] = await db.insert(transactions).values(tx).returning();
     return newTx;
   }
+
+  // Phone Connections
+  async getPhoneConnections(): Promise<PhoneConnection[]> {
+    return await db.select().from(phoneConnections).orderBy(desc(phoneConnections.createdAt));
+  }
+
+  async getPhoneConnection(phoneNumber: string): Promise<PhoneConnection | undefined> {
+    const [connection] = await db.select().from(phoneConnections).where(eq(phoneConnections.phoneNumber, phoneNumber));
+    return connection;
+  }
+
+  async createPhoneConnection(connection: InsertPhoneConnection): Promise<PhoneConnection> {
+    const [newConnection] = await db.insert(phoneConnections).values(connection).returning();
+    return newConnection;
+  }
+
+  async updatePhoneConnection(id: number, updates: Partial<InsertPhoneConnection>): Promise<PhoneConnection> {
+    const [updated] = await db.update(phoneConnections)
+      .set({ ...updates, verifiedAt: updates.isVerified ? new Date() : undefined })
+      .where(eq(phoneConnections.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deletePhoneConnection(id: number): Promise<void> {
+    await db.delete(phoneConnections).where(eq(phoneConnections.id, id));
+  }
 }
 
 export const storage = new DatabaseStorage();

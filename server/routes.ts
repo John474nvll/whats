@@ -811,3 +811,64 @@ export async function registerRoutes(
 
   return httpServer;
 }
+
+  // Phone Connection Endpoints
+  app.get("/api/platforms/phone-accounts", async (req, res) => {
+    try {
+      const phones = await storage.getPhoneConnections();
+      res.json(phones.filter(p => p.isVerified));
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch phone accounts" });
+    }
+  });
+
+  app.post("/api/platforms/send-phone-code", async (req, res) => {
+    try {
+      const { phoneNumber, platform } = req.body;
+      
+      const code = Math.random().toString().slice(2, 8);
+      
+      let existing = await storage.getPhoneConnection(phoneNumber);
+      if (existing) {
+        await storage.updatePhoneConnection(existing.id, {
+          verificationCode: code,
+          isVerified: false
+        });
+      } else {
+        await storage.createPhoneConnection({
+          phoneNumber,
+          verificationCode: code,
+          isVerified: false,
+          platform
+        });
+      }
+      
+      res.json({ success: true, message: "Código enviado a WhatsApp", code });
+    } catch (error) {
+      res.status(500).json({ error: error instanceof Error ? error.message : "Failed to send code" });
+    }
+  });
+
+  app.post("/api/platforms/verify-phone-code", async (req, res) => {
+    try {
+      const { phoneNumber, code } = req.body;
+      
+      const connection = await storage.getPhoneConnection(phoneNumber);
+      if (!connection) {
+        return res.status(404).json({ error: "Phone not found" });
+      }
+      
+      if (connection.verificationCode !== code) {
+        return res.status(400).json({ error: "Invalid code" });
+      }
+      
+      await storage.updatePhoneConnection(connection.id, {
+        isVerified: true,
+        verificationCode: null
+      });
+      
+      res.json({ success: true, message: "Phone verified successfully" });
+    } catch (error) {
+      res.status(500).json({ error: error instanceof Error ? error.message : "Verification failed" });
+    }
+  });

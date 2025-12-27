@@ -16,6 +16,21 @@ const platformIcons: Record<string, any> = {
   whatsapp: Smartphone,
 };
 
+// Validar número de teléfono colombiano
+const validateColombianPhone = (phone: string): boolean => {
+  const cleaned = phone.replace(/\D/g, '');
+  return cleaned.length === 12 && cleaned.startsWith('57');
+};
+
+// Formatear número colombiano
+const formatColombianPhone = (phone: string): string => {
+  const cleaned = phone.replace(/\D/g, '');
+  if (!cleaned.startsWith('57')) {
+    return '+57' + cleaned;
+  }
+  return '+' + cleaned;
+};
+
 const platformColors: Record<string, { color: string, bg: string, border: string, text: string }> = {
   instagram: { color: "bg-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/20", text: "text-pink-400" },
   facebook: { color: "bg-blue-600", bg: "bg-blue-600/10", border: "border-blue-600/20", text: "text-blue-400" },
@@ -30,6 +45,10 @@ export default function PlatformsHub() {
   const [campaignContent, setCampaignContent] = useState("");
   const [tokens, setTokens] = useState<Record<string, string>>({});
   const [connecting, setConnecting] = useState<string | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verifyingPhone, setVerifyingPhone] = useState<string | null>(null);
+  const [connectedPhones, setConnectedPhones] = useState<any[]>([]);
 
   const { data: accounts = [], isLoading: accountsLoading } = useQuery({
     queryKey: ["/api/platforms/accounts"],
@@ -79,6 +98,56 @@ export default function PlatformsHub() {
       } else {
         toast({ title: "Error", description: "No se pudo enviar el mensaje", variant: "destructive" });
       }
+    },
+  });
+
+  const sendPhoneCodeMutation = useMutation({
+    mutationFn: async () => {
+      if (!validateColombianPhone(phoneNumber)) {
+        throw new Error("Número colombiano inválido. Debe ser +57 XXX XXXXXXX");
+      }
+      const formatted = formatColombianPhone(phoneNumber);
+      const res = await apiRequest("POST", "/api/platforms/send-phone-code", {
+        phoneNumber: formatted,
+        platform: "whatsapp"
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Código enviado", description: "Revisa tu WhatsApp para el código de verificación" });
+      setVerifyingPhone("code_sent");
+    },
+    onError: (error) => {
+      toast({ title: "Error", description: error instanceof Error ? error.message : "No se pudo enviar el código", variant: "destructive" });
+    },
+  });
+
+  const verifyPhoneCodeMutation = useMutation({
+    mutationFn: async () => {
+      const formatted = formatColombianPhone(phoneNumber);
+      const res = await apiRequest("POST", "/api/platforms/verify-phone-code", {
+        phoneNumber: formatted,
+        code: verificationCode
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Teléfono conectado", description: "Tu número de WhatsApp está verificado y listo" });
+      setPhoneNumber("");
+      setVerificationCode("");
+      setVerifyingPhone(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/platforms/phone-accounts"] });
+    },
+    onError: (error) => {
+      toast({ title: "Verificación fallida", description: error instanceof Error ? error.message : "Código inválido", variant: "destructive" });
+    },
+  });
+
+  const { data: phoneAccounts = [] } = useQuery({
+    queryKey: ["/api/platforms/phone-accounts"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/platforms/phone-accounts");
+      return res.json();
     },
   });
 
@@ -299,43 +368,83 @@ export default function PlatformsHub() {
           </div>
 
           <aside className="space-y-8">
-            {/* WhatsApp Access Token Section */}
+            {/* WhatsApp Phone Number Connection */}
             <Card className="rounded-[2.5rem] bg-green-500/10 border-green-500/20 backdrop-blur-3xl overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <CardHeader className="relative z-10 p-6">
                 <CardTitle className="text-xl font-black flex items-center gap-3 text-green-400">
-                  <MessageCircle className="h-6 w-6" />
-                  WhatsApp
+                  <Smartphone className="h-6 w-6" />
+                  Conecta tu WhatsApp
                 </CardTitle>
-                <CardDescription className="text-green-300 font-bold">Acceso Token</CardDescription>
+                <CardDescription className="text-green-300 font-bold">Número Colombiano (+57)</CardDescription>
               </CardHeader>
               <CardContent className="relative z-10 p-6 pt-0 space-y-4">
                 <div className="space-y-3">
-                  <div>
-                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Ingresa tu access token</p>
-                    <Input
-                      type="password"
-                      placeholder="Pega tu access token aquí"
-                      className="bg-black/40 border-white/5 rounded-xl h-11 text-xs focus:border-green-500/50"
-                      value={tokens["whatsapp_access"] || ""}
-                      onChange={(e) => setTokens({ ...tokens, whatsapp_access: e.target.value })}
-                    />
-                  </div>
-                  <Button 
-                    className="w-full bg-green-500 text-black font-black h-11 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-xs uppercase tracking-widest"
-                    onClick={() => {
-                      setConnecting("whatsapp_access");
-                      setTimeout(() => {
-                        toast({ title: "WhatsApp Conectado", description: "Access token validado con éxito" });
-                        setTokens({ ...tokens, whatsapp_access: "" });
-                        setConnecting(null);
-                      }, 1500);
-                    }}
-                    disabled={!tokens["whatsapp_access"] || connecting === "whatsapp_access"}
-                  >
-                    {connecting === "whatsapp_access" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Conectar"}
-                  </Button>
+                  {!verifyingPhone ? (
+                    <>
+                      <div>
+                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Ingresa tu número de WhatsApp</p>
+                        <Input
+                          placeholder="ej: 573001234567 o +573001234567"
+                          className="bg-black/40 border-white/5 rounded-xl h-11 text-xs focus:border-green-500/50"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                        />
+                      </div>
+                      <Button 
+                        className="w-full bg-green-500 text-black font-black h-11 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-xs uppercase tracking-widest"
+                        onClick={() => sendPhoneCodeMutation.mutate()}
+                        disabled={!phoneNumber || sendPhoneCodeMutation.isPending}
+                      >
+                        {sendPhoneCodeMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enviar Código"}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Código de verificación</p>
+                        <Input
+                          placeholder="Ingresa el código recibido"
+                          className="bg-black/40 border-white/5 rounded-xl h-11 text-xs focus:border-green-500/50"
+                          value={verificationCode}
+                          onChange={(e) => setVerificationCode(e.target.value)}
+                        />
+                      </div>
+                      <Button 
+                        className="w-full bg-green-500 text-black font-black h-11 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-xs uppercase tracking-widest"
+                        onClick={() => verifyPhoneCodeMutation.mutate()}
+                        disabled={!verificationCode || verifyPhoneCodeMutation.isPending}
+                      >
+                        {verifyPhoneCodeMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Verificar"}
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="w-full border-white/5 text-slate-400 h-10"
+                        onClick={() => {
+                          setVerifyingPhone(null);
+                          setPhoneNumber("");
+                          setVerificationCode("");
+                        }}
+                      >
+                        Cancelar
+                      </Button>
+                    </>
+                  )}
                 </div>
+
+                {phoneAccounts.length > 0 && (
+                  <div className="pt-4 border-t border-white/10">
+                    <p className="text-[10px] font-black text-green-400 uppercase tracking-widest mb-3">Números Conectados</p>
+                    <div className="space-y-2">
+                      {phoneAccounts.map((account: any) => (
+                        <div key={account.id} className="p-3 rounded-lg bg-black/40 border border-green-500/20 flex items-center justify-between">
+                          <span className="text-xs text-slate-300 font-bold">{account.phoneNumber}</span>
+                          <Badge className="bg-green-500 text-black text-[8px] font-black">Activo</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
