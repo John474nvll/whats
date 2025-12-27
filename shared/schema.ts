@@ -270,6 +270,17 @@ export const customLinks = pgTable("custom_links", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const phoneConnections = pgTable("phone_connections", {
+  id: serial("id").primaryKey(),
+  phoneNumber: text("phone_number").notNull().unique(), // +573001234567
+  verificationCode: text("verification_code"),
+  isVerified: boolean("is_verified").default(false),
+  platform: text("platform").default("whatsapp"), // 'whatsapp'
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+  verifiedAt: timestamp("verified_at"),
+});
+
 export const insertContactSchema = createInsertSchema(contacts).omit({ id: true, createdAt: true });
 export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, lastMessageAt: true, createdAt: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
@@ -287,11 +298,14 @@ export const insertProductSchema = createInsertSchema(products).omit({ id: true,
 export const insertCustomLinkSchema = createInsertSchema(customLinks).omit({ id: true, createdAt: true, clicks: true });
 export const insertInventorySchema = createInsertSchema(inventory).omit({ id: true, createdAt: true });
 export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true, createdAt: true });
+export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections).omit({ id: true, createdAt: true, verifiedAt: true });
 
 export type Inventory = typeof inventory.$inferSelect;
 export type InsertInventory = z.infer<typeof insertInventorySchema>;
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+export type PhoneConnection = typeof phoneConnections.$inferSelect;
+export type InsertPhoneConnection = z.infer<typeof insertPhoneConnectionSchema>;
 
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;

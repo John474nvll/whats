@@ -1,6 +1,6 @@
 import { db } from "./db";
 import {
-  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent,
+  users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent, phoneConnections,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -19,6 +19,7 @@ import {
   type Transaction, type InsertTransaction,
   type Product, type InsertProduct,
   type CustomLink, type InsertCustomLink,
+  type PhoneConnection, type InsertPhoneConnection,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -126,6 +127,13 @@ export interface IStorage {
   createArtist(artist: InsertArtistProfile): Promise<ArtistProfile>;
   getMusicContent(artistId: number): Promise<MusicContent[]>;
   createMusicContent(content: InsertMusicContent): Promise<MusicContent>;
+
+  // Phone Connections
+  getPhoneConnections(): Promise<PhoneConnection[]>;
+  getPhoneConnection(phoneNumber: string): Promise<PhoneConnection | undefined>;
+  createPhoneConnection(connection: InsertPhoneConnection): Promise<PhoneConnection>;
+  updatePhoneConnection(id: number, updates: Partial<InsertPhoneConnection>): Promise<PhoneConnection>;
+  deletePhoneConnection(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
