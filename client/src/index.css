@@ -146,7 +146,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply font-black tracking-tighter drop-shadow-[0_0_10px_rgba(255,255,255,0.1)] dark:text-white;
+    @apply font-black tracking-tight;
   }
 
   :not(.dark) h1,
@@ -155,7 +155,7 @@
   :not(.dark) h4,
   :not(.dark) h5,
   :not(.dark) h6 {
-    @apply text-slate-900 drop-shadow-[0_0_10px_rgba(0,0,0,0.05)];
+    @apply text-slate-900;
   }
 
   p {
