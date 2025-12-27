@@ -204,6 +204,30 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 // === BASE SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users).omit({ createdAt: true });
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  price: integer("price").notNull(), // stored in cents
+  imageUrl: text("image_url"),
+  stock: integer("stock").default(0),
+  category: text("category"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const customLinks = pgTable("custom_links", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  productId: integer("product_id").references(() => products.id),
+  campaignId: integer("campaign_id").references(() => campaigns.id),
+  originalUrl: text("original_url").notNull(),
+  shortCode: text("short_code").unique().notNull(),
+  platform: text("platform"), 
+  clicks: integer("clicks").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertContactSchema = createInsertSchema(contacts).omit({ id: true, createdAt: true });
 export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, lastMessageAt: true, createdAt: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
@@ -215,6 +239,13 @@ export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: tru
 export const insertArtistProfileSchema = createInsertSchema(artistProfiles).omit({ id: true, createdAt: true });
 export const insertMusicContentSchema = createInsertSchema(musicContent).omit({ id: true, createdAt: true });
 export const insertCustomerSchema = createInsertSchema(customers).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertProductSchema = createInsertSchema(products).omit({ id: true, createdAt: true });
+export const insertCustomLinkSchema = createInsertSchema(customLinks).omit({ id: true, createdAt: true, clicks: true });
+
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = z.infer<typeof insertProductSchema>;
+export type CustomLink = typeof customLinks.$inferSelect;
+export type InsertCustomLink = z.infer<typeof insertCustomLinkSchema>;
 
 // === EXPLICIT API CONTRACT TYPES ===
 

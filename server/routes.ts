@@ -436,7 +436,10 @@ export async function registerRoutes(
         content,
         aiGenerated: aiGenerated || false,
         status: "active",
-        metrics: {},
+        metrics: {
+          execution_log: [],
+          stats: { sent: 0, failed: 0 }
+        },
         scheduledAt,
         userId: req.userId!
       });
@@ -446,15 +449,37 @@ export async function registerRoutes(
         for (const accountId of targetAccountIds) {
           const account = await storage.getSocialAccountById(accountId);
           if (account && account.userId === req.userId) {
-            // Mock or real publish call
-            console.log(`Executing campaign ${name} on account ${account.accountName} (${account.platform})`);
+            // Here you would integrate with platform-specific tools
+            // For now, we simulate execution and update metrics
+            console.log(`Executing master tool on account ${account.accountName} (${account.platform})`);
+            
+            // Simulation of tool execution
+            const success = Math.random() > 0.1;
+            campaign.metrics = {
+              ...campaign.metrics as object,
+              execution_log: [
+                ...((campaign.metrics as any).execution_log || []),
+                {
+                  account: account.accountName,
+                  platform: account.platform,
+                  timestamp: new Date().toISOString(),
+                  status: success ? "success" : "failed"
+                }
+              ],
+              stats: {
+                sent: ((campaign.metrics as any).stats?.sent || 0) + (success ? 1 : 0),
+                failed: ((campaign.metrics as any).stats?.failed || 0) + (success ? 0 : 1)
+              }
+            };
           }
         }
+        await storage.updateCampaign(campaign.id, { metrics: campaign.metrics });
       }
 
       res.status(201).json(campaign);
     } catch (error) {
-      res.status(500).json({ error: "Failed to create campaign" });
+      console.error("Campaign execution error:", error);
+      res.status(500).json({ error: "Failed to orchestrate campaign tools" });
     }
   });
 

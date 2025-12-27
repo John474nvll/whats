@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle } from "lucide-react";
+import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle, Activity, Loader2, Zap } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Campaign } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -10,8 +10,11 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Campaigns() {
-  const { toast } = useToast();
-  const { data: accounts } = useQuery<any[]>({
+  const { data: campaigns, isLoading: campaignsLoading } = useQuery<Campaign[]>({
+    queryKey: ["/api/campaigns"],
+  });
+
+  const { data: accounts, isLoading: accountsLoading } = useQuery<any[]>({
     queryKey: ["/api/social-accounts"],
   });
 
@@ -30,74 +33,102 @@ export default function Campaigns() {
       queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
       toast({ title: "Campaña iniciada", description: "Tu campaña multicanal está en marcha." });
       setSelectedAccounts([]);
+      const contentArea = document.getElementById('campaign-content') as HTMLTextAreaElement;
+      if (contentArea) contentArea.value = "";
+    },
+  });
+
+  const deleteCampaign = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/campaigns/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/campaigns"] });
+      toast({ title: "Campaña eliminada" });
     },
   });
 
   const filteredAccounts = accounts?.filter(acc => platform === "all" || acc.platform === platform) || [];
 
-  if (isLoading) return <div className="p-8">Cargando campañas...</div>;
+  if (campaignsLoading || accountsLoading) return (
+    <div className="p-8 flex items-center justify-center min-h-[400px]">
+      <div className="animate-spin h-8 w-8 border-4 border-kiwi border-t-transparent rounded-full" />
+    </div>
+  );
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter text-kiwi">Campañas Pro</h1>
-          <p className="text-muted-foreground font-medium">Gestiona tus lanzamientos multicanal con IA.</p>
+          <h1 className="text-5xl font-black tracking-tighter text-kiwi drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">Campañas Pro</h1>
+          <p className="text-muted-foreground font-medium text-lg">Orquestación centralizada para tus perfiles administrativos.</p>
         </div>
       </div>
 
-      <Card className="glass-card rounded-[2rem] border-border/50">
+      <Card className="glass-card rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
+          <Megaphone className="h-24 w-24 text-kiwi" />
+        </div>
         <CardHeader>
-          <CardTitle className="text-xl font-black flex items-center gap-2">
-            <Megaphone className="h-5 w-5 text-kiwi" />
-            Configurar Nueva Campaña
+          <CardTitle className="text-2xl font-black flex items-center gap-3">
+            <Zap className="h-6 w-6 text-kiwi" />
+            Configurar Lanzamiento Maestro
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Plataforma</label>
-                <select 
-                  className="w-full h-12 bg-muted/10 border-border/50 rounded-2xl px-4 focus:ring-kiwi"
-                  value={platform}
-                  onChange={(e) => {
-                    setPlatform(e.target.value);
-                    setSelectedAccounts([]);
-                  }}
-                >
-                  <option value="all">Todas las plataformas</option>
-                  <option value="whatsapp">WhatsApp</option>
-                  <option value="instagram">Instagram</option>
-                  <option value="facebook">Facebook</option>
-                </select>
+        <CardContent className="space-y-8">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-kiwi/70">1. Seleccionar Plataforma</label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {['all', 'whatsapp', 'instagram', 'facebook'].map((p) => (
+                    <Button
+                      key={p}
+                      variant="outline"
+                      onClick={() => {
+                        setPlatform(p);
+                        setSelectedAccounts([]);
+                      }}
+                      className={`h-12 rounded-2xl border-border/50 capitalize font-bold transition-all ${
+                        platform === p ? "bg-kiwi/20 border-kiwi text-kiwi shadow-[0_0_15px_rgba(34,197,94,0.2)]" : "hover:bg-muted/10"
+                      }`}
+                    >
+                      {p === 'all' ? 'Todas' : p}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Cuentas Administradoras</label>
-                <div className="flex flex-wrap gap-2 p-2 bg-muted/5 border border-dashed border-border/50 rounded-2xl min-h-[3rem]">
-                   {filteredAccounts.map(acc => (
+              <div className="space-y-3">
+                <label className="text-xs font-black uppercase tracking-[0.2em] text-cyan-neon/70">2. Perfiles Administrativos</label>
+                <div className="flex flex-wrap gap-2 p-4 bg-muted/5 border border-dashed border-border/30 rounded-[2rem] min-h-[5rem] content-start">
+                   {filteredAccounts.length > 0 ? filteredAccounts.map(acc => (
                      <Badge 
                        key={acc.id}
                        onClick={() => setSelectedAccounts(prev => 
                          prev.includes(acc.id) ? prev.filter(id => id !== acc.id) : [...prev, acc.id]
                        )}
-                       className={`rounded-full px-3 py-1 cursor-pointer transition-all ${
+                       className={`rounded-full px-4 py-2 cursor-pointer transition-all border font-bold text-xs flex items-center gap-2 ${
                          selectedAccounts.includes(acc.id) 
-                         ? "bg-kiwi text-black scale-105" 
-                         : "bg-muted/20 text-muted-foreground hover:bg-muted/30"
+                         ? "bg-kiwi text-black border-kiwi scale-105 shadow-lg shadow-kiwi/20" 
+                         : "bg-muted/20 text-muted-foreground border-transparent hover:bg-muted/30"
                        }`}
                      >
+                       {acc.platform === 'instagram' && <Instagram className="h-3 w-3" />}
+                       {acc.platform === 'facebook' && <Facebook className="h-3 w-3" />}
+                       {acc.platform === 'whatsapp' && <MessageCircle className="h-3 w-3" />}
                        {acc.accountName}
                      </Badge>
-                   ))}
+                   )) : (
+                     <p className="text-xs text-muted-foreground italic p-2">No hay cuentas vinculadas en esta plataforma.</p>
+                   )}
                 </div>
               </div>
            </div>
 
-           <div className="space-y-2">
-             <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Contenido de la Campaña</label>
+           <div className="space-y-3">
+             <label className="text-xs font-black uppercase tracking-[0.2em] text-raspberry/70">3. Contenido de la Campaña (Herramientas IA)</label>
              <Textarea 
-               placeholder="Escribe el mensaje o deja que la IA lo genere..."
-               className="rounded-[1.5rem] bg-muted/10 border-border/50 min-h-[100px]"
+               placeholder="Define el mensaje maestro que se aplicará a todas las cuentas seleccionadas..."
+               className="rounded-[2rem] bg-muted/10 border-border/50 min-h-[150px] p-6 text-lg focus:ring-kiwi/30"
                id="campaign-content"
              />
            </div>
@@ -106,22 +137,32 @@ export default function Campaigns() {
              onClick={() => {
                const content = (document.getElementById('campaign-content') as HTMLTextAreaElement).value;
                createCampaign.mutate({
-                 name: "Campaña Orquestada " + new Date().toLocaleDateString(),
+                 name: "Orquestación Centralizada " + new Date().toLocaleTimeString(),
                  platform,
                  content,
                  status: "active",
                  aiGenerated: true
                });
              }}
-             disabled={selectedAccounts.length === 0}
-             className="w-full h-14 rounded-[2rem] bg-kiwi text-black font-black text-lg hover:bg-kiwi/90 shadow-2xl shadow-kiwi/20"
+             disabled={selectedAccounts.length === 0 || createCampaign.isPending}
+             className="w-full h-16 rounded-[2.5rem] bg-kiwi text-black font-black text-xl hover:bg-kiwi/90 shadow-[0_20px_40px_rgba(34,197,94,0.3)] transition-all active:scale-95 disabled:opacity-50"
            >
-             <Send className="h-5 w-5 mr-2" /> Ejecutar Campaña en {selectedAccounts.length} Cuentas
+             {createCampaign.isPending ? (
+               <Loader2 className="h-6 w-6 animate-spin" />
+             ) : (
+               <>
+                 <Send className="h-6 w-6 mr-3" /> Aplicar Herramientas a {selectedAccounts.length} Cuentas
+               </>
+             )}
            </Button>
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
+        <h2 className="text-2xl font-black col-span-full flex items-center gap-2 text-foreground">
+          <Sparkles className="h-6 w-6 text-kiwi" />
+          Control de Ejecución en Tiempo Real
+        </h2>
         {campaigns?.map((campaign) => (
           <Card key={campaign.id} className="glass-card rounded-[2rem] overflow-hidden border-border/50">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
