@@ -115,6 +115,28 @@ export const salesFunnels = pgTable("sales_funnels", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const inventory = pgTable("inventory", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  sku: text("sku").notNull().unique(),
+  name: text("name").notNull(),
+  quantity: integer("quantity").default(0),
+  price: integer("price").notNull(),
+  category: text("category"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const transactions = pgTable("transactions", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  customerId: integer("customer_id").references(() => customers.id),
+  productId: integer("product_id").references(() => products.id),
+  amount: integer("amount").notNull(),
+  status: text("status").default("pending"), // 'pending', 'completed', 'cancelled'
+  paymentMethod: text("payment_method"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
@@ -241,6 +263,13 @@ export const insertMusicContentSchema = createInsertSchema(musicContent).omit({ 
 export const insertCustomerSchema = createInsertSchema(customers).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertProductSchema = createInsertSchema(products).omit({ id: true, createdAt: true });
 export const insertCustomLinkSchema = createInsertSchema(customLinks).omit({ id: true, createdAt: true, clicks: true });
+export const insertInventorySchema = createInsertSchema(inventory).omit({ id: true, createdAt: true });
+export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true, createdAt: true });
+
+export type Inventory = typeof inventory.$inferSelect;
+export type InsertInventory = z.infer<typeof insertInventorySchema>;
+export type Transaction = typeof transactions.$inferSelect;
+export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
 
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;

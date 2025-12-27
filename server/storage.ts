@@ -13,6 +13,10 @@ import {
   type Customer, type InsertCustomer,
   type ArtistProfile, type InsertArtistProfile,
   type MusicContent, type InsertMusicContent,
+  type Inventory, type InsertInventory,
+  type Transaction, type InsertTransaction,
+  type Product, type InsertProduct,
+  type CustomLink, type InsertCustomLink,
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 
@@ -21,6 +25,16 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, updates: Partial<InsertUser>): Promise<User>;
+
+  // Inventory
+  getInventory(userId: string): Promise<Inventory[]>;
+  createInventory(item: InsertInventory): Promise<Inventory>;
+  updateInventory(id: number, updates: Partial<InsertInventory>): Promise<Inventory>;
+  deleteInventory(id: number): Promise<void>;
+
+  // Transactions
+  getTransactions(userId: string): Promise<Transaction[]>;
+  createTransaction(tx: InsertTransaction): Promise<Transaction>;
 
   // Contacts
   getContacts(): Promise<Contact[]>;
@@ -424,6 +438,35 @@ export class DatabaseStorage implements IStorage {
   async createMusicContent(content: InsertMusicContent): Promise<MusicContent> {
     const [newContent] = await db.insert(musicContent).values(content).returning();
     return newContent;
+  }
+
+  // Inventory Implementation
+  async getInventory(userId: string): Promise<Inventory[]> {
+    return await db.select().from(inventory).where(eq(inventory.userId, userId));
+  }
+
+  async createInventory(item: InsertInventory): Promise<Inventory> {
+    const [newItem] = await db.insert(inventory).values(item).returning();
+    return newItem;
+  }
+
+  async updateInventory(id: number, updates: Partial<InsertInventory>): Promise<Inventory> {
+    const [updated] = await db.update(inventory).set(updates).where(eq(inventory.id, id)).returning();
+    return updated;
+  }
+
+  async deleteInventory(id: number): Promise<void> {
+    await db.delete(inventory).where(eq(inventory.id, id));
+  }
+
+  // Transactions Implementation
+  async getTransactions(userId: string): Promise<Transaction[]> {
+    return await db.select().from(transactions).where(eq(transactions.userId, userId)).orderBy(desc(transactions.createdAt));
+  }
+
+  async createTransaction(tx: InsertTransaction): Promise<Transaction> {
+    const [newTx] = await db.insert(transactions).values(tx).returning();
+    return newTx;
   }
 }
 

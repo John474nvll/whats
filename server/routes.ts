@@ -555,6 +555,44 @@ export async function registerRoutes(
     }
   });
 
+  // Inventory endpoints
+  app.get("/api/inventory", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getInventory(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch inventory" });
+    }
+  });
+
+  app.post("/api/inventory", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const item = await storage.createInventory({ ...req.body, userId: req.userId! });
+      res.status(201).json(item);
+    } catch {
+      res.status(500).json({ error: "Failed to create inventory item" });
+    }
+  });
+
+  // Transactions endpoints
+  app.get("/api/transactions", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getTransactions(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch transactions" });
+    }
+  });
+
+  app.post("/api/transactions", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const tx = await storage.createTransaction({ ...req.body, userId: req.userId! });
+      res.status(201).json(tx);
+    } catch {
+      res.status(500).json({ error: "Failed to create transaction" });
+    }
+  });
+
   // Products endpoints
   app.get("/api/products", authMiddleware as any, async (req: AuthRequest, res) => {
     try {
