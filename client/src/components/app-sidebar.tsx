@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 const menuGroups = [
