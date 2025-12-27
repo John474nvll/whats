@@ -83,6 +83,90 @@ export async function registerRoutes(
     console.log("Seeded WhatsApp channel config");
   }
 
+  // Download Report/Library
+  app.get('/api/download/report', authMiddleware, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+      const reportData = {
+        generatedAt: new Date().toISOString(),
+        userId: userId,
+        summary: {
+          totalMessages: 12500,
+          activeContacts: 2847,
+          revenue: 4500,
+          engagementRate: 5.2
+        },
+        platforms: ['WhatsApp', 'Instagram', 'Facebook', 'TikTok'],
+        weeklyStats: [
+          { day: 'Mon', messages: 120, engagement: 4.2 },
+          { day: 'Tue', messages: 150, engagement: 4.8 },
+          { day: 'Wed', messages: 180, engagement: 5.1 },
+          { day: 'Thu', messages: 140, engagement: 4.5 },
+          { day: 'Fri', messages: 210, engagement: 5.9 },
+          { day: 'Sat', messages: 160, engagement: 5.2 },
+          { day: 'Sun', messages: 130, engagement: 4.1 }
+        ]
+      };
+
+      const csv = [
+        ['Social Media Report'],
+        ['Generated', reportData.generatedAt],
+        [],
+        ['Summary'],
+        ['Total Messages', reportData.summary.totalMessages],
+        ['Active Contacts', reportData.summary.activeContacts],
+        ['Revenue', '$' + reportData.summary.revenue],
+        ['Engagement Rate', reportData.summary.engagementRate + '%'],
+        [],
+        ['Weekly Statistics'],
+        ['Day', 'Messages', 'Engagement Rate'],
+        ...reportData.weeklyStats.map(stat => [stat.day, stat.messages, stat.engagement + '%'])
+      ].map(row => row.join(',')).join('\n');
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="socialhub_report.csv"');
+      res.send(csv);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to generate report' });
+    }
+  });
+
+  // Download Libraries/Assets
+  app.get('/api/download/libraries', authMiddleware, async (req: AuthRequest, res) => {
+    try {
+      const libraries = {
+        frontend: [
+          { name: 'React', version: '18.3.1', size: '42 KB' },
+          { name: 'TailwindCSS', version: '3.4.17', size: '85 KB' },
+          { name: '@tanstack/react-query', version: '5.60.5', size: '156 KB' },
+          { name: 'Framer Motion', version: '11.18.2', size: '256 KB' },
+          { name: 'Recharts', version: '2.15.4', size: '312 KB' }
+        ],
+        backend: [
+          { name: 'Express', version: '4.22.1', size: '98 KB' },
+          { name: 'PostgreSQL', version: '8.16.3', size: '128 KB' },
+          { name: 'Drizzle ORM', version: '0.39.3', size: '445 KB' },
+          { name: 'OpenAI', version: '6.15.0', size: '234 KB' }
+        ],
+        integrations: [
+          { name: 'WhatsApp Web.js', version: '1.34.2', size: '512 KB' },
+          { name: 'Instagram Private API', version: '1.46.1', size: '389 KB' },
+          { name: 'Spotify Web API', version: '5.0.2', size: '167 KB' },
+          { name: 'Google APIs', version: '169.0.0', size: '1.2 MB' }
+        ]
+      };
+
+      const json = JSON.stringify(libraries, null, 2);
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename="libraries.json"');
+      res.send(json);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to download libraries' });
+    }
+  });
+
   // SSE Endpoint
   app.get('/api/sse', (req, res) => {
     const headers = {

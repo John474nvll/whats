@@ -20,6 +20,8 @@ import {
   Megaphone,
   Music,
   Send,
+  Download,
+  Package,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -163,11 +165,36 @@ export default function Dashboard() {
             <h1 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">Dashboard Principal</h1>
             <p className="text-muted-foreground mt-2 font-medium">Resumen general de tu ecosistema digital</p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-2xl border-white/5 bg-white/5 backdrop-blur-md hidden sm:flex">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <Button 
+              variant="outline" 
+              className="rounded-2xl border-primary/30 bg-primary/10 backdrop-blur-md hover:bg-primary/20 text-sm font-bold"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/api/download/report';
+                link.download = 'socialhub_report.csv';
+                link.click();
+              }}
+              data-testid="button-download-report"
+            >
+              <Download className="w-4 h-4 mr-2" />
               Descargar Reporte
             </Button>
-            <Button variant="ghost" size="icon" onClick={logout} className="rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors">
+            <Button 
+              variant="outline" 
+              className="rounded-2xl border-secondary/30 bg-secondary/10 backdrop-blur-md hover:bg-secondary/20 text-sm font-bold"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/api/download/libraries';
+                link.download = 'libraries.json';
+                link.click();
+              }}
+              data-testid="button-download-libs"
+            >
+              <Package className="w-4 h-4 mr-2" />
+              Descargar Librerías
+            </Button>
+            <Button variant="ghost" size="icon" onClick={logout} className="rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors" data-testid="button-logout">
               <LogOut className="w-5 h-5" />
             </Button>
           </div>
