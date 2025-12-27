@@ -229,3 +229,196 @@
     @apply shadow-lg;
   }
 }
+
+/* Mobile-First CSS3 Animations & Responsive Enhancements */
+@layer utilities {
+  /* Smooth animations */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-slideInUp {
+    animation: slideInUp 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slideInDown {
+    animation: slideInDown 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slideInLeft {
+    animation: slideInLeft 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-slideInRight {
+    animation: slideInRight 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Mobile touch feedback */
+  .touch-feedback {
+    @apply transition-transform duration-100 active:scale-95;
+  }
+
+  /* Flexible wrap containers */
+  .flex-wrap-auto {
+    @apply flex flex-wrap gap-2 md:gap-3;
+  }
+
+  .grid-auto-responsive {
+    @apply grid gap-2 md:gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  /* Responsive text sizing */
+  .text-responsive-sm {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+
+  /* Responsive padding */
+  .p-responsive {
+    @apply p-2 sm:p-3 md:p-4 lg:p-6;
+  }
+
+  .px-responsive {
+    @apply px-2 sm:px-3 md:px-4 lg:px-6;
+  }
+
+  .py-responsive {
+    @apply py-2 sm:py-3 md:py-4 lg:py-6;
+  }
+
+  /* Mobile safe area bottom padding */
+  .pb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .pt-safe {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .transition-smooth {
+    @apply transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)];
+  }
+
+  /* Mobile card utilities */
+  .card-mobile {
+    @apply rounded-lg sm:rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-3 sm:p-4 transition-smooth touch-feedback;
+  }
+
+  /* Responsive button sizing */
+  .btn-responsive {
+    @apply px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm md:text-base;
+  }
+
+  /* Grid wrap utilities */
+  .grid-wrap-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4;
+  }
+
+  .grid-wrap-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4;
+  }
+
+  .grid-wrap-4 {
+    @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3;
+  }
+
+  /* Stack on mobile, row on desktop */
+  .flex-stack {
+    @apply flex flex-col sm:flex-row gap-2 md:gap-4;
+  }
+
+  .flex-stack-reverse {
+    @apply flex flex-col-reverse sm:flex-row gap-2 md:gap-4;
+  }
+
+  /* Mobile overlay backdrop */
+  .backdrop-mobile {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40;
+  }
+
+  /* Mobile menu slide animation */
+  .menu-slide {
+    @apply transform transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)];
+  }
+
+  /* Responsive gap utilities */
+  .gap-responsive {
+    @apply gap-2 sm:gap-3 md:gap-4;
+  }
+
+  /* Safe clickable area (44x44px minimum) */
+  .clickable-safe {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
