@@ -29,6 +29,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
+import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
+
 function Router() {
   return (
     <Switch>
@@ -68,16 +70,46 @@ function AppContent() {
           <div className="hidden md:block absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-neon/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
           
           <header className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl z-50 gap-2 md:gap-4">
-            <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
-              <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-lg md:rounded-xl hover:bg-white/5 no-default-hover-elevate flex-shrink-0" />
-              <div className="hidden md:block h-6 w-px bg-white/5" />
-              <Badge variant="outline" className="hidden sm:inline-block border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[8px] md:text-[10px] tracking-[0.15em] md:tracking-[0.2em] px-2 md:px-3 py-1 whitespace-nowrap">
-                v3.0 PWA
-              </Badge>
+            <div className="flex items-center gap-2 md:gap-6 min-w-0 flex-1">
+              <div className="flex items-center gap-3 pr-4 border-r border-white/10 group cursor-pointer">
+                <div className="w-8 h-8 rounded-lg bg-kiwi p-0.5 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                  <div className="w-full h-full rounded-[0.4rem] bg-slate-950 flex items-center justify-center overflow-hidden">
+                    <img src={logoImage} alt="SocialHub" className="w-full h-full object-contain p-0.5" />
+                  </div>
+                </div>
+                <h1 className="font-black text-lg tracking-tighter text-white hidden sm:block">Social<span className="text-kiwi">Hub</span></h1>
+              </div>
+              
+              <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar py-1">
+                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
+                  <Link href="/">Dashboard</Link>
+                </Button>
+                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
+                  <Link href="/platforms">Plataformas</Link>
+                </Button>
+                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
+                  <Link href="/ai-generator">AI Gen</Link>
+                </Button>
+                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
+                  <Link href="/analytics">Analytics</Link>
+                </Button>
+              </div>
+
+              <div className="hidden lg:flex items-center gap-2">
+                <div className="h-4 w-px bg-white/10 mx-2" />
+                <Badge variant="outline" className="border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[9px] tracking-[0.15em] px-3 py-1 rounded-full whitespace-nowrap">
+                  V3.0 PWA
+                </Badge>
+              </div>
             </div>
-            <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
-              <Button variant="ghost" size="icon" className="rounded-lg md:rounded-xl hover:bg-white/5 text-slate-400 no-default-hover-elevate h-9 w-9 md:h-10 md:w-10">
-                <Settings className="h-4 w-4 md:h-5 md:w-5" />
+
+            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-4">
+              <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-full hover:bg-white/5 no-default-hover-elevate h-9 w-9 border border-white/5" />
+              <div className="h-6 w-px bg-white/10 hidden sm:block" />
+              <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/5 text-slate-400 no-default-hover-elevate h-9 w-9 border border-white/5" asChild>
+                <Link href="/settings">
+                  <Settings className="h-4 w-4" />
+                </Link>
               </Button>
               <ThemeToggle />
             </div>
