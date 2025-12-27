@@ -51,6 +51,12 @@ const menuGroups = [
     ],
   },
   {
+    label: "🔗 Plataformas",
+    items: [
+      { title: "Plataformas", url: "/platforms", icon: Smartphone },
+    ],
+  },
+  {
     label: "⚙️ SISTEMA",
     items: [
       { title: "Settings", url: "/settings", icon: Settings },
@@ -102,7 +108,7 @@ export function AppSidebar() {
                     const isActive = location === item.url;
                     return (
                       <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild className="h-auto p-0 hover:bg-transparent">
+                        <SidebarMenuButton asChild className="h-auto p-0 hover:bg-transparent no-default-hover-elevate">
                           <Link href={item.url}>
                             <div
                               className={`flex items-center gap-2 md:gap-3 px-2 md:px-4 py-2 md:py-3 rounded-lg md:rounded-2xl w-full transition-all duration-300 group/item relative overflow-hidden ${

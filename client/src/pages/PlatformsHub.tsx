@@ -1,12 +1,26 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
-import { MessageCircle, Send, Zap, CheckCircle2 } from "lucide-react";
+import { MessageCircle, Send, Zap, CheckCircle2, Instagram, Facebook, Smartphone, AlertCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
+
+const platformIcons: Record<string, any> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  whatsapp: Smartphone,
+};
+
+const platformColors: Record<string, { color: string, bg: string, border: string, text: string }> = {
+  instagram: { color: "bg-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/20", text: "text-pink-400" },
+  facebook: { color: "bg-blue-600", bg: "bg-blue-600/10", border: "border-blue-600/20", text: "text-blue-400" },
+  whatsapp: { color: "bg-green-500", bg: "bg-green-500/10", border: "border-green-500/20", text: "text-green-400" },
+};
 
 export default function PlatformsHub() {
   const { toast } = useToast();
@@ -14,8 +28,9 @@ export default function PlatformsHub() {
   const [recipientId, setRecipientId] = useState("");
   const [messageContent, setMessageContent] = useState("");
   const [campaignContent, setCampaignContent] = useState("");
+  const [tokens, setTokens] = useState<Record<string, string>>({});
+  const [connecting, setConnecting] = useState<string | null>(null);
 
-  // Get connected accounts
   const { data: accounts = [], isLoading: accountsLoading } = useQuery({
     queryKey: ["/api/platforms/accounts"],
     queryFn: async () => {
@@ -24,7 +39,29 @@ export default function PlatformsHub() {
     },
   });
 
-  // Send message mutation
+  const connectedPlatforms = accounts
+    ?.map((acc: any) => acc.platform)
+    .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index) || [];
+
+  const connectMutation = useMutation({
+    mutationFn: async ({ platform, token }: { platform: string, token: string }) => {
+      const res = await apiRequest("POST", "/api/platforms/connect", {
+        platform,
+        accessToken: token,
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/platforms/accounts"] });
+      toast({ title: "Conectado", description: "Plataforma vinculada con éxito" });
+      setTokens({});
+    },
+    onError: (error) => {
+      toast({ title: "Error", description: error instanceof Error ? error.message : "Error al conectar", variant: "destructive" });
+    },
+    onSettled: () => setConnecting(null),
+  });
+
   const sendMessageMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/platforms/send-message", {
@@ -43,222 +80,210 @@ export default function PlatformsHub() {
         toast({ title: "Error", description: "No se pudo enviar el mensaje", variant: "destructive" });
       }
     },
-    onError: (error) => {
-      toast({ title: "Error", description: error instanceof Error ? error.message : "Error desconocido", variant: "destructive" });
-    },
   });
-
-  // Create campaign mutation
-  const createCampaignMutation = useMutation({
-    mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/platforms/campaigns", {
-        platforms: ["whatsapp", "instagram", "facebook"],
-        content: campaignContent,
-        targetCustomerIds: [],
-      });
-      return res.json();
-    },
-    onSuccess: (data) => {
-      if (data.success) {
-        toast({ title: "Campaña creada", description: `ID: ${data.campaignId}` });
-        setCampaignContent("");
-      }
-    },
-  });
-
-  const connectedPlatforms = accounts
-    ?.map((acc: any) => acc.platform)
-    .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index) || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="relative z-10">
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">
-            Hub de Plataformas Unificado
-          </h1>
-          <p className="text-slate-400">
-            Integra WhatsApp, Instagram y Facebook en una sola interfaz
-          </p>
-        </div>
+    <div className="min-h-screen bg-black p-4 md:p-8 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-kiwi/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-neon/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
 
-        {/* Connected Platforms Status */}
-        <Card className="bg-slate-900/40 border-cyan-neon/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-kiwi" />
-              Plataformas Conectadas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+      <div className="max-w-6xl mx-auto space-y-12 relative z-10">
+        <header className="space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+            <Zap className="h-3 w-3 text-kiwi animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Hub Central v3.0</span>
+          </div>
+          <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-none">
+            Plataformas<span className="text-kiwi">Unificadas</span>
+          </h1>
+          <p className="text-xl text-slate-400 font-medium tracking-tight max-w-2xl">
+            Gestiona tus canales de comunicación de Meta en una sola interfaz neuronal.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Connection Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {["whatsapp", "instagram", "facebook"].map((platform) => (
-                <div
-                  key={platform}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    connectedPlatforms.includes(platform)
-                      ? "border-kiwi/50 bg-kiwi/5"
-                      : "border-muted/30 bg-muted/10"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold capitalize text-white">{platform}</span>
-                    {connectedPlatforms.includes(platform) && (
-                      <CheckCircle2 className="h-5 w-5 text-kiwi" />
-                    )}
+              {["whatsapp", "instagram", "facebook"].map((platform) => {
+                const Icon = platformIcons[platform];
+                const isConnected = connectedPlatforms.includes(platform);
+                const colors = platformColors[platform];
+                
+                return (
+                  <Card key={platform} className={`group relative overflow-hidden bg-slate-900/40 border-white/5 backdrop-blur-3xl rounded-[2rem] transition-all duration-500 hover:scale-[1.02] ${isConnected ? "border-kiwi/20 shadow-[0_20px_40px_rgba(34,197,94,0.1)]" : "hover:border-white/10"}`}>
+                    <div className={`absolute inset-0 bg-gradient-to-br from-${platform === 'whatsapp' ? 'green-500' : platform === 'instagram' ? 'pink-500' : 'blue-500'}/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    <CardHeader className="relative z-10 p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className={`p-3 rounded-2xl ${colors.bg} ${colors.text} shadow-xl`}>
+                          <Icon className="h-6 w-6" />
+                        </div>
+                        {isConnected ? (
+                          <Badge className="bg-kiwi text-black font-black uppercase text-[10px] tracking-widest px-3 py-1 rounded-full shadow-lg shadow-kiwi/20 animate-in fade-in zoom-in">
+                            Activo
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="border-white/10 text-slate-500 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full">
+                            Off
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-xl font-black capitalize text-white">{platform}</CardTitle>
+                      <CardDescription className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+                        {isConnected ? "Sincronizado" : "Sin Conexión"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="relative z-10 p-6 pt-0 space-y-4">
+                      {!isConnected && (
+                        <div className="space-y-4">
+                          <Input
+                            type="password"
+                            placeholder="Access Token..."
+                            className="bg-black/40 border-white/5 rounded-xl h-11 text-xs focus:border-kiwi/50"
+                            value={tokens[platform] || ""}
+                            onChange={(e) => setTokens({ ...tokens, [platform]: e.target.value })}
+                          />
+                          <Button 
+                            className="w-full bg-white text-black font-black h-11 rounded-xl hover:bg-white/90 active:scale-95 transition-all text-xs uppercase tracking-widest"
+                            onClick={() => {
+                              setConnecting(platform);
+                              connectMutation.mutate({ platform, token: tokens[platform] });
+                            }}
+                            disabled={!tokens[platform] || connecting === platform}
+                          >
+                            {connecting === platform ? <Loader2 className="h-4 w-4 animate-spin" /> : "Vincular Cuenta"}
+                          </Button>
+                        </div>
+                      )}
+                      {isConnected && (
+                        <Button variant="outline" className="w-full border-white/5 bg-white/5 text-slate-400 font-bold h-11 rounded-xl hover:bg-white/10 hover:text-white transition-all text-xs uppercase tracking-widest">
+                          Configurar
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {/* Messaging Panel */}
+            <Card className="rounded-[3rem] bg-slate-900/40 border-white/5 backdrop-blur-3xl p-4 overflow-hidden shadow-2xl">
+              <CardHeader className="p-8">
+                <CardTitle className="text-3xl font-black flex items-center gap-4 text-white">
+                  <div className="p-4 rounded-3xl bg-primary text-primary-foreground shadow-2xl shadow-primary/20">
+                    <Send className="h-7 w-7" />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {accounts?.filter((a: any) => a.platform === platform).length} cuenta(s)
+                  Terminal de Mensajería
+                </CardTitle>
+                <CardDescription className="text-lg text-slate-400 font-medium tracking-tight">Envía comunicaciones directas a través de tus canales vinculados.</CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-0 space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.25em] text-kiwi ml-2">1. Seleccionar Canal</label>
+                    <div className="flex gap-2">
+                      {["whatsapp", "instagram", "facebook"].map((p) => (
+                        <Button
+                          key={p}
+                          variant="outline"
+                          disabled={!connectedPlatforms.includes(p)}
+                          onClick={() => setSelectedPlatform(p as any)}
+                          className={`flex-1 h-16 rounded-2xl border-white/5 font-black uppercase text-[10px] tracking-[0.2em] transition-all ${selectedPlatform === p ? "bg-kiwi text-black border-kiwi shadow-2xl shadow-kiwi/20" : "bg-white/5 hover:bg-white/10"}`}
+                        >
+                          {p}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.25em] text-cyan-neon ml-2">2. Destinatario</label>
+                    <Input 
+                      placeholder="ID, número o usuario..."
+                      className="h-16 bg-black/40 border-white/5 rounded-2xl p-6 text-lg font-bold focus:border-cyan-neon/50"
+                      value={recipientId}
+                      onChange={(e) => setRecipientId(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-xs font-black uppercase tracking-[0.25em] text-slate-500 ml-2">3. Componer Mensaje</label>
+                  <Textarea 
+                    placeholder="Escribe el mensaje neuronal aquí..."
+                    className="min-h-[180px] bg-black/40 border-white/5 rounded-[2rem] p-8 text-xl font-medium leading-relaxed resize-none focus:border-kiwi/50"
+                    value={messageContent}
+                    onChange={(e) => setMessageContent(e.target.value)}
+                  />
+                </div>
+
+                <Button 
+                  className="w-full h-20 rounded-[2.5rem] bg-kiwi text-black font-black text-2xl hover:bg-kiwi/90 shadow-2xl shadow-kiwi/20 active:scale-95 transition-all"
+                  onClick={() => sendMessageMutation.mutate()}
+                  disabled={sendMessageMutation.isPending || !recipientId || !messageContent || !connectedPlatforms.includes(selectedPlatform)}
+                >
+                  {sendMessageMutation.isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : <>ENVIAR MENSAJE NEURONAL <Send className="ml-4 h-7 w-7" /></>}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <aside className="space-y-8">
+            {/* Guide Card */}
+            <Card className="rounded-[2.5rem] bg-amber-500/10 border-amber-500/20 backdrop-blur-3xl overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardHeader className="relative z-10 p-6">
+                <CardTitle className="text-xl font-black flex items-center gap-3 text-amber-500">
+                  <AlertCircle className="h-6 w-6" />
+                  Guía de Conexión
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative z-10 p-6 pt-0 space-y-4">
+                <div className="space-y-4">
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
+                    <p className="text-xs font-black text-amber-500 uppercase tracking-widest mb-2">Meta Developers</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Obtén tus tokens en el panel de desarrolladores de Meta (Instagram/Facebook).</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
+                    <p className="text-xs font-black text-green-500 uppercase tracking-widest mb-2">WhatsApp Business</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Usa la API de WhatsApp Cloud para gestionar mensajes empresariales.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Campaign Summary */}
+            <Card className="rounded-[2.5rem] bg-slate-900/40 border-white/5 backdrop-blur-3xl overflow-hidden p-6">
+              <CardHeader className="px-0">
+                <CardTitle className="text-xl font-black text-white uppercase tracking-widest flex items-center gap-3">
+                  <Zap className="h-5 w-5 text-kiwi" />
+                  Estado de Red
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-0 space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    <span>Cobertura</span>
+                    <span>{Math.round((connectedPlatforms.length / 3) * 100)}%</span>
+                  </div>
+                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-kiwi shadow-[0_0_10px_rgba(34,197,94,0.5)]"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(connectedPlatforms.length / 3) * 100}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-white/5">
+                  <p className="text-[10px] text-slate-500 leading-relaxed">
+                    Tu terminal neuronal está lista para orquestar campañas multi-canal una vez que vincules tus plataformas principales.
                   </p>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Send Message Section */}
-        <Card className="bg-slate-900/40 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Send className="h-5 w-5 text-primary" />
-              Enviar Mensaje Unificado
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm font-bold text-slate-300 mb-2 block">Plataforma</label>
-                <div className="flex gap-2">
-                  {["whatsapp", "instagram", "facebook"].map((platform) => (
-                    <Button
-                      key={platform}
-                      variant={selectedPlatform === platform ? "default" : "outline"}
-                      className="flex-1 capitalize text-xs"
-                      onClick={() => setSelectedPlatform(platform as any)}
-                      disabled={!connectedPlatforms.includes(platform)}
-                    >
-                      {platform.slice(0, 3)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-bold text-slate-300 mb-2 block">ID Destinatario</label>
-                <Input
-                  placeholder="Teléfono, ID o usuario"
-                  value={recipientId}
-                  onChange={(e) => setRecipientId(e.target.value)}
-                  className="bg-slate-800 border-slate-700"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="text-sm font-bold text-slate-300 mb-2 block">Mensaje</label>
-              <Textarea
-                placeholder="Escribe tu mensaje aquí..."
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                className="bg-slate-800 border-slate-700 min-h-[100px]"
-              />
-            </div>
-
-            <Button
-              onClick={() => sendMessageMutation.mutate()}
-              disabled={
-                sendMessageMutation.isPending ||
-                !recipientId ||
-                !messageContent ||
-                !connectedPlatforms.includes(selectedPlatform)
-              }
-              className="w-full gap-2"
-            >
-              <MessageCircle className="h-4 w-4" />
-              {sendMessageMutation.isPending ? "Enviando..." : "Enviar Mensaje"}
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Create Campaign Section */}
-        <Card className="bg-slate-900/40 border-raspberry/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-raspberry" />
-              Campaña Multi-Plataforma
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-bold text-slate-300 mb-2 block">
-                Contenido de Campaña
-              </label>
-              <Textarea
-                placeholder="Contenido que será enviado a WhatsApp, Instagram y Facebook..."
-                value={campaignContent}
-                onChange={(e) => setCampaignContent(e.target.value)}
-                className="bg-slate-800 border-slate-700 min-h-[100px]"
-              />
-            </div>
-
-            <div className="text-sm text-slate-400">
-              <p className="font-bold mb-2">Esta campaña se enviará a:</p>
-              <div className="flex gap-2 flex-wrap">
-                {["whatsapp", "instagram", "facebook"]
-                  .filter((p) => connectedPlatforms.includes(p))
-                  .map((p) => (
-                    <span key={p} className="px-2 py-1 bg-slate-800 rounded capitalize text-xs">
-                      {p}
-                    </span>
-                  ))}
-              </div>
-            </div>
-
-            <Button
-              onClick={() => createCampaignMutation.mutate()}
-              disabled={
-                createCampaignMutation.isPending ||
-                !campaignContent ||
-                connectedPlatforms.length === 0
-              }
-              className="w-full gap-2"
-              variant="secondary"
-            >
-              <Zap className="h-4 w-4" />
-              {createCampaignMutation.isPending ? "Creando..." : "Crear Campaña"}
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Connected Accounts List */}
-        <Card className="bg-slate-900/40 border-slate-700/50">
-          <CardHeader>
-            <CardTitle>Cuentas Conectadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {accountsLoading ? (
-              <p className="text-slate-400">Cargando...</p>
-            ) : accounts?.length > 0 ? (
-              <div className="space-y-2">
-                {accounts.map((account: any) => (
-                  <div
-                    key={account.id}
-                    className="p-3 rounded-lg bg-slate-800/50 border border-slate-700 flex justify-between items-center"
-                  >
-                    <div>
-                      <p className="font-bold text-white">{account.accountName}</p>
-                      <p className="text-xs text-slate-400 capitalize">{account.platform}</p>
-                    </div>
-                    <CheckCircle2 className="h-5 w-5 text-kiwi" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-400">No hay cuentas conectadas</p>
-            )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </aside>
+        </div>
       </div>
     </div>
   );
