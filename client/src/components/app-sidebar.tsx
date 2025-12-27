@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { motion } from "framer-motion";
 import {
   Sidebar,
   SidebarContent,
@@ -66,46 +67,55 @@ export function AppSidebar() {
   const [location] = useLocation();
 
   return (
-    <Sidebar className="bg-gradient-to-b from-slate-900 to-slate-950 border-r border-slate-800">
+    <Sidebar className="bg-slate-950/80 backdrop-blur-3xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
       <SidebarContent className="space-y-2">
         {/* Logo Section */}
-        <div className="px-4 py-6 border-b border-slate-800 mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center overflow-hidden shadow-lg shadow-primary/50">
-              <img src={logoImage} alt="SocialHub" className="w-full h-full object-cover" />
+        <div className="px-6 py-8 border-b border-white/5 mb-4 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-kiwi/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="w-12 h-12 rounded-2xl bg-kiwi p-0.5 shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <div className="w-full h-full rounded-[0.9rem] bg-slate-950 flex items-center justify-center overflow-hidden">
+                <img src={logoImage} alt="MasterHub" className="w-full h-full object-cover" />
+              </div>
             </div>
             <div className="flex-1">
-              <h1 className="font-bold text-lg bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">SocialHub</h1>
-              <p className="text-xs text-slate-400">v2.0</p>
+              <h1 className="font-black text-2xl tracking-tighter text-white leading-none">Master<span className="text-kiwi">Hub</span></h1>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">v2.0 Enterprise</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-kiwi animate-pulse" />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Menu Groups */}
         {menuGroups.map((group) => (
-          <SidebarGroup key={group.label} className="py-4">
-            <SidebarGroupLabel className="text-xs font-bold uppercase text-slate-500 tracking-widest px-2">
+          <SidebarGroup key={group.label} className="py-2 px-2">
+            <SidebarGroupLabel className="text-[10px] font-black uppercase text-slate-600 tracking-[0.25em] px-4 mb-2">
               {group.label}
             </SidebarGroupLabel>
-            <SidebarGroupContent className="mt-2">
-              <SidebarMenu className="space-y-1">
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-1">
                 {group.items.map((item) => {
                   const isActive = location === item.url;
                   return (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton asChild className="h-auto p-0 hover:bg-transparent">
                         <Link href={item.url}>
                           <div
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg w-full transition-all duration-200 ${
+                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl w-full transition-all duration-300 group/item relative overflow-hidden ${
                               isActive
-                                ? "bg-gradient-to-r from-primary/30 via-secondary/20 to-accent/30 text-white border border-primary/40 shadow-lg shadow-primary/20"
-                                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                                ? "bg-kiwi text-black font-black shadow-[0_10px_20px_rgba(34,197,94,0.2)] scale-[1.02]"
+                                : "text-slate-400 hover:text-white hover:bg-white/5"
                             }`}
                           >
-                            <item.icon className={`h-5 w-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`} />
-                            <span className="font-medium text-sm">{item.title}</span>
+                            <item.icon className={`h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${isActive ? "text-black" : "group-hover/item:text-kiwi"}`} />
+                            <span className="text-sm tracking-tight">{item.title}</span>
                             {isActive && (
-                              <div className="ml-auto w-2 h-2 rounded-full bg-primary animate-pulse" />
+                              <motion.div 
+                                layoutId="active-pill"
+                                className="ml-auto w-1.5 h-1.5 rounded-full bg-black"
+                              />
                             )}
                           </div>
                         </Link>
@@ -119,20 +129,20 @@ export function AppSidebar() {
         ))}
 
         {/* Connected Platforms */}
-        <SidebarGroup className="py-4">
-          <SidebarGroupLabel className="text-xs font-bold uppercase text-slate-500 tracking-widest px-2">
-            🔗 Plataformas Conectadas
+        <SidebarGroup className="py-4 px-2">
+          <SidebarGroupLabel className="text-[10px] font-black uppercase text-slate-600 tracking-[0.25em] px-4 mb-2">
+            🔗 Ecosistema
           </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-2">
+          <SidebarGroupContent>
             <div className="space-y-2 px-2">
               {socialPlatforms.map((platform) => (
-                <a key={platform.name} href={platform.link} target="_blank" rel="noopener noreferrer">
+                <a key={platform.name} href={platform.link} target="_blank" rel="noopener noreferrer" className="block">
                   <Button
-                    variant="outline"
-                    className={`w-full justify-start gap-3 ${platform.bgHover} border ${platform.borderColor} ${platform.textColor} hover:${platform.textColor} transition-all duration-200 rounded-lg h-10 text-sm font-medium`}
+                    variant="ghost"
+                    className={`w-full justify-start gap-3 h-11 px-4 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 group ${platform.textColor} hover:${platform.textColor}`}
                   >
-                    <div className={`w-3 h-3 rounded-full ${platform.color}`} />
-                    {platform.name}
+                    <div className={`w-2 h-2 rounded-full ${platform.color} shadow-[0_0_10px_currentColor] group-hover:scale-125 transition-transform`} />
+                    <span className="text-xs font-black uppercase tracking-widest">{platform.name}</span>
                   </Button>
                 </a>
               ))}

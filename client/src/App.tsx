@@ -21,8 +21,12 @@ import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
 import MusicManager from "@/pages/MusicManager";
 import SpotifyArtist from "@/pages/SpotifyArtist";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 function Router() {
   return (
@@ -54,14 +58,29 @@ function AppContent() {
 
   return (
     <SidebarProvider style={style}>
-      <div className="flex h-screen w-full">
+      <div className="flex h-screen w-full bg-black">
         <AppSidebar />
-        <div className="flex flex-col flex-1">
-          <header className="flex items-center justify-between p-4 border-b bg-background">
-            <SidebarTrigger data-testid="button-sidebar-toggle" />
-            <ThemeToggle />
+        <div className="flex flex-col flex-1 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-kiwi/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-neon/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
+          
+          <header className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl z-50">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-xl hover:bg-white/5 no-default-hover-elevate" />
+              <div className="h-6 w-px bg-white/5 mx-2" />
+              <Badge variant="outline" className="border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[10px] tracking-[0.2em] px-3 py-1">
+                SISTEMA OPERATIVO v2.0
+              </Badge>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white/5 text-slate-400 no-default-hover-elevate">
+                <Settings className="h-5 w-5" />
+              </Button>
+              <ThemeToggle />
+            </div>
           </header>
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1 overflow-auto relative z-10 custom-scrollbar">
             <Router />
           </main>
         </div>
