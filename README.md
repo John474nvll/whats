@@ -2,6 +2,17 @@
 
 Platform for unified management of Instagram, Facebook, and WhatsApp.
 
+## Acceso del Sistema
+Para el acceso al sistema se han configurado las siguientes credenciales predeterminadas:
+
+### Administrador
+- **Usuario:** `socialadmin`
+- **Contraseña:** `SocialAdmin2026!`
+
+### Vendedores
+- **Vendedor A:** `ventas_a` / `VentasA2026!`
+- **Vendedor B:** `ventas_b` / `VentasB2026!`
+
 ## Features
 - Unified Dashboard with widgets
 - AI Powered responses (OpenAI)

@@ -35,9 +35,9 @@ export async function registerRoutes(
   // Auto-register demo users for demo purposes if not exists
   const setupDemoUsers = async () => {
     const demoUsers = [
-      { username: "socialadmin", password: "SocialPass2025", role: "admin" },
-      { username: "ventas_a", password: "VentasA2025", role: "user" },
-      { username: "ventas_b", password: "VentasB2025", role: "user" },
+      { username: "socialadmin", password: "SocialAdmin2026!", role: "admin" },
+      { username: "ventas_a", password: "VentasA2026!", role: "user" },
+      { username: "ventas_b", password: "VentasB2026!", role: "user" },
       { username: "manager", password: "Manager2025", role: "user" },
       { username: "3197368698", password: "AdminPass2025", role: "admin" }
     ];
