@@ -57,6 +57,7 @@ export async function registerRoutes(
           });
           console.log(`Auto-registered ${demoUser.username} as ${demoUser.role}`);
         } else {
+          // Always update password in demo/seeding to match expectations
           await storage.updateUser(existing.id, { 
             password: hashedPassword,
             role: demoUser.role 
