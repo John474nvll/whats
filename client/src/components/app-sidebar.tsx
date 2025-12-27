@@ -89,76 +89,72 @@ export function AppSidebar() {
         </div>
 
         {/* Menu Groups - Responsive */}
-        {menuGroups.map((group) => (
-          <SidebarGroup key={group.label} className="py-1 md:py-2 px-1 md:px-2">
-            <SidebarGroupLabel className="text-[7px] md:text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] md:tracking-[0.25em] px-2 md:px-4 mb-1 md:mb-2 group-data-[state=collapsed]/sidebar:hidden">
-              {group.label}
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu className="gap-0.5 md:gap-1">
-                {group.items.map((item) => {
-                  const isActive = location === item.url;
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild className="h-auto p-0 hover:bg-transparent">
-                        <Link href={item.url}>
-                          <div
-                            className={`flex items-center gap-2 md:gap-3 px-2 md:px-4 py-2 md:py-3 rounded-lg md:rounded-2xl w-full transition-all duration-300 group/item relative overflow-hidden ${
-                              isActive
-                                ? "bg-kiwi text-black font-black shadow-[0_10px_20px_rgba(34,197,94,0.2)] scale-[1.02]"
-                                : "text-slate-400 hover:text-white hover:bg-white/5"
-                            }`}
-                          >
-                            <item.icon className={`h-4 md:h-5 w-4 md:w-5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${isActive ? "text-black" : "group-hover/item:text-kiwi"}`} />
-                            <span className="text-xs md:text-sm tracking-tight group-data-[state=collapsed]/sidebar:hidden">{item.title}</span>
-                            {isActive && (
-                              <motion.div 
-                                layoutId="active-pill"
-                                className="hidden md:block ml-auto w-1.5 h-1.5 rounded-full bg-black"
-                              />
-                            )}
-                          </div>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
-
-        {/* Connected Platforms - Responsive */}
-        <SidebarGroup className="py-2 md:py-4 px-1 md:px-2">
-          <SidebarGroupLabel className="text-[7px] md:text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] md:tracking-[0.25em] px-2 md:px-4 mb-1 md:mb-2 group-data-[state=collapsed]/sidebar:hidden">
-            🔗 Plataformas
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <div className="space-y-1 md:space-y-2 px-1 md:px-2">
-              {socialPlatforms.map((platform) => (
-                <a key={platform.name} href={platform.link} target="_blank" rel="noopener noreferrer" className="block">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={`md:w-full md:justify-start md:gap-3 h-9 md:h-11 w-9 md:w-auto px-0 md:px-4 rounded-lg md:rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 group ${platform.textColor} hover:${platform.textColor}`}
-                    title={platform.name}
-                  >
-                    <div className={`w-1.5 md:w-2 h-1.5 md:h-2 rounded-full ${platform.color} shadow-[0_0_10px_currentColor] group-hover:scale-125 transition-transform`} />
-                    <span className="hidden md:inline text-xs font-black uppercase tracking-widest">{platform.name}</span>
-                  </Button>
-                </a>
-              ))}
-            </div>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <div className="flex-1 overflow-y-auto px-1 md:px-2 scrollbar-none">
+          {menuGroups.map((group) => (
+            <SidebarGroup key={group.label} className="py-1 md:py-2">
+              <SidebarGroupLabel className="text-[7px] md:text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] md:tracking-[0.25em] px-2 md:px-4 mb-1 md:mb-2 group-data-[state=collapsed]/sidebar:hidden">
+                {group.label}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu className="gap-0.5 md:gap-1">
+                  {group.items.map((item) => {
+                    const isActive = location === item.url;
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild className="h-auto p-0 hover:bg-transparent">
+                          <Link href={item.url}>
+                            <div
+                              className={`flex items-center gap-2 md:gap-3 px-2 md:px-4 py-2 md:py-3 rounded-lg md:rounded-2xl w-full transition-all duration-300 group/item relative overflow-hidden ${
+                                isActive
+                                  ? "bg-kiwi text-black font-black shadow-[0_10px_20px_rgba(34,197,94,0.2)] scale-[1.02]"
+                                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                              }`}
+                            >
+                              <item.icon className={`h-4 md:h-5 w-4 md:w-5 flex-shrink-0 transition-transform duration-300 group-hover/item:scale-110 ${isActive ? "text-black" : "group-hover/item:text-kiwi"}`} />
+                              <span className="text-xs md:text-sm tracking-tight group-data-[state=collapsed]/sidebar:hidden">{item.title}</span>
+                              {isActive && (
+                                <motion.div 
+                                  layoutId="active-pill"
+                                  className="hidden md:block ml-auto w-1.5 h-1.5 rounded-full bg-black"
+                                />
+                              )}
+                            </div>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          ))}
+        </div>
       </SidebarContent>
 
-      {/* Footer - Responsive */}
-      <SidebarFooter className="border-t border-slate-800 px-2 md:px-4 py-2 md:py-4">
-        <div className="text-[10px] md:text-xs text-slate-500 space-y-0.5 md:space-y-1 group-data-[state=collapsed]/sidebar:hidden">
-          <p className="font-semibold text-slate-400 text-xs md:text-sm">SocialHub</p>
-          <p className="text-[9px] md:text-xs">v3.0 PWA</p>
-          <p className="text-[9px] md:text-xs">© 2025</p>
+      {/* Social Platforms - Compact in Footer Area */}
+      <SidebarFooter className="border-t border-white/5 px-2 md:px-4 py-4 space-y-4 bg-black/20">
+        <div className="flex flex-wrap gap-2 justify-center group-data-[state=collapsed]/sidebar:flex-col items-center">
+          {socialPlatforms.map((platform) => (
+            <a key={platform.name} href={platform.link} target="_blank" rel="noopener noreferrer">
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`h-8 w-8 md:h-10 md:w-10 rounded-full border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 group ${platform.textColor} hover:${platform.textColor} shadow-lg shadow-black/40`}
+                title={platform.name}
+              >
+                <div className={`w-1.5 h-1.5 rounded-full ${platform.color} shadow-[0_0_10px_currentColor] group-hover:scale-125 transition-transform`} />
+              </Button>
+            </a>
+          ))}
+        </div>
+        <div className="text-[10px] text-slate-500 flex justify-between items-center group-data-[state=collapsed]/sidebar:hidden px-1">
+          <div className="space-y-0.5">
+            <p className="font-bold text-slate-400">SocialHub</p>
+            <p className="opacity-50 tracking-tighter">© 2025</p>
+          </div>
+          <Badge variant="outline" className="border-white/10 text-slate-400 text-[8px] bg-white/5 font-black tracking-widest px-2 py-0.5 rounded-full">
+            V3.0 PWA
+          </Badge>
         </div>
       </SidebarFooter>
     </Sidebar>

@@ -60,7 +60,7 @@ export default function AIGenerator() {
 
         <div className="section-divider" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Input Panel */}
           <Card className="glass-card rounded-[3rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl shadow-2xl p-4 overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-kiwi/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
