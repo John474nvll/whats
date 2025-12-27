@@ -21,7 +21,7 @@ import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
 import MusicManager from "@/pages/MusicManager";
 import SpotifyArtist from "@/pages/SpotifyArtist";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";

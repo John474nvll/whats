@@ -137,6 +137,26 @@ export const transactions = pgTable("transactions", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const customerGroups = pgTable("customer_groups", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  criteria: jsonb("criteria").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const productCatalogs = pgTable("product_catalogs", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  productIds: integer("product_ids").array().default([]),
+  isActive: boolean("is_active").default(true),
+  metadata: jsonb("metadata").default({}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
@@ -261,6 +281,8 @@ export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: tru
 export const insertArtistProfileSchema = createInsertSchema(artistProfiles).omit({ id: true, createdAt: true });
 export const insertMusicContentSchema = createInsertSchema(musicContent).omit({ id: true, createdAt: true });
 export const insertCustomerSchema = createInsertSchema(customers).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertCustomerGroupSchema = createInsertSchema(customerGroups).omit({ id: true, createdAt: true });
+export const insertProductCatalogSchema = createInsertSchema(productCatalogs).omit({ id: true, createdAt: true });
 export const insertProductSchema = createInsertSchema(products).omit({ id: true, createdAt: true });
 export const insertCustomLinkSchema = createInsertSchema(customLinks).omit({ id: true, createdAt: true, clicks: true });
 export const insertInventorySchema = createInsertSchema(inventory).omit({ id: true, createdAt: true });
@@ -313,6 +335,12 @@ export type InsertMusicContent = z.infer<typeof insertMusicContentSchema>;
 
 export type Customer = typeof customers.$inferSelect;
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
+
+export type CustomerGroup = typeof customerGroups.$inferSelect;
+export type InsertCustomerGroup = z.infer<typeof insertCustomerGroupSchema>;
+
+export type ProductCatalog = typeof productCatalogs.$inferSelect;
+export type InsertProductCatalog = z.infer<typeof insertProductCatalogSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 

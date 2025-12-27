@@ -555,6 +555,53 @@ export async function registerRoutes(
     }
   });
 
+  // Customer Groups endpoints
+  app.get("/api/customer-groups", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getCustomerGroups(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch customer groups" });
+    }
+  });
+
+  app.post("/api/customer-groups", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const group = await storage.createCustomerGroup({ ...req.body, userId: req.userId! });
+      res.status(201).json(group);
+    } catch {
+      res.status(500).json({ error: "Failed to create customer group" });
+    }
+  });
+
+  // Product Catalogs endpoints
+  app.get("/api/catalogs", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getCatalogs(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch catalogs" });
+    }
+  });
+
+  app.post("/api/catalogs", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const catalog = await storage.createCatalog({ ...req.body, userId: req.userId! });
+      res.status(201).json(catalog);
+    } catch {
+      res.status(500).json({ error: "Failed to create catalog" });
+    }
+  });
+
+  app.patch("/api/catalogs/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const catalog = await storage.updateCatalog(parseInt(req.params.id), req.body);
+      res.json(catalog);
+    } catch {
+      res.status(500).json({ error: "Failed to update catalog" });
+    }
+  });
+
   // Inventory endpoints
   app.get("/api/inventory", authMiddleware as any, async (req: AuthRequest, res) => {
     try {

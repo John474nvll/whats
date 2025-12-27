@@ -11,6 +11,8 @@ import {
   type SalesFunnel, type InsertSalesFunnel,
   type Campaign, type InsertCampaign,
   type Customer, type InsertCustomer,
+  type CustomerGroup, type InsertCustomerGroup,
+  type ProductCatalog, type InsertProductCatalog,
   type ArtistProfile, type InsertArtistProfile,
   type MusicContent, type InsertMusicContent,
   type Inventory, type InsertInventory,
@@ -91,6 +93,17 @@ export interface IStorage {
   createCustomer(customer: InsertCustomer): Promise<Customer>;
   updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer>;
   deleteCustomer(id: number): Promise<void>;
+
+  // Customer Groups
+  getCustomerGroups(userId: string): Promise<CustomerGroup[]>;
+  createCustomerGroup(group: InsertCustomerGroup): Promise<CustomerGroup>;
+  deleteCustomerGroup(id: number): Promise<void>;
+
+  // Product Catalogs
+  getCatalogs(userId: string): Promise<ProductCatalog[]>;
+  createCatalog(catalog: InsertProductCatalog): Promise<ProductCatalog>;
+  updateCatalog(id: number, updates: Partial<InsertProductCatalog>): Promise<ProductCatalog>;
+  deleteCatalog(id: number): Promise<void>;
 
   // Social Account by ID
   getSocialAccountById(id: number): Promise<SocialAccount | undefined>;
@@ -368,6 +381,39 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCustomer(id: number): Promise<void> {
     await db.delete(customers).where(eq(customers.id, id));
+  }
+
+  // Customer Groups Implementation
+  async getCustomerGroups(userId: string): Promise<CustomerGroup[]> {
+    return await db.select().from(customerGroups).where(eq(customerGroups.userId, userId));
+  }
+
+  async createCustomerGroup(group: InsertCustomerGroup): Promise<CustomerGroup> {
+    const [newGroup] = await db.insert(customerGroups).values(group).returning();
+    return newGroup;
+  }
+
+  async deleteCustomerGroup(id: number): Promise<void> {
+    await db.delete(customerGroups).where(eq(customerGroups.id, id));
+  }
+
+  // Product Catalogs Implementation
+  async getCatalogs(userId: string): Promise<ProductCatalog[]> {
+    return await db.select().from(productCatalogs).where(eq(productCatalogs.userId, userId));
+  }
+
+  async createCatalog(catalog: InsertProductCatalog): Promise<ProductCatalog> {
+    const [newCatalog] = await db.insert(productCatalogs).values(catalog).returning();
+    return newCatalog;
+  }
+
+  async updateCatalog(id: number, updates: Partial<InsertProductCatalog>): Promise<ProductCatalog> {
+    const [updated] = await db.update(productCatalogs).set(updates).where(eq(productCatalogs.id, id)).returning();
+    return updated;
+  }
+
+  async deleteCatalog(id: number): Promise<void> {
+    await db.delete(productCatalogs).where(eq(productCatalogs.id, id));
   }
 
   async getSocialAccountById(id: number): Promise<SocialAccount | undefined> {
