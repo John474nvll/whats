@@ -809,8 +809,6 @@ export async function registerRoutes(
     }
   });
 
-  return httpServer;
-}
 
   // Phone Connection Endpoints
   app.get("/api/platforms/phone-accounts", async (req, res) => {
@@ -872,3 +870,6 @@ export async function registerRoutes(
       res.status(500).json({ error: error instanceof Error ? error.message : "Verification failed" });
     }
   });
+
+  return httpServer;
+}
