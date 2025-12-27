@@ -284,127 +284,108 @@ export default function Dashboard() {
   ) || [];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black p-8">
-      <div className="max-w-[1400px] mx-auto space-y-8 relative">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-950 via-slate-900 to-black p-4 md:p-8 overflow-x-hidden">
+      <div className="max-w-[1600px] mx-auto space-y-10 relative">
+        <div className="absolute -top-60 -right-60 w-[500px] h-[500px] bg-kiwi/10 rounded-full blur-[150px] pointer-events-none animate-pulse" />
+        <div className="absolute top-1/2 -left-60 w-[400px] h-[400px] bg-cyan-neon/10 rounded-full blur-[120px] pointer-events-none animate-pulse" style={{ animationDelay: "1s" }} />
         
         {/* Sales Accounts Overview */}
         {salesAccounts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {salesAccounts.map(acc => (
-              <Card key={acc.id} className="glass-card rounded-[2rem] border-border/50 overflow-hidden relative group bg-card/50 backdrop-blur-sm">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
-                   <Badge variant="outline" className="rounded-full bg-kiwi/10 text-kiwi border-kiwi/20">Ventas Activas</Badge>
-                </div>
-                <CardHeader className="flex flex-row items-center gap-4">
-                  <img 
-                    src={acc.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${acc.platform}`} 
-                    className="h-16 w-16 rounded-2xl border-2 border-kiwi/30"
-                    alt="Sales Profile"
-                  />
-                  <div>
-                    <CardTitle className="text-xl font-black">{acc.accountName}</CardTitle>
-                    <p className="text-sm text-muted-foreground uppercase font-bold tracking-widest">{acc.platform}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {salesAccounts.map((acc, idx) => (
+              <motion.div
+                key={acc.id}
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <Card className="glass-card rounded-[3rem] border-kiwi/20 overflow-hidden relative group bg-slate-900/40 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-kiwi/50 transition-all duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-kiwi/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute top-0 right-0 p-6 opacity-40 group-hover:opacity-100 transition-all">
+                     <Badge variant="outline" className="rounded-full bg-kiwi/5 text-kiwi border-kiwi/30 px-4 py-1.5 text-xs font-black tracking-widest uppercase">Ventas Activas</Badge>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Leads</p>
-                      <p className="text-xl font-black text-kiwi">{(acc.followersCount || 0) / 10}</p>
+                  <CardHeader className="flex flex-row items-center gap-6 relative z-10">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-kiwi blur-md opacity-20 rounded-2xl animate-pulse" />
+                      <img 
+                        src={acc.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${acc.platform}${acc.id}`} 
+                        className="h-20 w-20 rounded-2xl border-2 border-kiwi/40 relative z-10 object-cover shadow-2xl"
+                        alt="Sales Profile"
+                      />
                     </div>
-                    <div className="text-center">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Conversiones</p>
-                      <p className="text-xl font-black text-cyan-neon">{(acc.postsCount || 0) * 2}</p>
+                    <div>
+                      <CardTitle className="text-2xl font-black text-white tracking-tight">{acc.accountName}</CardTitle>
+                      <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs text-kiwi font-black uppercase tracking-[0.2em]">{acc.platform}</p>
+                        <div className="w-1.5 h-1.5 rounded-full bg-kiwi animate-ping" />
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-[10px] text-muted-foreground font-bold uppercase">ROI</p>
-                      <p className="text-xl font-black text-raspberry">12%</p>
+                  </CardHeader>
+                  <CardContent className="relative z-10">
+                    <div className="grid grid-cols-3 gap-6 p-6 rounded-[2.5rem] bg-black/40 border border-white/5 shadow-inner">
+                      <div className="text-center space-y-1">
+                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Leads</p>
+                        <p className="text-3xl font-black text-kiwi drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">{(acc.followersCount || 0) / 10}</p>
+                      </div>
+                      <div className="text-center space-y-1">
+                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Cierres</p>
+                        <p className="text-3xl font-black text-cyan-neon drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">{(acc.postsCount || 0) * 2}</p>
+                      </div>
+                      <div className="text-center space-y-1">
+                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">ROI</p>
+                        <p className="text-3xl font-black text-raspberry drop-shadow-[0_0_10px_rgba(225,29,72,0.5)]">12%</p>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         )}
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-1">
-            <h1 className="text-5xl font-black tracking-tighter text-foreground">SocialHub</h1>
-            <p className="text-muted-foreground font-medium text-lg">Resumen inteligente de tu ecosistema digital</p>
+        <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-8 relative z-10">
+          <div className="space-y-2">
+            <motion.h1 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+            >
+              Master<span className="text-kiwi">Hub</span>
+            </motion.h1>
+            <p className="text-slate-400 font-bold text-xl tracking-tight">Gestión inteligente de activos digitales v2.0</p>
           </div>
-          <div className="flex gap-3">
-            <Button size="sm" onClick={logout} variant="outline" className="gap-2 rounded-full">
-              <LogOut className="h-4 w-4" /> Logout
+          <div className="flex items-center gap-4 bg-slate-900/50 p-2 rounded-[2rem] border border-white/5 backdrop-blur-xl">
+            <div className="flex -space-x-3">
+              {accounts.slice(0, 3).map((acc, i) => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center overflow-hidden">
+                   <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${acc.platform}`} alt="platform" />
+                </div>
+              ))}
+            </div>
+            <div className="h-8 w-px bg-white/10" />
+            <Button size="icon" onClick={logout} variant="ghost" className="h-12 w-12 rounded-full hover:bg-raspberry/20 hover:text-raspberry transition-colors no-default-hover-elevate">
+              <LogOut className="h-6 w-6" />
             </Button>
           </div>
         </div>
 
-        {/* Quick Account Connection */}
-        <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Link2 className="h-5 w-5" /> Connected Accounts
-            </CardTitle>
-            <Button size="sm" onClick={() => setShowConnectModal(!showConnectModal)} className="rounded-full">
-              <Plus className="h-4 w-4 mr-1" /> Connect Account
-            </Button>
-          </CardHeader>
-          {showConnectModal && (
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {["instagram", "facebook", "whatsapp"].map((platform) => {
-                const isConnected = accounts.some((a) => a.platform === platform);
-                return (
-                  <div key={platform} className="flex flex-col gap-2">
-                    <p className="text-sm font-medium capitalize">{platform}</p>
-                    {isConnected ? (
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="secondary" className="flex-1" disabled>
-                          ✓ Connected
-                        </Button>
-                      </div>
-                    ) : (
-                      <Button
-                        size="sm"
-                        onClick={() => connectAccount(platform)}
-                        disabled={connectingPlatform === platform}
-                        className="rounded-lg"
-                      >
-                        {connectingPlatform === platform ? "Connecting..." : "Connect"}
-                      </Button>
-                    )}
-                  </div>
-                );
-              })}
-            </CardContent>
-          )}
-          {!showConnectModal && accounts.length > 0 && (
-            <CardContent className="flex flex-wrap gap-2">
-              {accounts.map((acc) => (
-                <div key={acc.id} className="px-3 py-1 bg-primary/10 rounded-full text-sm flex items-center gap-2">
-                  <span className="capitalize">{acc.platform}</span>
-                  <span className="text-xs text-muted-foreground">({acc.accountName})</span>
-                </div>
-              ))}
-            </CardContent>
-          )}
-        </Card>
-
         {/* Widgets Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
           {widgets?.filter(w => w.isVisible).map((widget) => (
-            <div 
+            <motion.div 
               key={widget.id} 
+              layout
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               className={
                 widget.type === "stats" ? "col-span-12" : 
-                widget.type === "social_feed" ? "col-span-12 lg:col-span-7" : 
-                "col-span-12 lg:col-span-5"
+                widget.type === "social_feed" ? "col-span-12 lg:col-span-8" : 
+                "col-span-12 lg:col-span-4"
               }
             >
               {renderWidget(widget)}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
