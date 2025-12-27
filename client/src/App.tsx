@@ -71,6 +71,8 @@ function AppContent() {
           
           <header className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl z-50 gap-2 md:gap-4">
             <div className="flex items-center gap-2 md:gap-6 min-w-0 flex-1">
+              <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-full hover:bg-white/5 no-default-hover-elevate h-10 w-10 border border-white/5 flex-shrink-0" />
+              
               <div className="flex items-center gap-3 pr-4 border-r border-white/10 group cursor-pointer">
                 <div className="w-8 h-8 rounded-lg bg-kiwi p-0.5 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                   <div className="w-full h-full rounded-[0.4rem] bg-slate-950 flex items-center justify-center overflow-hidden">
@@ -104,9 +106,7 @@ function AppContent() {
             </div>
 
             <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-4">
-              <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-full hover:bg-white/5 no-default-hover-elevate h-9 w-9 border border-white/5" />
-              <div className="h-6 w-px bg-white/10 hidden sm:block" />
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/5 text-slate-400 no-default-hover-elevate h-9 w-9 border border-white/5" asChild>
+              <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/5 text-slate-400 no-default-hover-elevate h-10 w-10 border border-white/5" asChild title="Ajustes">
                 <Link href="/settings">
                   <Settings className="h-4 w-4" />
                 </Link>
