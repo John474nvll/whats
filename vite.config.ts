@@ -10,26 +10,75 @@ export default defineConfig({
     runtimeErrorOverlay(),
     VitePWA({
       registerType: "autoUpdate",
+      includeAssets: ["favicon.png", "/icons/**/*.png"],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,woff,woff2,ttf,eot}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "google-fonts-cache",
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/api\./i,
+            handler: "NetworkFirst",
+            options: { cacheName: "api-cache", expiration: { maxAgeSeconds: 60 * 5 } },
+          },
+        ],
+      },
       manifest: {
-        name: "SocialHub V2",
+        name: "SocialHub v3.0 - Plataforma de Gestión de Redes Sociales",
         short_name: "SocialHub",
-        description: "Premium Social Media Management Platform",
-        theme_color: "#0f172a",
+        description: "Platform completa para gestionar Instagram, Facebook y WhatsApp desde un único dashboard profesional",
+        theme_color: "#000000",
         background_color: "#000000",
         display: "standalone",
-        icons: [
+        orientation: "portrait-primary",
+        start_url: "/",
+        scope: "/",
+        screenshots: [
           {
             src: "/icons/icon-192x192.png",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-512x512.png",
             sizes: "512x512",
-            type: "image/png"
-          }
-        ]
-      }
+            type: "image/png",
+          },
+        ],
+        icons: [
+          {
+            src: "/icons/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable",
+          },
+          {
+            src: "/icons/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+        categories: ["business", "productivity"],
+      },
     }),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
