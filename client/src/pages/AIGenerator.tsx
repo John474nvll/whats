@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Copy, RefreshCw, Wand2 } from "lucide-react";
+import { Loader2, Copy, RefreshCw, Wand2, Sparkles, Zap } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AIGenerator() {
-  const [contentType, setContentType] = useState<"post" | "caption" | "message">("post");
+  const [contentType, setContentType] = useState<"post" | "caption" | "message" | "image">("post");
   const [topic, setTopic] = useState("");
   const [generated, setGenerated] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,45 +16,26 @@ export default function AIGenerator() {
 
   const generateContent = async () => {
     if (!topic.trim()) {
-      toast({ title: "Error", description: "Please enter a topic" });
+      toast({ title: "Error", description: "Por favor ingresa un tema" });
       return;
     }
 
     setLoading(true);
     try {
-      const response = await fetch("/api/conversations/1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: `Generate a ${contentType} about: ${topic}. Keep it concise and engaging.`,
-        }),
+      const res = await apiRequest("POST", "/api/ai/generate-smart-content", {
+        type: contentType,
+        topic,
+        includeInventory: true
       });
-
-      if (!response.ok) throw new Error("Failed to generate");
-
-      let content = "";
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No reader");
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const text = new TextDecoder().decode(value);
-        const lines = text.split("\n");
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            try {
-              const data = JSON.parse(line.slice(6));
-              if (data.content) content += data.content;
-            } catch {}
-          }
-        }
-      }
-
-      setGenerated(content);
-      toast({ title: "Success", description: "Content generated!" });
+      const data = await res.json();
+      setGenerated(data.generated);
+      toast({ title: "Éxito", description: "Contenido generado con datos reales" });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to generate content" });
+      toast({
+        title: "Error",
+        description: "No se pudo conectar con el orquestador de IA",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }

@@ -299,6 +299,41 @@ export async function registerRoutes(
     res.json(channel);
   });
 
+  // AI & Content Linking
+  app.post("/api/ai/generate-smart-content", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const { type, topic, includeInventory, campaignId } = req.body;
+      
+      let context = "Eres un experto en marketing digital y ventas para SocialHub.";
+      
+      if (includeInventory) {
+        const products = await storage.getProducts(req.userId!);
+        if (products.length > 0) {
+          context += "\nProductos disponibles en el catálogo:\n";
+          products.slice(0, 5).forEach(p => {
+            context += `- ${p.name}: ${p.description} (Precio: $${p.price/100})\n`;
+          });
+        }
+      }
+
+      if (campaignId) {
+        const campaign = await storage.getCampaigns(req.userId!);
+        const currentCampaign = campaign.find(c => c.id === parseInt(campaignId));
+        if (currentCampaign) {
+          context += `\nCampaña actual: ${currentCampaign.name}. Objetivo: ${currentCampaign.platform}\n`;
+        }
+      }
+
+      const prompt = `Genera un ${type} sobre el tema: ${topic}. Asegúrate de que sea persuasivo y profesional.`;
+      const response = await aiOrchestrator.generateResponse(prompt, context);
+      
+      res.json({ generated: response });
+    } catch (error) {
+      console.error("AI Smart Content Error:", error);
+      res.status(500).json({ error: "Failed to generate smart content" });
+    }
+  });
+
   // Auth endpoints
   app.post("/api/auth/register", async (req, res) => {
     try {
