@@ -54,7 +54,8 @@ export default function Login() {
   const demoCredentials = (user: string = "socialadmin") => {
     const creds: Record<string, { username: string; password: string }> = {
       socialadmin: { username: "socialadmin", password: "SocialPass2025" },
-      manager: { username: "manager", password: "Manager2025" }
+      ventas_a: { username: "ventas_a", password: "VentasA2025" },
+      ventas_b: { username: "ventas_b", password: "VentasB2025" }
     };
     setFormData(creds[user] || creds.socialadmin);
   };
@@ -190,7 +191,7 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <Button
                     type="button"
                     onClick={() => demoCredentials("socialadmin")}
@@ -200,10 +201,17 @@ export default function Login() {
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => demoCredentials("manager")}
+                    onClick={() => demoCredentials("ventas_a")}
                     className="bg-secondary/20 hover:bg-secondary/30 border border-secondary/30 text-secondary font-bold rounded-lg h-11"
                   >
-                    👤 Manager
+                    💰 Ventas A
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => demoCredentials("ventas_b")}
+                    className="bg-accent/20 hover:bg-accent/30 border border-accent/30 text-accent font-bold rounded-lg h-11"
+                  >
+                    📈 Ventas B
                   </Button>
                 </div>
 
@@ -233,9 +241,9 @@ export default function Login() {
                   <p className="text-slate-400">Pass: <code className="text-primary font-mono">SocialPass2025</code></p>
                 </div>
                 <div className="bg-slate-900/50 rounded-lg p-3 border border-secondary/20">
-                  <p className="font-bold text-secondary mb-1">Manager Account</p>
-                  <p className="text-slate-400">Usuario: <code className="text-secondary font-mono">manager</code></p>
-                  <p className="text-slate-400">Pass: <code className="text-secondary font-mono">Manager2025</code></p>
+                  <p className="font-bold text-secondary mb-1">Cuentas de Ventas</p>
+                  <p className="text-slate-400">Ventas A: <code className="text-secondary font-mono">ventas_a</code> / <code className="text-secondary font-mono">VentasA2025</code></p>
+                  <p className="text-slate-400">Ventas B: <code className="text-accent font-mono">ventas_b</code> / <code className="text-accent font-mono">VentasB2025</code></p>
                 </div>
               </CardContent>
             </Card>

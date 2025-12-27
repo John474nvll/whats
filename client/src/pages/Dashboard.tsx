@@ -277,12 +277,57 @@ export default function Dashboard() {
     }
   };
 
+  const salesAccounts = accounts?.filter(acc => 
+    acc.accountName.toLowerCase().includes("ventas") || 
+    acc.accountName.toLowerCase().includes("sales")
+  ) || [];
+
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-slate-900 to-black p-8">
       <div className="max-w-[1400px] mx-auto space-y-8 relative">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-1/2 -left-40 w-80 h-80 bg-accent/20 rounded-full blur-[100px] pointer-events-none" />
         
+        {/* Sales Accounts Overview */}
+        {salesAccounts.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {salesAccounts.map(acc => (
+              <Card key={acc.id} className="glass-card rounded-[2rem] border-border/50 overflow-hidden relative group bg-card/50 backdrop-blur-sm">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                   <Badge variant="outline" className="rounded-full bg-kiwi/10 text-kiwi border-kiwi/20">Ventas Activas</Badge>
+                </div>
+                <CardHeader className="flex flex-row items-center gap-4">
+                  <img 
+                    src={acc.profilePicture || `https://api.dicebear.com/7.x/avataaars/svg?seed=${acc.platform}`} 
+                    className="h-16 w-16 rounded-2xl border-2 border-kiwi/30"
+                    alt="Sales Profile"
+                  />
+                  <div>
+                    <CardTitle className="text-xl font-black">{acc.accountName}</CardTitle>
+                    <p className="text-sm text-muted-foreground uppercase font-bold tracking-widest">{acc.platform}</p>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Leads</p>
+                      <p className="text-xl font-black text-kiwi">{(acc.followersCount || 0) / 10}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Conversiones</p>
+                      <p className="text-xl font-black text-cyan-neon">{(acc.postsCount || 0) * 2}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">ROI</p>
+                      <p className="text-xl font-black text-raspberry">12%</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-1">
