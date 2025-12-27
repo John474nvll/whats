@@ -201,17 +201,18 @@ export default function Login() {
             {/* Quick Access */}
             <div className="space-y-3 pt-4 border-t border-white/10">
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Quick Access</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {[
-                  { user: "socialadmin", pass: "admin123" },
-                  { user: "ventas_a", pass: "ventas123" },
+                  { user: "socialadmin", pass: "SocialAdmin2026!" },
+                  { user: "ventas_a", pass: "VentasA2026!" },
+                  { user: "ventas_b", pass: "VentasB2026!" },
                 ].map((acc, i) => (
                   <Button
                     key={i}
                     variant="outline"
                     onClick={() => quickAccess(acc.user, acc.pass)}
                     disabled={isLoading}
-                    className="rounded-lg border-white/10 hover:border-primary/50 hover:bg-primary/10 text-xs font-bold text-slate-300"
+                    className="rounded-lg border-white/10 hover:border-primary/50 hover:bg-primary/10 text-[10px] font-bold text-slate-300 px-1"
                   >
                     {acc.user}
                   </Button>
