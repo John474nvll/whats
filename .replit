@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "angular-node-24", "nodejs-24", "php-8.4", "python-3.9", "docker", "bash"]
+modules = ["nodejs-20", "web"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
