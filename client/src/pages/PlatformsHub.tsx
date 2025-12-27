@@ -104,6 +104,68 @@ export default function PlatformsHub() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
+            {/* Account Manager Section - Integrated */}
+            <Card className="rounded-[3rem] bg-slate-900/40 border-white/5 backdrop-blur-3xl p-8 overflow-hidden shadow-2xl">
+              <div className="flex items-center justify-between mb-8">
+                <div className="space-y-1">
+                  <h2 className="text-3xl font-black text-white">Gestión de Cuentas</h2>
+                  <p className="text-slate-400 font-medium">Administra tus perfiles vinculados y sus tokens.</p>
+                </div>
+                <Button className="bg-kiwi text-black font-black rounded-xl hover:bg-kiwi/90 px-6 h-12 shadow-lg shadow-kiwi/20">
+                  Vincular Meta
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {accountsLoading ? (
+                  <div className="col-span-2 py-10 flex justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-kiwi" />
+                  </div>
+                ) : accounts?.map((account: any) => (
+                  <motion.div
+                    key={account.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="p-6 rounded-[2rem] bg-black/40 border border-white/5 hover:border-white/10 transition-all group"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-xl ${platformColors[account.platform]?.bg || 'bg-white/5'} ${platformColors[account.platform]?.text || 'text-white'}`}>
+                          {(() => {
+                            const PlatformIcon = platformIcons[account.platform];
+                            return PlatformIcon ? <PlatformIcon className="h-5 w-5" /> : null;
+                          })()}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-white capitalize">{account.accountName}</h3>
+                          <Badge variant="outline" className="text-[8px] uppercase tracking-widest border-white/5 text-slate-500 mt-1">
+                            {account.platform}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-kiwi shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                        <span className="text-[10px] font-black text-kiwi uppercase tracking-widest">Activo</span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Token de Acceso</p>
+                        <p className="text-xs font-mono text-slate-400 truncate">••••••••••••••••</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" className="flex-1 h-10 rounded-xl border-white/5 bg-white/5 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-white">
+                          Configurar
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-red-500/10 hover:text-red-500 text-slate-500">
+                          <AlertCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </Card>
+
             {/* Connection Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {["whatsapp", "instagram", "facebook"].map((platform) => {
