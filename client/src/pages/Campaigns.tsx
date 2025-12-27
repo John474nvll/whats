@@ -60,15 +60,15 @@ export default function Campaigns() {
     <div className="p-8 max-w-6xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-5xl font-black tracking-tighter text-kiwi drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">Campañas Pro</h1>
-          <p className="text-muted-foreground font-medium text-lg">Orquestación centralizada para tus perfiles administrativos.</p>
+          <h1 className="text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(34,197,94,0.1)]">Master<span className="text-kiwi">Launch</span></h1>
+          <p className="text-slate-400 font-bold text-xl tracking-tight">Orquestación centralizada de activos v2.0</p>
         </div>
       </div>
 
-      <Card className="glass-card rounded-[3rem] border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          <Megaphone className="h-24 w-24 text-kiwi" />
-        </div>
+      <div className="section-divider" />
+
+      <Card className="glass-card rounded-[3.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl shadow-[0_30px_100px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-kiwi/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         <CardHeader>
           <CardTitle className="text-2xl font-black flex items-center gap-3">
             <Zap className="h-6 w-6 text-kiwi" />

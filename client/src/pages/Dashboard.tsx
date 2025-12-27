@@ -126,24 +126,27 @@ export default function Dashboard() {
               { label: "Instagram Reach", value: "12.2K", icon: Instagram, color: "bg-pink-500", change: "+8%" },
               { label: "Ventas Totales", value: "$4.5K", icon: ShoppingBag, color: "bg-kiwi", change: "+22%" },
               { label: "Engagement Link", value: "5.2%", icon: Link2, color: "bg-cyan-neon", change: "+2.1%" },
+              { label: "AI Suggestions", value: "12", icon: Zap, color: "bg-pineapple", change: "+5" },
+              { label: "Artist Profiles", value: "4", icon: Music, color: "bg-raspberry", change: "Active" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
+                className={i >= 4 ? "hidden xl:block" : ""}
               >
-                <Card className="hover-elevate border-border/50 bg-card/50 backdrop-blur-sm p-6">
+                <Card className="hover-elevate border-border/50 bg-slate-900/40 backdrop-blur-3xl p-6 rounded-[2.5rem] group shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:border-white/20 transition-all">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${stat.color} text-white`}>
+                    <div className={`p-4 rounded-[1.2rem] ${stat.color} text-black shadow-lg shadow-${stat.color.split('-')[1]}/20`}>
                       <stat.icon className="h-6 w-6" />
                     </div>
-                    <Badge variant="outline" className="text-green-600 font-bold">
+                    <Badge variant="outline" className="text-kiwi border-kiwi/20 bg-kiwi/5 font-black uppercase text-[10px] tracking-wider">
                       {stat.change}
                     </Badge>
                   </div>
-                  <h3 className="text-3xl font-black tracking-tight">{stat.value}</h3>
-                  <p className="text-sm font-medium text-muted-foreground mt-1">{stat.label}</p>
+                  <h3 className="text-4xl font-black text-white tracking-tighter drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">{stat.value}</h3>
+                  <p className="text-xs font-black text-slate-500 uppercase tracking-widest mt-1 group-hover:text-slate-300 transition-colors">{stat.label}</p>
                 </Card>
               </motion.div>
             ))}

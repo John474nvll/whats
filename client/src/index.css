@@ -56,16 +56,28 @@
     @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-body);
     background: 
-      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 40% 13%) 50%, hsl(217 40% 12%) 100%),
-      radial-gradient(circle at 20% 50%, hsl(217 91% 60% / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, hsl(217 91% 60% / 0.03) 0%, transparent 50%);
+      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 40% 12%) 50%, hsl(230 40% 3%) 100%),
+      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, hsl(var(--secondary) / 0.08) 0%, transparent 40%);
     background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply font-bold tracking-tight;
+    @apply font-black tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.1)];
   }
+
+  p {
+    @apply text-slate-400 font-medium leading-relaxed;
+  }
+}
+
+.text-neon-kiwi { color: hsl(var(--kiwi)); text-shadow: 0 0 15px hsl(var(--kiwi) / 0.5); }
+.text-neon-cyan { color: hsl(var(--cyan-neon)); text-shadow: 0 0 15px hsl(var(--cyan-neon) / 0.5); }
+.text-neon-raspberry { color: hsl(var(--raspberry)); text-shadow: 0 0 15px hsl(var(--raspberry) / 0.5); }
+
+.section-divider {
+  @apply h-px w-full bg-gradient-to-r from-transparent via-white/5 to-transparent my-12;
 }
 
 /* Custom Scrollbar */
