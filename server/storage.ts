@@ -81,6 +81,19 @@ export interface IStorage {
   // Social Account by ID
   getSocialAccountById(id: number): Promise<SocialAccount | undefined>;
 
+  // Products
+  getProducts(userId: string): Promise<Product[]>;
+  getProduct(id: number): Promise<Product | undefined>;
+  createProduct(product: InsertProduct): Promise<Product>;
+  updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product>;
+  deleteProduct(id: number): Promise<void>;
+
+  // Custom Links
+  getCustomLinks(userId: string): Promise<CustomLink[]>;
+  getCustomLink(shortCode: string): Promise<CustomLink | undefined>;
+  createCustomLink(link: InsertCustomLink): Promise<CustomLink>;
+  incrementLinkClicks(id: number): Promise<void>;
+
   // Artists & Music
   getArtists(userId: string): Promise<ArtistProfile[]>;
   createArtist(artist: InsertArtistProfile): Promise<ArtistProfile>;
@@ -346,6 +359,52 @@ export class DatabaseStorage implements IStorage {
   async getSocialAccountById(id: number): Promise<SocialAccount | undefined> {
     const [account] = await db.select().from(socialAccounts).where(eq(socialAccounts.id, id));
     return account;
+  }
+
+  // Products
+  async getProducts(userId: string): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.userId, userId));
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [item] = await db.select().from(products).where(eq(products.id, id));
+    return item;
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [newItem] = await db.insert(products).values(product).returning();
+    return newItem;
+  }
+
+  async updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product> {
+    const [updated] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
+    return updated;
+  }
+
+  async deleteProduct(id: number): Promise<void> {
+    await db.delete(products).where(eq(products.id, id));
+  }
+
+  // Custom Links
+  async getCustomLinks(userId: string): Promise<CustomLink[]> {
+    return await db.select().from(customLinks).where(eq(customLinks.userId, userId));
+  }
+
+  async getCustomLink(shortCode: string): Promise<CustomLink | undefined> {
+    const [link] = await db.select().from(customLinks).where(eq(customLinks.shortCode, shortCode));
+    return link;
+  }
+
+  async createCustomLink(link: InsertCustomLink): Promise<CustomLink> {
+    const [newLink] = await db.insert(customLinks).values(link).returning();
+    return newLink;
+  }
+
+  async incrementLinkClicks(id: number): Promise<void> {
+    const [link] = await db.select().from(customLinks).where(eq(customLinks.id, id));
+    if (link) {
+      await db.update(customLinks).set({ clicks: (link.clicks || 0) + 1 }).where(eq(customLinks.id, id));
+    }
   }
 
   // Artists & Music

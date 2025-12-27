@@ -555,6 +555,68 @@ export async function registerRoutes(
     }
   });
 
+  // Products endpoints
+  app.get("/api/products", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getProducts(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch products" });
+    }
+  });
+
+  app.post("/api/products", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const product = await storage.createProduct({ ...req.body, userId: req.userId! });
+      res.status(201).json(product);
+    } catch {
+      res.status(500).json({ error: "Failed to create product" });
+    }
+  });
+
+  app.delete("/api/products/:id", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      await storage.deleteProduct(Number(req.params.id));
+      res.sendStatus(204);
+    } catch {
+      res.status(500).json({ error: "Failed to delete product" });
+    }
+  });
+
+  // Custom Links endpoints
+  app.get("/api/links", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const result = await storage.getCustomLinks(req.userId!);
+      res.json(result);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch links" });
+    }
+  });
+
+  app.post("/api/links", authMiddleware as any, async (req: AuthRequest, res) => {
+    try {
+      const shortCode = Math.random().toString(36).substring(7);
+      const link = await storage.createCustomLink({ ...req.body, shortCode, userId: req.userId! });
+      res.status(201).json(link);
+    } catch {
+      res.status(500).json({ error: "Failed to create link" });
+    }
+  });
+
+  app.get("/l/:code", async (req, res) => {
+    try {
+      const link = await storage.getCustomLink(req.params.code);
+      if (link) {
+        await storage.incrementLinkClicks(link.id);
+        res.redirect(link.originalUrl);
+      } else {
+        res.status(404).send("Link not found");
+      }
+    } catch {
+      res.status(500).send("Error redirecting");
+    }
+  });
+
   // Artist & Music Endpoints
   app.get("/api/artists", authMiddleware as any, async (req: AuthRequest, res) => {
     try {

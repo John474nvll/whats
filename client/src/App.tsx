@@ -17,6 +17,8 @@ import AIGenerator from "@/pages/AIGenerator";
 import AccountLinks from "@/pages/AccountLinks";
 import FunnelBuilder from "@/pages/FunnelBuilder";
 import Campaigns from "@/pages/Campaigns";
+import Products from "@/pages/Products";
+import CustomLinks from "@/pages/CustomLinks";
 import MusicManager from "@/pages/MusicManager";
 import SpotifyArtist from "@/pages/SpotifyArtist";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -34,6 +36,8 @@ function Router() {
       <Route path="/accounts" component={AccountLinks} />
       <Route path="/funnels" component={FunnelBuilder} />
       <Route path="/campaigns" component={Campaigns} />
+      <Route path="/products" component={Products} />
+      <Route path="/links" component={CustomLinks} />
       <Route path="/music" component={MusicManager} />
       <Route path="/spotify-artist" component={SpotifyArtist} />
       <Route path="/settings" component={Settings} />
