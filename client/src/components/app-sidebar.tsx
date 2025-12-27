@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
@@ -34,6 +34,8 @@ const menuGroups = [
     label: "📢 MARKETING",
     items: [
       { title: "Campaigns", url: "/campaigns", icon: Megaphone },
+      { title: "Products", url: "/products", icon: Package },
+      { title: "Custom Links", url: "/links", icon: LinkIcon },
       { title: "Funnels", url: "/funnels", icon: GitFork },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
     ],
