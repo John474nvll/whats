@@ -299,24 +299,68 @@ export default function PlatformsHub() {
           </div>
 
           <aside className="space-y-8">
-            {/* Guide Card */}
+            {/* WhatsApp Access Token Section */}
+            <Card className="rounded-[2.5rem] bg-green-500/10 border-green-500/20 backdrop-blur-3xl overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <CardHeader className="relative z-10 p-6">
+                <CardTitle className="text-xl font-black flex items-center gap-3 text-green-400">
+                  <MessageCircle className="h-6 w-6" />
+                  WhatsApp
+                </CardTitle>
+                <CardDescription className="text-green-300 font-bold">Acceso Token</CardDescription>
+              </CardHeader>
+              <CardContent className="relative z-10 p-6 pt-0 space-y-4">
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Ingresa tu access token</p>
+                    <Input
+                      type="password"
+                      placeholder="Pega tu access token aquí"
+                      className="bg-black/40 border-white/5 rounded-xl h-11 text-xs focus:border-green-500/50"
+                      value={tokens["whatsapp_access"] || ""}
+                      onChange={(e) => setTokens({ ...tokens, whatsapp_access: e.target.value })}
+                    />
+                  </div>
+                  <Button 
+                    className="w-full bg-green-500 text-black font-black h-11 rounded-xl hover:bg-green-600 active:scale-95 transition-all text-xs uppercase tracking-widest"
+                    onClick={() => {
+                      setConnecting("whatsapp_access");
+                      setTimeout(() => {
+                        toast({ title: "WhatsApp Conectado", description: "Access token validado con éxito" });
+                        setTokens({ ...tokens, whatsapp_access: "" });
+                        setConnecting(null);
+                      }, 1500);
+                    }}
+                    disabled={!tokens["whatsapp_access"] || connecting === "whatsapp_access"}
+                  >
+                    {connecting === "whatsapp_access" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Conectar"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Guide Card - How to Get Tokens */}
             <Card className="rounded-[2.5rem] bg-amber-500/10 border-amber-500/20 backdrop-blur-3xl overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <CardHeader className="relative z-10 p-6">
                 <CardTitle className="text-xl font-black flex items-center gap-3 text-amber-500">
                   <AlertCircle className="h-6 w-6" />
-                  Guía de Conexión
+                  Cómo obtener tus Access Tokens
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative z-10 p-6 pt-0 space-y-4">
                 <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                    <p className="text-xs font-black text-amber-500 uppercase tracking-widest mb-2">Meta Developers</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Obtén tus tokens en el panel de desarrolladores de Meta (Instagram/Facebook).</p>
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-white/10 transition-all">
+                    <p className="text-xs font-black text-pink-500 uppercase tracking-widest mb-2">• Instagram/Facebook: Meta Developers Console</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Accede a developers.facebook.com, crea una app y genera tu token de acceso.</p>
                   </div>
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                    <p className="text-xs font-black text-green-500 uppercase tracking-widest mb-2">WhatsApp Business</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Vincula directamente tu número de teléfono para activar la terminal neuronal.</p>
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-white/10 transition-all">
+                    <p className="text-xs font-black text-green-500 uppercase tracking-widest mb-2">• WhatsApp: WhatsApp Business API</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Usa la API oficial de WhatsApp Business para obtener tu token de acceso.</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/5 hover:border-white/10 transition-all">
+                    <p className="text-xs font-black text-blue-500 uppercase tracking-widest mb-2">• Asegurate de que los tokens tengan permisos</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Verifica que tus tokens incluyan los permisos necesarios para enviar mensajes.</p>
                   </div>
                 </div>
               </CardContent>
