@@ -18,3 +18,7 @@
 2026-01-11 03:42:06.689 UTC [4332] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
 2026-01-11 03:42:06.690 UTC [4333] ERROR:  relation "channel_configs" does not exist at character 108
 2026-01-11 03:42:06.690 UTC [4333] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
+2026-01-11 03:44:51.069 UTC [5101] ERROR:  relation "users" does not exist at character 86
+2026-01-11 03:44:51.069 UTC [5101] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
+2026-01-11 03:44:51.069 UTC [5102] ERROR:  relation "channel_configs" does not exist at character 108
+2026-01-11 03:44:51.069 UTC [5102] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
