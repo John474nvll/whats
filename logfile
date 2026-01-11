@@ -140,3 +140,8 @@
 2026-01-11 23:51:24.682 UTC [13780] WARNING:  database "template1" has a collation version mismatch
 2026-01-11 23:51:24.682 UTC [13780] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
 2026-01-11 23:51:24.682 UTC [13780] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:51:32.875 UTC [13843] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:51:32.875 UTC [13843] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:51:32.875 UTC [13843] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:51:32.891 UTC [13843] ERROR:  role "user" already exists
+2026-01-11 23:51:32.891 UTC [13843] STATEMENT:  CREATE ROLE "user" NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;
