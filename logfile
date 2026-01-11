@@ -14,3 +14,7 @@
 2026-01-11 03:40:48.513 UTC [3836] LOG:  invalid length of startup packet
 2026-01-11 03:41:06.058 UTC [3967] FATAL:  role "replit" does not exist
 2026-01-11 03:41:06.058 UTC [3968] FATAL:  role "replit" does not exist
+2026-01-11 03:42:06.689 UTC [4332] ERROR:  relation "users" does not exist at character 86
+2026-01-11 03:42:06.689 UTC [4332] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
+2026-01-11 03:42:06.690 UTC [4333] ERROR:  relation "channel_configs" does not exist at character 108
+2026-01-11 03:42:06.690 UTC [4333] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
