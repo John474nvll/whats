@@ -1,27 +1,16 @@
-{pkgs}: {
-  channel = "stable-24.05";
-  packages = [
-    pkgs.nodejs_20
-  ];
-  idx.extensions = [
-    "svelte.svelte-vscode"
-    "vue.volar"
-  ];
-  idx.previews = {
-    previews = {
-      web = {
-        command = [
-          "npm"
-          "run"
-          "dev"
-          "--"
-          "--port"
-          "$PORT"
-          "--host"
-          "0.0.0.0"
-        ];
-        manager = "web";
-      };
-    };
-  };
+# This file defines the development environment for your project.
+# It's used by your IDE to install the necessary packages.
+{ pkgs }: {
+    deps = [
+        # Node.js and npm
+        pkgs.nodejs-22_x
+        pkgs.nodePackages.npm
+
+        # PostgreSQL database
+        pkgs.postgresql
+
+        # Tools for running scripts from package.json
+        pkgs.nodePackages.tsx
+        pkgs.drizzle-kit
+    ];
 }

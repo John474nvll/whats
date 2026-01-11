@@ -24,3 +24,7 @@
 2026-01-11 03:44:51.069 UTC [5102] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
 2026-01-11 03:45:44.947 UTC [3817] LOG:  checkpoint starting: time
 2026-01-11 03:47:32.983 UTC [3817] LOG:  checkpoint complete: wrote 1083 buffers (6.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=108.005 s, sync=0.018 s, total=108.037 s; sync files=418, longest=0.003 s, average=0.001 s; distance=5370 kB, estimate=5370 kB; lsn=0/1A8BBE0, redo lsn=0/1A8BB50
+2026-01-11 03:50:45.037 UTC [3817] LOG:  checkpoint starting: time
+2026-01-11 03:50:45.765 UTC [3817] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.705 s, sync=0.007 s, total=0.728 s; sync files=5, longest=0.005 s, average=0.002 s; distance=3 kB, estimate=4834 kB; lsn=0/1A8CB18, redo lsn=0/1A8CAC0
+2026-01-11 03:55:45.858 UTC [3817] LOG:  checkpoint starting: time
+2026-01-11 03:55:45.983 UTC [3817] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.005 s, total=0.126 s; sync files=2, longest=0.004 s, average=0.003 s; distance=4 kB, estimate=4351 kB; lsn=0/1A8DC70, redo lsn=0/1A8DC18
