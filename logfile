@@ -44,3 +44,5 @@
 2026-01-11 04:41:05.942 UTC [6625] LOG:  invalid length of startup packet
 2026-01-11 04:41:06.429 UTC [6630] LOG:  invalid length of startup packet
 2026-01-11 04:41:06.607 UTC [6632] LOG:  invalid length of startup packet
+2026-01-11 23:00:43.304 UTC [2331] FATAL:  database files are incompatible with server
+2026-01-11 23:00:43.304 UTC [2331] DETAIL:  The data directory was initialized by PostgreSQL version 17, which is not compatible with this version 15.7.
