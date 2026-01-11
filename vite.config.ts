@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -15,7 +16,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,woff,woff2,ttf,eot}"],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/fonts\\.(googleapis|gstatic)\\.com\\/.*/i,
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: "CacheFirst",
             options: {
               cacheName: "google-fonts-cache",
@@ -23,7 +24,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\\/\\/api\\./i,
+            urlPattern: /^https:\/\/api\./i,
             handler: "NetworkFirst",
             options: { cacheName: "api-cache", expiration: { maxAgeSeconds: 60 * 5 } },
           },
@@ -105,6 +106,11 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    host: '0.0.0.0',
+    port: 5000,
+    hmr: {
+        clientPort: 443
+    },
     fs: {
       strict: true,
       deny: ["**/.*"],
