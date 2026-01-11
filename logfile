@@ -12,3 +12,5 @@
 2026-01-11 03:40:44.888 UTC [3819] LOG:  database system was shut down at 2026-01-11 03:39:57 UTC
 2026-01-11 03:40:44.894 UTC [3816] LOG:  database system is ready to accept connections
 2026-01-11 03:40:48.513 UTC [3836] LOG:  invalid length of startup packet
+2026-01-11 03:41:06.058 UTC [3967] FATAL:  role "replit" does not exist
+2026-01-11 03:41:06.058 UTC [3968] FATAL:  role "replit" does not exist
