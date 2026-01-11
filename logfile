@@ -50,3 +50,25 @@
 2026-01-11 23:03:12.792 UTC [3010] LOG:  listening on IPv4 address "127.0.0.1", port 5432
 2026-01-11 23:03:12.796 UTC [3010] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
 2026-01-11 23:03:12.798 UTC [3010] LOG:  database system is shut down
+2026-01-11 23:28:23.872 UTC [9417] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-11 23:28:23.872 UTC [9417] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-11 23:28:23.878 UTC [9417] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-01-11 23:28:23.888 UTC [9420] LOG:  database system was shut down at 2026-01-11 23:02:45 UTC
+2026-01-11 23:28:23.896 UTC [9417] LOG:  database system is ready to accept connections
+2026-01-11 23:28:27.864 UTC [9442] LOG:  invalid length of startup packet
+2026-01-11 23:28:27.867 UTC [9443] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.016 UTC [9444] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.019 UTC [9445] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.145 UTC [9446] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.148 UTC [9447] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.330 UTC [9452] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.333 UTC [9453] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.493 UTC [9466] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.496 UTC [9467] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.785 UTC [9468] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.788 UTC [9469] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.922 UTC [9470] LOG:  invalid length of startup packet
+2026-01-11 23:28:28.925 UTC [9471] LOG:  invalid length of startup packet
+2026-01-11 23:29:23.953 UTC [9674] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:29:23.953 UTC [9674] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:29:23.953 UTC [9674] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
