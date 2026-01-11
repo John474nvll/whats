@@ -28,3 +28,19 @@
 2026-01-11 03:50:45.765 UTC [3817] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.705 s, sync=0.007 s, total=0.728 s; sync files=5, longest=0.005 s, average=0.002 s; distance=3 kB, estimate=4834 kB; lsn=0/1A8CB18, redo lsn=0/1A8CAC0
 2026-01-11 03:55:45.858 UTC [3817] LOG:  checkpoint starting: time
 2026-01-11 03:55:45.983 UTC [3817] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.005 s, total=0.126 s; sync files=2, longest=0.004 s, average=0.003 s; distance=4 kB, estimate=4351 kB; lsn=0/1A8DC70, redo lsn=0/1A8DC18
+2026-01-11 04:40:20.161 UTC [6433] FATAL:  database files are incompatible with server
+2026-01-11 04:40:20.161 UTC [6433] DETAIL:  The data directory was initialized by PostgreSQL version 17, which is not compatible with this version 15.10.
+2026-01-11 04:41:03.135 UTC [6602] LOG:  starting PostgreSQL 17.7 on x86_64-pc-linux-gnu, compiled by clang version 20.1.8, 64-bit
+2026-01-11 04:41:03.135 UTC [6602] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-11 04:41:03.141 UTC [6602] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-01-11 04:41:03.152 UTC [6606] LOG:  database system was interrupted; last known up at 2026-01-11 03:55:45 UTC
+2026-01-11 04:41:03.198 UTC [6606] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-01-11 04:41:03.204 UTC [6606] LOG:  redo starts at 0/1A8DC18
+2026-01-11 04:41:03.204 UTC [6606] LOG:  invalid record length at 0/1A8F0A0: expected at least 24, got 0
+2026-01-11 04:41:03.204 UTC [6606] LOG:  redo done at 0/1A8F068 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-01-11 04:41:03.212 UTC [6604] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-01-11 04:41:03.237 UTC [6604] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.006 s, total=0.029 s; sync files=3, longest=0.004 s, average=0.002 s; distance=5 kB, estimate=5 kB; lsn=0/1A8F0A0, redo lsn=0/1A8F0A0
+2026-01-11 04:41:03.244 UTC [6602] LOG:  database system is ready to accept connections
+2026-01-11 04:41:05.942 UTC [6625] LOG:  invalid length of startup packet
+2026-01-11 04:41:06.429 UTC [6630] LOG:  invalid length of startup packet
+2026-01-11 04:41:06.607 UTC [6632] LOG:  invalid length of startup packet
