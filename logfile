@@ -46,3 +46,7 @@
 2026-01-11 04:41:06.607 UTC [6632] LOG:  invalid length of startup packet
 2026-01-11 23:00:43.304 UTC [2331] FATAL:  database files are incompatible with server
 2026-01-11 23:00:43.304 UTC [2331] DETAIL:  The data directory was initialized by PostgreSQL version 17, which is not compatible with this version 15.7.
+2026-01-11 23:03:12.792 UTC [3010] LOG:  starting PostgreSQL 15.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 12.3.0, 64-bit
+2026-01-11 23:03:12.792 UTC [3010] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-11 23:03:12.796 UTC [3010] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2026-01-11 23:03:12.798 UTC [3010] LOG:  database system is shut down
