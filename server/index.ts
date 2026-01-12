@@ -9,6 +9,7 @@ import userRoutes from './api/user';
 import authRoutes from './api/auth';
 import { authMiddleware } from './core/middleware/auth.middleware';
 import { setupVite } from './vite';
+import { registerRoutes as registerAgentDashboardRoutes } from './modules/agent-dashboard/routes';
 
 const app = express();
 const server = createServer(app);
@@ -24,6 +25,9 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/crm', crmRoutes);
 app.use('/api/chat', authMiddleware, chatRoutes);
+
+// Register Agent-Dashboard routes
+registerAgentDashboardRoutes(server, app);
 
 if (process.env.NODE_ENV === 'development') {
   setupVite(server, app);
