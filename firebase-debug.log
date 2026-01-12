@@ -129,3 +129,58 @@ Additionally, handling the error in the 'buildEnd' hook caused the following err
     at async Command.hostingChannelDeployAction [as actionFn] (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/commands/hosting-channel-deploy.js:90:25)
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2026-01-12T23:47:46.587Z] ----------------------------------------------------------------------
+[debug] [2026-01-12T23:47:46.589Z] Command:       /nix/store/ws50yvm6vzlzf7jzz6n7xh4szddrack1-nodejs-20.19.1/bin/node /nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/bin/firebase.js deploy --only hosting
+[debug] [2026-01-12T23:47:46.590Z] CLI Version:   14.26.0
+[debug] [2026-01-12T23:47:46.590Z] Platform:      linux
+[debug] [2026-01-12T23:47:46.590Z] Node Version:  v20.19.1
+[debug] [2026-01-12T23:47:46.590Z] Time:          Mon Jan 12 2026 23:47:46 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-01-12T23:47:46.590Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-12T23:47:46.821Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:46.821Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:46.824Z] >>> [apiv2][query] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 [none]
+[debug] [2026-01-12T23:47:47.497Z] <<< [apiv2][status] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 200
+[debug] [2026-01-12T23:47:47.497Z] <<< [apiv2][body] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"workspaceId":"whatsgit-49237758","name":"whats.git","workspaceRedirectUrl":"firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev","status":"WORKSPACE_STATUS_RUNNING","lastAccessDatetime":"2026-01-12T23:46:30.973882Z","workspaceTemplate":"WORKSPACE_TEMPLATE_FLUTTER","owner":"SELF","serviceAccountEmail":"msp-1963245825146535087@monospace-4.iam.gserviceaccount.com","gitRepoUrl":"https://github.com/John474nvll/whats.git","enableNix":true,"ownerEmail":"john474nvallejo@gmail.com","workstationAccessToken":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiZmlyZWJhc2Utd2hhdHNnaXQtMTc2ODEwMjEyMTU4OC5jbHVzdGVyLWY3M2lia2t1aWplNjZ3c3N1b250ZHRieDZxLmNsb3Vkd29ya3N0YXRpb25zLmRldiIsImlhdCI6MTc2ODI2MTY2NywiZXhwIjoxNzY4MzQ4MDY3fQ.XGK0TjWpWbIjEZLVTQwM-6LHymvqNMMGdLEFUZlGuNxB2f_tZE7pFxGWloqoRi8jOtGxWGPQ29KEEqBBHDmRw-6p6tq7LF9iWT5W57CRRGHrPnGHMOi63IrTWFloBqSKYxOd2jdD1JDR0uQ4TB-unLq8BRare_Bm6XYnIWclrKDBwaGeN2R_gtw89fi_CKg5bdcHRbc0hgUhE46yu3x2gj7nenrJLf6ZVDNfFDVKwPrBYPZNExXq1uOg-aYY_NlHUIhdJGUtFhY6fsgKAo5EotIDq9NJtIH3yH49T-tcn54ZI43MbXsVg-TE_vUn1RSSrKoEh57Yzl61ZOm14gCEJw","firebaseProjectId":"studio-9757109032-d8c05"}
+[debug] [2026-01-12T23:47:47.498Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-12T23:47:47.499Z] > authorizing via signed-in user (john474nvallejo@gmail.com)
+[debug] [2026-01-12T23:47:47.499Z] [iam] checking project studio-9757109032-d8c05 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-12T23:47:47.499Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:47.499Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:47.500Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions [none]
+[debug] [2026-01-12T23:47:47.500Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions x-goog-quota-user=projects/studio-9757109032-d8c05
+[debug] [2026-01-12T23:47:47.500Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:47:47.545Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions 200
+[debug] [2026-01-12T23:47:47.546Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:47:47.546Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:47.547Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:47:47.547Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 [none]
+[debug] [2026-01-12T23:47:47.765Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 200
+[debug] [2026-01-12T23:47:47.765Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 {"projectId":"studio-9757109032-d8c05","projectNumber":"1072243655316","displayName":"Firebase app","name":"projects/studio-9757109032-d8c05","resources":{"hostingSite":"studio-9757109032-d8c05"},"state":"ACTIVE","etag":"1_8180af6a-26df-4672-beb0-c41be34fac73"}
+[info] 
+   Thank you for trying our experimental support for Vite on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+   The integration is known to work with Vite version 3 - 6. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-01-12T23:48:06.946Z] [vite-plugin-pwa:build] [plugin vite-plugin-pwa:build] There was an error during the build:
+  Could not resolve entry module "index.html".
+Additionally, handling the error in the 'buildEnd' hook caused the following error:
+  Could not resolve entry module "index.html".
+    at getRollupError (file:///home/user/whats/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:23390:39
+    at async catchUnfinishedHookActions (file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:22848:16)
+    at async rollupInternal (file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:23373:5)
+    at async buildEnvironment (file:///home/user/whats/node_modules/vite/dist/node/chunks/config.js:33540:12)
+    at async Object.build (file:///home/user/whats/node_modules/vite/dist/node/chunks/config.js:33899:19)
+    at async build (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:81:5)
+    at async prepareFrameworks (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/frameworks/index.js:226:33)
+    at async deploy (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/deploy/index.js:79:9)
+[error] 
+[error] Error: An unexpected error has occurred.
