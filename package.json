@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "PRISMA_CLI_BINARY_TARGETS=native prisma generate && LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu NODE_ENV=development tsx --env-file .env server/index.ts",
+    "dev": "PRISMA_CLI_BINARY_TARGETS=debian-openssl-1.1.x prisma generate && NODE_ENV=development tsx --env-file .env server/index.ts",
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
