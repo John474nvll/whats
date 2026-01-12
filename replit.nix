@@ -1,6 +1,8 @@
 { pkgs }: {
     deps = [
-      pkgs.nodejs_20
-        pkgs.postgresql
+      pkgs.nodejs_20,
+      pkgs.postgresql,
+      pkgs.openssl,
+      pkgs.pkg-config
     ];
 }
