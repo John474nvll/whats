@@ -21,26 +21,19 @@ app.use('/api/auth', authRoutes);
 app.use('/api/crm', crmRoutes);
 app.use('/api/chat', authMiddleware, chatRoutes);
 
-// Function to parse command line arguments
 const getPort = () => {
-  const portIndex = process.argv.indexOf('--port');
-  if (portIndex > -1 && process.argv[portIndex + 1]) {
-    const port = parseInt(process.argv[portIndex + 1], 10);
-    if (!isNaN(port)) return port;
+  const portArg = process.argv.find(arg => arg.startsWith('--port'));
+  if (portArg) {
+      const port = portArg.split('=')[1] || portArg.split(' ')[1]
+      if(port) return parseInt(port, 10);
   }
-  const portEnv = process.env.PORT;
-  if (portEnv && !isNaN(parseInt(portEnv, 10))) {
-      return parseInt(portEnv, 10)
-  }
-  return 3000;
+  return process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 };
 
 const PORT = getPort();
 
-let server: Server;
-
 async function startServer() {
-  server = createServer(app);
+  const server = createServer(app);
   let vite: ViteDevServer | null = null;
 
   if (process.env.NODE_ENV === 'development') {
@@ -51,23 +44,18 @@ async function startServer() {
     console.log(`Server is running on port ${PORT}`);
   });
 
-  server.on('error', (e: NodeJS.ErrnoException) => {
-    if (e.code === 'EADDRINUSE') {
-      console.log(`Port ${PORT} is already in use. Trying another port...`);
-      setTimeout(() => {
-        server.close();
-        startServer(); // Restart the server on a new port if needed, though the env should handle this.
-      }, 1000);
-    } else {
-        console.error("Server error:", e)
+  // Graceful shutdown
+  process.on('SIGTERM', async () => {
+    if (vite) {
+      await vite.close();
     }
+    server.close(() => {
+      console.log('Server has been gracefully shut down.');
+      process.exit(0);
+    });
   });
-
-  server.on('close', async () => {
-      if(vite){
-          await vite.close()
-      }
-  })
 }
 
-startServer();
+startServer().catch(err => {
+    console.error("Failed to start server:", err)
+});
