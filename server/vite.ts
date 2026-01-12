@@ -1,13 +1,12 @@
 import { type Express } from "express";
-import { createServer as createViteServer, createLogger, type ViteDevServer } from "vite";
+import { createServer as createViteServer, createLogger } from "vite";
+import type { ViteDevServer } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import fs from "fs";
 import path from "path";
 
 const viteLogger = createLogger();
-
-export { ViteDevServer };
 
 export async function setupVite(server: Server, app: Express): Promise<ViteDevServer> {
   const vite = await createViteServer({
