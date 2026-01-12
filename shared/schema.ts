@@ -187,6 +187,36 @@ export const customers = sqliteTable("customers", {
   updatedAt: integer("updated_at", { mode: 'timestamp' }).defaultNow(),
 });
 
+export const agents = sqliteTable("agents", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  phoneNumber: text("phone_number").unique(),
+  status: text("status").default("offline"), // 'online', 'offline'
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).defaultNow(),
+});
+
+export const calls = sqliteTable("calls", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    agentId: integer("agent_id").references(() => agents.id, { onDelete: 'set null' }),
+    customerPhone: text("customer_phone"),
+    status: text("status").default("initiated"), // 'initiated', 'ringing', 'answered', 'completed', 'failed'
+    direction: text("direction"), // 'inbound', 'outbound'
+    duration: integer("duration").default(0), // in seconds
+    recordingUrl: text("recording_url"),
+    createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+});
+
+export const whatsAppMessages = sqliteTable("whatsapp_messages", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    agentId: integer("agent_id").references(() => agents.id, { onDelete: 'set null' }),
+    from: text("from").notNull(),
+    to: text("to").notNull(),
+    body: text("body").notNull(),
+    status: text("status").default("sent"), // 'sent', 'delivered', 'read'
+    createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const campaignsRelations = relations(campaigns, ({ one }) => ({
@@ -243,6 +273,26 @@ export const messagesRelations = relations(messages, ({ one }) => ({
     references: [conversations.id],
   }),
 }));
+
+export const agentsRelations = relations(agents, ({ many }) => ({
+  calls: many(calls),
+  whatsAppMessages: many(whatsAppMessages),
+}));
+
+export const callsRelations = relations(calls, ({ one }) => ({
+  agent: one(agents, {
+    fields: [calls.agentId],
+    references: [agents.id],
+  }),
+}));
+
+export const whatsAppMessagesRelations = relations(whatsAppMessages, ({ one }) => ({
+  agent: one(agents, {
+    fields: [whatsAppMessages.agentId],
+    references: [agents.id],
+  }),
+}));
+
 
 // === BASE SCHEMAS ===
 
@@ -301,6 +351,10 @@ export const insertInventorySchema = createInsertSchema(inventory).omit({ id: tr
 export const insertTransactionSchema = createInsertSchema(transactions).omit({ id: true, createdAt: true });
 export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections).omit({ id: true, createdAt: true, verifiedAt: true });
 
+export const insertAgentSchema = createInsertSchema(agents).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertCallSchema = createInsertSchema(calls).omit({ id: true, createdAt: true });
+export const insertWhatsAppMessageSchema = createInsertSchema(whatsAppMessages).omit({ id: true, createdAt: true });
+
 export type Inventory = typeof inventory.$inferSelect;
 export type InsertInventory = z.infer<typeof insertInventorySchema>;
 export type Transaction = typeof transactions.$inferSelect;
@@ -356,6 +410,15 @@ export type InsertCustomerGroup = z.infer<typeof insertCustomerGroupSchema>;
 
 export type ProductCatalog = typeof productCatalogs.$inferSelect;
 export type InsertProductCatalog = z.infer<typeof insertProductCatalogSchema>;
+
+export type Agent = typeof agents.$inferSelect;
+export type InsertAgent = z.infer<typeof insertAgentSchema>;
+
+export type Call = typeof calls.$inferSelect;
+export type InsertCall = z.infer<typeof insertCallSchema>;
+
+export type WhatsAppMessage = typeof whatsAppMessages.$inferSelect;
+export type InsertWhatsAppMessage = z.infer<typeof insertWhatsAppMessageSchema>;
 
 export type MessageWithDetails = Message & { conversation?: Conversation };
 
