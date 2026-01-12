@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu NODE_ENV=development tsx --env-file .env server/index.ts",
+    "dev": "prisma generate && LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu NODE_ENV=development tsx --env-file .env server/index.ts",
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
@@ -130,6 +130,7 @@
     "drizzle-kit": "^0.31.8",
     "esbuild": "^0.25.0",
     "postcss": "^8.4.47",
+    "prisma": "^5.17.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.21.0",
     "typescript": "5.6.3",
