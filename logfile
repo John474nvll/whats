@@ -145,3 +145,377 @@
 2026-01-11 23:51:32.875 UTC [13843] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
 2026-01-11 23:51:32.891 UTC [13843] ERROR:  role "user" already exists
 2026-01-11 23:51:32.891 UTC [13843] STATEMENT:  CREATE ROLE "user" NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;
+2026-01-11 23:52:24.741 UTC [14100] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:52:24.741 UTC [14100] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:52:24.741 UTC [14100] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:52:54.771 UTC [14119] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:52:54.771 UTC [14119] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:52:54.771 UTC [14119] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:53:24.771 UTC [14120] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:53:24.771 UTC [14120] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:53:24.771 UTC [14120] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:53:54.800 UTC [14121] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:53:54.800 UTC [14121] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:53:54.800 UTC [14121] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:54:24.778 UTC [14122] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:54:24.778 UTC [14122] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:54:24.778 UTC [14122] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:54:54.830 UTC [14123] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:54:54.830 UTC [14123] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:54:54.830 UTC [14123] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:55:24.802 UTC [14124] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:55:24.802 UTC [14124] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:55:24.802 UTC [14124] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:55:54.860 UTC [14125] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:55:54.860 UTC [14125] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:55:54.860 UTC [14125] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:56:24.820 UTC [14126] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:56:24.820 UTC [14126] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:56:24.820 UTC [14126] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:56:54.880 UTC [14127] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:56:54.880 UTC [14127] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:56:54.880 UTC [14127] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:57:24.850 UTC [14128] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:57:24.850 UTC [14128] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:57:24.850 UTC [14128] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:57:54.910 UTC [14129] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:57:54.910 UTC [14129] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:57:54.910 UTC [14129] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:58:24.879 UTC [14130] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:58:24.879 UTC [14130] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:58:24.879 UTC [14130] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:58:54.939 UTC [14131] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:58:54.939 UTC [14131] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:58:54.939 UTC [14131] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:59:24.880 UTC [14132] WARNING:  database "postgres" has a collation version mismatch
+2026-01-11 23:59:24.880 UTC [14132] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:59:24.880 UTC [14132] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-11 23:59:54.960 UTC [14133] WARNING:  database "template1" has a collation version mismatch
+2026-01-11 23:59:54.960 UTC [14133] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-11 23:59:54.960 UTC [14133] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:00:24.909 UTC [14134] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:00:24.909 UTC [14134] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:00:24.909 UTC [14134] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:00:54.976 UTC [14135] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:00:54.976 UTC [14135] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:00:54.976 UTC [14135] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:01:24.939 UTC [14136] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:01:24.939 UTC [14136] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:01:24.939 UTC [14136] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:01:55.006 UTC [14137] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:01:55.006 UTC [14137] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:01:55.006 UTC [14137] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:02:24.954 UTC [14138] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:02:24.954 UTC [14138] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:02:24.954 UTC [14138] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:02:55.020 UTC [14139] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:02:55.020 UTC [14139] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:02:55.020 UTC [14139] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:03:24.984 UTC [14140] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:03:24.984 UTC [14140] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:03:24.984 UTC [14140] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:03:55.050 UTC [14141] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:03:55.050 UTC [14141] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:03:55.050 UTC [14141] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:04:25.013 UTC [14142] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:04:25.013 UTC [14142] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:04:25.013 UTC [14142] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:04:55.055 UTC [14143] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:04:55.055 UTC [14143] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:04:55.055 UTC [14143] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:05:25.043 UTC [14144] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:05:25.043 UTC [14144] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:05:25.043 UTC [14144] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:05:55.060 UTC [14145] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:05:55.060 UTC [14145] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:05:55.060 UTC [14145] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:06:25.072 UTC [14146] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:06:25.072 UTC [14146] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:06:25.072 UTC [14146] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:06:55.090 UTC [14147] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:06:55.090 UTC [14147] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:06:55.090 UTC [14147] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:07:25.102 UTC [14148] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:07:25.102 UTC [14148] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:07:25.102 UTC [14148] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:07:55.120 UTC [14149] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:07:55.120 UTC [14149] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:07:55.120 UTC [14149] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:08:25.119 UTC [14150] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:08:25.119 UTC [14150] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:08:25.119 UTC [14150] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:08:55.149 UTC [14151] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:08:55.149 UTC [14151] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:08:55.149 UTC [14151] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:09:25.128 UTC [14152] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:09:25.128 UTC [14152] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:09:25.128 UTC [14152] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:09:55.179 UTC [14153] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:09:55.179 UTC [14153] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:09:55.179 UTC [14153] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:10:25.158 UTC [14154] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:10:25.158 UTC [14154] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:10:25.158 UTC [14154] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:10:55.209 UTC [14155] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:10:55.209 UTC [14155] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:10:55.209 UTC [14155] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:11:25.188 UTC [14156] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:11:25.188 UTC [14156] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:11:25.188 UTC [14156] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:11:55.239 UTC [14157] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:11:55.239 UTC [14157] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:11:55.239 UTC [14157] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:12:25.218 UTC [14158] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:12:25.218 UTC [14158] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:12:25.218 UTC [14158] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:12:55.259 UTC [14159] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:12:55.259 UTC [14159] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:12:55.259 UTC [14159] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:13:25.247 UTC [14160] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:13:25.247 UTC [14160] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:13:25.247 UTC [14160] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:13:55.288 UTC [14161] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:13:55.288 UTC [14161] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:13:55.288 UTC [14161] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:14:25.277 UTC [14162] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:14:25.277 UTC [14162] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:14:25.277 UTC [14162] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:14:55.310 UTC [14163] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:14:55.310 UTC [14163] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:14:55.310 UTC [14163] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:15:25.282 UTC [14164] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:15:25.282 UTC [14164] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:15:25.282 UTC [14164] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:15:55.317 UTC [14165] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:15:55.317 UTC [14165] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:15:55.317 UTC [14165] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:16:25.310 UTC [14166] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:16:25.310 UTC [14166] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:16:25.310 UTC [14166] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:16:55.416 UTC [14167] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:16:55.416 UTC [14167] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:16:55.416 UTC [14167] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:17:25.339 UTC [14168] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:17:25.339 UTC [14168] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:17:25.339 UTC [14168] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:17:55.420 UTC [14169] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:17:55.420 UTC [14169] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:17:55.420 UTC [14169] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:18:25.354 UTC [14170] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:18:25.354 UTC [14170] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:18:25.354 UTC [14170] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:18:55.450 UTC [14171] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:18:55.450 UTC [14171] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:18:55.450 UTC [14171] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:19:25.384 UTC [14172] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:19:25.384 UTC [14172] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:19:25.384 UTC [14172] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:19:55.455 UTC [14173] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:19:55.455 UTC [14173] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:19:55.455 UTC [14173] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:20:25.413 UTC [14174] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:20:25.413 UTC [14174] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:20:25.413 UTC [14174] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:20:55.485 UTC [14175] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:20:55.485 UTC [14175] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:20:55.485 UTC [14175] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:21:25.420 UTC [14176] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:21:25.420 UTC [14176] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:21:25.420 UTC [14176] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:21:55.514 UTC [14177] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:21:55.514 UTC [14177] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:21:55.514 UTC [14177] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:22:25.420 UTC [14178] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:22:25.420 UTC [14178] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:22:25.420 UTC [14178] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:22:55.543 UTC [14179] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:22:55.543 UTC [14179] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:22:55.543 UTC [14179] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:23:25.520 UTC [14180] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:23:25.520 UTC [14180] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:23:25.520 UTC [14180] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:23:55.573 UTC [14181] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:23:55.573 UTC [14181] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:23:55.573 UTC [14181] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:24:25.546 UTC [14182] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:24:25.546 UTC [14182] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:24:25.546 UTC [14182] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:24:55.596 UTC [14183] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:24:55.596 UTC [14183] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:24:55.596 UTC [14183] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:25:25.575 UTC [14184] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:25:25.575 UTC [14184] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:25:25.575 UTC [14184] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:25:55.625 UTC [14185] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:25:55.625 UTC [14185] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:25:55.625 UTC [14185] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:26:25.578 UTC [14186] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:26:25.578 UTC [14186] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:26:25.578 UTC [14186] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:26:55.655 UTC [14187] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:26:55.655 UTC [14187] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:26:55.655 UTC [14187] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:27:25.578 UTC [14188] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:27:25.578 UTC [14188] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:27:25.578 UTC [14188] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:27:55.655 UTC [14189] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:27:55.655 UTC [14189] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:27:55.655 UTC [14189] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:28:25.608 UTC [14190] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:28:25.608 UTC [14190] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:28:25.608 UTC [14190] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:28:55.685 UTC [14191] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:28:55.685 UTC [14191] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:28:55.685 UTC [14191] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:29:25.612 UTC [14192] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:29:25.612 UTC [14192] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:29:25.612 UTC [14192] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:29:55.701 UTC [14193] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:29:55.701 UTC [14193] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:29:55.701 UTC [14193] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:30:25.620 UTC [14194] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:30:25.620 UTC [14194] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:30:25.620 UTC [14194] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:30:55.720 UTC [14195] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:30:55.720 UTC [14195] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:30:55.720 UTC [14195] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:31:25.650 UTC [14196] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:31:25.650 UTC [14196] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:31:25.650 UTC [14196] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:31:55.750 UTC [14197] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:31:55.750 UTC [14197] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:31:55.750 UTC [14197] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:32:25.680 UTC [14198] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:32:25.680 UTC [14198] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:32:25.680 UTC [14198] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:32:55.779 UTC [14199] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:32:55.779 UTC [14199] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:32:55.779 UTC [14199] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:33:25.691 UTC [14200] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:33:25.691 UTC [14200] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:33:25.691 UTC [14200] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:33:55.809 UTC [14201] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:33:55.809 UTC [14201] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:33:55.809 UTC [14201] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:34:25.720 UTC [14202] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:34:25.720 UTC [14202] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:34:25.720 UTC [14202] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:34:55.820 UTC [14203] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:34:55.820 UTC [14203] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:34:55.820 UTC [14203] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:35:25.750 UTC [14204] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:35:25.750 UTC [14204] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:35:25.750 UTC [14204] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:35:55.850 UTC [14205] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:35:55.850 UTC [14205] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:35:55.850 UTC [14205] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:36:25.780 UTC [14206] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:36:25.780 UTC [14206] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:36:25.780 UTC [14206] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:36:55.880 UTC [14207] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:36:55.880 UTC [14207] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:36:55.880 UTC [14207] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:37:25.809 UTC [14208] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:37:25.809 UTC [14208] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:37:25.809 UTC [14208] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:37:55.909 UTC [14209] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:37:55.909 UTC [14209] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:37:55.909 UTC [14209] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:38:25.820 UTC [14210] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:38:25.820 UTC [14210] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:38:25.820 UTC [14210] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:38:55.939 UTC [14211] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:38:55.939 UTC [14211] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:38:55.939 UTC [14211] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:39:25.850 UTC [14212] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:39:25.850 UTC [14212] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:39:25.850 UTC [14212] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:39:55.969 UTC [14213] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:39:55.969 UTC [14213] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:39:55.969 UTC [14213] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:40:25.880 UTC [14214] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:40:25.880 UTC [14214] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:40:25.880 UTC [14214] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:40:55.995 UTC [14215] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:40:55.995 UTC [14215] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:40:55.995 UTC [14215] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:41:25.909 UTC [14216] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:41:25.909 UTC [14216] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:41:25.909 UTC [14216] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:41:56.025 UTC [14217] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:41:56.025 UTC [14217] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:41:56.025 UTC [14217] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:42:25.939 UTC [14218] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:42:25.939 UTC [14218] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:42:25.939 UTC [14218] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:42:56.030 UTC [14219] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:42:56.030 UTC [14219] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:42:56.030 UTC [14219] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:43:25.968 UTC [14220] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:43:25.968 UTC [14220] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:43:25.968 UTC [14220] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:43:56.030 UTC [14221] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:43:56.030 UTC [14221] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:43:56.030 UTC [14221] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:44:25.997 UTC [14222] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:44:25.997 UTC [14222] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:44:25.997 UTC [14222] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:44:56.060 UTC [14223] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:44:56.060 UTC [14223] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:44:56.060 UTC [14223] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:45:26.027 UTC [14224] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:45:26.027 UTC [14224] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:45:26.027 UTC [14224] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:45:56.090 UTC [14225] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:45:56.090 UTC [14225] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:45:56.090 UTC [14225] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:46:26.057 UTC [14226] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:46:26.057 UTC [14226] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:46:26.057 UTC [14226] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:46:56.120 UTC [14227] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:46:56.120 UTC [14227] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:46:56.120 UTC [14227] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:47:26.087 UTC [14228] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:47:26.087 UTC [14228] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:47:26.087 UTC [14228] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:47:56.150 UTC [14229] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:47:56.150 UTC [14229] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:47:56.150 UTC [14229] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:48:26.117 UTC [14230] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:48:26.117 UTC [14230] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:48:26.117 UTC [14230] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:48:56.180 UTC [14231] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:48:56.180 UTC [14231] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:48:56.180 UTC [14231] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:49:26.119 UTC [14232] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:49:26.119 UTC [14232] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:49:26.119 UTC [14232] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:49:56.183 UTC [14233] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:49:56.183 UTC [14233] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:49:56.183 UTC [14233] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:50:26.120 UTC [14234] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:50:26.120 UTC [14234] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:50:26.120 UTC [14234] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:50:56.206 UTC [14235] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:50:56.206 UTC [14235] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:50:56.206 UTC [14235] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:51:26.136 UTC [14236] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:51:26.136 UTC [14236] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:51:26.136 UTC [14236] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:51:56.234 UTC [14237] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:51:56.234 UTC [14237] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:51:56.234 UTC [14237] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:52:26.166 UTC [14238] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:52:26.166 UTC [14238] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:52:26.166 UTC [14238] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:52:56.263 UTC [14529] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:52:56.263 UTC [14529] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:52:56.263 UTC [14529] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:53:14.439 UTC [14651] LOG:  invalid length of startup packet
+2026-01-12 00:53:14.442 UTC [14652] LOG:  invalid length of startup packet
+2026-01-12 00:53:26.167 UTC [14695] WARNING:  database "postgres" has a collation version mismatch
+2026-01-12 00:53:26.167 UTC [14695] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:53:26.167 UTC [14695] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-12 00:53:56.293 UTC [14792] WARNING:  database "template1" has a collation version mismatch
+2026-01-12 00:53:56.293 UTC [14792] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-12 00:53:56.293 UTC [14792] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
