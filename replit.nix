@@ -3,7 +3,7 @@
       pkgs.nodejs_20,
       pkgs.postgresql,
       pkgs.pkg-config,
-      pkgs.openssl
+      pkgs.openssl_1_1
     ];
     env = {
       PRISMA_CLI_QUERY_ENGINE_TYPE = "binary";
