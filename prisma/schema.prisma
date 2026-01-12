@@ -11,19 +11,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Unified model for a person interacting with the system
-model Contact {
+model User {
   id        String   @id @default(cuid())
-  name      String?
-  email     String?  @unique
-  phone     String?  @unique
-  source    String   // From which channel they came (e.g., "whatsapp", "instagram")
-  tags      Json?    // For custom tagging
-  status    String   @default("active") // e.g., "active", "lead", "blocked"
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  conversations Conversation[]
 }
 
 // Represents a conversation with a contact
@@ -35,7 +28,6 @@ model Conversation {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  contact Contact   @relation(fields: [contactId], references: [id])
   messages Message[]
 }
 
