@@ -1,0 +1,77 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Unified model for a person interacting with the system
+model Contact {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?  @unique
+  phone     String?  @unique
+  source    String   // From which channel they came (e.g., "whatsapp", "instagram")
+  tags      Json?    // For custom tagging
+  status    String   @default("active") // e.g., "active", "lead", "blocked"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  conversations Conversation[]
+}
+
+// Represents a conversation with a contact
+model Conversation {
+  id        String   @id @default(cuid())
+  contactId String
+  channel   String   // e.g., "whatsapp", "instagram"
+  status    String   @default("open") // e.g., "open", "closed", "pending_agent"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact Contact   @relation(fields: [contactId], references: [id])
+  messages Message[]
+}
+
+// Represents a single message in a conversation
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  content        String
+  from           String   // "bot", "agent", or contact's ID
+  type           String   @default("text") // "text", "image", "template"
+  timestamp      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+}
+
+// For marketing and outreach campaigns
+model Campaign {
+  id        String   @id @default(cuid())
+  name      String
+  content   String   // The message or template to send
+  channels  String[] // e.g., ["whatsapp", "instagram"]
+  status    String   @default("draft") // "draft", "active", "completed"
+  sentCount Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Stores credentials for different channels (e.g., WhatsApp, Instagram)
+model PlatformCredential {
+  id          String  @id @default(cuid())
+  platform    String  @unique // "whatsapp", "instagram_business"
+  accessToken String
+  // Add other necessary fields like webhook_verify_token, phone_number_id, etc.
+  metaVerifyToken   String?
+  metaPhoneNumberId String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
