@@ -9,23 +9,15 @@ import { nanoid } from "nanoid";
 const viteLogger = createLogger();
 
 export async function setupVite(server: Server, app: Express) {
-  const serverOptions = {
-    middlewareMode: true,
-    hmr: { server, path: "/vite-hmr" },
-    allowedHosts: true as const,
-  };
-
   const vite = await createViteServer({
     ...viteConfig,
     configFile: false,
-    customLogger: {
-      ...viteLogger,
-      error: (msg, options) => {
-        viteLogger.error(msg, options);
-        process.exit(1);
-      },
+    server: {
+      // This is the important part. We are disabling the HMR port and letting Vite run in middleware mode.
+      // This will prevent the EADDRINUSE error.
+      hmr: false,
+      middlewareMode: true,
     },
-    server: serverOptions,
     appType: "custom",
   });
 

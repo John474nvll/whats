@@ -1,71 +1,72 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // === TABLE DEFINITIONS ===
 
-export const users = pgTable("users", {
+export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   role: text("role").default("user"), // 'admin', 'user'
   avatar: text("avatar"),
-  settings: jsonb("settings").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
+  settings: text("settings", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const widgets = pgTable("widgets", {
-  id: serial("id").primaryKey(),
+export const widgets = sqliteTable("widgets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   type: text("type").notNull(), // 'stats', 'activity', 'social_feed', 'quick_actions'
   title: text("title").notNull(),
-  config: jsonb("config").default({}),
+  config: text("config", { mode: 'json' }).default({}),
   position: integer("position").default(0),
-  isVisible: boolean("is_visible").default(true),
+  isVisible: integer("is_visible", { mode: 'boolean' }).default(true),
 });
 
-export const contacts = pgTable("contacts", {
-  id: serial("id").primaryKey(),
+export const contacts = sqliteTable("contacts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name"),
   phone: text("phone").notNull(), // or handle identifier
   platform: text("platform").notNull(), // 'whatsapp', 'instagram', 'facebook'
-  metadata: jsonb("metadata"), // Store extra profile info
-  createdAt: timestamp("created_at").defaultNow(),
+  metadata: text("metadata", { mode: 'json' }), // Store extra profile info
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const conversations = pgTable("conversations", {
-  id: serial("id").primaryKey(),
+export const conversations = sqliteTable("conversations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   contactId: integer("contact_id").references(() => contacts.id).notNull(),
   status: text("status").default("active"), // 'active', 'agent_paused', 'closed'
   channel: text("channel").notNull(), // 'whatsapp', 'instagram'
-  botStatus: boolean("bot_status").default(true), // True if AI is active
-  lastMessageAt: timestamp("last_message_at").defaultNow(),
-  createdAt: timestamp("created_at").defaultNow(),
+  botStatus: integer("bot_status", { mode: 'boolean' }).default(true), // True if AI is active
+  lastMessageAt: integer("last_message_at", { mode: 'timestamp' }).defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const messages = pgTable("messages", {
-  id: serial("id").primaryKey(),
+export const messages = sqliteTable("messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   conversationId: integer("conversation_id").references(() => conversations.id).notNull(),
   content: text("content").notNull(),
   role: text("role").notNull(), // 'user', 'assistant', 'agent', 'system'
   platformMessageId: text("platform_message_id"),
-  metadata: jsonb("metadata"), // Tokens, usage, etc.
-  createdAt: timestamp("created_at").defaultNow(),
+  metadata: text("metadata", { mode: 'json' }), // Tokens, usage, etc.
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const channelConfigs = pgTable("channel_configs", {
-  id: serial("id").primaryKey(),
+export const channelConfigs = sqliteTable("channel_configs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   platform: text("platform").notNull().unique(), // 'whatsapp', 'instagram'
   accessToken: text("access_token").notNull(),
   verifyToken: text("verify_token").notNull(),
   phoneNumberId: text("phone_number_id"),
-  isActive: boolean("is_active").default(true),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  isActive: integer("is_active", { mode: 'boolean' }).default(true),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const socialAccounts = pgTable("social_accounts", {
-  id: serial("id").primaryKey(),
+export const socialAccounts = sqliteTable("social_accounts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   platform: text("platform").notNull(), // 'instagram', 'facebook', 'whatsapp', 'spotify', 'youtube'
   accountId: text("account_id").notNull(),
@@ -77,102 +78,102 @@ export const socialAccounts = pgTable("social_accounts", {
   followersCount: integer("followers_count").default(0),
   followingCount: integer("following_count").default(0),
   postsCount: integer("posts_count").default(0),
-  metadata: jsonb("metadata"), // Store profile data, permissions, etc
-  isConnected: boolean("is_connected").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  metadata: text("metadata", { mode: 'json' }), // Store profile data, permissions, etc
+  isConnected: integer("is_connected", { mode: 'boolean' }).default(true),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const artistProfiles = pgTable("artist_profiles", {
-  id: serial("id").primaryKey(),
+export const artistProfiles = sqliteTable("artist_profiles", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   artistName: text("artist_name").notNull(),
   genre: text("genre"),
   bio: text("bio"),
   spotifyArtistId: text("spotify_artist_id"),
   youtubeChannelId: text("youtube_channel_id"),
-  metadata: jsonb("metadata").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
+  metadata: text("metadata", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const musicContent = pgTable("music_content", {
-  id: serial("id").primaryKey(),
+export const musicContent = sqliteTable("music_content", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   artistId: integer("artist_id").notNull().references(() => artistProfiles.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   type: text("type").notNull(), // 'track', 'album', 'video'
   status: text("status").notNull().default("draft"), // 'draft', 'uploading', 'published'
-  platformLinks: jsonb("platform_links").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
+  platformLinks: text("platform_links", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const salesFunnels = pgTable("sales_funnels", {
-  id: serial("id").primaryKey(),
+export const salesFunnels = sqliteTable("sales_funnels", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
-  steps: jsonb("steps").notNull().default([]), // Array of steps with conditions and actions
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
+  steps: text("steps", { mode: 'json' }).notNull().default([]), // Array of steps with conditions and actions
+  isActive: integer("is_active", { mode: 'boolean' }).default(true),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const inventory = pgTable("inventory", {
-  id: serial("id").primaryKey(),
+export const inventory = sqliteTable("inventory", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   sku: text("sku").notNull().unique(),
   name: text("name").notNull(),
   quantity: integer("quantity").default(0),
   price: integer("price").notNull(),
   category: text("category"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const transactions = pgTable("transactions", {
-  id: serial("id").primaryKey(),
+export const transactions = sqliteTable("transactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   customerId: integer("customer_id").references(() => customers.id),
   productId: integer("product_id").references(() => products.id),
   amount: integer("amount").notNull(),
   status: text("status").default("pending"), // 'pending', 'completed', 'cancelled'
   paymentMethod: text("payment_method"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const customerGroups = pgTable("customer_groups", {
-  id: serial("id").primaryKey(),
+export const customerGroups = sqliteTable("customer_groups", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
-  criteria: jsonb("criteria").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
+  criteria: text("criteria", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const productCatalogs = pgTable("product_catalogs", {
-  id: serial("id").primaryKey(),
+export const productCatalogs = sqliteTable("product_catalogs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
-  productIds: integer("product_ids").array().default([]),
-  isActive: boolean("is_active").default(true),
-  metadata: jsonb("metadata").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
+  productIds: text("product_ids").default("[]"),
+  isActive: integer("is_active", { mode: 'boolean' }).default(true),
+  metadata: text("metadata", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const campaigns = pgTable("campaigns", {
-  id: serial("id").primaryKey(),
+export const campaigns = sqliteTable("campaigns", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   platform: text("platform").notNull(), // 'all', 'whatsapp', 'instagram', 'facebook'
-  targetAccountIds: integer("target_account_ids").array().default([]), // Selected social accounts
+  targetAccountIds: text("target_account_ids").default("[]"), // Selected social accounts
   status: text("status").notNull().default("draft"), // 'draft', 'active', 'completed'
   content: text("content"),
-  aiGenerated: boolean("ai_generated").default(false),
-  metrics: jsonb("metrics").default({}),
-  scheduledAt: timestamp("scheduled_at"),
-  createdAt: timestamp("created_at").defaultNow(),
+  aiGenerated: integer("ai_generated", { mode: 'boolean' }).default(false),
+  metrics: text("metrics", { mode: 'json' }).default({}),
+  scheduledAt: integer("scheduled_at", { mode: 'timestamp' }),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const customers = pgTable("customers", {
-  id: serial("id").primaryKey(),
+export const customers = sqliteTable("customers", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   email: text("email"),
@@ -180,10 +181,10 @@ export const customers = pgTable("customers", {
   platform: text("platform"), // 'whatsapp', 'instagram', 'facebook'
   platformId: text("platform_id"),
   status: text("status").default("active"), // 'active', 'inactive', 'blocked'
-  tags: text("tags").array().default([]),
-  metadata: jsonb("metadata").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  tags: text("tags").default("[]"),
+  metadata: text("metadata", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+  updatedAt: integer("updated_at", { mode: 'timestamp' }).defaultNow(),
 });
 
 // === RELATIONS ===
@@ -246,8 +247,8 @@ export const messagesRelations = relations(messages, ({ one }) => ({
 // === BASE SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users).omit({ createdAt: true });
-export const products = pgTable("products", {
-  id: serial("id").primaryKey(),
+export const products = sqliteTable("products", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
@@ -255,11 +256,11 @@ export const products = pgTable("products", {
   imageUrl: text("image_url"),
   stock: integer("stock").default(0),
   category: text("category"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const customLinks = pgTable("custom_links", {
-  id: serial("id").primaryKey(),
+export const customLinks = sqliteTable("custom_links", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   productId: integer("product_id").references(() => products.id),
   campaignId: integer("campaign_id").references(() => campaigns.id),
@@ -267,18 +268,18 @@ export const customLinks = pgTable("custom_links", {
   shortCode: text("short_code").unique().notNull(),
   platform: text("platform"), 
   clicks: integer("clicks").default(0),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
 });
 
-export const phoneConnections = pgTable("phone_connections", {
-  id: serial("id").primaryKey(),
+export const phoneConnections = sqliteTable("phone_connections", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   phoneNumber: text("phone_number").notNull().unique(), // +573001234567
   verificationCode: text("verification_code"),
-  isVerified: boolean("is_verified").default(false),
+  isVerified: integer("is_verified", { mode: 'boolean' }).default(false),
   platform: text("platform").default("whatsapp"), // 'whatsapp'
-  metadata: jsonb("metadata").default({}),
-  createdAt: timestamp("created_at").defaultNow(),
-  verifiedAt: timestamp("verified_at"),
+  metadata: text("metadata", { mode: 'json' }).default({}),
+  createdAt: integer("created_at", { mode: 'timestamp' }).defaultNow(),
+  verifiedAt: integer("verified_at", { mode: 'timestamp' }),
 });
 
 export const insertContactSchema = createInsertSchema(contacts).omit({ id: true, createdAt: true });
