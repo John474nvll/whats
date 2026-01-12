@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Users, Activity, Settings, Mic2, MessageSquare, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Users, Activity, Settings, Mic2, MessageSquare, BarChart3, Users2, Send, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
@@ -10,6 +10,9 @@ export function Sidebar() {
     { href: "/agents", label: "Agents", icon: Users },
     { href: "/whatsapp", label: "WhatsApp", icon: MessageSquare },
     { href: "/statistics", label: "Statistics", icon: BarChart3 },
+    { href: "/customers", label: "Gestión de Clientes", icon: Users2 },
+    { href: "/campaigns", label: "Campañas Multicanal", icon: Send },
+    { href: "/ai-content", label: "Generador Contenido IA", icon: Sparkles },
     { href: "/deployments", label: "Deployments", icon: Activity },
     { href: "/settings", label: "Settings", icon: Settings },
   ];
