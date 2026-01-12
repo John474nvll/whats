@@ -11,6 +11,9 @@ import Settings from "@/pages/Settings";
 import Deployments from "@/pages/Deployments";
 import WhatsAppModule from "@/pages/WhatsApp";
 import Statistics from "@/pages/Statistics";
+import Customers from "@/pages/Customers";
+import Campaigns from "@/pages/Campaigns";
+import AIContent from "@/pages/AIContent";
 
 function Router() {
   return (
@@ -22,6 +25,9 @@ function Router() {
       <Route path="/deployments" component={Deployments} />
       <Route path="/whatsapp" component={WhatsAppModule} />
       <Route path="/statistics" component={Statistics} />
+      <Route path="/customers" component={Customers} />
+      <Route path="/campaigns" component={Campaigns} />
+      <Route path="/ai-content" component={AIContent} />
       <Route component={NotFound} />
     </Switch>
   );
