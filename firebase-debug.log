@@ -1,0 +1,99 @@
+[debug] [2026-01-12T23:46:29.365Z] ----------------------------------------------------------------------
+[debug] [2026-01-12T23:46:29.367Z] Command:       /nix/store/ws50yvm6vzlzf7jzz6n7xh4szddrack1-nodejs-20.19.1/bin/node /nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/bin/firebase.js deploy --only hosting
+[debug] [2026-01-12T23:46:29.367Z] CLI Version:   14.26.0
+[debug] [2026-01-12T23:46:29.367Z] Platform:      linux
+[debug] [2026-01-12T23:46:29.367Z] Node Version:  v20.19.1
+[debug] [2026-01-12T23:46:29.368Z] Time:          Mon Jan 12 2026 23:46:29 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-01-12T23:46:29.368Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-12T23:46:29.626Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:29.626Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:29.629Z] >>> [apiv2][query] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 [none]
+[debug] [2026-01-12T23:46:30.308Z] <<< [apiv2][status] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 200
+[debug] [2026-01-12T23:46:30.309Z] <<< [apiv2][body] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"workspaceId":"whatsgit-49237758","name":"whats.git","workspaceRedirectUrl":"firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev","status":"WORKSPACE_STATUS_RUNNING","lastAccessDatetime":"2026-01-12T23:22:32.563342Z","workspaceTemplate":"WORKSPACE_TEMPLATE_FLUTTER","owner":"SELF","serviceAccountEmail":"msp-1963245825146535087@monospace-4.iam.gserviceaccount.com","gitRepoUrl":"https://github.com/John474nvll/whats.git","enableNix":true,"ownerEmail":"john474nvallejo@gmail.com","workstationAccessToken":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiZmlyZWJhc2Utd2hhdHNnaXQtMTc2ODEwMjEyMTU4OC5jbHVzdGVyLWY3M2lia2t1aWplNjZ3c3N1b250ZHRieDZxLmNsb3Vkd29ya3N0YXRpb25zLmRldiIsImlhdCI6MTc2ODI2MTU5MCwiZXhwIjoxNzY4MzQ3OTkwfQ.DaJ5ffHN75O7eCkV7HnhJ4ocVzmShpkBMG7Qh47kmUc_SGJxVScjIQbWRwfwxrfkC1tOYZ5xby30YJYFU9YY_GKLV5ZN-lsGU_gHJRH3QF68S34p14v32opMI9RRhwmHeYNME5LSJYp1WNHfVwf_7cCJW8Y12ZxtGde6PykcLvXOGdCBlUqmkdk8bvi8bj0K8vVR6de2sTgU1B7qKNs3VVbVTnxTeks8Lcs1uu5ZVcI0fzjc9Rydf0V4oYfXq1PxTIbnDWyF6ZKCoq8qWh23GXvMRX00-Fk3_ccMA_Z-M2v1fdN6cHJhMMcu5ybZbqrk1AzBvi6ktSip0LZ-LPCDsw"}
+[info] Updating Studio Workspace active project to match Firebase CLI 'studio-9757109032-d8c05'
+[debug] [2026-01-12T23:46:30.310Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:30.310Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:30.311Z] >>> [apiv2][query] PATCH https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 updateMask=workspace.firebaseProjectId
+[debug] [2026-01-12T23:46:30.311Z] >>> [apiv2][body] PATCH https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"firebaseProjectId":"studio-9757109032-d8c05"}
+[debug] [2026-01-12T23:46:31.034Z] <<< [apiv2][status] PATCH https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 200
+[debug] [2026-01-12T23:46:31.034Z] <<< [apiv2][body] PATCH https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"workspaceId":"whatsgit-49237758","name":"whats.git","workspaceRedirectUrl":"firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev","status":"WORKSPACE_STATUS_RUNNING","lastAccessDatetime":"2026-01-12T23:22:32.563342Z","workspaceTemplate":"WORKSPACE_TEMPLATE_FLUTTER","serviceAccountEmail":"msp-1963245825146535087@monospace-4.iam.gserviceaccount.com","gitRepoUrl":"https://github.com/John474nvll/whats.git","enableNix":true,"firebaseProjectId":"studio-9757109032-d8c05"}
+[debug] [2026-01-12T23:46:31.041Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-12T23:46:31.041Z] > authorizing via signed-in user (john474nvallejo@gmail.com)
+[debug] [2026-01-12T23:46:31.041Z] [iam] checking project studio-9757109032-d8c05 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-12T23:46:31.042Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:31.042Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:31.042Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions [none]
+[debug] [2026-01-12T23:46:31.042Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions x-goog-quota-user=projects/studio-9757109032-d8c05
+[debug] [2026-01-12T23:46:31.042Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:46:31.086Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions 200
+[debug] [2026-01-12T23:46:31.087Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:46:31.087Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:31.087Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:31.088Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 [none]
+[debug] [2026-01-12T23:46:31.324Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 200
+[debug] [2026-01-12T23:46:31.325Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 {"projectId":"studio-9757109032-d8c05","projectNumber":"1072243655316","displayName":"Firebase app","name":"projects/studio-9757109032-d8c05","resources":{"hostingSite":"studio-9757109032-d8c05"},"state":"ACTIVE","etag":"1_8180af6a-26df-4672-beb0-c41be34fac73"}
+[info] 
+   Thank you for trying our experimental support for Vite on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+   The integration is known to work with Vite version 3 - 6. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-01-12T23:46:49.846Z] [vite-plugin-pwa:build] [plugin vite-plugin-pwa:build] There was an error during the build:
+  Could not resolve entry module "index.html".
+Additionally, handling the error in the 'buildEnd' hook caused the following error:
+  Could not resolve entry module "index.html".
+    at getRollupError (file:///home/user/whats/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:23390:39
+    at async catchUnfinishedHookActions (file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:22848:16)
+    at async rollupInternal (file:///home/user/whats/node_modules/rollup/dist/es/shared/node-entry.js:23373:5)
+    at async buildEnvironment (file:///home/user/whats/node_modules/vite/dist/node/chunks/config.js:33540:12)
+    at async Object.build (file:///home/user/whats/node_modules/vite/dist/node/chunks/config.js:33899:19)
+    at async build (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/frameworks/vite/index.js:81:5)
+    at async prepareFrameworks (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/frameworks/index.js:226:33)
+    at async deploy (/nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/deploy/index.js:79:9)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-01-12T23:46:52.045Z] ----------------------------------------------------------------------
+[debug] [2026-01-12T23:46:52.047Z] Command:       /nix/store/ws50yvm6vzlzf7jzz6n7xh4szddrack1-nodejs-20.19.1/bin/node /nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/bin/firebase.js hosting:channel:deploy bdcrmwhats
+[debug] [2026-01-12T23:46:52.048Z] CLI Version:   14.26.0
+[debug] [2026-01-12T23:46:52.048Z] Platform:      linux
+[debug] [2026-01-12T23:46:52.048Z] Node Version:  v20.19.1
+[debug] [2026-01-12T23:46:52.048Z] Time:          Mon Jan 12 2026 23:46:52 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-01-12T23:46:52.048Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-12T23:46:52.310Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.310Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.313Z] >>> [apiv2][query] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 [none]
+[debug] [2026-01-12T23:46:52.827Z] <<< [apiv2][status] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 200
+[debug] [2026-01-12T23:46:52.828Z] <<< [apiv2][body] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"workspaceId":"whatsgit-49237758","name":"whats.git","workspaceRedirectUrl":"firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev","status":"WORKSPACE_STATUS_RUNNING","lastAccessDatetime":"2026-01-12T23:46:30.973882Z","workspaceTemplate":"WORKSPACE_TEMPLATE_FLUTTER","owner":"SELF","serviceAccountEmail":"msp-1963245825146535087@monospace-4.iam.gserviceaccount.com","gitRepoUrl":"https://github.com/John474nvll/whats.git","enableNix":true,"ownerEmail":"john474nvallejo@gmail.com","workstationAccessToken":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiZmlyZWJhc2Utd2hhdHNnaXQtMTc2ODEwMjEyMTU4OC5jbHVzdGVyLWY3M2lia2t1aWplNjZ3c3N1b250ZHRieDZxLmNsb3Vkd29ya3N0YXRpb25zLmRldiIsImlhdCI6MTc2ODI2MTYxMiwiZXhwIjoxNzY4MzQ4MDEyfQ.m_3G2IBrKRWteALEb0YAYPeb-zPSUgtqX3mNT4XQ-cLKo-zljVn5lLvaYO3cm-ODOX6zAPJgDo6dC5jJsvlVtmy7Wnk2QZacMMeaJM672EUpjelLPxSjfPqwb01VKZLEhku8FURDnH0W5WAALIUFQeRPgBcm4TdpmcfrZE-YUmQ1Rz1QVGkNGKZY_QghHE4TN7WgMPOe2oGqGaf3MiW88slFNRTM0kjv9VpEacF3q375wBzcEkHHTSeOwKTmsTqIUd2xtRQ8shEeiv_XoQ6UVqOw_m8z057yruUmG-3fgrCePbSi97Kgv-hprMznpGM-rXjl47HBSb04IBUnOvFgVg","firebaseProjectId":"studio-9757109032-d8c05"}
+[debug] [2026-01-12T23:46:52.828Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-12T23:46:52.829Z] > authorizing via signed-in user (john474nvallejo@gmail.com)
+[debug] [2026-01-12T23:46:52.829Z] [iam] checking project studio-9757109032-d8c05 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-12T23:46:52.829Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.829Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.829Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions [none]
+[debug] [2026-01-12T23:46:52.830Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions x-goog-quota-user=projects/studio-9757109032-d8c05
+[debug] [2026-01-12T23:46:52.830Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:46:52.893Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions 200
+[debug] [2026-01-12T23:46:52.893Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/studio-9757109032-d8c05:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-12T23:46:52.894Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.894Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.894Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 [none]
+[debug] [2026-01-12T23:46:52.986Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 200
+[debug] [2026-01-12T23:46:52.986Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 {"projectId":"studio-9757109032-d8c05","projectNumber":"1072243655316","displayName":"Firebase app","name":"projects/studio-9757109032-d8c05","resources":{"hostingSite":"studio-9757109032-d8c05"},"state":"ACTIVE","etag":"1_8180af6a-26df-4672-beb0-c41be34fac73"}
+[debug] [2026-01-12T23:46:52.988Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.988Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:52.988Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05/channels/bdcrmwhats [none]
+[debug] [2026-01-12T23:46:53.089Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05/channels/bdcrmwhats 404
+[debug] [2026-01-12T23:46:53.089Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05/channels/bdcrmwhats {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2026-01-12T23:46:53.090Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:53.090Z] Checked if tokens are valid: true, expires at: 1768264656725
+[debug] [2026-01-12T23:46:53.090Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05/channels?channelId=bdcrmwhats [none]
+[debug] [2026-01-12T23:46:53.090Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05/channels?channelId=bdcrmwhats {"ttl":"604800s"}
