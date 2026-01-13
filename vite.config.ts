@@ -86,9 +86,6 @@ export default defineConfig({
       },
     }),
   ],
-  optimizeDeps: {
-    exclude: ['pg'],
-  }, 
   resolve: {
     alias: {
       "@": path.resolve(projectRootDir, "client", "src"),
