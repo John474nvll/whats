@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { insertChannelConfigSchema, channelConfigs } from "../server/db";
+import { insertChannelConfigSchema, channelConfigs } from "./schema";
 
 export const errorSchemas = {
   400: z.object({
