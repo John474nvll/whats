@@ -1,3 +1,4 @@
+/*
 import { db } from "./db";
 import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent, phoneConnections,
@@ -552,3 +553,4 @@ export class DatabaseStorage implements IStorage {
 }
 
 export const storage = new DatabaseStorage();
+*/
