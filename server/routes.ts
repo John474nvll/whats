@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema } from "@shared/schema";
+import { loginSchema, registerSchema, insertCustomerSchema } from "@shared/schema";
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 
 // Simple SSE implementation
@@ -87,6 +87,104 @@ export async function registerRoutes(
     console.log("Seeded WhatsApp channel config");
   }
 
-  // ... (resto del archivo sin modificar)
+  // API routes (sin authMiddleware)
+  app.get("/api/customers", async (req, res) => {
+    // @ts-ignore
+    const customers = await storage.getCustomers(req.user?.id || ""); // Se debe adaptar según la lógica de negocio
+    res.json(customers);
+  });
 
+  app.post("/api/customers", async (req, res) => {
+    try {
+      const customerData = insertCustomerSchema.parse(req.body);
+       // @ts-ignore
+      const newCustomer = await storage.createCustomer({ ...customerData, userId: req.user?.id || "" }); // Se debe adaptar
+      res.status(201).json(newCustomer);
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        res.status(400).json({ message: e.errors[0].message, field: e.errors[0].path[0] });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  });
+
+  app.delete("/api/customers/:id", async (req, res) => {
+    const id = Number(req.params.id);
+    await storage.deleteCustomer(id);
+    res.status(204).send();
+  });
+
+  app.get(api.contacts.list.path, async (req, res) => {
+    const contacts = await storage.getContacts();
+    res.json(contacts);
+  });
+
+  app.post(api.contacts.create.path, async (req, res) => {
+    try {
+      const contact = api.contacts.create.input.parse(req.body);
+      const newContact = await storage.createContact(contact);
+      res.status(201).json(newContact);
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        res.status(400).json({ message: e.errors[0].message, field: e.errors[0].path[0] });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  });
+
+  app.get(api.conversations.list.path, async (req, res) => {
+    const conversations = await storage.getConversations();
+    res.json(conversations);
+  });
+
+  app.get(api.conversations.get.path, async (req, res) => {
+    const id = Number(req.params.id);
+    const conversation = await storage.getConversation(id);
+    if (conversation) {
+      res.json(conversation);
+    } else {
+      res.status(404).json({ message: "Conversation not found" });
+    }
+  });
+
+  app.get(api.messages.list.path, async (req, res) => {
+    const id = Number(req.params.id);
+    const messages = await storage.getMessages(id);
+    res.json(messages);
+  });
+
+  app.post(api.messages.create.path, async (req, res) => {
+    try {
+      const conversationId = Number(req.params.id);
+      const messageData = api.messages.create.input.parse(req.body);
+      const newMessage = await storage.createMessage({ ...messageData, conversationId });
+      res.status(201).json(newMessage);
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        res.status(400).json({ message: e.errors[0].message, field: e.errors[0].path[0] });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  });
+
+  app.patch(api.conversations.toggleBot.path, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const { botStatus } = api.conversations.toggleBot.input.parse(req.body);
+      const updatedConversation = await storage.updateBotStatus(id, botStatus);
+      res.json(updatedConversation);
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        res.status(400).json({ message: e.errors[0].message, field: e.errors[0].path[0] });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  });
+
+  // ... (resto del archivo sin modificar)
+  return httpServer;
 }
