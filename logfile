@@ -672,3 +672,5 @@
 2026-01-13 08:01:01.554 UTC [117410] FATAL:  role "postgres" does not exist
 2026-01-13 08:02:01.514 UTC [117831] FATAL:  role "postgres" does not exist
 2026-01-13 08:03:48.347 UTC [118259] FATAL:  role "postgres" does not exist
+2026-01-13 08:44:18.981 UTC [129133] LOG:  invalid length of startup packet
+2026-01-13 08:44:18.987 UTC [129134] LOG:  invalid length of startup packet
