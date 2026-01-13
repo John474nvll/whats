@@ -1,3 +1,4 @@
+/*
 import { db } from "../../db";
 import { conversations, messages, contacts } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
@@ -28,4 +29,4 @@ export const chatStorage: IChatStorage = {
     return message;
   },
 };
-
+*/
