@@ -617,3 +617,17 @@
 2026-01-13 00:59:09.694 UTC [5047] ERROR:  relation "users" does not exist at character 86
 2026-01-13 00:59:09.694 UTC [5047] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
 2026-01-13 00:59:09.721 UTC [5047] LOG:  could not receive data from client: Connection reset by peer
+2026-01-13 01:00:17.917 UTC [5364] ERROR:  permission denied for schema public at character 14
+2026-01-13 01:00:17.917 UTC [5364] STATEMENT:  CREATE TABLE "artist_profiles" (
+		"id" serial PRIMARY KEY NOT NULL,
+		"user_id" text NOT NULL,
+		"artist_name" text NOT NULL,
+		"genre" text,
+		"bio" text,
+		"spotify_artist_id" text,
+		"youtube_channel_id" text,
+		"metadata" jsonb DEFAULT '{}'::jsonb,
+		"created_at" timestamp DEFAULT now()
+	);
+	
+2026-01-13 01:01:44.305 UTC [4320] LOG:  checkpoint starting: time
