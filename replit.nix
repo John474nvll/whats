@@ -17,7 +17,25 @@
     # This part of the configuration runs when the environment starts.
     # It creates the necessary directory for PostgreSQL to run correctly and starts the service.
     pre-init = ''
+      # Create a robust start_db.sh script with absolute paths
+      echo "#!/bin/bash" > start_db.sh
+      echo "set -e" >> start_db.sh
+      echo "PG_CTL=${pkgs.postgresql}/bin/pg_ctl" >> start_db.sh
+      echo "INITDB=${pkgs.postgresql}/bin/initdb" >> start_db.sh
+      echo 'PGDATA=/home/user/whats/pgdata' >> start_db.sh
+      echo 'LOGFILE=/home/user/whats/logfile' >> start_db.sh
+      echo 'if [ ! -d "$PGDATA" ]; then' >> start_db.sh
+      echo '  echo "Initializing database..."' >> start_db.sh
+      echo '  $INITDB -D "$PGDATA"' >> start_db.sh
+      echo 'fi' >> start_db.sh
+      echo 'echo "Starting PostgreSQL..."' >> start_db.sh
+      echo '$PG_CTL -D "$PGDATA" -l "$LOGFILE" start' >> start_db.sh
+      chmod +x start_db.sh
+
+      # Ensure the PostgreSQL run directory exists
       mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql
-      bash start_db.sh
+      
+      # Execute the script to start the database
+      ./start_db.sh
     '';
 }
