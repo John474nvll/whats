@@ -3,5 +3,6 @@
     "deploymentHostingUrl": "https://studio-9757109032-d8c05.web.app"
   },
   "cloud_run_deploy": {},
-  "gemini_api": {}
+  "gemini_api": {},
+  "secrets_manager": {}
 }
