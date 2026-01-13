@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-PG_CTL=/nix/store/j6y1jsy8f16ps655vf1i1z788mv11q83-postgresql-16.3/bin/pg_ctl
-INITDB=/nix/store/j6y1jsy8f16ps655vf1i1z788mv11q83-postgresql-16.3/bin/initdb
+PG_CTL=/nix/store/qsmz8pss6j0s2hj65bj5wgx5yrv2qfkz-postgresql-16.9/bin/pg_ctl
+INITDB=/nix/store/qsmz8pss6j0s2hj65bj5wgx5yrv2qfkz-postgresql-16.9/bin/initdb
 PGDATA=/home/user/whats/pgdata
 LOGFILE=/home/user/whats/logfile
 if [ ! -d "$PGDATA" ]; then
