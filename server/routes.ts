@@ -13,7 +13,7 @@ import { loginUser, registerUser, generateToken, verifyToken } from "./services/
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
 import { loginSchema, registerSchema, insertCustomerSchema, customers, operations } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
-import { db } from "./lib/db"; // Using Drizzle db
+import { db } from "./db"; // Using Drizzle db
 import { eq } from "drizzle-orm"; // Using Drizzle eq operator
 
 // Simple SSE implementation
