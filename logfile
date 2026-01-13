@@ -566,3 +566,7 @@
 2026-01-13 00:15:26.467 UTC [13740] FATAL:  role "replit" does not exist
 2026-01-13 00:17:13.521 UTC [14177] FATAL:  database "replit" does not exist
 2026-01-13 00:17:13.521 UTC [14178] FATAL:  database "replit" does not exist
+2026-01-13 00:18:01.966 UTC [14449] ERROR:  relation "users" does not exist at character 86
+2026-01-13 00:18:01.966 UTC [14449] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
+2026-01-13 00:18:01.966 UTC [14450] ERROR:  relation "channel_configs" does not exist at character 108
+2026-01-13 00:18:01.966 UTC [14450] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
