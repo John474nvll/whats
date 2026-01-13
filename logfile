@@ -584,3 +584,7 @@
 2026-01-13 00:40:15.925 UTC [13632] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.105 s, sync=0.006 s, total=0.125 s; sync files=2, longest=0.004 s, average=0.003 s; distance=3 kB, estimate=3892 kB
 2026-01-13 00:43:31.775 UTC [21724] FATAL:  lock file "postmaster.pid" already exists
 2026-01-13 00:43:31.775 UTC [21724] HINT:  Is another postmaster (PID 13631) running in data directory "/home/user/whats/pgdata"?
+2026-01-13 00:47:45.149 UTC [1540] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:47:45.149 UTC [1540] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:47:45.155 UTC [1540] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2026-01-13 00:47:45.157 UTC [1540] LOG:  database system is shut down
