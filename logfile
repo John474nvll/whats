@@ -571,3 +571,4 @@
 2026-01-13 00:18:01.966 UTC [14450] ERROR:  relation "channel_configs" does not exist at character 108
 2026-01-13 00:18:01.966 UTC [14450] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
 2026-01-13 00:20:15.623 UTC [13632] LOG:  checkpoint starting: time
+2026-01-13 00:22:04.085 UTC [13632] LOG:  checkpoint complete: wrote 1086 buffers (6.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=108.427 s, sync=0.020 s, total=108.462 s; sync files=418, longest=0.004 s, average=0.001 s; distance=5338 kB, estimate=5338 kB
