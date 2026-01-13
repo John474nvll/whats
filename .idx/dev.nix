@@ -15,4 +15,5 @@
         pkgs.nodePackages.tsx
         pkgs.drizzle-kit
     ];
+    pre-init = "mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql";
 }

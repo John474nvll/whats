@@ -14,4 +14,7 @@
         pkgs.nodePackages.tsx
         pkgs.drizzle-kit
     ];
+    # This part of the configuration runs when the environment starts.
+    # It creates the necessary directory for PostgreSQL to run correctly.
+    pre-init = "mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql";
 }
