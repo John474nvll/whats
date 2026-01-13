@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCustomerSchema, type InsertCustomer } from "../../../../shared/db/schema";
+import { insertCustomerSchema, type InsertCustomer } from "@shared/db/schema";
 import { queryClient } from "../../lib/queryClient";
 
 interface CustomerFormProps {
@@ -209,9 +209,9 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                        <SelectItem value="active">Activo</SelectItem>
-                        <SelectItem value="inactive">Inactivo</SelectItem>
-                        <SelectItem value="blocked">Bloqueado</SelectItem>
+                        <SelectItem value="active">Activo</MDBtn>
+                        <SelectItem value="inactive">Inactivo</MDBtn>
+                        <SelectItem value="blocked">Bloqueado</MDBtn>
                         </SelectContent>
                     </Select>
                     <FormMessage />
