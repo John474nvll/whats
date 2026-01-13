@@ -9,6 +9,7 @@
 
         # PostgreSQL database
         pkgs.postgresql
+        pkgs.terminator
 
         # Tools for running scripts from package.json
         pkgs.nodePackages.tsx
