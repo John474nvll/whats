@@ -15,6 +15,9 @@
         pkgs.drizzle-kit
     ];
     # This part of the configuration runs when the environment starts.
-    # It creates the necessary directory for PostgreSQL to run correctly.
-    pre-init = "mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql";
+    # It creates the necessary directory for PostgreSQL to run correctly and starts the service.
+    pre-init = ''
+      mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql
+      bash start_db.sh
+    '';
 }
