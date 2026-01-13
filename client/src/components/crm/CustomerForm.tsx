@@ -1,17 +1,17 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useToast } from "../../hooks/use-toast";
 import { Plus, Edit } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCustomerSchema, type InsertCustomer } from "@shared/db/schema"; // Updated path
-import { queryClient } from "@/lib/queryClient";
+import { insertCustomerSchema, type InsertCustomer } from "../../../shared/db/schema";
+import { queryClient } from "../../lib/queryClient";
 
 interface CustomerFormProps {
   customer?: any;

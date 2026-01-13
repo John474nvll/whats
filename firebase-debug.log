@@ -8145,3 +8145,107 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2026-01-13T06:53:55.785Z] ----------------------------------------------------------------------
+[debug] [2026-01-13T06:53:55.787Z] Command:       /nix/store/ws50yvm6vzlzf7jzz6n7xh4szddrack1-nodejs-20.19.1/bin/node /nix/store/c776mhyhgykcld7p90ajrka149ifn61a-firebase-tools-14.26.0/lib/node_modules/firebase-tools/lib/bin/firebase.js emulators:start
+[debug] [2026-01-13T06:53:55.787Z] CLI Version:   14.26.0
+[debug] [2026-01-13T06:53:55.787Z] Platform:      linux
+[debug] [2026-01-13T06:53:55.788Z] Node Version:  v20.19.1
+[debug] [2026-01-13T06:53:55.788Z] Time:          Tue Jan 13 2026 06:53:55 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-01-13T06:53:55.788Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-13T06:53:56.095Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:53:56.095Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:53:56.100Z] >>> [apiv2][query] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 [none]
+[debug] [2026-01-13T06:53:56.755Z] <<< [apiv2][status] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 200
+[debug] [2026-01-13T06:53:56.756Z] <<< [apiv2][body] GET https://monospace-pa.googleapis.com/v1/workspaces/whatsgit-49237758 {"workspaceId":"whatsgit-49237758","name":"whats.git","workspaceRedirectUrl":"firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev","status":"WORKSPACE_STATUS_RUNNING","lastAccessDatetime":"2026-01-13T06:17:37.617976Z","workspaceTemplate":"WORKSPACE_TEMPLATE_FLUTTER","owner":"SELF","serviceAccountEmail":"msp-1963245825146535087@monospace-4.iam.gserviceaccount.com","gitRepoUrl":"https://github.com/John474nvll/whats.git","enableNix":true,"ownerEmail":"john474nvallejo@gmail.com","workstationAccessToken":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiZmlyZWJhc2Utd2hhdHNnaXQtMTc2ODEwMjEyMTU4OC5jbHVzdGVyLWY3M2lia2t1aWplNjZ3c3N1b250ZHRieDZxLmNsb3Vkd29ya3N0YXRpb25zLmRldiIsImlhdCI6MTc2ODI4NzIzNiwiZXhwIjoxNzY4MzczNjM2fQ.RB4__hHO93_P-I8LXjoRoe6Hac3d74hw4Fu5zMW8K8kIlWFAM0cCe3-AdIlay8rkSAa6lRDc8Pybc4vg4mYZa0m_E1iKxapAW3z-XeYuV0w6T7Ti8lL7DVK0Wf2UdEj5hyD46Ul591arZEEwKV9mSz6TW2wy1YCDK6rqNWp5xegIwlWJuoUodsKsyP4ry5qc9S58l8szwxzzPavfeEFDTFdokt6yE4bmHVhYt__ACRit11iIp6pyGlPscsHgsFXM_kxuETsCS9AMW9J6VviDYGDRB0BBT7vUqEz2CnKNBKthM62t93PjaobvsqLZUWco-o3-fFllypb8ovkRNqtfoQ","firebaseProjectId":"studio-9757109032-d8c05"}
+[debug] [2026-01-13T06:53:56.757Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-13T06:53:56.757Z] > authorizing via signed-in user (john474nvallejo@gmail.com)
+[info] i  emulators: Starting emulators: hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: hosting"}}
+[warn] ⚠  hub: Error when trying to check port 4402 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:4402 {"metadata":{"emulator":{"name":"hub"},"message":"Error when trying to check port 4402 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:4402"}}
+[warn] ⚠  hub: Port 4400 is available on 127.0.0.1 but not ::1. This may cause issues with some clients. {"metadata":{"emulator":{"name":"hub"},"message":"Port 4400 is available on 127.0.0.1 but not ::1. This may cause issues with some clients."}}
+[warn] ⚠  hub: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json {"metadata":{"emulator":{"name":"hub"},"message":"If you encounter connectivity issues, consider switching to a different port or explicitly specifying \"host\": \"<ip address>\" instead of hostname in firebase.json"}}
+[warn] ⚠  hub: emulator hub unable to start on port 4400, starting on 4402 instead. {"metadata":{"emulator":{"name":"hub"},"message":"emulator hub unable to start on port 4400, starting on 4402 instead."}}
+[warn] ⚠  logging: Error when trying to check port 4502 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:4502 {"metadata":{"emulator":{"name":"logging"},"message":"Error when trying to check port 4502 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:4502"}}
+[warn] ⚠  logging: Port 4500 is available on 127.0.0.1 but not ::1. This may cause issues with some clients. {"metadata":{"emulator":{"name":"logging"},"message":"Port 4500 is available on 127.0.0.1 but not ::1. This may cause issues with some clients."}}
+[warn] ⚠  logging: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json {"metadata":{"emulator":{"name":"logging"},"message":"If you encounter connectivity issues, consider switching to a different port or explicitly specifying \"host\": \"<ip address>\" instead of hostname in firebase.json"}}
+[warn] ⚠  logging: Logging Emulator unable to start on port 4500, starting on 4502 instead. {"metadata":{"emulator":{"name":"logging"},"message":"Logging Emulator unable to start on port 4500, starting on 4502 instead."}}
+[warn] ⚠  hosting: Error when trying to check port 5003 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:5003 {"metadata":{"emulator":{"name":"hosting"},"message":"Error when trying to check port 5003 on ::1: Error: listen EADDRNOTAVAIL: address not available ::1:5003"}}
+[warn] ⚠  hosting: Port 5000 is available on 127.0.0.1 but not ::1. This may cause issues with some clients. {"metadata":{"emulator":{"name":"hosting"},"message":"Port 5000 is available on 127.0.0.1 but not ::1. This may cause issues with some clients."}}
+[warn] ⚠  hosting: If you encounter connectivity issues, consider switching to a different port or explicitly specifying "host": "<ip address>" instead of hostname in firebase.json {"metadata":{"emulator":{"name":"hosting"},"message":"If you encounter connectivity issues, consider switching to a different port or explicitly specifying \"host\": \"<ip address>\" instead of hostname in firebase.json"}}
+[warn] ⚠  hosting: Hosting Emulator unable to start on port 5000, starting on 5003 instead. {"metadata":{"emulator":{"name":"hosting"},"message":"Hosting Emulator unable to start on port 5000, starting on 5003 instead."}}
+[debug] [2026-01-13T06:53:56.770Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4402}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4502}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5003}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-01-13T06:53:56.774Z] Emulator locator file path: /tmp/hub-studio-9757109032-d8c05.json
+[warn] ⚠  emulators: It seems that you are running multiple instances of the emulator suite for project studio-9757109032-d8c05. This may result in unexpected behavior. 
+[debug] [2026-01-13T06:53:56.775Z] [hub] writing locator at /tmp/hub-studio-9757109032-d8c05.json
+[debug] [2026-01-13T06:53:56.785Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:53:56.785Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:53:56.785Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 [none]
+[debug] [2026-01-13T06:53:56.961Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 200
+[debug] [2026-01-13T06:53:56.961Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 {"projectId":"studio-9757109032-d8c05","projectNumber":"1072243655316","displayName":"crm whats","name":"projects/studio-9757109032-d8c05","resources":{"hostingSite":"studio-9757109032-d8c05"},"state":"ACTIVE","etag":"1_823736de-8fcd-4457-af19-c63fdabe2437"}
+[info] 
+   Thank you for trying our experimental support for Vite on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+   The integration is known to work with Vite version 3 - 6. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-01-13T06:54:32.847Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "studio-9757109032-d8c05",
+      "rewrites": [],
+      "redirects": [],
+      "headers": [],
+      "cleanUrls": true,
+      "public": ".firebase/studio-9757109032-d8c05/hosting",
+      "webFramework": "vite"
+    }
+  ]
+}
+[debug] [2026-01-13T06:54:32.852Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:54:32.852Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:54:32.853Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites 
+[debug] [2026-01-13T06:54:33.045Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites 200
+[debug] [2026-01-13T06:54:33.045Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites {"sites":[{"name":"projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05","defaultUrl":"https://studio-9757109032-d8c05.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2026-01-13T06:54:33.046Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:54:33.046Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:54:33.046Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config [none]
+[debug] [2026-01-13T06:54:33.518Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config 200
+[debug] [2026-01-13T06:54:33.518Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config {"projectId":"studio-9757109032-d8c05","appId":"1:1072243655316:web:6ae4300ce346f20a376a81","storageBucket":"studio-9757109032-d8c05.firebasestorage.app","apiKey":"AIzaSyBGMWq1mqOTpbiWgKsBp6k04WDYMkMXazM","authDomain":"studio-9757109032-d8c05.firebaseapp.com","messagingSenderId":"1072243655316","projectNumber":"1072243655316","version":"2"}
+[info] i  hosting[studio-9757109032-d8c05]: Serving hosting files from: .firebase/studio-9757109032-d8c05/hosting {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: .firebase/studio-9757109032-d8c05/hosting"}}
+[info] ✔  hosting[studio-9757109032-d8c05]: Local server: http://127.0.0.1:5003 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: http://127.0.0.1:5003"}}
+[warn] ⚠  emulators: The Emulator UI is not starting because none of the running emulators have a UI component. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting because none of the running emulators have a UI component."}}
+[debug] [2026-01-13T06:54:33.563Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: connect ECONNREFUSED 127.0.0.1:40001. If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┐
+│ Emulator │ Host:Port      │
+├──────────┼────────────────┤
+│ Hosting  │ 127.0.0.1:5003 │
+└──────────┴────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4402
+  Other reserved ports: 4502
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] i  hosting: 127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] "GET / HTTP/1.1" 200 3550 "https://studio.firebase.google.com/" "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] \"GET / HTTP/1.1\" 200 3550 \"https://studio.firebase.google.com/\" \"Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] "GET / HTTP/1.1" 304 - "https://studio.firebase.google.com/" "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] \"GET / HTTP/1.1\" 304 - \"https://studio.firebase.google.com/\" \"Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] "GET /@vite/client HTTP/1.1" 200 179031 "https://5003-firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev/" "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] \"GET /@vite/client HTTP/1.1\" 200 179031 \"https://5003-firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev/\" \"Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] "GET /src/main.tsx HTTP/1.1" 200 2631 "https://5003-firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev/" "Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [13/Jan/2026:06:54:39 +0000] \"GET /src/main.tsx HTTP/1.1\" 200 2631 \"https://5003-firebase-whatsgit-1768102121588.cluster-f73ibkkuije66wssuontdtbx6q.cloudworkstations.dev/\" \"Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\""}}
