@@ -4,7 +4,7 @@
 { pkgs }: {
     deps = [
         # Node.js and npm
-        pkgs.nodejs-22_x
+        pkgs.nodejs-20_x
         pkgs.nodePackages.npm
 
         # PostgreSQL database
