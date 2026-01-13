@@ -206,6 +206,9 @@ export default function Login() {
                   { user: "socialadmin", pass: "SocialAdmin2026!" },
                   { user: "ventas_a", pass: "VentasA2026!" },
                   { user: "ventas_b", pass: "VentasB2026!" },
+                  { user: "soporte_a", pass: "SoporteA2026!" },
+                  { user: "marketing_a", pass: "MarketingA2026!" },
+                  { user: "analista_a", pass: "AnalistaA2026!" },
                 ].map((acc, i) => (
                   <Button
                     key={i}
