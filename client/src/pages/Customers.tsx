@@ -6,16 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, Filter, Trash2, Edit, MessageCircle, Instagram, Facebook, User } from "lucide-react";
+import { Plus, Search, Filter, Trash2, Edit, MessageCircle, Instagram, Facebook, User, Home, MapPin, PawPrint } from "lucide-react";
 import { CustomerForm } from "@/components/crm/CustomerForm";
 import { queryClient } from "@/lib/queryClient";
+import { Customer } from "@shared/schema"; // Import the type
 
 export default function Customers() {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const { data: customers, isLoading } = useQuery<any[]>({
+  const { data: customers, isLoading } = useQuery<Customer[]>({ // Use the Customer type
     queryKey: ["/api/customers"],
   });
 
@@ -27,7 +28,7 @@ export default function Customers() {
       queryClient.invalidateQueries({ queryKey: ["/api/customers"] });
       toast({ title: "Cliente eliminado" });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
@@ -36,12 +37,14 @@ export default function Customers() {
     const searchMatch = 
       c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.phone?.includes(searchTerm);
+      c.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.farmName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.tags?.toLowerCase().includes(searchTerm.toLowerCase());
     const statusMatch = statusFilter === "all" || c.status === statusFilter;
     return searchMatch && statusMatch;
   }) || [];
 
-  const getPlatformIcon = (platform: string) => {
+  const getPlatformIcon = (platform: string | null) => {
     switch (platform) {
       case "whatsapp": return <MessageCircle className="h-4 w-4 text-green-500" />;
       case "instagram": return <Instagram className="h-4 w-4 text-pink-500" />;
@@ -50,7 +53,7 @@ export default function Customers() {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
       case "active": return "bg-green-500/20 text-green-600 border-green-500/30";
       case "inactive": return "bg-yellow-500/20 text-yellow-600 border-yellow-500/30";
@@ -68,7 +71,7 @@ export default function Customers() {
             <h1 className="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
               Gestión de Clientes
             </h1>
-            <p className="text-muted-foreground text-lg">Administra tu base de datos de clientes y contactos</p>
+            <p className="text-muted-foreground text-lg">Administra tu base de datos de clientes y contactos de la industria ganadera.</p>
           </div>
           <CustomerForm />
         </div>
@@ -78,7 +81,7 @@ export default function Customers() {
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Buscar por nombre, email o teléfono..."
+              placeholder="Buscar por nombre, finca, email, teléfono o etiqueta..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-12 bg-slate-800/50 border-slate-700 h-11 rounded-lg w-full"
@@ -103,7 +106,7 @@ export default function Customers() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-48 rounded-lg bg-slate-800/50 animate-pulse border border-slate-700" />
+              <div key={i} className="h-64 rounded-lg bg-slate-800/50 animate-pulse border border-slate-700" />
             ))}
           </div>
         ) : filteredCustomers.length === 0 ? (
@@ -132,22 +135,31 @@ export default function Customers() {
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="flex-1">
-                    {customer.phone && (
-                      <p className="text-sm text-slate-400">📱 {customer.phone}</p>
-                    )}
-                    {customer.tags && customer.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {customer.tags.map((tag: string) => (
-                          <Badge key={tag} variant="secondary" className="text-xs rounded-full">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex gap-2 pt-2">
+                <CardContent className="space-y-3 flex-1 flex flex-col justify-between text-sm">
+                    <div className="flex-1 space-y-2 text-slate-400">
+                        {customer.farmName && (
+                            <p className="flex items-center gap-2"><Home className="h-4 w-4 text-muted-foreground" /> {customer.farmName}</p>
+                        )}
+                        {customer.phone && (
+                            <p className="flex items-center gap-2">📱 {customer.phone}</p>
+                        )}
+                         {customer.address && (
+                            <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-muted-foreground" /> {customer.address}</p>
+                        )}
+                        {customer.animalCount && (
+                             <p className="flex items-center gap-2"><PawPrint className="h-4 w-4 text-muted-foreground" /> {customer.animalCount} animales</p>
+                        )}
+                        {customer.tags && customer.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-2">
+                            {customer.tags.split(',').map((tag) => tag.trim()).filter(Boolean).map((tag: string) => (
+                            <Badge key={tag} variant="secondary" className="text-xs rounded-full">
+                                {tag}
+                            </Badge>
+                            ))}
+                        </div>
+                        )}
+                    </div>
+                  <div className="flex gap-2 pt-3">
                     <CustomerForm customer={customer} />
                     <Button
                       size="sm"

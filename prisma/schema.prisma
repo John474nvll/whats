@@ -18,7 +18,7 @@ model Customer {
   animalCount Int?
   platform    String   @default("whatsapp")
   status      String   @default("active")
-  tags        String[]
+  tags        String? // Stored as a comma-separated string
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   operations  Operation[]
@@ -37,20 +37,21 @@ model Operation {
 }
 
 model Contact {
-  id        Int      @id @default(autoincrecrement())
+  id        Int      @id @default(autoincrement())
   name      String?
   phone     String   @unique
   platform  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  inboxes   Inbox[]
 }
 
 model Inbox {
-  id        Int      @id @default(autoincrement())
-  contactId Int
-  contact   Contact  @relation(fields: [contactId], references: [id])
+  id          Int      @id @default(autoincrement())
+  contactId   Int
+  contact     Contact  @relation(fields: [contactId], references: [id])
   lastMessage String
-  status    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
