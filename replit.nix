@@ -3,7 +3,7 @@
 # It's used by your IDE to install the necessary packages.
 { pkgs }: {
     deps = [
-        # Node.js and npm
+        # Node.js and npm (using a compatible version)
         pkgs.nodejs-22_x
         pkgs.nodePackages.npm
 
@@ -28,14 +28,16 @@
       echo '  echo "Initializing database..."' >> start_db.sh
       echo '  $INITDB -D "$PGDATA"' >> start_db.sh
       echo 'fi' >> start_db.sh
-      echo 'echo "Starting PostgreSQL..."' >> start_db.sh
-      echo '$PG_CTL -D "$PGDATA" -l "$LOGFILE" start' >> start_db.sh
+      echo 'echo "Starting PostgreSQL and waiting for it to be ready..."' >> start_db.sh
+      # Use -w to wait for the server to start
+      echo '$PG_CTL -D "$PGDATA" -l "$LOGFILE" -w start' >> start_db.sh
       chmod +x start_db.sh
 
       # Ensure the PostgreSQL run directory exists
       mkdir -p /run/postgresql && chown -R $USER:$USER /run/postgresql
       
       # Execute the script to start the database
+      # This will now block until the database is ready
       ./start_db.sh
     '';
 }
