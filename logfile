@@ -654,3 +654,13 @@
 2026-01-13 07:40:15.005 UTC [111447] LOG:  listening on IPv4 address "127.0.0.1", port 5432
 2026-01-13 07:40:15.009 UTC [111447] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
 2026-01-13 07:40:15.011 UTC [111447] LOG:  database system is shut down
+2026-01-13 07:42:49.328 UTC [111989] LOG:  starting PostgreSQL 16.9 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.3.0, 64-bit
+2026-01-13 07:42:49.328 UTC [111989] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 07:42:49.332 UTC [111989] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2026-01-13 07:42:49.343 UTC [111993] LOG:  database system was shut down at 2026-01-13 07:42:49 UTC
+2026-01-13 07:42:49.362 UTC [111989] LOG:  database system is ready to accept connections
+2026-01-13 07:42:57.688 UTC [112051] LOG:  invalid length of startup packet
+2026-01-13 07:42:57.693 UTC [112052] LOG:  invalid length of startup packet
+2026-01-13 07:42:57.851 UTC [112053] LOG:  invalid length of startup packet
+2026-01-13 07:42:57.856 UTC [112054] LOG:  invalid length of startup packet
+2026-01-13 07:43:07.406 UTC [112127] FATAL:  role "postgres" does not exist
