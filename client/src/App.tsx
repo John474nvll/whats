@@ -33,6 +33,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
+      <Route path="/login" component={Login} />
       <Route path="/inbox" component={Inbox} />
       <Route path="/contacts" component={Contacts} />
       <Route path="/customers" component={Customers} />
@@ -120,29 +121,10 @@ function AppContent() {
 }
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setIsAuthenticated(!!localStorage.getItem("token"));
-    };
-    window.addEventListener("storage", handleStorageChange);
-    const interval = setInterval(() => {
-      const token = !!localStorage.getItem("token");
-      if (token !== isAuthenticated) {
-        setIsAuthenticated(token);
-      }
-    }, 500);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
-    };
-  }, [isAuthenticated]);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {isAuthenticated ? <AppContent /> : <Login />}
+        <AppContent />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

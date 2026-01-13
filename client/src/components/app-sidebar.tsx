@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -25,35 +25,28 @@ const menuGroups = [
     ],
   },
   {
-    label: "📱 CANALES SOCIALES",
+    label: "📱 CRM",
     items: [
       { title: "Inbox", url: "/inbox", icon: MessageSquare },
       { title: "Contacts", url: "/contacts", icon: Users },
       { title: "Customers", url: "/customers", icon: Users },
-      { title: "Account Links", url: "/accounts", icon: LinkIcon },
     ],
   },
   {
     label: "📢 MARKETING",
     items: [
-      { title: "Campaigns", url: "/campaigns", icon: Megaphone },
-      { title: "Products", url: "/products", icon: Package },
-      { title: "Custom Links", url: "/links", icon: LinkIcon },
-      { title: "Funnels", url: "/funnels", icon: GitFork },
-      { title: "Analytics", url: "/analytics", icon: BarChart3 },
+        { title: "Campaigns", url: "/campaigns", icon: Megaphone },
+        { title: "Products", url: "/products", icon: Package },
+        { title: "Account Links", url: "/accounts", icon: LinkIcon },
+        { title: "Custom Links", url: "/links", icon: LinkIcon },
+        { title: "Funnels", url: "/funnels", icon: GitFork },
+        { title: "Analytics", url: "/analytics", icon: BarChart3 },
     ],
   },
   {
-    label: "🎵 CONTENIDO",
+    label: "✨ IA & Automatización",
     items: [
-      { title: "Music Studio", url: "/music", icon: Music },
-      { title: "Spotify Artist", url: "/spotify-artist", icon: Music },
       { title: "AI Generator", url: "/ai-generator", icon: Sparkles },
-    ],
-  },
-  {
-    label: "🔗 Plataformas",
-    items: [
       { title: "Plataformas", url: "/platforms", icon: Smartphone },
     ],
   },
