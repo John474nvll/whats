@@ -11189,3 +11189,66 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [debug] [2026-01-13T06:57:24.270Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 [none]
 [debug] [2026-01-13T06:57:24.555Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 200
 [debug] [2026-01-13T06:57:24.555Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05 {"projectId":"studio-9757109032-d8c05","projectNumber":"1072243655316","displayName":"crm whats","name":"projects/studio-9757109032-d8c05","resources":{"hostingSite":"studio-9757109032-d8c05"},"state":"ACTIVE","etag":"1_823736de-8fcd-4457-af19-c63fdabe2437"}
+[info] 
+   Thank you for trying our experimental support for Vite on Firebase Hosting.
+   While this integration is maintained by Googlers it is not a supported Firebase product.
+   Issues filed on GitHub will be addressed on a best-effort basis by maintainers and other community members.
+   The integration is known to work with Vite version 3 - 6. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/frameworks-overview
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-01-13T06:58:04.472Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "studio-9757109032-d8c05",
+      "rewrites": [],
+      "redirects": [],
+      "headers": [],
+      "cleanUrls": true,
+      "public": ".firebase/studio-9757109032-d8c05/hosting",
+      "webFramework": "vite"
+    }
+  ]
+}
+[debug] [2026-01-13T06:58:04.480Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:58:04.480Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:58:04.481Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites 
+[debug] [2026-01-13T06:58:04.683Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites 200
+[debug] [2026-01-13T06:58:04.683Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/sites {"sites":[{"name":"projects/studio-9757109032-d8c05/sites/studio-9757109032-d8c05","defaultUrl":"https://studio-9757109032-d8c05.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2026-01-13T06:58:04.683Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:58:04.683Z] Checked if tokens are valid: true, expires at: 1768289049943
+[debug] [2026-01-13T06:58:04.684Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config [none]
+[debug] [2026-01-13T06:58:05.039Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config 200
+[debug] [2026-01-13T06:58:05.040Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/studio-9757109032-d8c05/webApps/-/config {"projectId":"studio-9757109032-d8c05","appId":"1:1072243655316:web:6ae4300ce346f20a376a81","storageBucket":"studio-9757109032-d8c05.firebasestorage.app","apiKey":"AIzaSyBGMWq1mqOTpbiWgKsBp6k04WDYMkMXazM","authDomain":"studio-9757109032-d8c05.firebaseapp.com","messagingSenderId":"1072243655316","projectNumber":"1072243655316","version":"2"}
+[info] i  hosting[studio-9757109032-d8c05]: Serving hosting files from: .firebase/studio-9757109032-d8c05/hosting {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: .firebase/studio-9757109032-d8c05/hosting"}}
+[info] ✔  hosting[studio-9757109032-d8c05]: Local server: http://127.0.0.1:5002 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: http://127.0.0.1:5002"}}
+[warn] ⚠  emulators: The Emulator UI is not starting because none of the running emulators have a UI component. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting because none of the running emulators have a UI component."}}
+[debug] [2026-01-13T06:58:05.087Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: connect ECONNREFUSED 127.0.0.1:40001. If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┐
+│ Emulator │ Host:Port      │
+├──────────┼────────────────┤
+│ Hosting  │ 127.0.0.1:5002 │
+└──────────┴────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4401
+  Other reserved ports: 4501
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
