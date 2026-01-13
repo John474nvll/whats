@@ -62,6 +62,21 @@ export const inboxes = sqliteTable("inboxes", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const conversations = sqliteTable("conversations", {
+  id: integer("id").primaryKey(),
+  contactId: integer("contact_id").references(() => contacts.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const messages = sqliteTable("messages", {
+  id: integer("id").primaryKey(),
+  conversationId: integer("conversation_id").notNull().references(() => conversations.id),
+  role: text("role").notNull(),
+  content: text("content").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+
 // === RELATIONS ===
 
 export const customerRelations = relations(customers, ({ many }) => ({
@@ -77,12 +92,28 @@ export const operationRelations = relations(operations, ({ one }) => ({
 
 export const contactRelations = relations(contacts, ({ many }) => ({
   inboxes: many(inboxes),
+  conversations: many(conversations),
 }));
 
 export const inboxRelations = relations(inboxes, ({ one }) => ({
   contact: one(contacts, {
     fields: [inboxes.contactId],
     references: [contacts.id],
+  }),
+}));
+
+export const conversationRelations = relations(conversations, ({ one, many }) => ({
+  contact: one(contacts, {
+    fields: [conversations.contactId],
+    references: [contacts.id],
+  }),
+  messages: many(messages),
+}));
+
+export const messageRelations = relations(messages, ({ one }) => ({
+  conversation: one(conversations, {
+    fields: [messages.conversationId],
+    references: [conversations.id],
   }),
 }));
 
@@ -101,6 +132,8 @@ export const insertCustomerSchema = createInsertSchema(customers, {
 export const insertOperationSchema = createInsertSchema(operations);
 export const insertContactSchema = createInsertSchema(contacts);
 export const insertInboxSchema = createInsertSchema(inboxes);
+export const insertConversationSchema = createInsertSchema(conversations);
+export const insertMessageSchema = createInsertSchema(messages);
 
 // === TYPES ===
 
@@ -115,3 +148,9 @@ export type InsertContact = z.infer<typeof insertContactSchema>;
 
 export type Inbox = typeof inboxes.$inferSelect;
 export type InsertInbox = z.infer<typeof insertInboxSchema>;
+
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = z.infer<typeof insertConversationSchema>;
+
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;

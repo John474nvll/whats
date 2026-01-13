@@ -1,91 +1,34 @@
-import { z } from 'zod';
-import { insertContactSchema, contacts } from './schema.ts';
+import { z } from "zod";
+import { insertChannelConfigSchema, channelConfigs } from "../server/db";
 
 export const errorSchemas = {
-  validation: z.object({
-    message: z.string(),
-    field: z.string().optional(),
+  400: z.object({
+    error: z.string(),
+    issues: z.array(z.object({
+      code: z.string(),
+      expected: z.string(),
+      received: z.string(),
+      path: z.array(z.string()),
+      message: z.string(),
+    })),
   }),
-  notFound: z.object({
+  401: z.object({
+    error: z.string(),
     message: z.string(),
   }),
-  internal: z.object({
+  404: z.object({
+    error: z.string(),
+    message: z.string(),
+  }),
+  500: z.object({
+    error: z.string(),
     message: z.string(),
   }),
 };
 
+export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>
+
 export const api = {
-  contacts: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/contacts',
-      responses: {
-        200: z.array(z.custom<typeof contacts.$inferSelect>()),
-      },
-    },
-    get: {
-      method: 'GET' as const,
-      path: '/api/contacts/:id',
-      responses: {
-        200: z.custom<typeof contacts.$inferSelect>(),
-        404: errorSchemas.notFound,
-      },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/contacts',
-      input: insertContactSchema,
-      responses: {
-        201: z.custom<typeof contacts.$inferSelect>(),
-        400: errorSchemas.validation,
-      },
-    },
-  },
-  /*
-  conversations: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/conversations',
-      responses: {
-        200: z.array(z.custom<typeof conversations.$inferSelect & { contact: typeof contacts.$inferSelect }>()),
-      },
-    },
-    get: {
-      method: 'GET' as const,
-      path: '/api/conversations/:id',
-      responses: {
-        200: z.custom<typeof conversations.$inferSelect & { messages: typeof messages.$inferSelect[] }>(),
-        404: errorSchemas.notFound,
-      },
-    },
-    toggleBot: {
-      method: 'PATCH' as const,
-      path: '/api/conversations/:id/bot',
-      input: z.object({ botStatus: z.boolean() }),
-      responses: {
-        200: z.custom<typeof conversations.$inferSelect>(),
-        404: errorSchemas.notFound,
-      },
-    },
-  },
-  messages: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/conversations/:id/messages',
-      responses: {
-        200: z.array(z.custom<typeof messages.$inferSelect>()),
-      },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/conversations/:id/messages',
-      input: insertMessageSchema.omit({ conversationId: true }),
-      responses: {
-        201: z.custom<typeof messages.$inferSelect>(),
-        400: errorSchemas.validation,
-      },
-    },
-  },
   channels: {
     list: {
       method: 'GET' as const,
@@ -104,17 +47,12 @@ export const api = {
       },
     },
   },
-  */
 };
 
-export function buildUrl(path: string, params?: Record<string, string | number>): string {
+export function buildUrl(path: string, params: Record<string, string>) {
   let url = path;
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      if (url.includes(`:${key}`)) {
-        url = url.replace(`:${key}`, String(value));
-      }
-    });
+  for (const key in params) {
+    url = url.replace(`:${key}`, params[key]);
   }
   return url;
 }
