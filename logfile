@@ -562,3 +562,5 @@
 2026-01-13 00:15:15.600 UTC [13631] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
 2026-01-13 00:15:15.610 UTC [13634] LOG:  database system was shut down at 2026-01-13 00:15:04 UTC
 2026-01-13 00:15:15.617 UTC [13631] LOG:  database system is ready to accept connections
+2026-01-13 00:15:26.466 UTC [13739] FATAL:  role "replit" does not exist
+2026-01-13 00:15:26.467 UTC [13740] FATAL:  role "replit" does not exist
