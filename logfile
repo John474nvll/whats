@@ -592,3 +592,28 @@
 2026-01-13 00:49:34.001 UTC [2192] LOG:  listening on IPv4 address "127.0.0.1", port 5432
 2026-01-13 00:49:34.005 UTC [2192] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
 2026-01-13 00:49:34.006 UTC [2192] LOG:  database system is shut down
+2026-01-13 00:56:01.215 UTC [3909] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:56:01.215 UTC [3909] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:56:01.219 UTC [3909] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2026-01-13 00:56:01.221 UTC [3909] LOG:  database system is shut down
+2026-01-13 00:56:44.278 UTC [4319] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:56:44.278 UTC [4319] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:56:44.282 UTC [4319] LOG:  listening on Unix socket "/run/postgresql/.s.PGSQL.5432"
+2026-01-13 00:56:44.291 UTC [4322] LOG:  database system was shut down at 2026-01-13 00:49:19 UTC
+2026-01-13 00:56:44.299 UTC [4319] LOG:  database system is ready to accept connections
+2026-01-13 00:56:48.326 UTC [4344] LOG:  invalid length of startup packet
+2026-01-13 00:56:48.331 UTC [4345] LOG:  invalid length of startup packet
+2026-01-13 00:56:48.479 UTC [4346] LOG:  invalid length of startup packet
+2026-01-13 00:56:48.483 UTC [4347] LOG:  invalid length of startup packet
+2026-01-13 00:57:00.749 UTC [4431] FATAL:  role "replit" does not exist
+2026-01-13 00:57:00.749 UTC [4432] FATAL:  role "replit" does not exist
+2026-01-13 00:57:50.278 UTC [4611] FATAL:  database "user" does not exist
+2026-01-13 00:58:14.191 UTC [4737] FATAL:  role "replit" does not exist
+2026-01-13 00:58:14.191 UTC [4738] FATAL:  role "replit" does not exist
+2026-01-13 00:58:37.924 UTC [4873] FATAL:  database "replit" does not exist
+2026-01-13 00:58:37.925 UTC [4874] FATAL:  database "replit" does not exist
+2026-01-13 00:59:09.692 UTC [5048] ERROR:  relation "channel_configs" does not exist at character 108
+2026-01-13 00:59:09.692 UTC [5048] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
+2026-01-13 00:59:09.694 UTC [5047] ERROR:  relation "users" does not exist at character 86
+2026-01-13 00:59:09.694 UTC [5047] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
+2026-01-13 00:59:09.721 UTC [5047] LOG:  could not receive data from client: Connection reset by peer
