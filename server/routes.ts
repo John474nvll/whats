@@ -1,5 +1,5 @@
 
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
@@ -17,9 +17,13 @@ import { db } from "./lib/db"; // Using Drizzle db
 import { eq } from "drizzle-orm"; // Using Drizzle eq operator
 
 // Simple SSE implementation
-let clients: { id: number; res: any }[] = [];
+interface SseClient {
+  id: number;
+  res: Response;
+}
+let clients: SseClient[] = [];
 
-function broadcast(event: string, data: any) {
+function broadcast(event: string, data: unknown) {
   clients.forEach(client => {
     client.res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   });
@@ -39,16 +43,17 @@ export async function registerRoutes(
   // ... (user seeding logic remains the same)
 
   // Customer CRUD endpoints
-  app.get("/api/customers", async (req, res) => {
+  app.get("/api/customers", async (req: Request, res: Response) => {
     try {
       const allCustomers = await db.select().from(customers);
       res.json(allCustomers);
-    } catch (error: any) {
-      res.status(500).json({ error: "Failed to fetch customers", details: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to fetch customers", details: errorMessage });
     }
   });
 
-  app.get("/api/customers/:id", async (req, res) => {
+  app.get("/api/customers/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       const customer = await db.select().from(customers).where(eq(customers.id, id));
@@ -56,25 +61,27 @@ export async function registerRoutes(
         return res.status(404).json({ error: "Customer not found" });
       }
       res.json(customer[0]);
-    } catch (error: any) {
-      res.status(500).json({ error: "Failed to fetch customer", details: error.message });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to fetch customer", details: errorMessage });
     }
   });
 
-  app.post("/api/customers", async (req, res) => {
+  app.post("/api/customers", async (req: Request, res: Response) => {
     try {
       const data = insertCustomerSchema.parse(req.body);
       const newCustomer = await db.insert(customers).values(data).returning();
       res.status(201).json(newCustomer[0]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: "Invalid input", details: error.flatten() });
       }
-      res.status(500).json({ error: "Failed to create customer", details: error.message });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to create customer", details: errorMessage });
     }
   });
 
-  app.put("/api/customers/:id", async (req, res) => {
+  app.put("/api/customers/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       const data = insertCustomerSchema.parse(req.body);
@@ -83,15 +90,16 @@ export async function registerRoutes(
         return res.status(404).json({ error: "Customer not found" });
       }
       res.json(updatedCustomer[0]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: "Invalid input", details: error.flatten() });
       }
-      res.status(500).json({ error: "Failed to update customer", details: error.message });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to update customer", details: errorMessage });
     }
   });
 
-  app.delete("/api/customers/:id", async (req, res) => {
+  app.delete("/api/customers/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       const deletedCustomer = await db.delete(customers).where(eq(customers.id, id)).returning();
@@ -99,21 +107,23 @@ export async function registerRoutes(
         return res.status(404).json({ error: "Customer not found to delete" });
       }
       res.json({ message: "Customer deleted successfully" });
-    } catch (error: any) {
-      if (error.message.includes("FOREIGN KEY constraint failed")) {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes("FOREIGN KEY constraint failed")) {
         return res.status(409).json({ error: "Cannot delete customer because they have associated operations.", details: error.message });
       }
-      res.status(500).json({ error: "Failed to delete customer", details: error.message });
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to delete customer", details: errorMessage });
     }
   });
 
   // Operations endpoint
-  app.get("/api/operations", async (req, res) => {
+  app.get("/api/operations", async (req: Request, res: Response) => {
     try {
         const allOperations = await db.select().from(operations);
         res.json(allOperations);
-    } catch (error: any) {
-        res.status(500).json({ error: "Failed to fetch operations", details: error.message });
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+        res.status(500).json({ error: "Failed to fetch operations", details: errorMessage });
     }
   });
 
