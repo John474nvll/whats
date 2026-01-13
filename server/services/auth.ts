@@ -1,3 +1,4 @@
+
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
@@ -31,7 +32,7 @@ export function verifyToken(token: string): AuthPayload | null {
   }
 }
 
-export async function registerUser(username: string, password: string) {
+export async function registerUser(username: string, password: string, botId: string) {
   const existing = await storage.getUserByUsername(username);
   if (existing) throw new Error("Username already exists");
 
@@ -40,6 +41,7 @@ export async function registerUser(username: string, password: string) {
     id: randomUUID(),
     username,
     password: hashedPassword,
+    botId,
   });
 
   return user;
