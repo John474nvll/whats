@@ -209,9 +209,9 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                        <SelectItem value="active">Activo</MDBtn>
-                        <SelectItem value="inactive">Inactivo</MDBtn>
-                        <SelectItem value="blocked">Bloqueado</MDBtn>
+                        <SelectItem value="active">Activo</SelectItem>
+                        <SelectItem value="inactive">Inactivo</SelectItem>
+                        <SelectItem value="blocked">Bloqueado</SelectItem>
                         </SelectContent>
                     </Select>
                     <FormMessage />
