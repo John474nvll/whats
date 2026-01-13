@@ -1,10 +1,12 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath } from 'url';
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { VitePWA } from "vite-plugin-pwa";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const projectRootDir = path.resolve(__dirname);
 
 export default defineConfig({
@@ -84,6 +86,9 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    exclude: ['pg'],
+  }, 
   resolve: {
     alias: {
       "@": path.resolve(projectRootDir, "client", "src"),

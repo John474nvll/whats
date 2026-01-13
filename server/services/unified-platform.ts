@@ -1,4 +1,3 @@
-/*
 import { MetaService, WhatsAppService } from "./platforms";
 import { db } from "../db";
 import { socialAccounts, campaigns, customers, messages } from "@shared/schema";
@@ -250,4 +249,3 @@ export async function createUnifiedService(
 ): Promise<UnifiedPlatformService> {
   return new UnifiedPlatformService(accessToken, phoneNumberId);
 }
-*/
