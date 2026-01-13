@@ -570,3 +570,4 @@
 2026-01-13 00:18:01.966 UTC [14449] STATEMENT:  select "id", "username", "password", "role", "avatar", "settings", "created_at" from "users" where "users"."username" = $1
 2026-01-13 00:18:01.966 UTC [14450] ERROR:  relation "channel_configs" does not exist at character 108
 2026-01-13 00:18:01.966 UTC [14450] STATEMENT:  select "id", "platform", "access_token", "verify_token", "phone_number_id", "is_active", "updated_at" from "channel_configs"
+2026-01-13 00:20:15.623 UTC [13632] LOG:  checkpoint starting: time
