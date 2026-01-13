@@ -3,18 +3,21 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { registerRoutes } from "./routes";
 import { registerMiddleware } from "./middleware";
-import { registerStatic } from "./static";
-import { registerVite } from "./vite";
+import { serveStatic } from "./static";
+import { setupVite } from "./vite";
 import express from "express";
 
 const app = express();
 const httpServer = createServer(app);
 
 async function bootstrap() {
-  await registerVite(app);
+  if (process.env.NODE_ENV === 'production') {
+    serveStatic(app);
+  } else {
+    await setupVite(httpServer, app);
+  }
   
   registerMiddleware(app);
-  registerStatic(app);
   await registerRoutes(httpServer, app);
   
   const port = process.env.PORT || 3000;
