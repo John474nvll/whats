@@ -519,3 +519,41 @@
 2026-01-12 00:53:56.293 UTC [14792] WARNING:  database "template1" has a collation version mismatch
 2026-01-12 00:53:56.293 UTC [14792] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
 2026-01-12 00:53:56.293 UTC [14792] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-13 00:04:06.257 UTC [10996] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:04:06.257 UTC [10996] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:04:06.264 UTC [10996] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-01-13 00:04:06.285 UTC [10999] LOG:  database system was interrupted; last known up at 2026-01-11 23:33:28 UTC
+2026-01-13 00:04:06.327 UTC [10999] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-01-13 00:04:06.334 UTC [10999] LOG:  redo starts at 0/15A7628
+2026-01-13 00:04:06.334 UTC [10999] LOG:  invalid record length at 0/15A7710: wanted 24, got 0
+2026-01-13 00:04:06.334 UTC [10999] LOG:  redo done at 0/15A76D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-01-13 00:04:06.341 UTC [10997] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-01-13 00:04:06.365 UTC [10997] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.028 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB
+2026-01-13 00:04:06.372 UTC [10996] LOG:  database system is ready to accept connections
+2026-01-13 00:04:09.771 UTC [11018] LOG:  invalid length of startup packet
+2026-01-13 00:04:09.775 UTC [11019] LOG:  invalid length of startup packet
+2026-01-13 00:04:18.897 UTC [11091] FATAL:  role "replit" does not exist
+2026-01-13 00:04:18.897 UTC [11092] FATAL:  role "replit" does not exist
+2026-01-13 00:05:31.842 UTC [11355] FATAL:  database "user" does not exist
+2026-01-13 00:05:40.240 UTC [11394] WARNING:  database "postgres" has a collation version mismatch
+2026-01-13 00:05:40.240 UTC [11394] DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-13 00:05:40.240 UTC [11394] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-13 00:05:40.254 UTC [11394] ERROR:  template database "template1" has a collation version mismatch
+2026-01-13 00:05:40.254 UTC [11394] DETAIL:  The template database was created using collation version 2.38, but the operating system provides version 2.39.
+2026-01-13 00:05:40.254 UTC [11394] HINT:  Rebuild all objects in the template database that use the default collation and run ALTER DATABASE template1 REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+2026-01-13 00:05:40.254 UTC [11394] STATEMENT:  CREATE DATABASE "user";
+2026-01-13 00:06:00.957 UTC [10996] LOG:  received fast shutdown request
+2026-01-13 00:06:00.961 UTC [10996] LOG:  aborting any active transactions
+2026-01-13 00:06:00.963 UTC [10996] LOG:  background worker "logical replication launcher" (PID 11002) exited with exit code 1
+2026-01-13 00:06:00.963 UTC [10997] LOG:  shutting down
+2026-01-13 00:06:00.967 UTC [10997] LOG:  checkpoint starting: shutdown immediate
+2026-01-13 00:06:00.982 UTC [10997] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.019 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB
+2026-01-13 00:06:00.986 UTC [10996] LOG:  database system is shut down
+2026-01-13 00:07:21.622 UTC [11766] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:07:21.623 UTC [11766] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:07:21.627 UTC [11766] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2026-01-13 00:07:21.629 UTC [11766] LOG:  database system is shut down
+2026-01-13 00:08:44.220 UTC [12083] LOG:  starting PostgreSQL 15.10 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 13.2.0, 64-bit
+2026-01-13 00:08:44.220 UTC [12083] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-01-13 00:08:44.225 UTC [12083] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": No such file or directory
+2026-01-13 00:08:44.227 UTC [12083] LOG:  database system is shut down
