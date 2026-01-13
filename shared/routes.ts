@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertContactSchema, insertConversationSchema, insertMessageSchema, insertChannelConfigSchema, contacts, conversations, messages, channelConfigs } from './schema';
+import { insertContactSchema, contacts } from './schema.ts';
 
 export const errorSchemas = {
   validation: z.object({
@@ -41,6 +41,7 @@ export const api = {
       },
     },
   },
+  /*
   conversations: {
     list: {
       method: 'GET' as const,
@@ -103,6 +104,7 @@ export const api = {
       },
     },
   },
+  */
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
