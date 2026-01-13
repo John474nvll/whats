@@ -5,6 +5,8 @@ import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { VitePWA } from "vite-plugin-pwa";
 
+const projectRootDir = path.resolve(__dirname);
+
 export default defineConfig({
   plugins: [
     react(),
@@ -81,24 +83,17 @@ export default defineConfig({
         categories: ["business", "productivity"],
       },
     }),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          (await import("@replit/vite-plugin-cartographer")).cartographer(),
-          (await import("@replit/vite-plugin-dev-banner")).devBanner(),
-        ]
-      : []),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@": path.resolve(projectRootDir, "client", "src"),
+      "@shared": path.resolve(projectRootDir, "shared"),
+      "@assets": path.resolve(projectRootDir, "attached_assets"),
     },
   },
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(projectRootDir, "client"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(projectRootDir, "dist/public"),
     emptyOutDir: true,
   },
   server: {
