@@ -39,8 +39,21 @@ export async function registerRoutes(
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
 
-  // Auto-register demo users
-  // ... (user seeding logic remains the same)
+  // User registration endpoint
+  app.post("/api/register", async (req: Request, res: Response) => {
+    try {
+      const { username, password, botId } = registerSchema.parse(req.body);
+      const user = await registerUser(username, password, botId);
+      const token = generateToken({ userId: user.id, username: user.username });
+      res.status(201).json({ user, token });
+    } catch (error: unknown) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid input", details: error.flatten() });
+      }
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      res.status(500).json({ error: "Failed to register user", details: errorMessage });
+    }
+  });
 
   // Customer CRUD endpoints
   app.get("/api/customers", async (req: Request, res: Response) => {
