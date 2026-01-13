@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { motion } from "framer-motion";
-import { User, Lock, ArrowRight, Loader2, Sparkles, Shield, Zap } from "lucide-react";
+import { User, Lock, ArrowRight, Loader2, Sparkles, Shield, Zap, Bot } from "lucide-react";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 export default function Login() {
@@ -14,14 +15,22 @@ export default function Login() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "", botId: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const res = await apiRequest("POST", isLogin ? "/api/auth/login" : "/api/auth/register", formData);
+      const endpoint = isLogin ? "/api/auth/login" : "/api/register";
+      const payload = isLogin ? { username: formData.username, password: formData.password } : formData;
+      const res = await apiRequest("POST", endpoint, payload);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || (isLogin ? "Login failed" : "Registration failed"));
+      }
+
       const result = await res.json();
       localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
@@ -185,6 +194,23 @@ export default function Login() {
                   />
                 </div>
               </div>
+
+              {!isLogin && (
+                <div className="space-y-3">
+                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Bot ID</Label>
+                  <div className="relative group">
+                    <Bot className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-primary transition" />
+                    <Input
+                      name="botId"
+                      placeholder="Enter the Bot ID"
+                      value={formData.botId}
+                      onChange={(e) => setFormData({ ...formData, botId: e.target.value })}
+                      className="h-12 pl-12 rounded-xl bg-white/5 border-white/10 focus:border-primary/50 focus:ring-primary/20 text-white placeholder:text-slate-500 font-medium transition-all"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               <Button
                 type="submit"
