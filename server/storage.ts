@@ -1,6 +1,7 @@
 import { db } from "./db";
 import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent, phoneConnections,
+  customerGroups, productCatalogs, products, customLinks, inventory, transactions,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,

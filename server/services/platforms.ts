@@ -74,6 +74,23 @@ export interface PlatformConfig {
   connectedAt: Date;
 }
 
+export class AccessTokenWrapper {
+  constructor(private storage: IStorage) {}
+
+  async getValidToken(userId: string, platform: string): Promise<string | undefined> {
+    const account = await this.storage.getSocialAccount(userId, platform);
+    if (!account || !account.accessToken) return undefined;
+
+    const isValid = platform === "instagram" 
+      ? await validateInstagramToken(account.accessToken)
+      : platform === "facebook"
+        ? await validateFacebookToken(account.accessToken)
+        : await validateWhatsAppToken(account.accessToken);
+
+    return isValid ? account.accessToken : undefined;
+  }
+}
+
 export async function validateInstagramToken(token: string): Promise<boolean> {
   try {
     const response = await fetch(
