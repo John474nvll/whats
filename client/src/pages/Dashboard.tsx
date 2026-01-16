@@ -1,5 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import {
   Card,
   CardContent,
@@ -29,6 +30,9 @@ import {
   Contact,
   LineChart,
   User,
+  Phone,
+  BarChart,
+  Target,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -190,6 +194,60 @@ export default function Dashboard() {
         {stats.map((stat, i) => (
           <StatCard key={stat.label} {...stat} />
         ))}
+      </div>
+
+      {/* CRM & AI Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Lead Management */}
+        <Card className="border-border/40 bg-card/40 backdrop-blur-2xl shadow-2xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Target className="w-5 h-5 text-primary" />
+              Gestión de Leads (CRM)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                  <p className="text-xs text-muted-foreground uppercase font-black">Nuevos Leads</p>
+                  <p className="text-2xl font-black mt-1 text-kiwi">12</p>
+                </div>
+                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                  <p className="text-xs text-muted-foreground uppercase font-black">En Proceso</p>
+                  <p className="text-2xl font-black mt-1 text-cyan-neon">8</p>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full rounded-xl border-primary/20 hover:bg-primary/10" asChild>
+                <Link href="/customers">Ver Pipeline de Ventas</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* AI Assistant (Retell) */}
+        <Card className="border-border/40 bg-card/40 backdrop-blur-2xl shadow-2xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Phone className="w-5 h-5 text-primary" />
+              AI Voice Assistant (Retell)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/5 border border-primary/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-primary animate-pulse" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">Asistente Activo</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-black">Próxima llamada: 14:00</p>
+                </div>
+              </div>
+              <Button size="sm" variant="kiwi" className="rounded-xl">Configurar</Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

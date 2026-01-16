@@ -97,7 +97,7 @@ function AppContent() {
               <div className="hidden lg:flex items-center gap-2">
                 <div className="h-4 w-px bg-white/10 mx-2" />
                 <Badge variant="outline" className="border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[9px] tracking-[0.15em] px-3 py-1 rounded-full whitespace-nowrap">
-                  V3.0 PWA
+                  V3.1 PWA
                 </Badge>
               </div>
             </div>
