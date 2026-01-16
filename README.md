@@ -30,7 +30,10 @@ SocialHub v3.1 es una **plataforma integral renovada** que ahora incluye un pote
 | **AI** | OpenAI + Retell AI |
 | **PWA** | Vite PWA Plugin |
 
-## 📂 Estructura del Proyecto
-- `client/`: Frontend (React).
-- `server/`: Backend (Express, API).
-- `shared/`: Esquemas de datos y tipos.
+## 🔐 Credenciales de Acceso Rápido
+
+El sistema cuenta con las siguientes cuentas preconfiguradas para pruebas:
+
+- **Administrador:** `socialadmin` / `SocialAdmin2026!`
+- **Ventas:** `ventas_a` / `VentasA2026!`
+- **Soporte:** `soporte_a` / `SoporteA2026!`
