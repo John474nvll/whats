@@ -140,6 +140,29 @@ export async function registerRoutes(
     }
   });
 
+  // CRM & Retell endpoints
+  app.patch("/api/customers/:id/status", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { leadStatus } = z.object({ leadStatus: z.string() }).parse(req.body);
+      const updated = await db.update(customers).set({ leadStatus }).where(eq(customers.id, id)).returning();
+      res.json(updated[0]);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update lead status" });
+    }
+  });
+
+  app.post("/api/retell/call", async (req: Request, res: Response) => {
+    try {
+      const { customerId, agentId } = z.object({ customerId: z.number(), agentId: z.string() }).parse(req.body);
+      // Mock Retell API call - would use actual Retell SDK here
+      console.log(`Initiating Retell call for customer ${customerId} with agent ${agentId}`);
+      res.json({ success: true, callId: "mock-call-id" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to initiate Retell call" });
+    }
+  });
+
   // Other existing routes (contacts, conversations, etc.)
   // ... (The rest of the routes file remains unchanged)
 

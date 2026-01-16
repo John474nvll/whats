@@ -35,6 +35,8 @@ export const customers = sqliteTable("customers", {
   animalCount: integer("animal_count"),
   platform: text("platform").default("whatsapp"),
   status: text("status").default("active"),
+  leadStatus: text("lead_status").default("new"), // new, contacting, qualified, lost, won
+  retellAgentId: text("retell_agent_id"),
   tags: text("tags"), // Stored as a comma-separated string
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
