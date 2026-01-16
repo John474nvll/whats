@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  whats:
+    build:
+      context: ./whats
+      dockerfile: Dockerfile
+    container_name: whats_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./whats/.env
+    depends_on:
+      - db
+
+  crm:
+    build:
+      context: ./crm
+      dockerfile: Dockerfile
+    container_name: nextcrm_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - ./crm/.env
+    depends_on:
+      - crm_db
+
+  db:
+    image: mysql:8
+    container_name: whats_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: whats_db
+    volumes:
+      - db_data:/var/lib/mysql
+
+  crm_db:
+    image: mysql:8
+    container_name: crm_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: crm_db
+    volumes:
+      - crm_db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  crm_db_data:
