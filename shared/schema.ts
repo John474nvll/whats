@@ -36,6 +36,10 @@ export const customers = sqliteTable("customers", {
   platform: text("platform").default("whatsapp"),
   status: text("status").default("active"),
   leadStatus: text("lead_status").default("new"), // new, contacting, qualified, lost, won
+  source: text("source"), // facebook, instagram, whatsapp, organic, referral
+  estimatedValue: real("estimated_value").default(0),
+  conversionProbability: integer("conversion_probability").default(0), // 0-100
+  notes: text("notes"),
   retellAgentId: text("retell_agent_id"),
   tags: text("tags"), // Stored as a comma-separated string
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),

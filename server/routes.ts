@@ -211,16 +211,40 @@ export async function registerRoutes(
     }
   });
 
-  // CRM Update Status
-  app.patch("/api/customers/:id/status", async (req: Request, res: Response) => {
+  // CRM Advanced API
+  app.patch("/api/customers/:id/crm", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
-      const { leadStatus } = z.object({ leadStatus: z.string() }).parse(req.body);
-      const updated = await db.update(customers).set({ leadStatus, updatedAt: new Date() }).where(eq(customers.id, id)).returning();
+      const data = z.object({
+        leadStatus: z.string().optional(),
+        source: z.string().optional(),
+        estimatedValue: z.number().optional(),
+        conversionProbability: z.number().optional(),
+        notes: z.string().optional(),
+      }).parse(req.body);
+
+      const updated = await db.update(customers)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(customers.id, id))
+        .returning();
+
       if (updated.length === 0) return res.status(404).json({ error: "Customer not found" });
       res.json(updated[0]);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update lead status" });
+      res.status(500).json({ error: "Failed to update CRM data" });
+    }
+  });
+
+  app.get("/api/crm/leads/high-value", async (req: Request, res: Response) => {
+    try {
+      const highValueLeads = await db.select()
+        .from(customers)
+        .where(z.any()) // placeholder for actual complex filter
+        .orderBy(desc(customers.estimatedValue))
+        .limit(10);
+      res.json(highValueLeads);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch high value leads" });
     }
   });
 
