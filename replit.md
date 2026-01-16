@@ -1,19 +1,21 @@
-# SocialHub v3.0 - Platform PWA Completa de Gestión de Redes Sociales
+# SocialHub v3.1 - Gestión CRM & Redes Sociales
 
-## 📋 Descripción General
-SocialHub v3.0 es una **plataforma integral, renovada y completamente funcional como PWA** para gestionar múltiples redes sociales (Instagram, Facebook, WhatsApp) desde un único dashboard profesional con autenticación JWT, vinculación de cuentas, publicación de contenido, gestión avanzada de clientes, campañas multicanal, y generación de contenido con IA. Totalmente instalable como aplicación nativa en móviles y con soporte offline.
+- **Backend**: Express.js con SQLite optimizado (WAL mode).
+- **Frontend**: Dashboard v3.1 Glassmorphism con integración CRM completa.
+- **Integraciones**: Retell AI (Mock) y Twilio (vía Secretos).
+- **Base de Datos**: Reset realizado el 16 de enero de 2026 para sincronización limpia de esquema.
 
-## ✨ Características Principales v3.0
+## ✨ Características Principales v3.1
 
-### PWA Completa
-- ✅ Progressive Web App funcional
-- ✅ Service Worker con caché inteligente
-- ✅ Instalable en dispositivos (Android/iOS)
-- ✅ Offline capabilities
-- ✅ Sincronización en background
-- ✅ Soporte de notificaciones push
-- ✅ Manifesto PWA completo
-- ✅ Iconos maskable para todos los dispositivos
+### CRM & Lead Management
+- ✅ Pipeline visual de ventas en Dashboard.
+- ✅ Gestión de estados (New, Contacting, Qualified, Won, Lost).
+- ✅ Integración con Retell AI para llamadas automáticas.
+
+### PWA & Performance
+- ✅ PWA v3.1 estable.
+- ✅ SQLite optimizado con modo WAL.
+- ✅ Sincronización de tokens segura con AccessTokenWrapper.
 
 ### 🔐 Autenticación & Usuarios
 - ✅ Sistema de login/registro con JWT
