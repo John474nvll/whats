@@ -1,90 +1,65 @@
 
-import { Router } from 'express';
-import { prisma } from '../db';
+import express from 'express';
+import prisma from '../db';
 
-const router = Router();
+const router = express.Router();
 
-// List all contacts
+// Get all contacts
 router.get('/', async (req, res) => {
-  const contacts = await prisma.contact.findMany({
-    include: {
-      company: true,
-      owner: true,
-    },
-  });
+  const contacts = await prisma.contact.findMany();
   res.json(contacts);
 });
 
-// Get a single contact
+// Get a contact by id
 router.get('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const { id } = req.params;
   const contact = await prisma.contact.findUnique({
-    where: { id },
-    include: {
-      company: true,
-      owner: true,
-      deals: true,
-      interactions: true,
-    },
+    where: { id: Number(id) },
   });
-  if (!contact) {
-    return res.status(404).json({ error: 'Contact not found' });
-  }
   res.json(contact);
 });
 
 // Create a new contact
 router.post('/', async (req, res) => {
   const { name, email, phone, platform, companyId, ownerId } = req.body;
-  try {
-    const newContact = await prisma.contact.create({
-      data: {
-        name,
-        email,
-        phone,
-        platform: platform || 'manual',
-        companyId,
-        ownerId,
-      },
-    });
-    res.status(201).json(newContact);
-  } catch (error) {
-    res.status(500).json({ error: 'Could not create contact' });
-  }
+  const newContact = await prisma.contact.create({
+    data: {
+      name,
+      email,
+      phone,
+      platform,
+      companyId,
+      ownerId,
+    },
+  });
+  res.json(newContact);
 });
 
 // Update a contact
 router.put('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { name, email, phone, companyId, ownerId } = req.body;
-  try {
-    const updatedContact = await prisma.contact.update({
-      where: { id },
-      data: {
-        name,
-        email,
-        phone,
-        companyId,
-        ownerId,
-      },
-    });
-    res.json(updatedContact);
-  } catch (error) {
-    res.status(500).json({ error: 'Could not update contact' });
-  }
+  const { id } = req.params;
+  const { name, email, phone, platform, companyId, ownerId } = req.body;
+  const updatedContact = await prisma.contact.update({
+    where: { id: Number(id) },
+    data: {
+      name,
+      email,
+      phone,
+      platform,
+      companyId,
+      ownerId,
+    },
+  });
+  res.json(updatedContact);
 });
 
 // Delete a contact
 router.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
-  try {
-    await prisma.contact.delete({
-      where: { id },
-    });
-    res.json({ message: 'Contact deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: 'Could not delete contact' });
-  }
+  const { id } = req.params;
+  await prisma.contact.delete({
+    where: { id: Number(id) },
+  });
+  res.json({ message: 'Contact deleted' });
 });
 
 export default router;
