@@ -50,9 +50,8 @@ function Router() {
       <Route path="/settings" component={Settings} />
 
       {/* CRM Routes */}
-      <Route path="/crm/:rest*">
-        <CRMRoutes />
-      </Route>
+      <Route path="/crm" component={CRMRoutes} />
+      <Route path="/crm/:rest*" component={CRMRoutes} />
 
       <Route component={NotFound} />
     </Switch>
