@@ -26,6 +26,16 @@ export const users = sqliteTable("users", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const wabaAccounts = sqliteTable("waba_accounts", {
+    id: integer("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id).unique(),
+    wabaAccountId: text("waba_account_id").notNull(),
+    phoneNumberId: text("phone_number_id").notNull(),
+    accessToken: text("access_token").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+    updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
 export const retellAgents = sqliteTable("retell_agents", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -275,7 +285,7 @@ export const phoneConnections = sqliteTable("phone_connections", {
 
 // === RELATIONS ===
 
-export const userRelations = relations(users, ({ many }) => ({
+export const userRelations = relations(users, ({ many, one }) => ({
   customers: many(customers),
   socialAccounts: many(socialAccounts),
   widgets: many(widgets),
@@ -290,6 +300,14 @@ export const userRelations = relations(users, ({ many }) => ({
   transactions: many(transactions),
   interactions: many(interactions),
   retellAgents: many(retellAgents),
+  wabaAccount: one(wabaAccounts),
+}));
+
+export const wabaAccountRelations = relations(wabaAccounts, ({ one }) => ({
+    user: one(users, {
+        fields: [wabaAccounts.userId],
+        references: [users.id],
+    }),
 }));
 
 export const retellAgentRelations = relations(retellAgents, ({ one }) => ({
@@ -483,6 +501,7 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
 // === ZOD SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users);
+export const insertWabaAccountSchema = createInsertSchema(wabaAccounts);
 export const insertRetellAgentSchema = createInsertSchema(retellAgents);
 export const insertCompanySchema = createInsertSchema(companies);
 export const insertContactSchema = createInsertSchema(contacts);
@@ -520,6 +539,9 @@ export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections);
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
+export type WabaAccount = typeof wabaAccounts.$inferSelect;
+export type InsertWabaAccount = z.infer<typeof insertWabaAccountSchema>;
 
 export type RetellAgent = typeof retellAgents.$inferSelect;
 export type InsertRetellAgent = z.infer<typeof insertRetellAgentSchema>;
