@@ -23,22 +23,16 @@ const menuGroups = [
     label: "🏠 PRINCIPAL",
     items: [
       { title: "Dashboard", url: "/", icon: Home },
-    ],
-  },
-  {
-    label: "📱 CRM",
-    items: [
       { title: "Inbox", url: "/inbox", icon: MessageSquare },
     ],
   },
   {
-    label: "💼 CRM MODULAR",
+    label: "💼 CRM",
     items: [
-      { title: "CRM Dashboard", url: "/crm", icon: Briefcase },
-      { title: "Contacts", url: "/contacts", icon: Contact },
-      { title: "Deals", url: "/crm/deals", icon: GitFork },
-      { title: "Users", url: "/crm/users", icon: Users },
+      { title: "Dashboard", url: "/crm", icon: Briefcase },
       { title: "Companies", url: "/crm/companies", icon: Building },
+      { title: "Contacts", url: "/crm/contacts", icon: Contact },
+      { title: "Deals", url: "/crm/deals", icon: GitFork },
     ],
   },
   {
