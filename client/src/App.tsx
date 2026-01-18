@@ -31,11 +31,7 @@ import { motion } from "framer-motion";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 // CRM Pages
-import CRMDashboard from "@/pages/crm/Dashboard";
-import CRMUsers from "@/pages/crm/Users";
-import CRMCompanies from "@/pages/crm/Companies";
-import CRMContacts from "@/pages/crm/Contacts";
-import CRMDeals from "@/pages/crm/Deals";
+import CRMRoutes from "@/pages/crm";
 
 function Router() {
   return (
@@ -56,11 +52,9 @@ function Router() {
       <Route path="/settings" component={Settings} />
 
       {/* CRM Routes */}
-      <Route path="/crm" component={CRMDashboard} />
-      <Route path="/crm/users" component={CRMUsers} />
-      <Route path="/crm/companies" component={CRMCompanies} />
-      <Route path="/crm/contacts" component={CRMContacts} />
-      <Route path="/crm/deals" component={CRMDeals} />
+      <Route path="/crm/:rest*">
+        <CRMRoutes />
+      </Route>
 
       <Route component={NotFound} />
     </Switch>
