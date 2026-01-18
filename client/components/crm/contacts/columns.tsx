@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// This type is based on the data you expect from your API
 export type Contact = {
   id: number;
   name: string;
@@ -21,7 +20,12 @@ export type Contact = {
   status: "activo" | "inactivo" | "potencial";
 };
 
-export const columns: ColumnDef<Contact>[] = [
+interface GetColumnsProps {
+    onEdit: (contact: Contact) => void;
+    onDelete: (id: number) => void;
+}
+
+export const getColumns = ({ onEdit, onDelete }: GetColumnsProps): ColumnDef<Contact>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -50,12 +54,12 @@ export const columns: ColumnDef<Contact>[] = [
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
       const statusClass = {
-        activo: "bg-green-500",
-        inactivo: "bg-red-500",
-        potencial: "bg-yellow-500",
-      }[status] || "bg-gray-500";
+        activo: "bg-green-500/80",
+        inactivo: "bg-red-500/80",
+        potencial: "bg-yellow-500/80",
+      }[status] || "bg-gray-500/80";
 
-      return <span className={`px-2 py-1 rounded-full text-white text-xs ${statusClass}`}>{status}</span>;
+      return <span className={`px-2 py-1 rounded-full text-white text-xs font-semibold ${statusClass}`}>{status}</span>;
     },
   },
   {
@@ -79,8 +83,13 @@ export const columns: ColumnDef<Contact>[] = [
               Copiar ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Editar Contacto</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500">Eliminar Contacto</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit(contact)}>Editar Contacto</DropdownMenuItem>
+            <DropdownMenuItem 
+                onClick={() => onDelete(contact.id)}
+                className="text-red-500"
+            >
+                Eliminar Contacto
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
