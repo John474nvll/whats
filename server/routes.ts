@@ -22,6 +22,7 @@ import companiesCrmRoutes from './routes/companies';
 import contactsCrmRoutes from './routes/contacts';
 import dealsCrmRoutes from './routes/deals';
 import interactionsCrmRoutes from './routes/interactions';
+import retellRoutes from './routes/retell';
 
 // Simple SSE implementation
 interface SseClient {
@@ -46,12 +47,13 @@ export async function registerRoutes(
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
 
-  // --- CRM API Routes ---
+  // --- CRM & Retell API Routes ---
   app.use('/api/crm/users', usersCrmRoutes);
   app.use('/api/crm/companies', companiesCrmRoutes);
   app.use('/api/crm/contacts', contactsCrmRoutes);
   app.use('/api/crm/deals', dealsCrmRoutes);
   app.use('/api/crm/interactions', interactionsCrmRoutes);
+  app.use('/api/retell/agents', retellRoutes);
 
 
   // User registration endpoint
@@ -179,33 +181,6 @@ export async function registerRoutes(
       res.json(pipeline);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch pipeline" });
-    }
-  });
-
-  // Retell AI Enhanced Integration
-  app.get("/api/retell/agents", async (req: Request, res: Response) => {
-    try {
-      res.json([
-        { id: "agent_sales_1", name: "Asistente de Ventas (ES)", language: "es-ES" },
-        { id: "agent_support_1", name: "Soporte Técnico (ES)", language: "es-ES" }
-      ]);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch agents" });
-    }
-  });
-
-  app.post("/api/retell/call/schedule", async (req: Request, res: Response) => {
-    try {
-      const { customerId, agentId, scheduledAt } = z.object({ 
-        customerId: z.number(), 
-        agentId: z.string(),
-        scheduledAt: z.string()
-      }).parse(req.body);
-      
-      console.log(`Scheduling Retell call for ${customerId} at ${scheduledAt}`);
-      res.json({ success: true, message: "Call scheduled successfully" });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to schedule call" });
     }
   });
 
