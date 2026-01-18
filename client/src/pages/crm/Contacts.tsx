@@ -1,99 +1,48 @@
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ContactForm } from '@/components/crm/ContactForm';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { PlusCircle } from "lucide-react";
 
-const Contacts = () => {
-  const [contacts, setContacts] = useState([]);
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+import { Button } from "@/components/ui/button";
+import { columns } from "@/components/crm/contacts/columns";
+import { DataTable } from "@/components/crm/contacts/data-table";
 
-  useEffect(() => {
-    fetch('/api/crm/contacts')
-      .then((res) => res.json())
-      .then((data) => setContacts(data));
-  }, []);
+// API fetching function
+const fetchContacts = async () => {
+  const res = await fetch('/api/contacts');
+  if (!res.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return res.json();
+};
 
-  const handleFormSubmit = (contact) => {
-    const method = contact.id ? 'PUT' : 'POST';
-    const url = contact.id ? `/api/crm/contacts/${contact.id}` : '/api/crm/contacts';
+export const Route = createFileRoute('/app/contacts')({
+  component: ContactsComponent,
+});
 
-    fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(contact),
-    })
-      .then((res) => res.json())
-      .then((updatedContact) => {
-        if (contact.id) {
-          setContacts(contacts.map((c) => (c.id === updatedContact.id ? updatedContact : c)));
-        } else {
-          setContacts([...contacts, updatedContact]);
-        }
-        setIsFormOpen(false);
-      });
-  };
-
-  const handleDelete = (id) => {
-    fetch(`/api/crm/contacts/${id}`, {
-      method: 'DELETE',
-    }).then(() => {
-      setContacts(contacts.filter((c) => c.id !== id));
-    });
-  };
+function ContactsComponent() {
+  const { data: contacts, isLoading, error } = useQuery({ 
+    queryKey: ['contacts'], 
+    queryFn: fetchContacts 
+  });
 
   return (
-    <div className="p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Contacts</CardTitle>
-          <Button onClick={() => {
-            setSelectedContact(null);
-            setIsFormOpen(true);
-          }}>New Contact</Button>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Platform</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {contacts.map((contact) => (
-                <TableRow key={contact.id}>
-                  <TableCell>{contact.name}</TableCell>
-                  <TableCell>{contact.email}</TableCell>
-                  <TableCell>{contact.phone}</TableCell>
-                  <TableCell>{contact.platform}</TableCell>
-                  <TableCell>
-                    <Button onClick={() => {
-                      setSelectedContact(contact);
-                      setIsFormOpen(true);
-                    }}>Edit</Button>
-                    <Button onClick={() => handleDelete(contact.id)}>Delete</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-      {isFormOpen && (
-        <ContactForm
-          contact={selectedContact}
-          onSubmit={handleFormSubmit}
-          onCancel={() => setIsFormOpen(false)}
-        />
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Contactos</h2>
+        <div className="flex items-center space-x-2">
+          <Button>
+            <PlusCircle className="mr-2 h-4 w-4" /> Añadir Contacto
+          </Button>
+        </div>
+      </div>
+      {isLoading ? (
+        <div>Cargando...</div>
+      ) : error ? (
+        <div>Error al cargar los contactos.</div>
+      ) : (
+        <DataTable columns={columns} data={contacts || []} />
       )}
     </div>
   );
-};
-
-export default Contacts;
+}
