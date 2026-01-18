@@ -1,30 +1,68 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type InsertMessage } from "@shared/routes";
+
+// Define the correct API paths as simple strings
+const API_BASE_PATH = '/api/inbox';
+
+// --- Query Hooks for fetching data ---
 
 export function useConversations() {
   return useQuery({
-    queryKey: [api.conversations.list.path],
+    queryKey: ['conversations'],
     queryFn: async () => {
-      const res = await fetch(api.conversations.list.path, { credentials: "include" });
+      const res = await fetch(`${API_BASE_PATH}/conversations`);
       if (!res.ok) throw new Error("Failed to fetch conversations");
-      return api.conversations.list.responses[200].parse(await res.json());
+      return res.json();
     },
-    refetchInterval: 5000, // Poll for new conversations
+    refetchInterval: 5000, // Poll for new conversations or status changes
   });
 }
 
 export function useConversation(id: number) {
   return useQuery({
-    queryKey: [api.conversations.get.path, id],
+    queryKey: ['conversation', id],
     queryFn: async () => {
-      const url = buildUrl(api.conversations.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
+      const res = await fetch(`${API_BASE_PATH}/conversations/${id}`);
       if (res.status === 404) return null;
-      if (!res.ok) throw new Error("Failed to fetch conversation");
-      return api.conversations.get.responses[200].parse(await res.json());
+      if (!res.ok) throw new Error("Failed to fetch conversation details");
+      return res.json();
     },
-    enabled: !!id,
-    refetchInterval: 3000, // Poll for new messages
+    enabled: !!id, // Only run the query if an ID is provided
+  });
+}
+
+export function useMessages(conversationId: number) {
+  return useQuery({
+    queryKey: ['messages', conversationId],
+    queryFn: async () => {
+      const res = await fetch(`${API_BASE_PATH}/conversations/${conversationId}/messages`);
+      if (!res.ok) throw new Error("Failed to fetch messages");
+      return res.json();
+    },
+    enabled: !!conversationId, // Only run if a conversation ID is provided
+    refetchInterval: 2000, // Poll frequently for new messages
+  });
+}
+
+// --- Mutation Hooks for creating/updating data ---
+
+export function useSendMessage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
+      const res = await fetch(`${API_BASE_PATH}/conversations/${conversationId}/send`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content }),
+      });
+      if (!res.ok) throw new Error("Failed to send message");
+      return res.json();
+    },
+    onSuccess: (_, variables) => {
+      // Invalidate and refetch queries to show the new message immediately
+      queryClient.invalidateQueries({ queryKey: ['messages', variables.conversationId] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] }); // To update the last message preview
+    },
   });
 }
 
@@ -32,57 +70,18 @@ export function useToggleBot() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, botStatus }: { id: number; botStatus: boolean }) => {
-      const url = buildUrl(api.conversations.toggleBot.path, { id });
-      const res = await fetch(url, {
-        method: api.conversations.toggleBot.method,
+      const res = await fetch(`${API_BASE_PATH}/conversations/${id}/toggle-bot`, {
+        method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ botStatus }),
-        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to toggle bot status");
-      return api.conversations.toggleBot.responses[200].parse(await res.json());
+      return res.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, data.id] });
-    },
-  });
-}
-
-export function useMessages(conversationId: number) {
-  return useQuery({
-    queryKey: [api.messages.list.path, conversationId],
-    queryFn: async () => {
-      const url = buildUrl(api.messages.list.path, { id: conversationId });
-      const res = await fetch(url, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch messages");
-      return api.messages.list.responses[200].parse(await res.json());
-    },
-    enabled: !!conversationId,
-    refetchInterval: 2000, // Poll for real-time messages
-  });
-}
-
-export function useSendMessage() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ conversationId, content, role = "agent" }: { conversationId: number; content: string; role?: string }) => {
-      // Note: role is defaulted to 'agent' for UI sent messages, backend might override or use 'agent'
-      const data = { content, role };
-      const url = buildUrl(api.messages.create.path, { id: conversationId });
-      const res = await fetch(url, {
-        method: api.messages.create.method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to send message");
-      return api.messages.create.responses[201].parse(await res.json());
-    },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [api.messages.list.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] }); // Update last message preview
+      // Invalidate relevant queries to reflect the bot status change
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      queryClient.invalidateQueries({ queryKey: ['conversation', data.id] });
     },
   });
 }
