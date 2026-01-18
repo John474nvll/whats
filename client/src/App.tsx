@@ -11,7 +11,6 @@ import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Inbox from "@/pages/Inbox";
 import Contacts from "@/pages/Contacts";
-import Customers from "@/pages/Customers";
 import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
@@ -40,7 +39,6 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/inbox" component={Inbox} />
       <Route path="/contacts" component={Contacts} />
-      <Route path="/customers" component={Customers} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/accounts" component={AccountLinks} />
