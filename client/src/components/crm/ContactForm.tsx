@@ -1,48 +1,78 @@
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useToast } from "../../hooks/use-toast";
 import { Plus, Edit } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertContactSchema, type InsertContact } from "@shared/schema";
-import { useCreateContact, useUpdateContact } from "@/hooks/use-contacts";
+import { z } from "zod";
+import { queryClient } from "../../lib/queryClient";
+import { Contact, Company, User } from "@shared/schema";
+
+const contactSchema = z.object({
+  name: z.string().min(1, "El nombre es requerido"),
+  email: z.string().email("Email inválido").optional().or(z.literal('')),
+  phone: z.string().min(1, "El teléfono es requerido"),
+  companyId: z.number().int().positive().optional(),
+  ownerId: z.number().int().positive().optional(),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 interface ContactFormProps {
-  contact?: any;
+  contact?: Contact;
 }
 
 export function ContactForm({ contact }: ContactFormProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  const createContact = useCreateContact();
-  const updateContact = useUpdateContact();
 
-  const form = useForm<InsertContact>({
-    resolver: zodResolver(insertContactSchema),
-    defaultValues: contact || {
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: contact ? {
+      ...contact,
+      companyId: contact.companyId || undefined,
+      ownerId: contact.ownerId || undefined,
+    } : {
       name: "",
+      email: "",
       phone: "",
-      platform: "whatsapp",
     },
   });
 
-  const onSubmit = (data: InsertContact) => {
-    const mutation = contact ? updateContact : createContact;
-    mutation.mutate(contact ? { ...data, id: contact.id } : data, {
-        onSuccess: () => {
-            toast({ title: "Éxito", description: `Contacto ${contact ? 'actualizado' : 'creado'} correctamente` });
-            setIsOpen(false);
-            if (!contact) form.reset();
-        },
-        onError: (error) => {
-            toast({ title: "Error", description: error.message, variant: "destructive" });
-        }
-    });
+  const { data: companies } = useQuery<Company[]>({ queryKey: ['/api/crm/companies'], queryFn: async () => (await fetch('/api/crm/companies')).json() });
+  const { data: users } = useQuery<User[]>({ queryKey: ['/api/crm/users'], queryFn: async () => (await fetch('/api/crm/users')).json() });
+
+  const contactMutation = useMutation({
+    mutationFn: async (data: ContactFormData) => {
+      const method = contact ? "PUT" : "POST";
+      const url = contact ? `/api/crm/contacts/${contact.id}` : "/api/crm/contacts";
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to save contact');
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/crm/contacts"] });
+      toast({ title: "Éxito", description: `Contacto ${contact ? 'actualizado' : 'creado'} correctamente` });
+      setIsOpen(false);
+      if (!contact) form.reset();
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const onSubmit = (data: ContactFormData) => {
+    contactMutation.mutate(data);
   };
 
   return (
@@ -58,9 +88,9 @@ export function ContactForm({ contact }: ContactFormProps) {
             </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] bg-slate-900/50 border-slate-700">
+      <DialogContent className="sm:max-w-[480px] bg-slate-900/50 border-slate-700">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">{contact ? 'Editar' : 'Crear Nuevo'} Contacto</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">{contact ? 'Editar' : 'Crear'} Contacto</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -71,7 +101,20 @@ export function ContactForm({ contact }: ContactFormProps) {
                 <FormItem>
                   <FormLabel>Nombre *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Juan Pérez" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
+                    <Input placeholder="Ana García" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="ana@correo.com" type="email" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,9 +125,9 @@ export function ContactForm({ contact }: ContactFormProps) {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Teléfono</FormLabel>
+                  <FormLabel>Teléfono *</FormLabel>
                   <FormControl>
-                    <Input placeholder="+1234567890" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input placeholder="+57 300 123 4567" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -92,28 +135,46 @@ export function ContactForm({ contact }: ContactFormProps) {
             />
             <FormField
               control={form.control}
-              name="platform"
+              name="companyId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Plataforma</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value || "whatsapp"}>
+                  <FormLabel>Empresa</FormLabel>
+                  <Select onValueChange={(v) => field.onChange(parseInt(v))} defaultValue={String(field.value)}>
                     <FormControl>
                       <SelectTrigger className="bg-slate-800/50 border-slate-700 h-10 rounded-lg">
-                        <SelectValue />
+                        <SelectValue placeholder="Seleccionar empresa" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                      <SelectItem value="instagram">Instagram</SelectItem>
-                      <SelectItem value="facebook">Facebook</SelectItem>
+                      {companies?.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={createContact.isPending || updateContact.isPending} className="w-full bg-primary hover:opacity-90 text-black font-bold rounded-lg h-10">
-              {createContact.isPending || updateContact.isPending ? 'Guardando...' : 'Guardar'}
+            <FormField
+              control={form.control}
+              name="ownerId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Propietario</FormLabel>
+                  <Select onValueChange={(v) => field.onChange(parseInt(v))} defaultValue={String(field.value)}>
+                    <FormControl>
+                      <SelectTrigger className="bg-slate-800/50 border-slate-700 h-10 rounded-lg">
+                        <SelectValue placeholder="Asignar a un usuario" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                       {users?.map(u => <SelectItem key={u.id} value={String(u.id)}>{u.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={contactMutation.isPending} className="w-full bg-primary hover:opacity-90 text-black font-bold rounded-lg h-10">
+              {contactMutation.isPending ? 'Guardando...' : 'Guardar'}
             </Button>
           </form>
         </Form>
