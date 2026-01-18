@@ -1,58 +1,51 @@
 
 import express from 'express';
-import prisma from '../db';
+import { db } from '../db';
+import { users } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 const router = express.Router();
 
 // Get all users
 router.get('/', async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
+  const result = await db.select().from(users);
+  res.json(result);
 });
 
 // Get a user by id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const user = await prisma.user.findUnique({
-    where: { id: Number(id) },
-  });
-  res.json(user);
+  const result = await db.select().from(users).where(eq(users.id, Number(id)));
+  res.json(result[0]);
 });
 
 // Create a new user
 router.post('/', async (req, res) => {
   const { name, email, password } = req.body;
-  const newUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password,
-    },
-  });
-  res.json(newUser);
+  const newUser = await db.insert(users).values({
+    name,
+    email,
+    password,
+  }).returning();
+  res.json(newUser[0]);
 });
 
 // Update a user
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
-  const updatedUser = await prisma.user.update({
-    where: { id: Number(id) },
-    data: {
-      name,
-      email,
-      password,
-    },
-  });
-  res.json(updatedUser);
+  const updatedUser = await db.update(users).set({
+    name,
+    email,
+    password,
+  }).where(eq(users.id, Number(id))).returning();
+  res.json(updatedUser[0]);
 });
 
 // Delete a user
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.user.delete({
-    where: { id: Number(id) },
-  });
+  await db.delete(users).where(eq(users.id, Number(id)));
   res.json({ message: 'User deleted' });
 });
 
