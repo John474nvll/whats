@@ -3,31 +3,33 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, MessageSquare, Briefcase, BarChart, PlusCircle } from "lucide-react";
+import { Users, MessageSquare, Briefcase, BarChart, PlusCircle, Loader } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
-// Mock hooks for fetching data - in a real app, these would hit your API
+// Hook to fetch real dashboard stats from the backend
 const useDashboardStats = () => {
-  // These would fetch data from /api/dashboard/stats or similar
   return useQuery({
-      queryKey: ['dashboardStats'],
-      queryFn: () => Promise.resolve({
-          newContacts: 12,
-          activeConversations: 5,
-          activeCampaigns: 2,
-          conversionRate: "3.5%"
-      })
+    queryKey: ['dashboardStats'],
+    queryFn: async () => {
+      const res = await fetch('/api/dashboard/stats');
+      if (!res.ok) throw new Error("Failed to fetch dashboard stats");
+      return res.json();
+    },
+    staleTime: 1000 * 60, // Refetch every minute
   });
 };
 
+// Hook to fetch recent conversations from the inbox API
 const useRecentConversations = () => {
   return useQuery({
-      queryKey: ['recentConversations'],
-      queryFn: () => Promise.resolve([
-          { id: 1, name: "Ana Garcia", lastMessage: "¡Hola! Necesito ayuda con mi pedido.", time: "2m ago" },
-          { id: 2, name: "Carlos Rodriguez", lastMessage: "Gracias, todo solucionado.", time: "15m ago" },
-          { id: 3, name: "Laura Fernandez", lastMessage: "¿Tienen stock de este producto?", time: "1h ago" },
-      ])
+    queryKey: ['conversations'], // Use the same key as the main inbox to share cache
+    queryFn: async () => {
+      const res = await fetch('/api/inbox/conversations');
+      if (!res.ok) throw new Error("Failed to fetch recent conversations");
+      const data = await res.json();
+      return data.slice(0, 3); // Take the 3 most recent conversations for the dashboard
+    },
+    staleTime: 1000 * 30, // Refetch every 30 seconds
   });
 };
 
@@ -36,15 +38,11 @@ export default function Dashboard() {
   const { data: conversations, isLoading: loadingConversations } = useRecentConversations();
 
   const statCards = [
-    { title: "Nuevos Contactos", value: stats?.newContacts, icon: <Users className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-blue-500/10" },
-    { title: "Conversaciones Activas", value: stats?.activeConversations, icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-green-500/10" },
-    { title: "Campañas Activas", value: stats?.activeCampaigns, icon: <Briefcase className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-purple-500/10" },
-    { title: "Tasa de Conversión", value: stats?.conversionRate, icon: <BarChart className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-yellow-500/10" },
+    { title: "Nuevos Contactos (30d)", value: stats?.newContacts, icon: <Users className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-blue-500/10" },
+    { title: "Conversaciones Activas (24h)", value: stats?.activeConversations, icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-green-500/10" },
+    { title: "Campañas Activas", value: stats?.activeCampaigns ?? 'N/A', icon: <Briefcase className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-purple-500/10" },
+    { title: "Tasa de Conversión", value: stats?.conversionRate ?? 'N/A', icon: <BarChart className="h-5 w-5 text-muted-foreground" />, bgColor: "bg-yellow-500/10" },
   ];
-
-  if (loadingStats || loadingConversations) {
-    return <div className="flex items-center justify-center h-full">Cargando Dashboard...</div>;
-  }
 
   return (
     <div className="flex-1 space-y-6 p-6 md:p-8">
@@ -68,7 +66,11 @@ export default function Dashboard() {
                 {card.icon}
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{card.value}</div>
+                {loadingStats ? (
+                  <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
+                ) : (
+                  <div className="text-2xl font-bold">{card.value}</div>
+                )}
               </CardContent>
             </Card>
           </motion.div>
@@ -83,17 +85,21 @@ export default function Dashboard() {
               <CardTitle>Conversaciones Recientes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {conversations?.map((conv) => (
-                  <div key={conv.id} className="flex items-start justify-between">
-                    <div>
-                      <p className="font-semibold">{conv.name}</p>
-                      <p className="text-sm text-muted-foreground truncate">{conv.lastMessage}</p>
+              {loadingConversations ? (
+                <div className="flex items-center justify-center py-8"><Loader className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+              ) : (
+                <div className="space-y-4">
+                  {conversations?.map((conv: any) => (
+                    <div key={conv.id} className="flex items-start justify-between">
+                      <div>
+                        <p className="font-semibold">{conv.contactName}</p>
+                        <p className="text-sm text-muted-foreground truncate">{conv.lastMessage}</p>
+                      </div>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{new Date(conv.lastMessageAt).toLocaleTimeString()}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">{conv.time}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
               <Button variant="outline" className="mt-4 w-full" asChild>
                 <Link to="/app/inbox">Ver todas las conversaciones</Link>
               </Button>

@@ -14,7 +14,8 @@ import { whatsappRoutes } from './routes/whatsapp';
 import { googleRoutes } from './routes/google';
 import { unifiedPlatformRoutes } from './routes/unified-platforms';
 import { platformsRoutes } from './routes/platforms';
-import { inboxRoutes } from './routes/inbox'; // Import the new inbox routes
+import { inboxRoutes } from './routes/inbox';
+import { dashboardRoutes } from './routes/dashboard'; // Import the new dashboard routes
 
 const app = new Elysia();
 
@@ -33,7 +34,8 @@ app.group('/api', (app) =>
     .use(googleRoutes)
     .use(unifiedPlatformRoutes)
     .use(platformsRoutes)
-    .use(inboxRoutes) // Register the inbox routes
+    .use(inboxRoutes)
+    .use(dashboardRoutes) // Register the dashboard routes
 );
 
 // Register webhook routes at the top level
