@@ -5,6 +5,7 @@ import { usersRoutes } from './routes/users';
 import { contactsRoutes } from './routes/contacts';
 import { companiesRoutes } from './routes/companies';
 import { sendWhatsAppMessage } from './services/whatsapp';
+import { createVoiceResponse } from './services/twilio';
 
 const prisma = new PrismaClient();
 const app = new Elysia();
@@ -41,6 +42,16 @@ async function getConversation(contact: any) {
 
   return conversation;
 }
+
+// Webhook for Twilio Voice
+app.post('/voice', ({ set }) => {
+  const welcomeMessage = 'Hello! Thank you for calling. We will connect you to an agent shortly.';
+  const twimlResponse = createVoiceResponse(welcomeMessage);
+  
+  set.headers['Content-Type'] = 'application/xml';
+  set.status = 200;
+  return twimlResponse;
+});
 
 
 // Webhook for WhatsApp
