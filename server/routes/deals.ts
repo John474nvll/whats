@@ -1,59 +1,92 @@
 
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../db';
 
-const prisma = new PrismaClient();
 const router = Router();
 
-// GET /api/deals - Get all deals
+// List all deals
 router.get('/', async (req, res) => {
   const deals = await prisma.deal.findMany({
-    include: { company: true, contact: true, owner: true },
+    include: {
+      company: true,
+      contact: true,
+      owner: true,
+    },
   });
   res.json(deals);
 });
 
-// GET /api/deals/:id - Get deal by ID
+// Get a single deal
 router.get('/:id', async (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   const deal = await prisma.deal.findUnique({
-    where: { id: parseInt(id) },
-    include: { company: true, contact: true, owner: true, interactions: true },
+    where: { id },
+    include: {
+      company: true,
+      contact: true,
+      owner: true,
+      interactions: true,
+    },
   });
-  if (deal) {
-    res.json(deal);
-  } else {
-    res.status(404).json({ error: 'Deal not found' });
+  if (!deal) {
+    return res.status(404).json({ error: 'Deal not found' });
+  }
+  res.json(deal);
+});
+
+// Create a new deal
+router.post('/', async (req, res) => {
+  const { title, value, stage, companyId, contactId, ownerId } = req.body;
+  try {
+    const newDeal = await prisma.deal.create({
+      data: {
+        title,
+        value,
+        stage,
+        companyId,
+        contactId,
+        ownerId,
+      },
+    });
+    res.status(201).json(newDeal);
+  } catch (error) {
+    res.status(500).json({ error: 'Could not create deal' });
   }
 });
 
-// POST /api/deals - Create a new deal
-router.post('/', async (req, res) => {
-  const { title, value, stage, companyId, contactId, ownerId } = req.body;
-  const newDeal = await prisma.deal.create({
-    data: { title, value, stage, companyId, contactId, ownerId },
-  });
-  res.status(201).json(newDeal);
-});
-
-// PUT /api/deals/:id - Update a deal
+// Update a deal
 router.put('/:id', async (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   const { title, value, stage, companyId, contactId, ownerId } = req.body;
-  const updatedDeal = await prisma.deal.update({
-    where: { id: parseInt(id) },
-    data: { title, value, stage, companyId, contactId, ownerId },
-  });
-  res.json(updatedDeal);
+  try {
+    const updatedDeal = await prisma.deal.update({
+      where: { id },
+      data: {
+        title,
+        value,
+        stage,
+        companyId,
+        contactId,
+        ownerId,
+      },
+    });
+    res.json(updatedDeal);
+  } catch (error) {
+    res.status(500).json({ error: 'Could not update deal' });
+  }
 });
 
-// DELETE /api/deals/:id - Delete a deal
+// Delete a deal
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  await prisma.deal.delete({
-    where: { id: parseInt(id) },
-  });
-  res.status(204).send();
+  const id = parseInt(req.params.id);
+  try {
+    await prisma.deal.delete({
+      where: { id },
+    });
+    res.json({ message: 'Deal deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Could not delete deal' });
+  }
 });
 
 export default router;
