@@ -1,64 +1,55 @@
 
 import express from 'express';
-import prisma from '../db';
+import { db } from '../db';
+import { deals } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 const router = express.Router();
 
 // Get all deals
 router.get('/', async (req, res) => {
-  const deals = await prisma.deal.findMany();
-  res.json(deals);
+  const result = await db.select().from(deals);
+  res.json(result);
 });
 
 // Get a deal by id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const deal = await prisma.deal.findUnique({
-    where: { id: Number(id) },
-  });
-  res.json(deal);
+  const result = await db.select().from(deals).where(eq(deals.id, Number(id)));
+  res.json(result[0]);
 });
 
 // Create a new deal
 router.post('/', async (req, res) => {
-  const { title, value, stage, companyId, contactId, ownerId } = req.body;
-  const newDeal = await prisma.deal.create({
-    data: {
-      title,
-      value,
-      stage,
-      companyId,
-      contactId,
-      ownerId,
-    },
-  });
-  res.json(newDeal);
+  const { title, value, stage, companyId, contactId } = req.body;
+  const newDeal = await db.insert(deals).values({
+    title,
+    value,
+    stage,
+    companyId,
+    contactId,
+  }).returning();
+  res.json(newDeal[0]);
 });
 
 // Update a deal
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { title, value, stage, companyId, contactId, ownerId } = req.body;
-  const updatedDeal = await prisma.deal.update({
-    where: { id: Number(id) },
-    data: {
-      title,
-      value,
-      stage,
-      companyId,
-      contactId,
-      ownerId,
-    },
-  });
-  res.json(updatedDeal);
+  const { title, value, stage, companyId, contactId } = req.body;
+  const updatedDeal = await db.update(deals).set({
+    title,
+    value,
+    stage,
+    companyId,
+    contactId,
+  }).where(eq(deals.id, Number(id))).returning();
+  res.json(updatedDeal[0]);
 });
 
 // Delete a deal
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.deal.delete({
-    where: { id: Number(id) },
-  });
+  await db.delete(deals).where(eq(deals.id, Number(id)));
   res.json({ message: 'Deal deleted' });
 });
 
