@@ -8,6 +8,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum BotStatus {
+  ACTIVE
+  PAUSED
+}
+
 model Company {
   id        String   @id @default(uuid())
   name      String
@@ -36,7 +41,7 @@ model Conversation {
   user      User       @relation(fields: [userId], references: [id])
   userId    String
   messages  Message[]
-  botState  BotState[]
+  botStatus BotStatus  @default(ACTIVE)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -50,11 +55,3 @@ model Message {
   createdAt      DateTime     @default(now())
 }
 
-model BotState {
-  id             String       @id @default(uuid())
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId String       @unique
-  isActive       Boolean      @default(true)
-  pausedAt       DateTime?    // Timestamp for when the bot was paused
-  updatedAt      DateTime     @updatedAt
-}
