@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Briefcase, Building, Contact } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Briefcase, Building, Contact, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -33,6 +33,7 @@ const menuGroups = [
       { title: "Companies", url: "/crm/companies", icon: Building },
       { title: "Contacts", url: "/crm/contacts", icon: Contact },
       { title: "Deals", url: "/crm/deals", icon: GitFork },
+      { title: "Retell Agents", url: "/crm/retell-agents", icon: Zap },
     ],
   },
   {

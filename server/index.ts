@@ -6,6 +6,7 @@ import { registerMiddleware } from "./middleware";
 import { serveStatic } from "./static";
 import { setupVite } from "./vite";
 import express from "express";
+import { googleRoutes } from "./routes/google";
 
 const app = express();
 const httpServer = createServer(app);
@@ -19,6 +20,7 @@ async function bootstrap() {
   
   registerMiddleware(app);
   await registerRoutes(httpServer, app);
+  app.use('/api', googleRoutes.handle);
   
   const port = process.env.PORT || 3000;
   httpServer.listen(port, '0.0.0.0', () => {
