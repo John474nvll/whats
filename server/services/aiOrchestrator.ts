@@ -1,111 +1,50 @@
 
-import { PrismaClient } from '@prisma/client';
-import { OpenAI } from 'openai';
-import { sendWhatsAppMessage } from './whatsapp';
+import OpenAI from 'openai';
 
-const prisma = new PrismaClient();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-class AiOrchestrator {
-  async handleIncomingMessage(phoneNumber: string, messageContent: string) {
-    const user = await this.findOrCreateUser(phoneNumber);
-    const conversation = await this.findOrCreateConversation(user.id);
+/**
+ * Generates a response using AI.
+ * @param userMessage The message from the user.
+ * @param conversationHistory The history of the conversation.
+ * @returns The AI-generated response string.
+ */
+export async function generateResponse(userMessage: string, conversationHistory: any[] = []): Promise<string> {
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn('OpenAI API key not set. Returning a default message.');
+    return "AI is not configured. You said: " + userMessage;
+  }
 
-    // Guardar el mensaje del usuario
-    await prisma.message.create({
-      data: {
-        conversationId: conversation.id,
-        sender: 'user',
-        content: messageContent,
-      },
+  try {
+    const systemPrompt = 'You are a helpful customer service assistant for a company called SocialHub. Your goal is to be friendly and professional. If you do not know the answer, say that you will ask a human agent.';
+
+    const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+      { role: 'system', content: systemPrompt },
+      ...conversationHistory.map(msg => ({ 
+        role: msg.sender === 'user' ? 'user' : 'assistant', 
+        content: msg.content 
+      })),
+      { role: 'user', content: userMessage },
+    ];
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: messages,
+      temperature: 0.7,
     });
 
-    // Comprobar si el bot debe ser pausado
-    if (messageContent.toUpperCase().includes('AGENTE')) {
-      await this.pauseBot(conversation.id);
-      // Opcional: Notificar al usuario que un agente se pondrá en contacto
-      await sendWhatsAppMessage(phoneNumber, 'Un agente se pondrá en contacto contigo en breve.');
-      return;
+    const response = completion.choices[0]?.message?.content;
+    
+    if (!response) {
+        throw new Error('No response from OpenAI');
     }
 
-    const botState = await this.getBotState(conversation.id);
-    if (!botState.isActive) {
-      console.log('Bot is paused for this conversation.');
-      return;
-    }
+    return response;
 
-    const conversationHistory = await this.getConversationHistory(conversation.id);
-    const aiResponse = await this.generateAiResponse(conversationHistory);
-
-    // Guardar la respuesta del bot
-    await prisma.message.create({
-      data: {
-        conversationId: conversation.id,
-        sender: 'bot',
-        content: aiResponse,
-      },
-    });
-
-    // Enviar la respuesta de la IA por WhatsApp
-    await sendWhatsAppMessage(phoneNumber, aiResponse);
-  }
-
-  private async findOrCreateUser(phoneNumber: string) {
-    let user = await prisma.user.findUnique({ where: { phoneNumber } });
-    if (!user) {
-      user = await prisma.user.create({ data: { phoneNumber } });
-    }
-    return user;
-  }
-
-  private async findOrCreateConversation(userId: string) {
-    let conversation = await prisma.conversation.findFirst({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-    });
-    if (!conversation) {
-      conversation = await prisma.conversation.create({ data: { userId } });
-    }
-    return conversation;
-  }
-
-  private async getBotState(conversationId: string) {
-    let botState = await prisma.botState.findUnique({ where: { conversationId } });
-    if (!botState) {
-      botState = await prisma.botState.create({ data: { conversationId } });
-    }
-    return botState;
-  }
-
-  private async pauseBot(conversationId: string) {
-    return prisma.botState.update({
-      where: { conversationId },
-      data: { isActive: false, pausedAt: new Date() },
-    });
-  }
-
-  private async getConversationHistory(conversationId: string) {
-    const messages = await prisma.message.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: 'asc' },
-    });
-    return messages.map((msg) => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content }));
-  }
-
-  private async generateAiResponse(history: any[]) {
-    try {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: history,
-      });
-      return completion.choices[0].message.content ?? 'No pude procesar tu solicitud.';
-    } catch (error) {
-      console.error('Error generating AI response:', error);
-      return 'Hubo un error al generar una respuesta.';
-    }
+  } catch (error) {
+    console.error('Failed to generate AI response:', error);
+    return 'Sorry, I am having trouble connecting to the AI brain. Please try again later.';
   }
 }
-
-export const aiOrchestrator = new AiOrchestrator();
