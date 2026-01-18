@@ -8,6 +8,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// --- Existing Models (Maintained for compatibility) ---
+
 model Customer {
   id          Int      @id @default(autoincrement())
   name        String
@@ -36,14 +38,56 @@ model Operation {
   updatedAt   DateTime @updatedAt
 }
 
+// --- CRM Models ---
+
+// User model for assigning ownership
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String   // In a real app, this should be a hash
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignedContacts Contact[]
+  assignedDeals    Deal[]
+  interactions     Interaction[]
+}
+
+// Company model for B2B relationships
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  website   String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contacts     Contact[]
+  deals        Deal[]
+}
+
+// Enhanced Contact model
 model Contact {
   id        Int      @id @default(autoincrement())
   name      String?
+  email     String?  @unique
   phone     String   @unique
   platform  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   inboxes   Inbox[]
+
+  // CRM specific fields
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+  
+  ownerId   Int?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+
+  deals        Deal[]
+  interactions Interaction[]
 }
 
 model Inbox {
@@ -54,4 +98,42 @@ model Inbox {
   status      String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// Deal model for sales pipeline
+model Deal {
+  id          Int      @id @default(autoincrement())
+  title       String
+  value       Float
+  stage       String   // e.g., "Lead", "Qualified", "Proposal", "Won", "Lost"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  companyId   Int?
+  company     Company? @relation(fields: [companyId], references: [id])
+  
+  contactId   Int?
+  contact     Contact? @relation(fields: [contactId], references: [id])
+
+  ownerId     Int?
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  
+  interactions Interaction[]
+}
+
+// Interaction model for logging activities
+model Interaction {
+  id          Int      @id @default(autoincrement())
+  type        String   // e.g., "Call", "Email", "Meeting"
+  content     String
+  createdAt   DateTime @default(now())
+
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+
+  contactId   Int?
+  contact     Contact? @relation(fields: [contactId], references: [id])
+  
+  dealId      Int?
+  deal        Deal?    @relation(fields: [dealId], references: [id])
 }
