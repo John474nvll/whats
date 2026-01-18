@@ -26,6 +26,18 @@ export const users = sqliteTable("users", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const retellAgents = sqliteTable("retell_agents", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  llm_websocket_url: text("llm_websocket_url").notNull(),
+  voice_id: text("voice_id").notNull(),
+  agent_prompt: text("agent_prompt"),
+  status: text("status").default("active"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+  userId: text("user_id").notNull().references(() => users.id),
+});
+
 export const companies = sqliteTable("companies", {
   id: integer("id").primaryKey(),
   name: text("name").notNull(),
@@ -277,6 +289,14 @@ export const userRelations = relations(users, ({ many }) => ({
   inventory: many(inventory),
   transactions: many(transactions),
   interactions: many(interactions),
+  retellAgents: many(retellAgents),
+}));
+
+export const retellAgentRelations = relations(retellAgents, ({ one }) => ({
+  user: one(users, {
+    fields: [retellAgents.userId],
+    references: [users.id],
+  }),
 }));
 
 export const companyRelations = relations(companies, ({ many }) => ({
@@ -463,6 +483,7 @@ export const transactionRelations = relations(transactions, ({ one }) => ({
 // === ZOD SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users);
+export const insertRetellAgentSchema = createInsertSchema(retellAgents);
 export const insertCompanySchema = createInsertSchema(companies);
 export const insertContactSchema = createInsertSchema(contacts);
 export const insertDealSchema = createInsertSchema(deals);
@@ -499,6 +520,9 @@ export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections);
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
+export type RetellAgent = typeof retellAgents.$inferSelect;
+export type InsertRetellAgent = z.infer<typeof insertRetellAgentSchema>;
 
 export type Company = typeof companies.$inferSelect;
 export type InsertCompany = z.infer<typeof insertCompanySchema>;
@@ -555,6 +579,7 @@ export type CustomLink = typeof customLinks.$inferSelect;
 export type InsertCustomLink = z.infer<typeof insertCustomLinkSchema>;
 
 export type ArtistProfile = typeof artistProfiles.$inferSelect;
+
 export type InsertArtistProfile = z.infer<typeof insertArtistProfileSchema>;
 
 export type MusicContent = typeof musicContent.$inferSelect;

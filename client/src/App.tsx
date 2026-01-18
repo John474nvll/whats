@@ -31,6 +31,7 @@ import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
 // CRM Pages
 import CRMRoutes from "@/pages/crm";
+import RetellAgents from "@/pages/RetellAgents";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function Router() {
 
       {/* CRM Routes */}
       <Route path="/crm" component={CRMRoutes} />
+      <Route path="/crm/retell-agents" component={RetellAgents} />
       <Route path="/crm/:rest*" component={CRMRoutes} />
 
       <Route component={NotFound} />
