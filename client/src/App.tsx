@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Switch, Route, Link } from "wouter";
 import { queryClient } from "./lib/queryClient";
@@ -29,6 +30,13 @@ import { motion } from "framer-motion";
 
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
+// CRM Pages
+import CRMDashboard from "@/pages/crm/Dashboard";
+import CRMUsers from "@/pages/crm/Users";
+import CRMCompanies from "@/pages/crm/Companies";
+import CRMContacts from "@/pages/crm/Contacts";
+import CRMDeals from "@/pages/crm/Deals";
+
 function Router() {
   return (
     <Switch>
@@ -46,6 +54,14 @@ function Router() {
       <Route path="/links" component={CustomLinks} />
       <Route path="/platforms" component={PlatformsHub} />
       <Route path="/settings" component={Settings} />
+
+      {/* CRM Routes */}
+      <Route path="/crm" component={CRMDashboard} />
+      <Route path="/crm/users" component={CRMUsers} />
+      <Route path="/crm/companies" component={CRMCompanies} />
+      <Route path="/crm/contacts" component={CRMContacts} />
+      <Route path="/crm/deals" component={CRMDeals} />
+
       <Route component={NotFound} />
     </Switch>
   );
