@@ -1,3 +1,4 @@
+
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import {
@@ -28,18 +29,16 @@ const menuGroups = [
     label: "📱 CRM",
     items: [
       { title: "Inbox", url: "/inbox", icon: MessageSquare },
-      { title: "Contacts", url: "/contacts", icon: Users },
-      { title: "Customers", url: "/customers", icon: Users },
     ],
   },
   {
     label: "💼 CRM MODULAR",
     items: [
       { title: "CRM Dashboard", url: "/crm", icon: Briefcase },
+      { title: "Contacts", url: "/contacts", icon: Contact },
       { title: "Deals", url: "/crm/deals", icon: GitFork },
       { title: "Users", url: "/crm/users", icon: Users },
       { title: "Companies", url: "/crm/companies", icon: Building },
-      { title: "Contacts", url: "/crm/contacts", icon: Contact },
     ],
   },
   {
