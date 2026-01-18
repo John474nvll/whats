@@ -1,11 +1,11 @@
 
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { randomUUID } from "crypto";
-import { storage } from "../storage";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { PrismaClient } from '@prisma/client';
 
-const JWT_SECRET = process.env.SESSION_SECRET || "dev-secret-key";
-const JWT_EXPIRY = "7d";
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.SESSION_SECRET || 'dev-secret-key';
+const JWT_EXPIRY = '7d';
 
 export interface AuthPayload {
   userId: string;
@@ -32,27 +32,34 @@ export function verifyToken(token: string): AuthPayload | null {
   }
 }
 
-export async function registerUser(username: string, password: string, botId: string) {
-  const existing = await storage.getUserByUsername(username);
-  if (existing) throw new Error("Username already exists");
+export async function registerUser(username: string, password: string, name?: string) {
+  const existing = await prisma.user.findUnique({ where: { username } });
+  if (existing) {
+    throw new Error('Username already exists');
+  }
 
   const hashedPassword = await hashPassword(password);
-  const user = await storage.createUser({
-    id: randomUUID(),
-    username,
-    password: hashedPassword,
-    botId,
+  const user = await prisma.user.create({
+    data: {
+      username,
+      password: hashedPassword,
+      name,
+    },
   });
 
   return user;
 }
 
 export async function loginUser(username: string, password: string) {
-  const user = await storage.getUserByUsername(username);
-  if (!user) throw new Error("Invalid credentials");
+  const user = await prisma.user.findUnique({ where: { username } });
+  if (!user || !user.password) {
+    throw new Error('Invalid credentials');
+  }
 
   const valid = await verifyPassword(password, user.password);
-  if (!valid) throw new Error("Invalid credentials");
+  if (!valid) {
+    throw new Error('Invalid credentials');
+  }
 
   return user;
 }

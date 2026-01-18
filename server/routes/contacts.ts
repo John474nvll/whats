@@ -1,56 +1,40 @@
 
-import express from 'express';
-import { db } from '../db';
-import { contacts } from '@shared/schema';
-import { eq } from 'drizzle-orm';
+import { Elysia } from 'elysia';
+import { PrismaClient } from '@prisma/client';
+import { authMiddleware } from '../middleware/auth';
 
-const router = express.Router();
+const prisma = new PrismaClient();
 
-// Get all contacts
-router.get('/', async (req, res) => {
-  const result = await db.select().from(contacts);
-  res.json(result);
-});
-
-// Get a contact by id
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const result = await db.select().from(contacts).where(eq(contacts.id, Number(id)));
-  res.json(result[0]);
-});
-
-// Create a new contact
-router.post('/', async (req, res) => {
-  const { name, email, phone, companyId, platform } = req.body;
-  const newContact = await db.insert(contacts).values({
-    name,
-    email,
-    phone,
-    companyId,
-    platform
-  }).returning();
-  res.json(newContact[0]);
-});
-
-// Update a contact
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, email, phone, companyId, platform } = req.body;
-  const updatedContact = await db.update(contacts).set({
-    name,
-    email,
-    phone,
-    companyId,
-    platform
-  }).where(eq(contacts.id, Number(id))).returning();
-  res.json(updatedContact[0]);
-});
-
-// Delete a contact
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  await db.delete(contacts).where(eq(contacts.id, Number(id)));
-  res.json({ message: 'Contact deleted' });
-});
-
-export default router;
+export const contactsRoutes = new Elysia()
+  .use(authMiddleware) // Protege todas las rutas de contactos
+  .get('/contacts', async () => {
+    // Solo usuarios autenticados pueden llegar aquí
+    return await prisma.user.findMany({
+      where: { phoneNumber: { not: null } }, // Filtra para obtener solo contactos (con teléfono)
+    });
+  })
+  .post('/contacts', async ({ body }: { body: any }) => {
+    const { name, phoneNumber } = body;
+    return await prisma.user.create({
+      data: {
+        name,
+        phoneNumber,
+      },
+    });
+  })
+  .get('/contacts/:id', async ({ params }) => {
+    const { id } = params;
+    return await prisma.user.findUnique({ where: { id } });
+  })
+  .put('/contacts/:id', async ({ params, body }: { params: any, body: any }) => {
+    const { id } = params;
+    return await prisma.user.update({
+      where: { id },
+      data: body,
+    });
+  })
+  .delete('/contacts/:id', async ({ params }) => {
+    const { id } = params;
+    await prisma.user.delete({ where: { id } });
+    return { message: 'Contact deleted successfully' };
+  });

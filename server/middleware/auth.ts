@@ -1,24 +1,27 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../services/auth";
 
-export interface AuthRequest extends Request {
-  userId?: string;
-  username?: string;
+import { Elysia } from 'elysia';
+import { verifyToken, AuthPayload } from '../services/auth';
+
+// Extiende el contexto de Elysia para incluir el usuario actual
+export interface AuthenticatedContext {
+  user: AuthPayload;
 }
 
-export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+export const authMiddleware = new Elysia()
+  .derive(({ headers }) => {
+    const authHeader = headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new Error('Unauthorized');
+    }
 
-  const token = authHeader.slice(7);
-  const payload = verifyToken(token);
-  if (!payload) {
-    return res.status(401).json({ error: "Invalid token" });
-  }
+    const token = authHeader.split(' ')[1];
+    const user = verifyToken(token);
 
-  req.userId = payload.userId;
-  req.username = payload.username;
-  next();
-}
+    if (!user) {
+      throw new Error('Invalid or expired token');
+    }
+
+    return {
+      user: user as AuthPayload
+    };
+  });

@@ -7,6 +7,7 @@ import { serveStatic } from "./static";
 import { setupVite } from "./vite";
 import express from "express";
 import { googleRoutes } from "./routes/google";
+import { whatsappRoutes } from "./routes/whatsapp";
 
 const app = express();
 const httpServer = createServer(app);
@@ -21,7 +22,8 @@ async function bootstrap() {
   registerMiddleware(app);
   await registerRoutes(httpServer, app);
   app.use('/api', googleRoutes.handle);
-  
+  app.use('/api', whatsappRoutes.handle);
+
   const port = process.env.PORT || 3000;
   httpServer.listen(port, '0.0.0.0', () => {
     console.log(`Server listening on http://0.0.0.0:${port}`);

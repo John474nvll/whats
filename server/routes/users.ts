@@ -1,52 +1,30 @@
 
-import express from 'express';
-import { db } from '../db';
-import { users } from '@shared/schema';
-import { eq } from 'drizzle-orm';
+import { Elysia } from 'elysia';
+import { registerUser, loginUser, generateToken } from '../services/auth';
 
-const router = express.Router();
-
-// Get all users
-router.get('/', async (req, res) => {
-  const result = await db.select().from(users);
-  res.json(result);
-});
-
-// Get a user by id
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const result = await db.select().from(users).where(eq(users.id, Number(id)));
-  res.json(result[0]);
-});
-
-// Create a new user
-router.post('/', async (req, res) => {
-  const { name, email, password } = req.body;
-  const newUser = await db.insert(users).values({
-    name,
-    email,
-    password,
-  }).returning();
-  res.json(newUser[0]);
-});
-
-// Update a user
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, email, password } = req.body;
-  const updatedUser = await db.update(users).set({
-    name,
-    email,
-    password,
-  }).where(eq(users.id, Number(id))).returning();
-  res.json(updatedUser[0]);
-});
-
-// Delete a user
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  await db.delete(users).where(eq(users.id, Number(id)));
-  res.json({ message: 'User deleted' });
-});
-
-export default router;
+export const usersRoutes = new Elysia()
+  .post('/register', async ({ body }: { body: any }) => {
+    try {
+      const { username, password, name } = body;
+      if (!username || !password) {
+        return new Response('Username and password are required', { status: 400 });
+      }
+      const user = await registerUser(username, password, name);
+      return { message: 'User registered successfully', userId: user.id };
+    } catch (error: any) {
+      return new Response(error.message, { status: 409 }); // Conflict
+    }
+  })
+  .post('/login', async ({ body }: { body: any }) => {
+    try {
+      const { username, password } = body;
+      if (!username || !password) {
+        return new Response('Username and password are required', { status: 400 });
+      }
+      const user = await loginUser(username, password);
+      const token = generateToken({ userId: user.id, username: user.username! });
+      return { message: 'Login successful', token };
+    } catch (error: any) {
+      return new Response(error.message, { status: 401 }); // Unauthorized
+    }
+  });
