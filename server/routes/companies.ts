@@ -1,60 +1,53 @@
 
 import express from 'express';
-import prisma from '../db';
+import { db } from '../db';
+import { companies } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 const router = express.Router();
 
 // Get all companies
 router.get('/', async (req, res) => {
-  const companies = await prisma.company.findMany();
-  res.json(companies);
+  const result = await db.select().from(companies);
+  res.json(result);
 });
 
 // Get a company by id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const company = await prisma.company.findUnique({
-    where: { id: Number(id) },
-  });
-  res.json(company);
+  const result = await db.select().from(companies).where(eq(companies.id, Number(id)));
+  res.json(result[0]);
 });
 
 // Create a new company
 router.post('/', async (req, res) => {
   const { name, website, phone, address } = req.body;
-  const newCompany = await prisma.company.create({
-    data: {
-      name,
-      website,
-      phone,
-      address,
-    },
-  });
-  res.json(newCompany);
+  const newCompany = await db.insert(companies).values({
+    name,
+    website,
+    phone,
+    address,
+  }).returning();
+  res.json(newCompany[0]);
 });
 
 // Update a company
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, website, phone, address } = req.body;
-  const updatedCompany = await prisma.company.update({
-    where: { id: Number(id) },
-    data: {
-      name,
-      website,
-      phone,
-      address,
-    },
-  });
-  res.json(updatedCompany);
+  const updatedCompany = await db.update(companies).set({
+    name,
+    website,
+    phone,
+    address,
+  }).where(eq(companies.id, Number(id))).returning();
+  res.json(updatedCompany[0]);
 });
 
 // Delete a company
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.company.delete({
-    where: { id: Number(id) },
-  });
+  await db.delete(companies).where(eq(companies.id, Number(id)));
   res.json({ message: 'Company deleted' });
 });
 

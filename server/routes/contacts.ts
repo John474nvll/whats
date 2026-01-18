@@ -1,64 +1,55 @@
 
 import express from 'express';
-import prisma from '../db';
+import { db } from '../db';
+import { contacts } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 const router = express.Router();
 
 // Get all contacts
 router.get('/', async (req, res) => {
-  const contacts = await prisma.contact.findMany();
-  res.json(contacts);
+  const result = await db.select().from(contacts);
+  res.json(result);
 });
 
 // Get a contact by id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const contact = await prisma.contact.findUnique({
-    where: { id: Number(id) },
-  });
-  res.json(contact);
+  const result = await db.select().from(contacts).where(eq(contacts.id, Number(id)));
+  res.json(result[0]);
 });
 
 // Create a new contact
 router.post('/', async (req, res) => {
-  const { name, email, phone, platform, companyId, ownerId } = req.body;
-  const newContact = await prisma.contact.create({
-    data: {
-      name,
-      email,
-      phone,
-      platform,
-      companyId,
-      ownerId,
-    },
-  });
-  res.json(newContact);
+  const { name, email, phone, companyId, platform } = req.body;
+  const newContact = await db.insert(contacts).values({
+    name,
+    email,
+    phone,
+    companyId,
+    platform
+  }).returning();
+  res.json(newContact[0]);
 });
 
 // Update a contact
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, email, phone, platform, companyId, ownerId } = req.body;
-  const updatedContact = await prisma.contact.update({
-    where: { id: Number(id) },
-    data: {
-      name,
-      email,
-      phone,
-      platform,
-      companyId,
-      ownerId,
-    },
-  });
-  res.json(updatedContact);
+  const { name, email, phone, companyId, platform } = req.body;
+  const updatedContact = await db.update(contacts).set({
+    name,
+    email,
+    phone,
+    companyId,
+    platform
+  }).where(eq(contacts.id, Number(id))).returning();
+  res.json(updatedContact[0]);
 });
 
 // Delete a contact
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.contact.delete({
-    where: { id: Number(id) },
-  });
+  await db.delete(contacts).where(eq(contacts.id, Number(id)));
   res.json({ message: 'Contact deleted' });
 });
 
