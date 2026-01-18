@@ -14,7 +14,14 @@ import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./se
 import { loginSchema, registerSchema, insertCustomerSchema, customers, operations } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
-import { eq } from "drizzle-orm"; // Using Drizzle eq operator
+import { eq, desc } from "drizzle-orm"; // Using Drizzle eq operator
+
+// --- CRM Route Imports ---
+import usersCrmRoutes from './routes/users';
+import companiesCrmRoutes from './routes/companies';
+import contactsCrmRoutes from './routes/contacts';
+import dealsCrmRoutes from './routes/deals';
+import interactionsCrmRoutes from './routes/interactions';
 
 // Simple SSE implementation
 interface SseClient {
@@ -38,6 +45,14 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
+
+  // --- CRM API Routes ---
+  app.use('/api/crm/users', usersCrmRoutes);
+  app.use('/api/crm/companies', companiesCrmRoutes);
+  app.use('/api/crm/contacts', contactsCrmRoutes);
+  app.use('/api/crm/deals', dealsCrmRoutes);
+  app.use('/api/crm/interactions', interactionsCrmRoutes);
+
 
   // User registration endpoint
   app.post("/api/register", async (req: Request, res: Response) => {
