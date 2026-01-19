@@ -26,6 +26,7 @@ import PlatformsHub from "@/pages/PlatformsHub";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Whatsapp } from "@/components/ui/whatsapp";
 
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 
@@ -49,6 +50,7 @@ function Router() {
       <Route path="/links" component={CustomLinks} />
       <Route path="/platforms" component={PlatformsHub} />
       <Route path="/settings" component={Settings} />
+      <Route path="/whatsapp" component={Whatsapp} />
 
       {/* CRM Routes */}
       <Route path="/crm" component={CRMRoutes} />
