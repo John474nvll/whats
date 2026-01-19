@@ -1,10 +1,21 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient: OpenAI | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY environment variable is not set");
+    }
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openaiClient;
+}
 
 export async function generateContent(prompt: string): Promise<string> {
+  const openai = getOpenAI();
   const message = await (openai.chat.completions.create as any)({
     model: "gpt-4-turbo",
     max_tokens: 1024,
@@ -47,6 +58,7 @@ export async function analyzeMessage(message: string): Promise<{
 }
 
 export async function generateImage(prompt: string): Promise<string> {
+  const openai = getOpenAI();
   const image = await openai.images.generate({
     model: "dall-e-3",
     prompt: prompt,

@@ -1,39 +1,34 @@
-
 import { Elysia } from 'elysia';
+import { node } from '@elysiajs/node';
 import { cors } from '@elysiajs/cors';
 import { staticPlugin } from '@elysiajs/static';
 
-// Import individual route modules
 import { usersRoutes } from './routes/users';
 import { contactsRoutes } from './routes/contacts';
 import { companiesRoutes } from './routes/companies';
-import dealsRoutes from './routes/deals';
-import interactionsRoutes from './routes/interactions';
-import retellRoutes from './routes/retell';
-import whatsappRoutes from './routes/whatsapp';
+import { dealsRoutes } from './routes/deals';
+import { interactionsRoutes } from './routes/interactions';
+import { retellRoutes } from './routes/retell';
+import { whatsappRoutes } from './routes/whatsapp';
 import { googleRoutes } from './routes/google';
-import { registerUnifiedPlatformRoutes } from './routes/unified-platforms';
+import { unifiedPlatformRoutes } from './routes/unified-platforms';
 import { platformsRoutes } from './routes/platforms';
 import { inboxRoutes } from './routes/inbox';
-import { dashboardRoutes } from './routes/dashboard'; // Import the new dashboard routes
-import aiRoutes from './routes/ai';
-import campaignsRoutes from './routes/campaigns';
+import { dashboardRoutes } from './routes/dashboard';
+import { aiRoutes } from './routes/ai';
+import { campaignsRoutes } from './routes/campaigns';
 
-const app = new Elysia();
+const app = new Elysia({ adapter: node() });
 
-// Basic middleware
-app.use(cors()); // Enable CORS for frontend interactions
+app.use(cors());
 
-// Register webhook routes at the top level
 app.use(whatsappRoutes);
 
-// Serve static files for the frontend client
 app.use(staticPlugin({
     assets: "client/dist",
     prefix: ''
 }));
 
-// Group all API routes under the '/api' prefix
 app.group('/api', (app) =>
   app
     .use(usersRoutes)
@@ -45,15 +40,13 @@ app.group('/api', (app) =>
     .use(googleRoutes)
     .use(platformsRoutes)
     .use(inboxRoutes)
-    .use(dashboardRoutes) // Register the dashboard routes
+    .use(dashboardRoutes)
     .use(aiRoutes)
     .use(campaignsRoutes)
 );
 
-// Register unified platform routes
-registerUnifiedPlatformRoutes(app as any);
+app.use(unifiedPlatformRoutes);
 
-// Main server listener
 app.listen({
     port: 5001,
     hostname: '0.0.0.0'
