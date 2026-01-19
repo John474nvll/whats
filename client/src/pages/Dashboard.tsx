@@ -13,25 +13,12 @@ import {
   MessageSquare,
   Users,
   Activity,
-  ArrowUpRight,
-  ArrowDownRight,
   Zap,
-  MessageCircle,
-  Instagram,
-  Facebook,
   Link2,
   Plus,
   LogOut,
-  ShoppingBag,
-  Megaphone,
-  Music,
-  Send,
-  Download,
-  Package,
-  Contact,
-  LineChart,
-  User,
-  Phone,
+  Briefcase,
+  PlusCircle,
   BarChart,
   Target,
   RefreshCw,
@@ -39,6 +26,7 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
+  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +44,7 @@ import {
   Bar,
   Cell,
 } from "recharts";
-import { customerGrowthData, StatCard } from "@/components/dashboard/StatCard";
+import { StatCard } from "@/components/dashboard/StatCard";
 import { RecentConversations } from "@/components/dashboard/RecentConversations";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -72,24 +60,35 @@ const activityData = [
   { name: "Sun", value: 130, avg: 70 },
 ];
 
+const useDashboardStats = () => {
+  return useQuery({
+    queryKey: ['dashboardStats'],
+    queryFn: async () => {
+      // Assuming this endpoint exists and returns the stats in the expected format
+      const res = await apiRequest("GET", '/api/dashboard/stats');
+      return res;
+    },
+    staleTime: 1000 * 60, // Refetch every minute
+  });
+};
+
 export default function Dashboard() {
   const { toast } = useToast();
   const [showTokens, setShowTokens] = useState(false);
+  
   const { data: widgets, isLoading: isLoadingWidgets } = useQuery<Widget[]>({
     queryKey: ["/api/widgets"],
   });
   const { data: accounts = [], isLoading: isLoadingAccounts } = useQuery<SocialAccount[]>({
     queryKey: ["/api/social-accounts"],
   });
-  const { data: customers = [], isLoading: isLoadingCustomers } = useQuery<any[]>({
-    queryKey: ["/api/customers"],
-  });
-  const { data: crmStats } = useQuery<any>({
+  const { data: crmStats, isLoading: isLoadingCrmStats } = useQuery<any>({
     queryKey: ["/api/crm/stats"],
   });
   const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<any[]>({
     queryKey: ["/api/inbox/conversations"],
   });
+  const { data: dashboardStats, isLoading: isLoadingDashboardStats } = useDashboardStats();
 
   const refreshMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -107,7 +106,9 @@ export default function Dashboard() {
     window.location.href = "/";
   };
 
-  if (isLoadingWidgets || isLoadingAccounts || isLoadingCustomers || isLoadingConversations) {
+  const isLoading = isLoadingWidgets || isLoadingAccounts || isLoadingCrmStats || isLoadingConversations || isLoadingDashboardStats;
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-950">
         <motion.div
@@ -137,14 +138,12 @@ export default function Dashboard() {
     acc[account.platform].push(account);
     return acc;
   }, {} as Record<string, SocialAccount[]>);
-
+  
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-primary/30">
-      {/* Dynamic Background Overlay */}
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,197,94,0.1),transparent_50%)] pointer-events-none" />
       
       <div className="max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 space-y-8 relative">
-        {/* Header Section */}
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -156,7 +155,7 @@ export default function Dashboard() {
                 <Zap className="w-6 h-6 text-primary" />
               </div>
               <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 px-3 py-1 rounded-full font-black text-[10px] tracking-widest uppercase">
-                v3.1 Stable
+                v4.0 Alpha
               </Badge>
             </div>
             <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/40">
@@ -172,17 +171,14 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 flex-wrap"
           >
-            <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 p-1 rounded-2xl flex gap-1">
-              <Button variant="ghost" className="rounded-xl font-bold text-xs px-4 h-10 hover:bg-white/5">
-                <Calendar className="w-4 h-4 mr-2" />
-                Hoy
-              </Button>
-              <Button variant="ghost" className="rounded-xl font-bold text-xs px-4 h-10 text-slate-500 hover:text-white">
-                Mes
-              </Button>
-            </div>
+            <Button className="rounded-2xl bg-primary text-black font-black hover:scale-105 transition-all shadow-[0_10px_30px_rgba(34,197,94,0.3)] px-6 h-12" asChild>
+              <Link to="/app/campaigns/new">
+                <PlusCircle className="w-5 h-5 mr-2" />
+                Crear Campaña
+              </Link>
+            </Button>
             <Button
-              className="rounded-2xl bg-primary text-black font-black hover:scale-105 transition-all shadow-[0_10px_30px_rgba(34,197,94,0.3)] px-6 h-12"
+              className="rounded-2xl bg-white/10 text-white font-bold hover:bg-white/20 border border-white/10 px-6 h-12"
               onClick={() => window.location.href = '/inbox'}
             >
               <MessageSquare className="w-5 h-5 mr-2" />
@@ -199,45 +195,34 @@ export default function Dashboard() {
           </motion.div>
         </header>
 
-        {/* Core Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           <StatCard 
-            label="Clientes Activos" 
-            value={customers.length.toString()} 
-            change="+12.5%" 
+            label="Nuevos Contactos (30d)" 
+            value={dashboardStats?.newContacts || '0'} 
             icon={Users} 
             color="bg-blue-500" 
-            trend="up" 
           />
           <StatCard 
-            label="Tasa de Cierre" 
-            value="64%" 
-            change="+4.2%" 
-            icon={Target} 
-            color="bg-emerald-500" 
-            trend="up" 
+            label="Conversaciones Activas (24h)" 
+            value={dashboardStats?.activeConversations || '0'} 
+            icon={MessageSquare} 
+            color="bg-green-500" 
           />
           <StatCard 
-            label="IA Engagement" 
-            value="892" 
-            change="+18%" 
-            icon={Activity} 
+            label="Campañas Activas" 
+            value={dashboardStats?.activeCampaigns || 'N/A'} 
+            icon={Briefcase} 
             color="bg-purple-500" 
-            trend="up" 
           />
           <StatCard 
-            label="Coste Lead" 
-            value="$1.24" 
-            change="-8%" 
-            icon={TrendingUp} 
-            color="bg-amber-500" 
-            trend="down" 
+            label="Tasa de Conversión" 
+            value={dashboardStats?.conversionRate || 'N/A'} 
+            icon={BarChart} 
+            color="bg-yellow-500" 
           />
         </div>
 
-        {/* Main Content Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-          {/* Left Column - CRM & Charts */}
           <div className="xl:col-span-8 space-y-6">
             <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -249,11 +234,9 @@ export default function Dashboard() {
                   </CardTitle>
                   <CardDescription className="text-slate-500 mt-1">Interacción en tiempo real a través de canales vinculados</CardDescription>
                 </div>
-                <div className="flex gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-[10px] font-black text-emerald-400 uppercase tracking-tighter">Live Sync</span>
-                  </div>
                 </div>
               </CardHeader>
               <CardContent className="p-6">
@@ -292,7 +275,6 @@ export default function Dashboard() {
             </Card>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sales Pipeline */}
               <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl">
                 <CardHeader>
                   <CardTitle className="text-lg font-black flex items-center gap-2">
@@ -327,7 +309,6 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              {/* Retell Voice AI Status */}
               <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
                   <Phone className="w-32 h-32 text-primary rotate-12" />
@@ -344,31 +325,19 @@ export default function Dashboard() {
                       <Zap className="w-8 h-8 text-black" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-black text-white text-lg">Retell Agent V1</p>
-                      <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Modo: Ventas & Agendamiento</p>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <div className="flex gap-0.5">
-                        {[1, 2, 3, 4].map(i => (
-                          <motion.div
-                            key={i}
-                            animate={{ height: [4, 12, 4] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                            className="w-1 bg-primary rounded-full"
-                          />
-                        ))}
-                      </div>
+                      <p className="font-black text-white text-lg">Retell Agent V2</p>
+                      <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Modo: Ventas & Agendamiento IA</p>
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
                       <p className="text-[10px] text-slate-500 font-black uppercase">Llamadas Hoy</p>
-                      <p className="text-2xl font-black text-white">24</p>
+                      <p className="text-2xl font-black text-white">37</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
                       <p className="text-[10px] text-slate-500 font-black uppercase">Duración Media</p>
-                      <p className="text-2xl font-black text-white">3.2m</p>
+                      <p className="text-2xl font-black text-white">4.1m</p>
                     </div>
                   </div>
 
@@ -380,16 +349,25 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right Column - Social Platforms & Recent Activity */}
           <div className="xl:col-span-4 space-y-6">
             <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl">
+                <CardHeader>
+                  <CardTitle>Acciones Rápidas</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-4">
+                  <Button variant="outline" asChild><Link to="/app/customers/new" className="flex flex-col h-24 justify-center items-center"><Users className="h-6 w-6 mb-1" /><span className="text-center text-xs">Nuevo Cliente</span></Link></Button>
+                  <Button variant="outline" asChild><Link to="/app/contacts/new" className="flex flex-col h-24 justify-center items-center"><PlusCircle className="h-6 w-6 mb-1" /><span className="text-center text-xs">Nuevo Contacto</span></Link></Button>
+                  <Button variant="outline" asChild><Link to="/app/analytics" className="flex flex-col h-24 justify-center items-center"><BarChart className="h-6 w-6 mb-1" /><span className="text-center text-xs">Ver Analíticas</span></Link></Button>
+                  <Button variant="outline" asChild><Link to="/app/settings" className="flex flex-col h-24 justify-center items-center"><Briefcase className="h-6 w-6 mb-1" /><span className="text-center text-xs">Ajustes</span></Link></Button>
+                </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl">
               <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg font-black flex items-center gap-2">
-                    <Link2 className="w-5 h-5 text-amber-500" />
-                    Plataformas Conectadas
-                  </CardTitle>
-                </div>
+                <CardTitle className="text-lg font-black flex items-center gap-2">
+                  <Link2 className="w-5 h-5 text-amber-500" />
+                  Plataformas Conectadas
+                </CardTitle>
                 <div className="flex items-center gap-2">
                   <Button 
                     variant="ghost" 
@@ -419,10 +397,10 @@ export default function Dashboard() {
                           className="p-4 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/40 transition-all group mt-2"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/5">
+                             <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/5">
                               {account.platform === 'whatsapp' && <MessageSquare className="w-6 h-6 text-emerald-500" />}
-                              {account.platform === 'instagram' && <Instagram className="w-6 h-6 text-pink-500" />}
-                              {account.platform === 'facebook' && <Facebook className="w-6 h-6 text-blue-500" />}
+                              {account.platform === 'instagram' && <i className="fab fa-instagram text-pink-500 text-2xl"></i>}
+                              {account.platform === 'facebook' && <i className="fab fa-facebook text-blue-500 text-2xl"></i>}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-black text-white truncate">{account.platform.toUpperCase()}</p>
@@ -451,17 +429,6 @@ export default function Dashboard() {
                               >
                                 <p className="text-[10px] font-black text-slate-400 uppercase">Access Token</p>
                                 <p className="text-xs text-slate-300 break-all mt-1 font-mono">{account.accessToken}</p>
-                                <Button 
-                                  size="sm" 
-                                  variant="ghost"
-                                  className="mt-2 text-xs"
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(account.accessToken);
-                                    toast({ title: 'Copiado!', description: 'Token copiado al portapapeles.' });
-                                  }}
-                                >
-                                  Copiar
-                                </Button>
                               </motion.div>
                             )}
                           </AnimatePresence>
@@ -482,7 +449,6 @@ export default function Dashboard() {
 
             <RecentConversations conversations={conversations} />
 
-            {/* System Health */}
             <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
