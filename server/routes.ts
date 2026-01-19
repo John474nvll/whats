@@ -23,6 +23,8 @@ import contactsCrmRoutes from './routes/contacts';
 import dealsCrmRoutes from './routes/deals';
 import interactionsCrmRoutes from './routes/interactions';
 import retellRoutes from './routes/retell';
+import campaignsCrmRoutes from './routes/campaigns';
+import whatsappRoutes from './routes/whatsapp';
 
 // Simple SSE implementation
 interface SseClient {
@@ -54,6 +56,8 @@ export async function registerRoutes(
   app.use('/api/crm/deals', dealsCrmRoutes);
   app.use('/api/crm/interactions', interactionsCrmRoutes);
   app.use('/api/retell/agents', retellRoutes);
+  app.use('/api/campaigns', campaignsCrmRoutes);
+  app.use('/api/whatsapp', whatsappRoutes);
 
 
   // User registration endpoint
