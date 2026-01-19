@@ -3,7 +3,7 @@ import { Elysia, t } from 'elysia';
 import { IStorage } from "../storage";
 import { initializePlatform } from "../services/platforms";
 import { db } from '../db';
-import { socialAccounts } from '../db/schema';
+import { socialAccounts } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
 
 export const platformsRoutes = new Elysia({ prefix: '/platforms' })
