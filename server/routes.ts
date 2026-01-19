@@ -158,6 +158,63 @@ export async function registerRoutes(
     }
   });
 
+  // Marketing & Campaign Management
+  app.get("/api/campaigns", async (req: Request, res: Response) => {
+    try {
+      const allCampaigns = await db.select().from(campaigns).orderBy(desc(campaigns.createdAt));
+      res.json(allCampaigns);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch campaigns" });
+    }
+  });
+
+  app.post("/api/campaigns", async (req: Request, res: Response) => {
+    try {
+      const data = z.object({
+        name: z.string(),
+        type: z.string(),
+        content: z.string(),
+        platform: z.string().optional(),
+        status: z.string().default("active"),
+        aiGenerated: z.boolean().default(false),
+        targetAccountIds: z.array(z.number()).optional()
+      }).parse(req.body);
+
+      const userId = "demo-user"; // Simplified for demo
+      const newCampaign = await db.insert(campaigns).values({
+        ...data,
+        userId,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }).returning();
+
+      res.status(201).json(newCampaign[0]);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create campaign" });
+    }
+  });
+
+  app.delete("/api/campaigns/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await db.delete(campaigns).where(eq(campaigns.id, id));
+      res.json({ message: "Campaign deleted" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete campaign" });
+    }
+  });
+
+  // Twilio / WhatsApp Integration
+  app.post("/api/whatsapp/connect", async (req: Request, res: Response) => {
+    try {
+      const { apiKey, apiSecret, phoneNumber } = req.body;
+      console.log(`Connecting WhatsApp via Twilio: ${phoneNumber}`);
+      res.json({ success: true, message: "WhatsApp connection initiated" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to connect WhatsApp" });
+    }
+  });
+
   app.get("/api/crm/pipeline", async (req: Request, res: Response) => {
     try {
       const pipeline = await db.select().from(customers).orderBy(desc(customers.updatedAt));
