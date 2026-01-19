@@ -8,14 +8,16 @@ import { usersRoutes } from './routes/users';
 import { contactsRoutes } from './routes/contacts';
 import { companiesRoutes } from './routes/companies';
 import dealsRoutes from './routes/deals';
-import { interactionsRoutes } from './routes/interactions';
-import { retellRoutes } from './routes/retell';
-import { whatsappRoutes } from './routes/whatsapp';
+import interactionsRoutes from './routes/interactions';
+import retellRoutes from './routes/retell';
+import whatsappRoutes from './routes/whatsapp';
 import { googleRoutes } from './routes/google';
 import { unifiedPlatformRoutes } from './routes/unified-platforms';
 import { platformsRoutes } from './routes/platforms';
 import { inboxRoutes } from './routes/inbox';
 import { dashboardRoutes } from './routes/dashboard'; // Import the new dashboard routes
+import aiRoutes from './routes/ai';
+import campaignsRoutes from './routes/campaigns';
 
 const app = new Elysia();
 
@@ -36,6 +38,8 @@ app.group('/api', (app) =>
     .use(platformsRoutes)
     .use(inboxRoutes)
     .use(dashboardRoutes) // Register the dashboard routes
+    .use(aiRoutes)
+    .use(campaignsRoutes)
 );
 
 // Register webhook routes at the top level
