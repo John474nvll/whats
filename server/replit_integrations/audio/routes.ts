@@ -1,10 +1,13 @@
-import type { Express, Request, Response } from "express";
-import { chatStorage } from "../chat/storage";
+import { Request, Response } from "express";
+import { db } from "../../db";
+import { conversations, messages } from "../../../shared/schema";
+import { eq, desc } from "drizzle-orm";
 import { openai, speechToText, voiceChatWithTextModel, convertWebmToWav } from "./client";
+import { chatStorage } from "../chat/storage";
 
 // Note: Set express.json({ limit: "50mb" }) for audio payloads.
 // Note: Use convertWebmToWav() to convert browser WebM to WAV before API calls.
-export function registerAudioRoutes(app: Express): void {
+export function registerAudioRoutes(app: any): void {
   // Get all conversations
   app.get("/api/conversations", async (req: Request, res: Response) => {
     try {
