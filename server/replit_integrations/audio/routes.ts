@@ -11,8 +11,8 @@ export function registerAudioRoutes(app: any): void {
   // Get all conversations
   app.get("/api/conversations", async (req: Request, res: Response) => {
     try {
-      const conversations = await chatStorage.getAllConversations();
-      res.json(conversations);
+      const allConversations = await chatStorage.getAllConversations();
+      res.json(allConversations);
     } catch (error) {
       console.error("Error fetching conversations:", error);
       res.status(500).json({ error: "Failed to fetch conversations" });
@@ -27,8 +27,8 @@ export function registerAudioRoutes(app: any): void {
       if (!conversation) {
         return res.status(404).json({ error: "Conversation not found" });
       }
-      const messages = await chatStorage.getMessagesByConversation(id);
-      res.json({ ...conversation, messages });
+      const allMessages = await chatStorage.getMessagesByConversation(id);
+      res.json({ ...conversation, messages: allMessages });
     } catch (error) {
       console.error("Error fetching conversation:", error);
       res.status(500).json({ error: "Failed to fetch conversation" });
@@ -74,7 +74,7 @@ export function registerAudioRoutes(app: any): void {
 
       // 1. Transcribe user audio
       const audioBuffer = Buffer.from(audio, "base64");
-      const userTranscript = await speechToText(audioBuffer, inputFormat);
+      const userTranscript = await speechToText(audioBuffer, inputFormat as any);
 
       // 2. Save user message
       await chatStorage.createMessage(conversationId, "user", userTranscript);
@@ -97,8 +97,8 @@ export function registerAudioRoutes(app: any): void {
       const stream = await openai.chat.completions.create({
         model: "gpt-audio-mini",
         modalities: ["text", "audio"],
-        audio: { voice, format: "pcm16" },
-        messages: chatHistory,
+        audio: { voice: voice as any, format: "pcm16" },
+        messages: chatHistory as any,
         stream: true,
       });
 
@@ -164,9 +164,9 @@ export function registerAudioRoutes(app: any): void {
 
       // Stream the voice chat pipeline
       for await (const event of voiceChatWithTextModel(audioBuffer, {
-        voice,
-        inputFormat,
-        chatHistory,
+        voice: voice as any,
+        inputFormat: inputFormat as any,
+        chatHistory: chatHistory as any,
         locale,
       })) {
         if (event.type === "user_transcript") {
@@ -194,3 +194,4 @@ export function registerAudioRoutes(app: any): void {
     }
   });
 }
+
