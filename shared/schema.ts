@@ -229,7 +229,7 @@ export const products = sqliteTable("products", {
 export const customLinks = sqliteTable("custom_links", {
   id: integer("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id),
-  shortCode: text("short_code").notNull().unique(),
+  shortCode: text("short_code").notNull(),
   originalUrl: text("original_url").notNull(),
   clicks: integer("clicks").default(0),
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
