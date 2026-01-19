@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { Whatsapp } from "@/components/ui/whatsapp";
 
 export default function Campaigns() {
   const { toast } = useToast();
@@ -115,7 +117,7 @@ export default function Campaigns() {
                      >
                        {acc.platform === 'instagram' && <Instagram className="h-3 w-3" />}
                        {acc.platform === 'facebook' && <Facebook className="h-3 w-3" />}
-                       {acc.platform === 'whatsapp' && <MessageCircle className="h-3 w-3" />}
+                       {acc.platform === 'whatsapp' && <Whatsapp className="h-3 w-3" />}
                        {acc.name || `Cuenta ${acc.id}`}
                      </Badge>
                    )) : (
@@ -186,7 +188,7 @@ export default function Campaigns() {
                 <div className="flex -space-x-2">
                   {campaign.platform === 'whatsapp' || campaign.platform === 'all' &&
                     <div className="h-8 w-8 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center">
-                      <MessageCircle className="h-4 w-4 text-white" />
+                      <Whatsapp className="h-4 w-4 text-white" />
                     </div>
                   }
                   {campaign.platform === 'instagram' || campaign.platform === 'all' &&
