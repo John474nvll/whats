@@ -20,7 +20,6 @@ export const contactsRoutes = new Elysia({ prefix: '/contacts' })
       name: t.String(),
       email: t.Optional(t.String()),
       phone: t.Optional(t.String()),
-      status: t.Optional(t.Enum(contacts.status.enumValues)),
     }),
   })
 
@@ -48,7 +47,6 @@ export const contactsRoutes = new Elysia({ prefix: '/contacts' })
         name: t.Optional(t.String()),
         email: t.Optional(t.String()),
         phone: t.Optional(t.String()),
-        status: t.Optional(t.Enum(contacts.status.enumValues)),
     }),
   })
 
