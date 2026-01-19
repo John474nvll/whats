@@ -136,6 +136,7 @@ export const campaigns = sqliteTable("campaigns", {
   type: text("type").notNull(),
   target: text("target", { mode: "json" }),
   content: text("content"),
+  aiGenerated: integer("ai_generated", { mode: "boolean" }).default(false),
   scheduledAt: integer("scheduled_at", { mode: "timestamp" }),
   status: text("status"),
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),

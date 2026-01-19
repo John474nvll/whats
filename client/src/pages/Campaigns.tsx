@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle, Activity, Loader2, Zap, Phone, LayoutDashboard } from "lucide-react";
+import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle, Activity, Loader2, Zap, Phone, LayoutDashboard, Users } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Campaign, SocialAccount } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
