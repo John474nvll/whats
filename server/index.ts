@@ -7,7 +7,7 @@ import { staticPlugin } from '@elysiajs/static';
 import { usersRoutes } from './routes/users';
 import { contactsRoutes } from './routes/contacts';
 import { companiesRoutes } from './routes/companies';
-import { dealsRoutes } from './routes/deals';
+import dealsRoutes from './routes/deals';
 import { interactionsRoutes } from './routes/interactions';
 import { retellRoutes } from './routes/retell';
 import { whatsappRoutes } from './routes/whatsapp';
