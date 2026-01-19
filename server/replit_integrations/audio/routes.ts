@@ -39,7 +39,7 @@ export function registerAudioRoutes(app: any): void {
   app.post("/api/conversations", async (req: Request, res: Response) => {
     try {
       const { title } = req.body;
-      const conversation = await db.insert(conversations).values({ title: title || "New Chat" }).returning();
+      const conversation = await db.insert(conversations).values({ status: "active" }).returning();
       res.status(201).json(conversation[0]);
     } catch (error) {
       console.error("Error creating conversation:", error);
