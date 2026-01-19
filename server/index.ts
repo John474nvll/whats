@@ -12,7 +12,7 @@ import interactionsRoutes from './routes/interactions';
 import retellRoutes from './routes/retell';
 import whatsappRoutes from './routes/whatsapp';
 import { googleRoutes } from './routes/google';
-import { unifiedPlatformRoutes } from './routes/unified-platforms';
+import { registerUnifiedPlatformRoutes } from './routes/unified-platforms';
 import { platformsRoutes } from './routes/platforms';
 import { inboxRoutes } from './routes/inbox';
 import { dashboardRoutes } from './routes/dashboard'; // Import the new dashboard routes
@@ -24,6 +24,15 @@ const app = new Elysia();
 // Basic middleware
 app.use(cors()); // Enable CORS for frontend interactions
 
+// Register webhook routes at the top level
+app.use(whatsappRoutes);
+
+// Serve static files for the frontend client
+app.use(staticPlugin({
+    assets: "client/dist",
+    prefix: ''
+}));
+
 // Group all API routes under the '/api' prefix
 app.group('/api', (app) =>
   app
@@ -34,7 +43,6 @@ app.group('/api', (app) =>
     .use(interactionsRoutes)
     .use(retellRoutes)
     .use(googleRoutes)
-    .use(unifiedPlatformRoutes)
     .use(platformsRoutes)
     .use(inboxRoutes)
     .use(dashboardRoutes) // Register the dashboard routes
@@ -42,14 +50,8 @@ app.group('/api', (app) =>
     .use(campaignsRoutes)
 );
 
-// Register webhook routes at the top level
-app.use(whatsappRoutes);
-
-// Serve static files for the frontend client
-app.use(staticPlugin({
-    assets: "client/dist",
-    prefix: ''
-}));
+// Register unified platform routes
+registerUnifiedPlatformRoutes(app as any);
 
 // Main server listener
 app.listen(3000, () => {
