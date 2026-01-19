@@ -276,7 +276,7 @@ export const transactions = sqliteTable("transactions", {
 
 export const phoneConnections = sqliteTable("phone_connections", {
   id: integer("id").primaryKey(),
-  phoneNumber: text("phone_number").notNull().unique(),
+  phoneNumber: text("phone_number").notNull(),
   isVerified: integer("is_verified", { mode: "boolean" }).default(false),
   verifiedAt: integer("verified_at", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
