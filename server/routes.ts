@@ -14,7 +14,7 @@ import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./se
 import { loginSchema, registerSchema, insertCustomerSchema, customers, operations } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
-import { eq } from "drizzle-orm"; // Using Drizzle eq operator
+import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
 
 // Simple SSE implementation
 interface SseClient {
@@ -239,7 +239,7 @@ export async function registerRoutes(
     try {
       const highValueLeads = await db.select()
         .from(customers)
-        .where(z.any()) // placeholder for actual complex filter
+        .where(sql`${customers.estimatedValue} > 0`)
         .orderBy(desc(customers.estimatedValue))
         .limit(10);
       res.json(highValueLeads);

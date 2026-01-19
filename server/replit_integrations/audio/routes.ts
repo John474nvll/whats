@@ -36,8 +36,8 @@ export function registerAudioRoutes(app: Express): void {
   app.post("/api/conversations", async (req: Request, res: Response) => {
     try {
       const { title } = req.body;
-      const conversation = await chatStorage.createConversation(title || "New Chat");
-      res.status(201).json(conversation);
+      const conversation = await db.insert(conversations).values({ title: title || "New Chat" }).returning();
+      res.status(201).json(conversation[0]);
     } catch (error) {
       console.error("Error creating conversation:", error);
       res.status(500).json({ error: "Failed to create conversation" });
@@ -48,7 +48,8 @@ export function registerAudioRoutes(app: Express): void {
   app.delete("/api/conversations/:id", async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
-      await chatStorage.deleteConversation(id);
+      await db.delete(messages).where(eq(messages.conversationId, id));
+      await db.delete(conversations).where(eq(conversations.id, id));
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting conversation:", error);
