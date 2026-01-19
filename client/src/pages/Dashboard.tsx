@@ -37,6 +37,8 @@ import {
   RefreshCw,
   Calendar,
   ShieldCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,6 +60,7 @@ import { customerGrowthData, StatCard } from "@/components/dashboard/StatCard";
 import { RecentConversations } from "@/components/dashboard/RecentConversations";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const activityData = [
   { name: "Mon", value: 120, avg: 80 },
@@ -71,6 +74,7 @@ const activityData = [
 
 export default function Dashboard() {
   const { toast } = useToast();
+  const [showTokens, setShowTokens] = useState(false);
   const { data: widgets, isLoading: isLoadingWidgets } = useQuery<Widget[]>({
     queryKey: ["/api/widgets"],
   });
@@ -125,6 +129,14 @@ export default function Dashboard() {
     { name: 'Cualificados', value: crmStats?.qualified || 0, color: '#10b981' },
     { name: 'Ganados', value: crmStats?.won || 0, color: '#f59e0b' },
   ];
+
+  const groupedAccounts = accounts.reduce((acc, account) => {
+    if (!acc[account.platform]) {
+      acc[account.platform] = [];
+    }
+    acc[account.platform].push(account);
+    return acc;
+  }, {} as Record<string, SocialAccount[]>);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-primary/30">
@@ -378,43 +390,84 @@ export default function Dashboard() {
                     Plataformas Conectadas
                   </CardTitle>
                 </div>
-                <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white/5 text-slate-400">
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="rounded-xl hover:bg-white/5 text-slate-400"
+                    onClick={() => setShowTokens(!showTokens)}
+                  >
+                    {showTokens ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </Button>
+                  <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white/5 text-slate-400">
+                    <RefreshCw className="w-4 h-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <AnimatePresence>
-                  {accounts.map((account) => (
-                    <motion.div
-                      key={account.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/40 transition-all group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/5">
-                          {account.platform === 'whatsapp' && <MessageSquare className="w-6 h-6 text-emerald-500" />}
-                          {account.platform === 'instagram' && <Instagram className="w-6 h-6 text-pink-500" />}
-                          {account.platform === 'facebook' && <Facebook className="w-6 h-6 text-blue-500" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-black text-white truncate">{account.platform.toUpperCase()}</p>
-                          <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-bold text-slate-500 tracking-widest uppercase">ID: {account.id}</span>
-                            <Badge className="bg-emerald-500/10 text-emerald-500 text-[8px] font-black border-none h-4">ACTIVE</Badge>
-                          </div>
-                        </div>
-                        <Button 
-                          size="icon" 
-                          variant="ghost" 
-                          className="rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => refreshMutation.mutate(account.id)}
-                          disabled={refreshMutation.isPending}
+                  {Object.entries(groupedAccounts).map(([platform, accountList]) => (
+                    <div key={platform}>
+                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider px-4 pt-4">{platform}</h3>
+                      {accountList.map((account) => (
+                        <motion.div
+                          key={account.id}
+                          layout
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          className="p-4 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/40 transition-all group mt-2"
                         >
-                          <RefreshCw className={`w-4 h-4 ${refreshMutation.isPending ? 'animate-spin' : ''}`} />
-                        </Button>
-                      </div>
-                    </motion.div>
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/5">
+                              {account.platform === 'whatsapp' && <MessageSquare className="w-6 h-6 text-emerald-500" />}
+                              {account.platform === 'instagram' && <Instagram className="w-6 h-6 text-pink-500" />}
+                              {account.platform === 'facebook' && <Facebook className="w-6 h-6 text-blue-500" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-black text-white truncate">{account.platform.toUpperCase()}</p>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] font-bold text-slate-500 tracking-widest uppercase">ID: {account.id}</span>
+                                <Badge className="bg-emerald-500/10 text-emerald-500 text-[8px] font-black border-none h-4">ACTIVE</Badge>
+                              </div>
+                            </div>
+                            <Button 
+                              size="icon" 
+                              variant="ghost" 
+                              className="rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => refreshMutation.mutate(account.id)}
+                              disabled={refreshMutation.isPending}
+                            >
+                              <RefreshCw className={`w-4 h-4 ${refreshMutation.isPending ? 'animate-spin' : ''}`} />
+                            </Button>
+                          </div>
+                          <AnimatePresence>
+                            {showTokens && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                animate={{ opacity: 1, height: 'auto', marginTop: '16px' }}
+                                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                className="bg-slate-950/50 p-3 rounded-2xl border border-white/10"
+                              >
+                                <p className="text-[10px] font-black text-slate-400 uppercase">Access Token</p>
+                                <p className="text-xs text-slate-300 break-all mt-1 font-mono">{account.accessToken}</p>
+                                <Button 
+                                  size="sm" 
+                                  variant="ghost"
+                                  className="mt-2 text-xs"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(account.accessToken);
+                                    toast({ title: 'Copiado!', description: 'Token copiado al portapapeles.' });
+                                  }}
+                                >
+                                  Copiar
+                                </Button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+                      ))}
+                    </div>
                   ))}
                 </AnimatePresence>
                 
