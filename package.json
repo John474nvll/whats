@@ -19,6 +19,7 @@
     "@ecl/vanilla-component-social-media-share": "^4.11.0",
     "@elysiajs/bearer": "^1.4.2",
     "@elysiajs/cors": "^1.4.1",
+    "@elysiajs/static": "^1.4.7",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
     "@prisma/client": "^6.19.2",
