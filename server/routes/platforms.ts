@@ -1,71 +1,60 @@
-import { Router, Request, Response } from "express";
+
+import { Elysia, t } from 'elysia';
 import { IStorage } from "../storage";
 import { initializePlatform } from "../services/platforms";
+import { db } from '../db';
+import { socialAccounts } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
-export function createPlatformRoutes(storage: IStorage) {
-  const router = Router();
+export const platformsRoutes = new Elysia({ prefix: '/platforms' })
+  .post('/connect', async ({ body, set }) => {
+    const { platform, accessToken } = body;
 
-  router.post("/platforms/connect", async (req: Request, res: Response) => {
-    try {
-      const { platform, accessToken } = req.body;
-
-      if (!platform || !accessToken) {
-        return res
-          .status(400)
-          .json({ error: "Missing platform or accessToken" });
-      }
-
-      const success = await initializePlatform(storage, platform, {
-        accessToken,
-        verifyToken: process.env[`${platform.toUpperCase()}_VERIFY_TOKEN`] || "",
-        isActive: true,
-      });
-
-      if (success) {
-        res.json({ success: true, message: "Platform connected successfully" });
-      } else {
-        res
-          .status(400)
-          .json({ error: "Failed to validate platform credentials" });
-      }
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    if (!platform || !accessToken) {
+      set.status = 400;
+      return { error: "Missing platform or accessToken" };
     }
-  });
 
-  router.get("/platforms", (req: Request, res: Response) => {
-    try {
-      const platforms = storage.getChannels();
-      res.json(platforms);
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    const success = await initializePlatform(platform, {
+      accessToken,
+      verifyToken: process.env[`${platform.toUpperCase()}_VERIFY_TOKEN`] || "",
+      isActive: true,
+    });
+
+    if (success) {
+      return { success: true, message: "Platform connected successfully" };
+    } else {
+      set.status = 400;
+      return { error: "Failed to validate platform credentials" };
     }
-  });
+  }, {
+    body: t.Object({
+      platform: t.String(),
+      accessToken: t.String(),
+    })
+  })
+  .get('/', async () => {
+    const allAccounts = await db.select().from(socialAccounts);
+    return allAccounts;
+  })
+  .post('/webhook/meta', async ({ body, set }) => {
+    const { object, entry } = body as any;
 
-  router.post("/platforms/webhook/meta", (req: Request, res: Response) => {
-    try {
-      const { object, entry } = req.body;
-
-      if (object === "instagram" || object === "page") {
-        entry.forEach((item: any) => {
-          item.messaging.forEach((event: any) => {
-            if (event.message) {
-              console.log(
-                "Received message from",
-                event.sender.id,
-                ":",
-                event.message.text
-              );
-            }
-          });
+    if (object === "instagram" || object === "page") {
+      entry.forEach((item: any) => {
+        item.messaging.forEach((event: any) => {
+          if (event.message) {
+            console.log(
+              "Received message from",
+              event.sender.id,
+              ":",
+              event.message.text
+            );
+          }
         });
-      }
-
-      res.status(200).send("EVENT_RECEIVED");
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      });
     }
-  });
 
-  return router;
-}
+    set.status = 200;
+    return "EVENT_RECEIVED";
+  });
