@@ -12,11 +12,12 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Briefcase, Building, Contact, Zap } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Briefcase, Building, Contact, Zap, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
+import { useState } from "react";
 
 const menuGroups = [
   {
@@ -71,6 +72,7 @@ const accountTokens = [
 
 export function AppSidebar() {
   const [location] = useLocation();
+  const [showTokens, setShowTokens] = useState(false);
 
   return (
     <Sidebar className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 backdrop-blur-2xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)] group/sidebar data-[state=collapsed]:w-[var(--sidebar-width-icon)]">
@@ -119,42 +121,47 @@ export function AppSidebar() {
 
           {/* Connected Accounts & Tokens Section */}
           <div className="py-4 px-1 md:px-2 group-data-[state=collapsed]/sidebar:hidden">
-            <div className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] px-2 md:px-4 mb-3">
-              🔐 Accesos Conectados
+            <div className="flex items-center justify-between text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] px-2 md:px-4 mb-3">
+              <span>🔐 Accesos Conectados</span>
+              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full" onClick={() => setShowTokens(!showTokens)}>
+                {showTokens ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
             </div>
-            <div className="space-y-2">
-              {accountTokens.map((account) => {
-                const IconComponent = account.icon;
-                return (
-                  <motion.div
-                    key={account.platform}
-                    whileHover={{ x: 4 }}
-                    className={`p-3 rounded-lg border transition-all duration-300 cursor-pointer ${account.color} hover:shadow-lg`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <IconComponent className="w-4 h-4" />
-                        <span className="text-xs font-bold">{account.platform}</span>
+            {showTokens && (
+              <div className="space-y-2">
+                {accountTokens.map((account) => {
+                  const IconComponent = account.icon;
+                  return (
+                    <motion.div
+                      key={account.platform}
+                      whileHover={{ x: 4 }}
+                      className={`p-3 rounded-lg border transition-all duration-300 cursor-pointer ${account.color} hover:shadow-lg`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <IconComponent className="w-4 h-4" />
+                          <span className="text-xs font-bold">{account.platform}</span>
+                        </div>
+                        <Badge 
+                          variant="outline" 
+                          className={`text-[8px] font-black px-1.5 py-0 ${
+                            account.status === 'active' 
+                              ? 'bg-green-500/20 border-green-500/40 text-green-400' 
+                              : 'bg-slate-500/20 border-slate-500/40 text-slate-400'
+                          }`}
+                        >
+                          {account.status === 'active' ? '✓ Activo' : '○ Inactivo'}
+                        </Badge>
                       </div>
-                      <Badge 
-                        variant="outline" 
-                        className={`text-[8px] font-black px-1.5 py-0 ${
-                          account.status === 'active' 
-                            ? 'bg-green-500/20 border-green-500/40 text-green-400' 
-                            : 'bg-slate-500/20 border-slate-500/40 text-slate-400'
-                        }`}
-                      >
-                        {account.status === 'active' ? '✓ Activo' : '○ Inactivo'}
-                      </Badge>
-                    </div>
-                    <div className="text-[9px] text-slate-400 font-mono flex items-center gap-1">
-                      <Lock className="w-3 h-3" />
-                      {account.token}
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+                      <div className="text-[9px] text-slate-400 font-mono flex items-center gap-1">
+                        <Lock className="w-3 h-3" />
+                        {account.token}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </SidebarContent>
