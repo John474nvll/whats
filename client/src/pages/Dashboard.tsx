@@ -56,6 +56,7 @@ import {
 } from "recharts";
 import { customerGrowthData, StatCard } from "@/components/dashboard/StatCard";
 import { RecentConversations } from "@/components/dashboard/RecentConversations";
+import { SalesPipeline } from "@/components/crm/SalesPipeline";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -278,6 +279,8 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
+
+            <SalesPipeline customers={customers} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Sales Pipeline */}
