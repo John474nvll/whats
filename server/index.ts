@@ -54,6 +54,9 @@ app.group('/api', (app) =>
 registerUnifiedPlatformRoutes(app as any);
 
 // Main server listener
-app.listen(3000, () => {
+app.listen({
+    port: 5001,
+    hostname: '0.0.0.0'
+}, () => {
   console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
 });
