@@ -134,24 +134,24 @@ export default function Dashboard() {
       
       <div className="max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 space-y-8 relative">
         {/* Header Section */}
-        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 md:gap-6">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-2"
+            className="space-y-1 md:space-y-2"
           >
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/20 p-2 rounded-xl border border-primary/30">
-                <Zap className="w-6 h-6 text-primary" />
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="bg-primary/20 p-1.5 md:p-2 rounded-xl border border-primary/30">
+                <Zap className="w-5 h-5 md:w-6 md:h-6 text-primary" />
               </div>
-              <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 px-3 py-1 rounded-full font-black text-[10px] tracking-widest uppercase">
+              <Badge variant="outline" className="border-primary/50 text-primary bg-primary/5 px-2 md:px-3 py-0.5 md:py-1 rounded-full font-black text-[9px] md:text-[10px] tracking-widest uppercase">
                 v3.1 Stable
               </Badge>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/40">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/40">
               Control <span className="text-primary">SocialHub</span>
             </h1>
-            <p className="text-slate-400 font-medium max-w-md">
+            <p className="text-slate-400 text-sm md:text-base font-medium max-w-md">
               Gestión unificada de leads, automatización por voz y ecosistema de redes sociales.
             </p>
           </motion.div>
@@ -159,37 +159,37 @@ export default function Dashboard() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3 flex-wrap"
+            className="flex items-center gap-2 md:gap-3 flex-wrap"
           >
             <div className="bg-slate-900/50 backdrop-blur-xl border border-white/5 p-1 rounded-2xl flex gap-1">
-              <Button variant="ghost" className="rounded-xl font-bold text-xs px-4 h-10 hover:bg-white/5">
-                <Calendar className="w-4 h-4 mr-2" />
+              <Button variant="ghost" className="rounded-xl font-bold text-[10px] md:text-xs px-3 md:px-4 h-9 md:h-10 hover:bg-white/5">
+                <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1.5 md:mr-2" />
                 Hoy
               </Button>
-              <Button variant="ghost" className="rounded-xl font-bold text-xs px-4 h-10 text-slate-500 hover:text-white">
+              <Button variant="ghost" className="rounded-xl font-bold text-[10px] md:text-xs px-3 md:px-4 h-9 md:h-10 text-slate-500 hover:text-white">
                 Mes
               </Button>
             </div>
             <Button
-              className="rounded-2xl bg-primary text-black font-black hover:scale-105 transition-all shadow-[0_10px_30px_rgba(34,197,94,0.3)] px-6 h-12"
+              className="flex-1 sm:flex-none rounded-2xl bg-primary text-black font-black hover:scale-105 transition-all shadow-[0_10px_30px_rgba(34,197,94,0.3)] px-4 md:px-6 h-11 md:h-12 text-sm"
               onClick={() => window.location.href = '/inbox'}
             >
-              <MessageSquare className="w-5 h-5 mr-2" />
+              <MessageSquare className="w-4 h-4 md:w-5 md:h-5 mr-2" />
               Abrir Inbox
             </Button>
             <Button
               variant="outline"
               size="icon"
               onClick={logout}
-              className="rounded-2xl border-white/10 bg-white/5 h-12 w-12 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/30 transition-all"
+              className="rounded-2xl border-white/10 bg-white/5 h-11 w-11 md:h-12 md:w-12 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/30 transition-all"
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-4 h-4 md:w-5 md:h-5" />
             </Button>
           </motion.div>
         </header>
 
         {/* Core Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
           <StatCard 
             label="Clientes Activos" 
             value={customers.length.toString()} 

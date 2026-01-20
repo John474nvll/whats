@@ -59,38 +59,35 @@ function AppContent() {
 
   return (
     <SidebarProvider style={style}>
-      <div className="flex h-screen w-full bg-black md:overflow-hidden">
+      <div className="flex h-screen w-full bg-slate-950 md:overflow-hidden select-none">
         <AppSidebar />
         <div className="flex flex-col flex-1 relative overflow-hidden w-full">
-          {/* Background decoration - hidden on mobile for performance */}
-          <div className="hidden md:block absolute top-0 right-0 w-[500px] h-[500px] bg-kiwi/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
-          <div className="hidden md:block absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-neon/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
+          {/* Background decoration - optimized for mobile */}
+          <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-kiwi/5 rounded-full blur-[80px] md:blur-[120px] -mr-32 -mt-32 md:-mr-64 md:-mt-64 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-cyan-neon/5 rounded-full blur-[80px] md:blur-[120px] -ml-32 -mb-32 md:-ml-64 md:-mb-64 pointer-events-none" />
           
-          <header className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl z-50 gap-2 md:gap-4">
+          <header className="flex items-center justify-between px-3 md:px-6 py-2 md:py-4 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl z-50 gap-2 md:gap-4 sticky top-0">
             <div className="flex items-center gap-2 md:gap-6 min-w-0 flex-1">
               <SidebarTrigger data-testid="button-sidebar-toggle" className="rounded-full hover:bg-white/5 no-default-hover-elevate h-10 w-10 border border-white/5 flex-shrink-0" />
               
-              <div className="flex items-center gap-3 pr-4 border-r border-white/10 group cursor-pointer">
-                <div className="w-8 h-8 rounded-lg bg-kiwi p-0.5 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+              <div className="flex items-center gap-2 md:gap-3 pr-2 md:pr-4 border-r border-white/10 group cursor-pointer shrink-0">
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-kiwi p-0.5 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                   <div className="w-full h-full rounded-[0.4rem] bg-slate-950 flex items-center justify-center overflow-hidden">
                     <img src={logoImage} alt="SocialHub" className="w-full h-full object-contain p-0.5" />
                   </div>
                 </div>
-                <h1 className="font-black text-lg tracking-tighter text-white hidden sm:block">Social<span className="text-kiwi">Hub</span></h1>
+                <h1 className="font-black text-base md:text-lg tracking-tighter text-white hidden xs:block">Social<span className="text-kiwi">Hub</span></h1>
               </div>
               
-              <div className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar py-1">
-                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
-                  <Link href="/">Dashboard</Link>
+              <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1 mask-fade-right">
+                <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
+                  <Link href="/">Dash</Link>
                 </Button>
-                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
-                  <Link href="/platforms">Plataformas</Link>
+                <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
+                  <Link href="/platforms">Plat</Link>
                 </Button>
-                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
-                  <Link href="/ai-generator">AI Gen</Link>
-                </Button>
-                <Button variant="ghost" size="sm" className="rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-4 h-8" asChild>
-                  <Link href="/analytics">Analytics</Link>
+                <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
+                  <Link href="/ai-generator">AI</Link>
                 </Button>
               </div>
 
