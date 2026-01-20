@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns } from "@shared/schema"; // Updated imports
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertArtistProfileSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
@@ -324,6 +324,96 @@ export async function registerRoutes(
     }
   });
 
+  // Products & Inventory
+  app.get("/api/products", async (req: Request, res: Response) => {
+    try {
+      const allProducts = await storage.getProducts("demo-user");
+      res.json(allProducts);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch products" });
+    }
+  });
+
+  app.post("/api/products", async (req: Request, res: Response) => {
+    try {
+      const data = insertProductSchema.parse(req.body);
+      const newProduct = await storage.createProduct({ ...data, userId: "demo-user" });
+      res.status(201).json(newProduct);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create product" });
+    }
+  });
+
+  app.get("/api/inventory", async (req: Request, res: Response) => {
+    try {
+      const allInventory = await storage.getInventory("demo-user");
+      res.json(allInventory);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch inventory" });
+    }
+  });
+
+  app.post("/api/inventory", async (req: Request, res: Response) => {
+    try {
+      const data = insertInventorySchema.parse(req.body);
+      const newItem = await storage.createInventory({ ...data, userId: "demo-user" });
+      res.status(201).json(newItem);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create inventory item" });
+    }
+  });
+
+  // Music & Artists
+  app.get("/api/artists", async (req: Request, res: Response) => {
+    try {
+      const allArtists = await storage.getArtists("demo-user");
+      res.json(allArtists);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch artists" });
+    }
+  });
+
+  app.post("/api/artists", async (req: Request, res: Response) => {
+    try {
+      const data = insertArtistProfileSchema.parse(req.body);
+      const newArtist = await storage.createArtist({ ...data, userId: "demo-user" });
+      res.status(201).json(newArtist);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create artist profile" });
+    }
+  });
+
+  // Custom Links
+  app.get("/api/links", async (req: Request, res: Response) => {
+    try {
+      const allLinks = await storage.getCustomLinks("demo-user");
+      res.json(allLinks);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch custom links" });
+    }
+  });
+
+  app.post("/api/links", async (req: Request, res: Response) => {
+    try {
+      const data = insertCustomLinkSchema.parse(req.body);
+      const newLink = await storage.createCustomLink({ ...data, userId: "demo-user" });
+      res.status(201).json(newLink);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create custom link" });
+    }
+  });
+
+  // Social Account by User
+  app.get("/api/social-accounts/:userId", async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.userId;
+      const accounts = await storage.getSocialAccounts(userId);
+      res.json(accounts);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch social accounts" });
+    }
+  });
+
   // DELETE Social Account (Disconnect)
   app.delete("/api/social-accounts/:id", async (req: Request, res: Response) => {
     try {
@@ -332,6 +422,86 @@ export async function registerRoutes(
       res.json({ success: true, message: "Account disconnected successfully" });
     } catch (error) {
       res.status(500).json({ error: "Failed to disconnect account" });
+    }
+  });
+
+  // Funnels
+  app.get("/api/funnels", async (req: Request, res: Response) => {
+    try {
+      const allFunnels = await storage.getFunnels("demo-user");
+      res.json(allFunnels);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch funnels" });
+    }
+  });
+
+  app.post("/api/funnels", async (req: Request, res: Response) => {
+    try {
+      const data = insertSalesFunnelSchema.parse(req.body);
+      const newFunnel = await storage.createFunnel({ ...data, userId: "demo-user" });
+      res.status(201).json(newFunnel);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create funnel" });
+    }
+  });
+
+  // Product Catalogs
+  app.get("/api/catalogs", async (req: Request, res: Response) => {
+    try {
+      const allCatalogs = await storage.getCatalogs("demo-user");
+      res.json(allCatalogs);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch catalogs" });
+    }
+  });
+
+  app.post("/api/catalogs", async (req: Request, res: Response) => {
+    try {
+      const data = insertProductCatalogSchema.parse(req.body);
+      const newCatalog = await storage.createCatalog({ ...data, userId: "demo-user" });
+      res.status(201).json(newCatalog);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create catalog" });
+    }
+  });
+
+  // Customer Groups
+  app.get("/api/customer-groups", async (req: Request, res: Response) => {
+    try {
+      const allGroups = await storage.getCustomerGroups("demo-user");
+      res.json(allGroups);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch customer groups" });
+    }
+  });
+
+  app.post("/api/customer-groups", async (req: Request, res: Response) => {
+    try {
+      const data = insertCustomerGroupSchema.parse(req.body);
+      const newGroup = await storage.createCustomerGroup({ ...data, userId: "demo-user" });
+      res.status(201).json(newGroup);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create customer group" });
+    }
+  });
+
+  // Phone Connections
+  app.get("/api/phone-connections", async (req: Request, res: Response) => {
+    try {
+      const allConnections = await storage.getPhoneConnections();
+      res.json(allConnections);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch phone connections" });
+    }
+  });
+
+  app.post("/api/phone-connections", async (req: Request, res: Response) => {
+    try {
+      const data = insertPhoneConnectionSchema.parse(req.body);
+      const newConnection = await storage.createPhoneConnection(data);
+      res.status(201).json(newConnection);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create phone connection" });
     }
   });
 

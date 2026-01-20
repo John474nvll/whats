@@ -10,8 +10,57 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 
-const PlatformIntegration = () => <div className="p-4 bg-slate-900/50 rounded-2xl border border-white/5 text-slate-400">Integración de Plataformas</div>;
-const AIContentGenerator = () => <div className="p-4 bg-slate-900/50 rounded-2xl border border-white/5 text-slate-400">Generador de Contenido IA</div>;
+const PlatformIntegration = () => (
+  <Card className="bg-slate-900/40 border-white/5">
+    <CardHeader>
+      <CardTitle className="text-white">Integración de Plataformas</CardTitle>
+      <CardDescription>Configura tus conexiones principales</CardDescription>
+    </CardHeader>
+    <CardContent className="text-slate-400">Panel de integraciones activas</CardContent>
+  </Card>
+);
+
+const AIContentGenerator = () => (
+  <Card className="bg-slate-900/40 border-white/5">
+    <CardHeader>
+      <CardTitle className="text-white">Generador de Contenido IA</CardTitle>
+      <CardDescription>Configuración de modelos OpenAI</CardDescription>
+    </CardHeader>
+    <CardContent className="text-slate-400">Ajustes de generación neuronal</CardContent>
+  </Card>
+);
+
+import { useChannels, useUpdateChannel } from "@/hooks/use-channels";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Loader2, Save, ChevronDown, ChevronUp, Link2, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion, AnimatePresence } from "framer-motion";
+
+const PlatformIntegration = () => (
+  <Card className="bg-slate-900/40 border-white/5">
+    <CardHeader>
+      <CardTitle className="text-white">Integración de Plataformas</CardTitle>
+      <CardDescription>Configura tus conexiones principales</CardDescription>
+    </CardHeader>
+    <CardContent className="text-slate-400">Panel de integraciones activas</CardContent>
+  </Card>
+);
+
+const AIContentGenerator = () => (
+  <Card className="bg-slate-900/40 border-white/5">
+    <CardHeader>
+      <CardTitle className="text-white">Generador de Contenido IA</CardTitle>
+      <CardDescription>Configuración de modelos OpenAI</CardDescription>
+    </CardHeader>
+    <CardContent className="text-slate-400">Ajustes de generación neuronal</CardContent>
+  </Card>
+);
 
 export default function Settings() {
   const { data: channels, isLoading } = useChannels();
@@ -76,7 +125,7 @@ export default function Settings() {
               </div>
 
               {['whatsapp', 'instagram', 'facebook', 'spotify'].map((platform) => {
-                const config = channels?.find(c => c.platform === platform);
+                const config = (channels as any[])?.find(c => c.platform === platform);
                 const isExpanded = expandedPlatform === platform;
 
                 return (
