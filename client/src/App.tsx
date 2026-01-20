@@ -19,7 +19,7 @@ import FunnelBuilder from "@/pages/FunnelBuilder";
 import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
-import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Music, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import PlatformsHub from "@/pages/PlatformsHub";
@@ -102,7 +102,7 @@ function AppContent() {
             <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-4">
               <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/5 text-slate-400 no-default-hover-elevate h-10 w-10 border border-white/5" asChild title="Ajustes">
                 <Link href="/settings">
-                  <Settings className="h-4 w-4" />
+                  <SettingsIcon className="h-4 w-4" />
                 </Link>
               </Button>
               <ThemeToggle />

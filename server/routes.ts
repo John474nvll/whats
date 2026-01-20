@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations } from "@shared/schema"; // Updated imports
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
@@ -321,6 +321,17 @@ export async function registerRoutes(
       res.json(updated);
     } catch (error) {
       res.status(500).json({ error: "Failed to refresh token" });
+    }
+  });
+
+  // DELETE Social Account (Disconnect)
+  app.delete("/api/social-accounts/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSocialAccount(id);
+      res.json({ success: true, message: "Account disconnected successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to disconnect account" });
     }
   });
 

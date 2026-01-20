@@ -7,10 +7,11 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, Save, ChevronDown, ChevronUp, Link2, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { PlatformIntegration } from "@/components/PlatformIntegration";
-import { AIContentGenerator } from "@/components/AIContentGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
+
+const PlatformIntegration = () => <div className="p-4 bg-slate-900/50 rounded-2xl border border-white/5 text-slate-400">Integración de Plataformas</div>;
+const AIContentGenerator = () => <div className="p-4 bg-slate-900/50 rounded-2xl border border-white/5 text-slate-400">Generador de Contenido IA</div>;
 
 export default function Settings() {
   const { data: channels, isLoading } = useChannels();

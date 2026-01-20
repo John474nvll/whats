@@ -1,5 +1,9 @@
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { SocialAccount } from "@shared/schema";
 import {
   Sidebar,
   SidebarContent,
@@ -58,15 +62,27 @@ const menuGroups = [
   },
 ];
 
-const accountTokens = [
-  { platform: "WhatsApp", token: "wa_••••••89F2", status: "active", icon: MessageSquare, color: "bg-green-500/10 border-green-500/30" },
-  { platform: "Instagram", token: "ig_••••••4A7E", status: "active", icon: Instagram, color: "bg-pink-500/10 border-pink-500/30" },
-  { platform: "Facebook", token: "fb_••••••2B5C", status: "active", icon: Facebook, color: "bg-blue-500/10 border-blue-500/30" },
-  { platform: "TikTok", token: "tk_••••••8D1F", status: "inactive", icon: Globe, color: "bg-slate-500/10 border-slate-500/30" },
-];
-
 export function AppSidebar() {
   const [location] = useLocation();
+  const { toast } = useToast();
+
+  const { data: connectedAccounts, refetch: refetchAccounts } = useQuery<SocialAccount[]>({
+    queryKey: ["/api/social-accounts/demo-user"], // In a real app, use the actual user ID
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/social-accounts/demo-user");
+      return res.json();
+    },
+  });
+
+  const disconnectMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/social-accounts/${id}`);
+    },
+    onSuccess: () => {
+      refetchAccounts();
+      toast({ title: "Cuenta desconectada" });
+    },
+  });
 
   return (
     <Sidebar className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 backdrop-blur-2xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)] group/sidebar data-[state=collapsed]:w-[var(--sidebar-width-icon)]">
@@ -119,37 +135,48 @@ export function AppSidebar() {
               🔐 Accesos Conectados
             </div>
             <div className="space-y-2">
-              {accountTokens.map((account) => {
-                const IconComponent = account.icon;
+              {connectedAccounts?.map((account) => {
+                const IconComponent = account.platform === 'instagram' ? Instagram : 
+                                     account.platform === 'facebook' ? Facebook : 
+                                     account.platform === 'whatsapp' ? MessageSquare : Smartphone;
                 return (
                   <motion.div
-                    key={account.platform}
+                    key={account.id}
                     whileHover={{ x: 4 }}
-                    className={`p-3 rounded-lg border transition-all duration-300 cursor-pointer ${account.color} hover:shadow-lg`}
+                    className={`p-3 rounded-lg border transition-all duration-300 group ${
+                      account.platform === 'whatsapp' ? 'bg-green-500/10 border-green-500/30' : 
+                      account.platform === 'instagram' ? 'bg-pink-500/10 border-pink-500/30' : 'bg-blue-500/10 border-blue-500/30'
+                    } hover:shadow-lg relative overflow-hidden`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <IconComponent className="w-4 h-4" />
-                        <span className="text-xs font-bold">{account.platform}</span>
+                        <span className="text-xs font-bold capitalize">{account.platform}</span>
                       </div>
-                      <Badge 
-                        variant="outline" 
-                        className={`text-[8px] font-black px-1.5 py-0 ${
-                          account.status === 'active' 
-                            ? 'bg-green-500/20 border-green-500/40 text-green-400' 
-                            : 'bg-slate-500/20 border-slate-500/40 text-slate-400'
-                        }`}
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 rounded-full hover:bg-red-500/20 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => disconnectMutation.mutate(account.id)}
                       >
-                        {account.status === 'active' ? '✓ Activo' : '○ Inactivo'}
-                      </Badge>
+                        <Lock className="w-3 h-3" />
+                      </Button>
                     </div>
                     <div className="text-[9px] text-slate-400 font-mono flex items-center gap-1">
                       <Lock className="w-3 h-3" />
-                      {account.token}
+                      {account.accessToken?.substring(0, 10)}••••••
                     </div>
                   </motion.div>
                 );
               })}
+              {(!connectedAccounts || connectedAccounts.length === 0) && (
+                <div className="p-4 rounded-xl border border-dashed border-white/10 text-center space-y-2">
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Sin cuentas conectadas</p>
+                  <Button variant="outline" size="sm" className="h-7 text-[9px] font-black uppercase tracking-widest border-primary/20 text-primary hover:bg-primary/5" asChild>
+                    <Link href="/platforms">Conectar Ahora</Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
