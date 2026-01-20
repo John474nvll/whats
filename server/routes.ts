@@ -132,11 +132,67 @@ export async function registerRoutes(
   // Operations endpoint
   app.get("/api/operations", async (req: Request, res: Response) => {
     try {
-        const allOperations = await db.select().from(operations);
+        const allOperations = await storage.getOperations(); 
         res.json(allOperations);
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
         res.status(500).json({ error: "Failed to fetch operations", details: errorMessage });
+    }
+  });
+
+  app.get("/api/conversations", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const conversations = await storage.getConversations();
+      res.json(conversations);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/conversations/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const conversation = await storage.getConversation(id);
+      if (!conversation) return res.status(404).json({ error: "Not found" });
+      res.json(conversation);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/conversations/:id/toggle-bot", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { botStatus } = req.body;
+      const updated = await storage.updateBotStatus(id, botStatus);
+      res.json(updated);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/conversations/:id/messages", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const messages = await storage.getMessages(id);
+      res.json(messages);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/conversations/:id/messages", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { content, role } = req.body;
+      const message = await storage.createMessage({
+        conversationId: id,
+        content,
+        role: role || "agent",
+      });
+      res.status(201).json(message);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   });
 

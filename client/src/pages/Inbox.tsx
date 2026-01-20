@@ -9,27 +9,28 @@ export default function Inbox() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   
   const { data: conversations, isLoading: loadingConversations } = useConversations();
-  const { data: activeConversation } = useConversation(selectedId!);
-  const { data: messages } = useMessages(selectedId!);
+  const activeId = selectedId ?? (Array.isArray(conversations) && conversations.length > 0 ? conversations[0].id : null);
+  const { data: activeConversation } = useConversation(activeId!);
+  const { data: messages } = useMessages(activeId!);
   
   const toggleBotMutation = useToggleBot();
   const sendMessageMutation = useSendMessage();
 
   useEffect(() => {
-    if (!selectedId && conversations && conversations.length > 0) {
+    if (!selectedId && Array.isArray(conversations) && conversations.length > 0) {
       setSelectedId(conversations[0].id);
     }
   }, [conversations, selectedId]);
 
   const handleToggleBot = (enabled: boolean) => {
-    if (selectedId) {
-      toggleBotMutation.mutate({ id: selectedId, botStatus: enabled });
+    if (activeId) {
+      toggleBotMutation.mutate({ id: activeId, botStatus: enabled });
     }
   };
 
   const handleSendMessage = (content: string) => {
-    if (selectedId) {
-      sendMessageMutation.mutate({ conversationId: selectedId, content });
+    if (activeId) {
+      sendMessageMutation.mutate({ conversationId: activeId, content });
     }
   };
 
@@ -52,14 +53,14 @@ export default function Inbox() {
       <div className="flex h-screen gap-4 p-6">
         <div className="w-96 flex-shrink-0 bg-card rounded-lg border border-border overflow-hidden flex flex-col">
           <ConversationList 
-            conversations={conversations || []} 
+            conversations={Array.isArray(conversations) ? conversations : []} 
             selectedId={selectedId}
             onSelect={setSelectedId}
           />
         </div>
         
         <div className="flex-1 bg-card rounded-lg border border-border overflow-hidden flex flex-col">
-          {selectedId && activeConversation && messages ? (
+          {activeId && activeConversation && messages ? (
             <ChatInterface 
               conversation={activeConversation as any}
               messages={messages || []}
