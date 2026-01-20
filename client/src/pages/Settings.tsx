@@ -10,26 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion, AnimatePresence } from "framer-motion";
 
-const PlatformIntegration = () => (
-  <Card className="bg-slate-900/40 border-white/5">
-    <CardHeader>
-      <CardTitle className="text-white">Integración de Plataformas</CardTitle>
-      <CardDescription>Configura tus conexiones principales</CardDescription>
-    </CardHeader>
-    <CardContent className="text-slate-400">Panel de integraciones activas</CardContent>
-  </Card>
-);
-
-const AIContentGenerator = () => (
-  <Card className="bg-slate-900/40 border-white/5">
-    <CardHeader>
-      <CardTitle className="text-white">Generador de Contenido IA</CardTitle>
-      <CardDescription>Configuración de modelos OpenAI</CardDescription>
-    </CardHeader>
-    <CardContent className="text-slate-400">Ajustes de generación neuronal</CardContent>
-  </Card>
-);
-
 import { useChannels, useUpdateChannel } from "@/hooks/use-channels";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
