@@ -2,6 +2,7 @@ import { db } from "./db";
 import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, artistProfiles, musicContent, phoneConnections,
   customerGroups, productCatalogs, products, customLinks, inventory, transactions,
+  teams, tasks, finances, emails,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -21,8 +22,12 @@ import {
   type Product, type InsertProduct,
   type CustomLink, type InsertCustomLink,
   type PhoneConnection, type InsertPhoneConnection,
+  type Team, type InsertTeam,
+  type Task, type InsertTask,
+  type Finance, type InsertFinance,
+  type Email, type InsertEmail,
 } from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -30,23 +35,33 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, updates: Partial<InsertUser>): Promise<User>;
 
-  // Inventory
+  getTeams(): Promise<Team[]>;
+  getTeam(id: number): Promise<Team | undefined>;
+  createTeam(team: InsertTeam): Promise<Team>;
+
+  getTasks(assignedTo?: string): Promise<Task[]>;
+  createTask(task: InsertTask): Promise<Task>;
+  updateTask(id: number, task: Partial<InsertTask>): Promise<Task>;
+
+  getFinances(): Promise<Finance[]>;
+  createFinance(finance: InsertFinance): Promise<Finance>;
+
+  getEmails(userId: string): Promise<Email[]>;
+  createEmail(email: InsertEmail): Promise<Email>;
+
   getInventory(userId: string): Promise<Inventory[]>;
   createInventory(item: InsertInventory): Promise<Inventory>;
   updateInventory(id: number, updates: Partial<InsertInventory>): Promise<Inventory>;
   deleteInventory(id: number): Promise<void>;
 
-  // Transactions
   getTransactions(userId: string): Promise<Transaction[]>;
   createTransaction(tx: InsertTransaction): Promise<Transaction>;
 
-  // Contacts
   getContacts(): Promise<Contact[]>;
   getContact(id: number): Promise<Contact | undefined>;
   getContactByPhone(phone: string): Promise<Contact | undefined>;
   createContact(contact: InsertContact): Promise<Contact>;
 
-  // Conversations
   getConversations(): Promise<(Conversation & { contact: Contact })[]>;
   getConversation(id: number): Promise<(Conversation & { messages: Message[] }) | undefined>;
   getConversationByContactId(contactId: number): Promise<Conversation | undefined>;
@@ -54,82 +69,68 @@ export interface IStorage {
   updateConversationStatus(id: number, status: string): Promise<Conversation>;
   updateBotStatus(id: number, isActive: boolean): Promise<Conversation>;
 
-  // Messages
   getMessages(conversationId: number): Promise<Message[]>;
   createMessage(message: InsertMessage): Promise<Message>;
 
-  // Channels
   getChannels(): Promise<ChannelConfig[]>;
   getChannel(platform: string): Promise<ChannelConfig | undefined>;
   updateChannel(platform: string, config: Partial<InsertChannelConfig>): Promise<ChannelConfig>;
   createChannel(config: InsertChannelConfig): Promise<ChannelConfig>;
 
-  // Social Accounts
   getSocialAccounts(userId: string): Promise<SocialAccount[]>;
   getSocialAccount(userId: string, platform: string): Promise<SocialAccount | undefined>;
   createSocialAccount(account: InsertSocialAccount): Promise<SocialAccount>;
   updateSocialAccount(id: number, updates: Partial<InsertSocialAccount>): Promise<SocialAccount>;
   deleteSocialAccount(id: number): Promise<void>;
 
-  // Widgets
   getWidgets(userId: string): Promise<Widget[]>;
   createWidget(widget: InsertWidget): Promise<Widget>;
   updateWidget(id: number, updates: Partial<InsertWidget>): Promise<Widget>;
   deleteWidget(id: number): Promise<void>;
 
-  // Funnels
   getFunnels(userId: string): Promise<SalesFunnel[]>;
   createFunnel(funnel: InsertSalesFunnel): Promise<SalesFunnel>;
   updateFunnel(id: number, updates: Partial<InsertSalesFunnel>): Promise<SalesFunnel>;
   deleteFunnel(id: number): Promise<void>;
 
-  // Campaigns
   getCampaigns(userId: string): Promise<Campaign[]>;
   createCampaign(campaign: InsertCampaign): Promise<Campaign>;
   updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign>;
   deleteCampaign(id: number): Promise<void>;
 
-  // Customers
   getCustomers(userId: string): Promise<Customer[]>;
   getCustomer(id: number): Promise<Customer | undefined>;
   createCustomer(customer: InsertCustomer): Promise<Customer>;
   updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer>;
   deleteCustomer(id: number): Promise<void>;
 
-  // Customer Groups
   getCustomerGroups(userId: string): Promise<CustomerGroup[]>;
   createCustomerGroup(group: InsertCustomerGroup): Promise<CustomerGroup>;
   deleteCustomerGroup(id: number): Promise<void>;
 
-  // Product Catalogs
   getCatalogs(userId: string): Promise<ProductCatalog[]>;
   createCatalog(catalog: InsertProductCatalog): Promise<ProductCatalog>;
   updateCatalog(id: number, updates: Partial<InsertProductCatalog>): Promise<ProductCatalog>;
   deleteCatalog(id: number): Promise<void>;
 
-  // Social Account by ID
   getSocialAccountById(id: number): Promise<SocialAccount | undefined>;
 
-  // Products
   getProducts(userId: string): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product>;
   deleteProduct(id: number): Promise<void>;
 
-  // Custom Links
   getCustomLinks(userId: string): Promise<CustomLink[]>;
   getCustomLink(shortCode: string): Promise<CustomLink | undefined>;
   createCustomLink(link: InsertCustomLink): Promise<CustomLink>;
   incrementLinkClicks(id: number): Promise<void>;
 
-  // Artists & Music
   getArtists(userId: string): Promise<ArtistProfile[]>;
   createArtist(artist: InsertArtistProfile): Promise<ArtistProfile>;
   getMusicContent(artistId: number): Promise<MusicContent[]>;
   createMusicContent(content: InsertMusicContent): Promise<MusicContent>;
 
-  // Phone Connections
   getPhoneConnections(): Promise<PhoneConnection[]>;
   getPhoneConnection(phoneNumber: string): Promise<PhoneConnection | undefined>;
   createPhoneConnection(connection: InsertPhoneConnection): Promise<PhoneConnection>;
@@ -150,7 +151,7 @@ export class DatabaseStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
-    return user;
+    return user[0];
   }
 
   async updateUser(id: string, updates: Partial<InsertUser>): Promise<User> {
@@ -158,10 +159,52 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(users.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
-  // Contacts
+  async getTeams(): Promise<Team[]> {
+    return await db.select().from(teams);
+  }
+  async getTeam(id: number): Promise<Team | undefined> {
+    const [team] = await db.select().from(teams).where(eq(teams.id, id));
+    return team;
+  }
+  async createTeam(insertTeam: InsertTeam): Promise<Team> {
+    const [team] = await db.insert(teams).values(insertTeam).returning();
+    return team[0];
+  }
+
+  async getTasks(assignedTo?: string): Promise<Task[]> {
+    if (assignedTo) {
+      return await db.select().from(tasks).where(eq(tasks.assignedTo, assignedTo));
+    }
+    return await db.select().from(tasks);
+  }
+  async createTask(insertTask: InsertTask): Promise<Task> {
+    const [task] = await db.insert(tasks).values(insertTask).returning();
+    return task[0];
+  }
+  async updateTask(id: number, update: Partial<InsertTask>): Promise<Task> {
+    const [task] = await db.update(tasks).set(update).where(eq(tasks.id, id)).returning();
+    return task[0];
+  }
+
+  async getFinances(): Promise<Finance[]> {
+    return await db.select().from(finances);
+  }
+  async createFinance(insertFinance: InsertFinance): Promise<Finance> {
+    const [finance] = await db.insert(finances).values(insertFinance).returning();
+    return finance[0];
+  }
+
+  async getEmails(userId: string): Promise<Email[]> {
+    return await db.select().from(emails).where(eq(emails.userId, userId));
+  }
+  async createEmail(insertEmail: InsertEmail): Promise<Email> {
+    const [email] = await db.insert(emails).values(insertEmail).returning();
+    return email[0];
+  }
+
   async getContacts(): Promise<Contact[]> {
     return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
   }
@@ -178,10 +221,9 @@ export class DatabaseStorage implements IStorage {
 
   async createContact(contact: InsertContact): Promise<Contact> {
     const [newContact] = await db.insert(contacts).values(contact).returning();
-    return newContact;
+    return newContact[0];
   }
 
-  // Conversations
   async getConversations(): Promise<(Conversation & { contact: Contact })[]> {
     const result = await db.query.conversations.findMany({
       with: {
@@ -198,7 +240,7 @@ export class DatabaseStorage implements IStorage {
       with: {
         messages: {
           orderBy: [desc(messages.createdAt)],
-          limit: 50, // Load last 50 messages
+          limit: 50,
         },
       },
     });
@@ -213,7 +255,7 @@ export class DatabaseStorage implements IStorage {
 
   async createConversation(conversation: InsertConversation): Promise<Conversation> {
     const [newConversation] = await db.insert(conversations).values(conversation).returning();
-    return newConversation;
+    return newConversation[0];
   }
 
   async updateConversationStatus(id: number, status: string): Promise<Conversation> {
@@ -221,7 +263,7 @@ export class DatabaseStorage implements IStorage {
       .set({ status })
       .where(eq(conversations.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async updateBotStatus(id: number, isActive: boolean): Promise<Conversation> {
@@ -229,10 +271,9 @@ export class DatabaseStorage implements IStorage {
       .set({ botStatus: isActive })
       .where(eq(conversations.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
-  // Messages
   async getMessages(conversationId: number): Promise<Message[]> {
     return await db.select()
       .from(messages)
@@ -245,10 +286,9 @@ export class DatabaseStorage implements IStorage {
     await db.update(conversations)
       .set({ lastMessageAt: new Date() })
       .where(eq(conversations.id, message.conversationId));
-    return newMessage;
+    return newMessage[0];
   }
 
-  // Channels
   async getChannels(): Promise<ChannelConfig[]> {
     return await db.select().from(channelConfigs);
   }
@@ -263,28 +303,27 @@ export class DatabaseStorage implements IStorage {
       .set({ ...config, updatedAt: new Date() })
       .where(eq(channelConfigs.platform, platform))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async createChannel(config: InsertChannelConfig): Promise<ChannelConfig> {
     const [newConfig] = await db.insert(channelConfigs).values(config).returning();
-    return newConfig;
+    return newConfig[0];
   }
 
-  // Social Accounts
   async getSocialAccounts(userId: string): Promise<SocialAccount[]> {
     return await db.select().from(socialAccounts).where(eq(socialAccounts.userId, userId));
   }
 
   async getSocialAccount(userId: string, platform: string): Promise<SocialAccount | undefined> {
     const [account] = await db.select().from(socialAccounts)
-      .where((acc) => eq(acc.userId, userId) && eq(acc.platform, platform));
+      .where(and(eq(socialAccounts.userId, userId), eq(socialAccounts.platform, platform)));
     return account;
   }
 
   async createSocialAccount(account: InsertSocialAccount): Promise<SocialAccount> {
     const [newAccount] = await db.insert(socialAccounts).values(account).returning();
-    return newAccount;
+    return newAccount[0];
   }
 
   async updateSocialAccount(id: number, updates: Partial<InsertSocialAccount>): Promise<SocialAccount> {
@@ -292,21 +331,20 @@ export class DatabaseStorage implements IStorage {
       .set({ ...updates, updatedAt: new Date() })
       .where(eq(socialAccounts.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteSocialAccount(id: number): Promise<void> {
     await db.delete(socialAccounts).where(eq(socialAccounts.id, id));
   }
 
-  // Widgets
   async getWidgets(userId: string): Promise<Widget[]> {
     return await db.select().from(widgets).where(eq(widgets.userId, userId)).orderBy(widgets.position);
   }
 
   async createWidget(widget: InsertWidget): Promise<Widget> {
     const [newWidget] = await db.insert(widgets).values(widget).returning();
-    return newWidget;
+    return newWidget[0];
   }
 
   async updateWidget(id: number, updates: Partial<InsertWidget>): Promise<Widget> {
@@ -314,21 +352,20 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(widgets.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteWidget(id: number): Promise<void> {
     await db.delete(widgets).where(eq(widgets.id, id));
   }
 
-  // Funnels
   async getFunnels(userId: string): Promise<SalesFunnel[]> {
     return await db.select().from(salesFunnels).where(eq(salesFunnels.userId, userId)).orderBy(desc(salesFunnels.createdAt));
   }
 
   async createFunnel(funnel: InsertSalesFunnel): Promise<SalesFunnel> {
     const [newFunnel] = await db.insert(salesFunnels).values(funnel).returning();
-    return newFunnel;
+    return newFunnel[0];
   }
 
   async updateFunnel(id: number, updates: Partial<InsertSalesFunnel>): Promise<SalesFunnel> {
@@ -336,21 +373,20 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(salesFunnels.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteFunnel(id: number): Promise<void> {
     await db.delete(salesFunnels).where(eq(salesFunnels.id, id));
   }
 
-  // Campaigns
   async getCampaigns(userId: string): Promise<Campaign[]> {
     return await db.select().from(campaigns).where(eq(campaigns.userId, userId)).orderBy(desc(campaigns.createdAt));
   }
 
   async createCampaign(campaign: InsertCampaign): Promise<Campaign> {
     const [newCampaign] = await db.insert(campaigns).values(campaign).returning();
-    return newCampaign;
+    return newCampaign[0];
   }
 
   async updateCampaign(id: number, updates: Partial<InsertCampaign>): Promise<Campaign> {
@@ -358,14 +394,13 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(campaigns.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteCampaign(id: number): Promise<void> {
     await db.delete(campaigns).where(eq(campaigns.id, id));
   }
 
-  // Customers
   async getCustomers(userId: string): Promise<Customer[]> {
     return await db.select().from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.createdAt));
   }
@@ -377,7 +412,7 @@ export class DatabaseStorage implements IStorage {
 
   async createCustomer(customer: InsertCustomer): Promise<Customer> {
     const [newCustomer] = await db.insert(customers).values(customer).returning();
-    return newCustomer;
+    return newCustomer[0];
   }
 
   async updateCustomer(id: number, updates: Partial<InsertCustomer>): Promise<Customer> {
@@ -385,40 +420,38 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(customers.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteCustomer(id: number): Promise<void> {
     await db.delete(customers).where(eq(customers.id, id));
   }
 
-  // Customer Groups Implementation
   async getCustomerGroups(userId: string): Promise<CustomerGroup[]> {
     return await db.select().from(customerGroups).where(eq(customerGroups.userId, userId));
   }
 
   async createCustomerGroup(group: InsertCustomerGroup): Promise<CustomerGroup> {
     const [newGroup] = await db.insert(customerGroups).values(group).returning();
-    return newGroup;
+    return newGroup[0];
   }
 
   async deleteCustomerGroup(id: number): Promise<void> {
     await db.delete(customerGroups).where(eq(customerGroups.id, id));
   }
 
-  // Product Catalogs Implementation
   async getCatalogs(userId: string): Promise<ProductCatalog[]> {
     return await db.select().from(productCatalogs).where(eq(productCatalogs.userId, userId));
   }
 
   async createCatalog(catalog: InsertProductCatalog): Promise<ProductCatalog> {
     const [newCatalog] = await db.insert(productCatalogs).values(catalog).returning();
-    return newCatalog;
+    return newCatalog[0];
   }
 
   async updateCatalog(id: number, updates: Partial<InsertProductCatalog>): Promise<ProductCatalog> {
     const [updated] = await db.update(productCatalogs).set(updates).where(eq(productCatalogs.id, id)).returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteCatalog(id: number): Promise<void> {
@@ -430,7 +463,6 @@ export class DatabaseStorage implements IStorage {
     return account;
   }
 
-  // Products
   async getProducts(userId: string): Promise<Product[]> {
     return await db.select().from(products).where(eq(products.userId, userId));
   }
@@ -442,19 +474,18 @@ export class DatabaseStorage implements IStorage {
 
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newItem] = await db.insert(products).values(product).returning();
-    return newItem;
+    return newItem[0];
   }
 
   async updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product> {
     const [updated] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteProduct(id: number): Promise<void> {
     await db.delete(products).where(eq(products.id, id));
   }
 
-  // Custom Links
   async getCustomLinks(userId: string): Promise<CustomLink[]> {
     return await db.select().from(customLinks).where(eq(customLinks.userId, userId));
   }
@@ -466,7 +497,7 @@ export class DatabaseStorage implements IStorage {
 
   async createCustomLink(link: InsertCustomLink): Promise<CustomLink> {
     const [newLink] = await db.insert(customLinks).values(link).returning();
-    return newLink;
+    return newLink[0];
   }
 
   async incrementLinkClicks(id: number): Promise<void> {
@@ -476,14 +507,13 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  // Artists & Music
   async getArtists(userId: string): Promise<ArtistProfile[]> {
     return await db.select().from(artistProfiles).where(eq(artistProfiles.userId, userId));
   }
 
   async createArtist(artist: InsertArtistProfile): Promise<ArtistProfile> {
     const [newArtist] = await db.insert(artistProfiles).values(artist).returning();
-    return newArtist;
+    return newArtist[0];
   }
 
   async getMusicContent(artistId: number): Promise<MusicContent[]> {
@@ -492,39 +522,36 @@ export class DatabaseStorage implements IStorage {
 
   async createMusicContent(content: InsertMusicContent): Promise<MusicContent> {
     const [newContent] = await db.insert(musicContent).values(content).returning();
-    return newContent;
+    return newContent[0];
   }
 
-  // Inventory Implementation
   async getInventory(userId: string): Promise<Inventory[]> {
     return await db.select().from(inventory).where(eq(inventory.userId, userId));
   }
 
   async createInventory(item: InsertInventory): Promise<Inventory> {
     const [newItem] = await db.insert(inventory).values(item).returning();
-    return newItem;
+    return newItem[0];
   }
 
   async updateInventory(id: number, updates: Partial<InsertInventory>): Promise<Inventory> {
     const [updated] = await db.update(inventory).set(updates).where(eq(inventory.id, id)).returning();
-    return updated;
+    return updated[0];
   }
 
   async deleteInventory(id: number): Promise<void> {
     await db.delete(inventory).where(eq(inventory.id, id));
   }
 
-  // Transactions Implementation
   async getTransactions(userId: string): Promise<Transaction[]> {
     return await db.select().from(transactions).where(eq(transactions.userId, userId)).orderBy(desc(transactions.createdAt));
   }
 
   async createTransaction(tx: InsertTransaction): Promise<Transaction> {
     const [newTx] = await db.insert(transactions).values(tx).returning();
-    return newTx;
+    return newTx[0];
   }
 
-  // Phone Connections
   async getPhoneConnections(): Promise<PhoneConnection[]> {
     return await db.select().from(phoneConnections).orderBy(desc(phoneConnections.createdAt));
   }
@@ -536,7 +563,7 @@ export class DatabaseStorage implements IStorage {
 
   async createPhoneConnection(connection: InsertPhoneConnection): Promise<PhoneConnection> {
     const [newConnection] = await db.insert(phoneConnections).values(connection).returning();
-    return newConnection;
+    return newConnection[0];
   }
 
   async updatePhoneConnection(id: number, updates: Partial<InsertPhoneConnection>): Promise<PhoneConnection> {
@@ -544,7 +571,7 @@ export class DatabaseStorage implements IStorage {
       .set({ ...updates, verifiedAt: updates.isVerified ? new Date() : undefined })
       .where(eq(phoneConnections.id, id))
       .returning();
-    return updated;
+    return updated[0];
   }
 
   async deletePhoneConnection(id: number): Promise<void> {

@@ -22,6 +22,52 @@ export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  role: text("role").default("user"), // admin, manager, salesperson, customer
+  avatar: text("avatar"),
+  teamId: integer("team_id"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const teams = sqliteTable("teams", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  leaderId: text("leader_id").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const tasks = sqliteTable("tasks", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  assignedTo: text("assigned_to").references(() => users.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status").default("pending"), // pending, in_progress, completed, cancelled
+  priority: text("priority").default("medium"), // low, medium, high
+  dueDate: integer("due_date", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const finances = sqliteTable("finances", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  type: text("type").notNull(), // income, expense
+  category: text("category").notNull(),
+  amount: real("amount").notNull(),
+  description: text("description"),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  status: text("status").default("completed"), // pending, completed, void
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const emails = sqliteTable("emails", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  to: text("to").notNull(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  status: text("status").default("sent"), // sent, failed, draft
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
@@ -230,7 +276,7 @@ export const phoneConnections = sqliteTable("phone_connections", {
 
 // === RELATIONS ===
 
-export const userRelations = relations(users, ({ many }) => ({
+export const userRelations = relations(users, ({ one, many }) => ({
   customers: many(customers),
   socialAccounts: many(socialAccounts),
   widgets: many(widgets),
@@ -243,154 +289,58 @@ export const userRelations = relations(users, ({ many }) => ({
   artistProfiles: many(artistProfiles),
   inventory: many(inventory),
   transactions: many(transactions),
+  tasks: many(tasks, { relationName: "userTasks" }),
+  assignedTasks: many(tasks, { relationName: "assignedTasks" }),
+  finances: many(finances),
+  emails: many(emails),
+  team: one(teams, {
+    fields: [users.teamId],
+    references: [teams.id],
+  }),
 }));
 
-export const customerRelations = relations(customers, ({ one, many }) => ({
-  operations: many(operations),
+export const teamRelations = relations(teams, ({ one, many }) => ({
+  leader: one(users, {
+    fields: [teams.leaderId],
+    references: [users.id],
+  }),
+  members: many(users),
+}));
+
+export const taskRelations = relations(tasks, ({ one }) => ({
   user: one(users, {
-    fields: [customers.userId],
+    fields: [tasks.userId],
+    references: [users.id],
+    relationName: "userTasks",
+  }),
+  assignee: one(users, {
+    fields: [tasks.assignedTo],
+    references: [users.id],
+    relationName: "assignedTasks",
+  }),
+}));
+
+export const financeRelations = relations(finances, ({ one }) => ({
+  user: one(users, {
+    fields: [finances.userId],
     references: [users.id],
   }),
 }));
 
-export const operationRelations = relations(operations, ({ one }) => ({
-  customer: one(customers, {
-    fields: [operations.customerId],
-    references: [customers.id],
-  }),
-}));
-
-export const contactRelations = relations(contacts, ({ many }) => ({
-  inboxes: many(inboxes),
-  conversations: many(conversations),
-}));
-
-export const inboxRelations = relations(inboxes, ({ one }) => ({
-  contact: one(contacts, {
-    fields: [inboxes.contactId],
-    references: [contacts.id],
-  }),
-}));
-
-export const conversationRelations = relations(conversations, ({ one, many }) => ({
-  contact: one(contacts, {
-    fields: [conversations.contactId],
-    references: [contacts.id],
-  }),
-  messages: many(messages),
-}));
-
-export const messageRelations = relations(messages, ({ one }) => ({
-  conversation: one(conversations, {
-    fields: [messages.conversationId],
-    references: [conversations.id],
-  }),
-}));
-
-export const socialAccountRelations = relations(socialAccounts, ({ one }) => ({
+export const emailRelations = relations(emails, ({ one }) => ({
   user: one(users, {
-    fields: [socialAccounts.userId],
+    fields: [emails.userId],
     references: [users.id],
   }),
 }));
-
-export const widgetRelations = relations(widgets, ({ one }) => ({
-  user: one(users, {
-    fields: [widgets.userId],
-    references: [users.id],
-  }),
-}));
-
-export const salesFunnelRelations = relations(salesFunnels, ({ one }) => ({
-  user: one(users, {
-    fields: [salesFunnels.userId],
-    references: [users.id],
-  }),
-}));
-
-export const campaignRelations = relations(campaigns, ({ one }) => ({
-  user: one(users, {
-    fields: [campaigns.userId],
-    references: [users.id],
-  }),
-}));
-
-export const customerGroupRelations = relations(customerGroups, ({ one }) => ({
-  user: one(users, {
-    fields: [customerGroups.userId],
-    references: [users.id],
-  }),
-}));
-
-export const productCatalogRelations = relations(productCatalogs, ({ one, many }) => ({
-  user: one(users, {
-    fields: [productCatalogs.userId],
-    references: [users.id],
-  }),
-  products: many(products),
-}));
-
-export const productRelations = relations(products, ({ one, many }) => ({
-  catalog: one(productCatalogs, {
-    fields: [products.catalogId],
-    references: [productCatalogs.id],
-  }),
-  user: one(users, {
-    fields: [products.userId],
-    references: [users.id],
-  }),
-  inventory: many(inventory),
-  transactions: many(transactions),
-}));
-
-export const customLinkRelations = relations(customLinks, ({ one }) => ({
-  user: one(users, {
-    fields: [customLinks.userId],
-    references: [users.id],
-  }),
-}));
-
-export const artistProfileRelations = relations(artistProfiles, ({ one, many }) => ({
-  user: one(users, {
-    fields: [artistProfiles.userId],
-    references: [users.id],
-  }),
-  musicContent: many(musicContent),
-}));
-
-export const musicContentRelations = relations(musicContent, ({ one }) => ({
-  artist: one(artistProfiles, {
-    fields: [musicContent.artistId],
-    references: [artistProfiles.id],
-  }),
-}));
-
-export const inventoryRelations = relations(inventory, ({ one }) => ({
-  user: one(users, {
-    fields: [inventory.userId],
-    references: [users.id],
-  }),
-  product: one(products, {
-    fields: [inventory.productId],
-    references: [products.id],
-  }),
-}));
-
-export const transactionRelations = relations(transactions, ({ one }) => ({
-  user: one(users, {
-    fields: [transactions.userId],
-    references: [users.id],
-  }),
-  product: one(products, {
-    fields: [transactions.productId],
-    references: [products.id],
-  }),
-}));
-
 
 // === ZOD SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users);
+export const insertTeamSchema = createInsertSchema(teams);
+export const insertTaskSchema = createInsertSchema(tasks);
+export const insertFinanceSchema = createInsertSchema(finances);
+export const insertEmailSchema = createInsertSchema(emails);
 export const insertCustomerSchema = createInsertSchema(customers, {
     animalCount: z.number().optional(),
     tags: z.string().optional(),
@@ -423,6 +373,18 @@ export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections);
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
+export type Team = typeof teams.$inferSelect;
+export type InsertTeam = z.infer<typeof insertTeamSchema>;
+
+export type Task = typeof tasks.$inferSelect;
+export type InsertTask = z.infer<typeof insertTaskSchema>;
+
+export type Finance = typeof finances.$inferSelect;
+export type InsertFinance = z.infer<typeof insertFinanceSchema>;
+
+export type Email = typeof emails.$inferSelect;
+export type InsertEmail = z.infer<typeof insertEmailSchema>;
 
 export type Customer = typeof customers.$inferSelect;
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>;

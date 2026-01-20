@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertArtistProfileSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema } from "@shared/schema"; // Updated imports
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertArtistProfileSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema } from "@shared/schema"; // Updated imports
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
@@ -485,23 +485,64 @@ export async function registerRoutes(
     }
   });
 
-  // Phone Connections
-  app.get("/api/phone-connections", async (req: Request, res: Response) => {
+  // Finances
+  app.get("/api/finances", async (req: Request, res: Response) => {
     try {
-      const allConnections = await storage.getPhoneConnections();
-      res.json(allConnections);
+      const allFinances = await storage.getFinances();
+      res.json(allFinances);
     } catch (error) {
-      res.status(500).json({ error: "Failed to fetch phone connections" });
+      res.status(500).json({ error: "Failed to fetch finances" });
     }
   });
 
-  app.post("/api/phone-connections", async (req: Request, res: Response) => {
+  app.post("/api/finances", async (req: Request, res: Response) => {
     try {
-      const data = insertPhoneConnectionSchema.parse(req.body);
-      const newConnection = await storage.createPhoneConnection(data);
-      res.status(201).json(newConnection);
+      const data = insertFinanceSchema.parse(req.body);
+      const newFinance = await storage.createFinance({ ...data, userId: "demo-user" });
+      res.status(201).json(newFinance);
     } catch (error) {
-      res.status(500).json({ error: "Failed to create phone connection" });
+      res.status(500).json({ error: "Failed to create finance record" });
+    }
+  });
+
+  // Teams
+  app.get("/api/teams", async (req: Request, res: Response) => {
+    try {
+      const allTeams = await storage.getTeams();
+      res.json(allTeams);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch teams" });
+    }
+  });
+
+  // Tasks
+  app.get("/api/tasks", async (req: Request, res: Response) => {
+    try {
+      const allTasks = await storage.getTasks();
+      res.json(allTasks);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch tasks" });
+    }
+  });
+
+  app.post("/api/tasks", async (req: Request, res: Response) => {
+    try {
+      const data = insertTaskSchema.parse(req.body);
+      const newTask = await storage.createTask({ ...data, userId: "demo-user" });
+      res.status(201).json(newTask);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create task" });
+    }
+  });
+
+  // Emails
+  app.post("/api/emails/send", async (req: Request, res: Response) => {
+    try {
+      const data = insertEmailSchema.parse(req.body);
+      const newEmail = await storage.createEmail({ ...data, userId: "demo-user" });
+      res.status(201).json(newEmail);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to send email" });
     }
   });
 

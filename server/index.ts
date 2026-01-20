@@ -7,10 +7,19 @@ import { serveStatic } from "./static";
 import { setupVite } from "./vite";
 import express from "express";
 
+import { setupDemoAccounts } from "./services/auth";
+
 const app = express();
 const httpServer = createServer(app);
 
 async function bootstrap() {
+  // Setup demo accounts on startup
+  try {
+    await setupDemoAccounts();
+  } catch (err) {
+    console.error("Failed to setup demo accounts:", err);
+  }
+
   if (process.env.NODE_ENV === 'production') {
     serveStatic(app);
   } else {

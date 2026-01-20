@@ -32,6 +32,39 @@ export function verifyToken(token: string): AuthPayload | null {
   }
 }
 
+export async function setupDemoAccounts() {
+  const adminUsername = "socialadmin";
+  const managerUsername = "manager";
+
+  try {
+    const admin = await storage.getUserByUsername(adminUsername);
+    if (!admin) {
+      const hashedPassword = await hashPassword("SocialPass2025");
+      await storage.createUser({
+        id: randomUUID(),
+        username: adminUsername,
+        password: hashedPassword,
+        role: "admin",
+        botId: "default",
+      });
+    }
+
+    const manager = await storage.getUserByUsername(managerUsername);
+    if (!manager) {
+      const hashedPassword = await hashPassword("Manager2025");
+      await storage.createUser({
+        id: randomUUID(),
+        username: managerUsername,
+        password: hashedPassword,
+        role: "manager",
+        botId: "default",
+      });
+    }
+  } catch (err) {
+    console.error("Error setting up demo accounts:", err);
+  }
+}
+
 export async function registerUser(username: string, password: string, botId: string) {
   const existing = await storage.getUserByUsername(username);
   if (existing) throw new Error("Username already exists");
@@ -42,6 +75,7 @@ export async function registerUser(username: string, password: string, botId: st
     username,
     password: hashedPassword,
     botId,
+    role: "user",
   });
 
   return user;
