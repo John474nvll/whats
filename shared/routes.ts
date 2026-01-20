@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { insertChannelConfigSchema, channelConfigs } from "./schema";
+import { insertChannelConfigSchema, channelConfigs, conversations, messages, contacts } from "./schema";
 
 export const errorSchemas = {
   400: z.object({
@@ -43,16 +43,54 @@ export const api = {
       input: insertChannelConfigSchema.omit({ platform: true }).partial(),
       responses: {
         200: z.custom<typeof channelConfigs.$inferSelect>(),
-        404: errorSchemas.notFound,
       },
     },
   },
+  conversations: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/conversations',
+      responses: {
+        200: z.array(z.custom<typeof conversations.$inferSelect & { contact: typeof contacts.$inferSelect }>()),
+      },
+    },
+    get: {
+      method: 'GET' as const,
+      path: '/api/conversations/:id',
+      responses: {
+        200: z.custom<typeof conversations.$inferSelect & { messages: (typeof messages.$inferSelect)[] }>(),
+      },
+    },
+    toggleBot: {
+      method: 'POST' as const,
+      path: '/api/conversations/:id/toggle-bot',
+      responses: {
+        200: z.custom<typeof conversations.$inferSelect>(),
+      },
+    },
+  },
+  messages: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/conversations/:id/messages',
+      responses: {
+        200: z.array(z.custom<typeof messages.$inferSelect>()),
+      },
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/conversations/:id/messages',
+      responses: {
+        201: z.custom<typeof messages.$inferSelect>(),
+      },
+    },
+  }
 };
 
-export function buildUrl(path: string, params: Record<string, string>) {
+export function buildUrl(path: string, params: Record<string, string | number>) {
   let url = path;
   for (const key in params) {
-    url = url.replace(`:${key}`, params[key]);
+    url = url.replace(`:${key}`, String(params[key]));
   }
   return url;
 }

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type InsertMessage } from "@shared/routes";
+import { api, buildUrl } from "@shared/routes";
 
 export function useConversations() {
   return useQuery({
@@ -7,9 +7,9 @@ export function useConversations() {
     queryFn: async () => {
       const res = await fetch(api.conversations.list.path, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch conversations");
-      return api.conversations.list.responses[200].parse(await res.json());
+      return res.json();
     },
-    refetchInterval: 5000, // Poll for new conversations
+    refetchInterval: 5000,
   });
 }
 
@@ -21,10 +21,10 @@ export function useConversation(id: number) {
       const res = await fetch(url, { credentials: "include" });
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch conversation");
-      return api.conversations.get.responses[200].parse(await res.json());
+      return res.json();
     },
     enabled: !!id,
-    refetchInterval: 3000, // Poll for new messages
+    refetchInterval: 3000,
   });
 }
 
@@ -40,7 +40,7 @@ export function useToggleBot() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to toggle bot status");
-      return api.conversations.toggleBot.responses[200].parse(await res.json());
+      return res.json();
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
@@ -56,10 +56,10 @@ export function useMessages(conversationId: number) {
       const url = buildUrl(api.messages.list.path, { id: conversationId });
       const res = await fetch(url, { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch messages");
-      return api.messages.list.responses[200].parse(await res.json());
+      return res.json();
     },
     enabled: !!conversationId,
-    refetchInterval: 2000, // Poll for real-time messages
+    refetchInterval: 2000,
   });
 }
 
@@ -67,7 +67,6 @@ export function useSendMessage() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ conversationId, content, role = "agent" }: { conversationId: number; content: string; role?: string }) => {
-      // Note: role is defaulted to 'agent' for UI sent messages, backend might override or use 'agent'
       const data = { content, role };
       const url = buildUrl(api.messages.create.path, { id: conversationId });
       const res = await fetch(url, {
@@ -77,12 +76,12 @@ export function useSendMessage() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to send message");
-      return api.messages.create.responses[201].parse(await res.json());
+      return res.json();
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [api.messages.list.path, variables.conversationId] });
       queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] }); // Update last message preview
+      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
     },
   });
 }
