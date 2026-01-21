@@ -92,7 +92,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {['whatsapp', 'instagram', 'facebook', 'spotify'].map((platform) => {
+              {['whatsapp', 'instagram', 'facebook'].map((platform) => {
                 const config = (channels as any[])?.find(c => c.platform === platform);
                 const isExpanded = expandedPlatform === platform;
 
@@ -112,7 +112,6 @@ export default function Settings() {
                              {platform === 'whatsapp' && <RefreshCw className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />}
                              {platform === 'instagram' && <RefreshCw className="w-5 h-5 md:w-6 md:h-6 text-pink-500" />}
                              {platform === 'facebook' && <RefreshCw className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />}
-                             {platform === 'spotify' && <RefreshCw className="w-5 h-5 md:w-6 md:h-6 text-green-400" />}
                           </div>
                           <div>
                             <CardTitle className="capitalize font-black text-lg md:text-xl text-white">{platform}</CardTitle>
@@ -160,7 +159,7 @@ export default function Settings() {
                                   type="password" 
                                   defaultValue={config?.accessToken}
                                   className="bg-slate-900/50 border-white/10 rounded-xl h-11 md:h-12 font-mono text-xs focus:ring-primary/20"
-                                  placeholder={platform === 'spotify' ? "Spotify Client Secret" : `Access Token ${platform}`}
+                                  placeholder={`Access Token ${platform}`}
                                   onBlur={(e) => {
                                     if (e.target.value !== config?.accessToken) {
                                       handleUpdate(platform, { accessToken: e.target.value });
@@ -174,12 +173,12 @@ export default function Settings() {
                             </div>
 
                             <div className="grid gap-2">
-                              <Label htmlFor={`verify-${platform}`} className="text-xs font-black text-slate-500 uppercase tracking-[0.15em]">{platform === 'spotify' ? 'Client ID' : 'Webhook Verification Token'}</Label>
+                              <Label htmlFor={`verify-${platform}`} className="text-xs font-black text-slate-500 uppercase tracking-[0.15em]">Webhook Verification Token</Label>
                               <Input 
                                 id={`verify-${platform}`} 
                                 defaultValue={config?.verifyToken}
                                 className="bg-slate-900/50 border-white/10 rounded-xl h-11 md:h-12 font-mono text-xs focus:ring-primary/20"
-                                placeholder={platform === 'spotify' ? "Spotify Client ID" : "Verification Token"}
+                                placeholder="Verification Token"
                                 onBlur={(e) => {
                                   if (e.target.value !== config?.verifyToken) {
                                     handleUpdate(platform, { verifyToken: e.target.value });

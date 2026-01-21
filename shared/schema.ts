@@ -226,26 +226,6 @@ export const customLinks = sqliteTable("custom_links", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
-export const artistProfiles = sqliteTable("artist_profiles", {
-  id: integer("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id),
-  name: text("name").notNull(),
-  bio: text("bio"),
-  imageUrl: text("image_url"),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
-});
-
-export const musicContent = sqliteTable("music_content", {
-  id: integer("id").primaryKey(),
-  artistId: integer("artist_id").notNull().references(() => artistProfiles.id),
-  type: text("type").notNull(),
-  title: text("title").notNull(),
-  url: text("url").notNull(),
-  releaseDate: integer("release_date", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
-});
-
 export const inventory = sqliteTable("inventory", {
   id: integer("id").primaryKey(),
   userId: text("user_id").notNull().references(() => users.id),
@@ -286,7 +266,6 @@ export const userRelations = relations(users, ({ one, many }) => ({
   productCatalogs: many(productCatalogs),
   products: many(products),
   customLinks: many(customLinks),
-  artistProfiles: many(artistProfiles),
   inventory: many(inventory),
   transactions: many(transactions),
   tasks: many(tasks, { relationName: "userTasks" }),
@@ -363,8 +342,6 @@ export const insertCustomerGroupSchema = createInsertSchema(customerGroups);
 export const insertProductCatalogSchema = createInsertSchema(productCatalogs);
 export const insertProductSchema = createInsertSchema(products);
 export const insertCustomLinkSchema = createInsertSchema(customLinks);
-export const insertArtistProfileSchema = createInsertSchema(artistProfiles);
-export const insertMusicContentSchema = createInsertSchema(musicContent);
 export const insertInventorySchema = createInsertSchema(inventory);
 export const insertTransactionSchema = createInsertSchema(transactions);
 export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections);
@@ -430,12 +407,6 @@ export type InsertProduct = z.infer<typeof insertProductSchema>;
 
 export type CustomLink = typeof customLinks.$inferSelect;
 export type InsertCustomLink = z.infer<typeof insertCustomLinkSchema>;
-
-export type ArtistProfile = typeof artistProfiles.$inferSelect;
-export type InsertArtistProfile = z.infer<typeof insertArtistProfileSchema>;
-
-export type MusicContent = typeof musicContent.$inferSelect;
-export type InsertMusicContent = z.infer<typeof insertMusicContentSchema>;
 
 export type Inventory = typeof inventory.$inferSelect;
 export type InsertInventory = z.infer<typeof insertInventorySchema>;

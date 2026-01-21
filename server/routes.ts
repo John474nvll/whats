@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertArtistProfileSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema } from "@shared/schema"; // Updated imports
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema } from "@shared/schema";
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
@@ -360,26 +360,6 @@ export async function registerRoutes(
       res.status(201).json(newItem);
     } catch (error) {
       res.status(500).json({ error: "Failed to create inventory item" });
-    }
-  });
-
-  // Music & Artists
-  app.get("/api/artists", async (req: Request, res: Response) => {
-    try {
-      const allArtists = await storage.getArtists("demo-user");
-      res.json(allArtists);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch artists" });
-    }
-  });
-
-  app.post("/api/artists", async (req: Request, res: Response) => {
-    try {
-      const data = insertArtistProfileSchema.parse(req.body);
-      const newArtist = await storage.createArtist({ ...data, userId: "demo-user" });
-      res.status(201).json(newArtist);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to create artist profile" });
     }
   });
 

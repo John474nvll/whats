@@ -507,24 +507,6 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getArtists(userId: string): Promise<ArtistProfile[]> {
-    return await db.select().from(artistProfiles).where(eq(artistProfiles.userId, userId));
-  }
-
-  async createArtist(artist: InsertArtistProfile): Promise<ArtistProfile> {
-    const [newArtist] = await db.insert(artistProfiles).values(artist).returning();
-    return newArtist[0];
-  }
-
-  async getMusicContent(artistId: number): Promise<MusicContent[]> {
-    return await db.select().from(musicContent).where(eq(musicContent.artistId, artistId));
-  }
-
-  async createMusicContent(content: InsertMusicContent): Promise<MusicContent> {
-    const [newContent] = await db.insert(musicContent).values(content).returning();
-    return newContent[0];
-  }
-
   async getInventory(userId: string): Promise<Inventory[]> {
     return await db.select().from(inventory).where(eq(inventory.userId, userId));
   }
