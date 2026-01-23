@@ -306,6 +306,24 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/crm/metrics", async (req: Request, res: Response) => {
+    try {
+      const metrics = await storage.getSalesMetrics("demo-user");
+      res.json(metrics[0] || { revenue: 0, newLeads: 0, conversions: 0 });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch metrics" });
+    }
+  });
+
+  app.get("/api/conversations", async (req: Request, res: Response) => {
+    try {
+      const convs = await storage.getConversations();
+      res.json(convs);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch conversations" });
+    }
+  });
+
   // Marketing & Campaign Management
   app.get("/api/campaigns", async (req: Request, res: Response) => {
     try {
