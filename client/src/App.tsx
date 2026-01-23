@@ -19,6 +19,8 @@ import FunnelBuilder from "@/pages/FunnelBuilder";
 import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
+import Billing from "@/pages/Billing";
+import Projects from "@/pages/Projects";
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -46,6 +48,8 @@ function Router() {
       <Route path="/links" component={CustomLinks} />
       <Route path="/platforms" component={PlatformsHub} />
       <Route path="/settings" component={Settings} />
+      <Route path="/billing" component={Billing} />
+      <Route path="/projects" component={Projects} />
       <Route component={NotFound} />
     </Switch>
   );
