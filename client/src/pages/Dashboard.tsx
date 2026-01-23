@@ -44,6 +44,7 @@ import { RecentConversations } from "@/components/dashboard/RecentConversations"
 import { SalesPipeline } from "@/components/crm/SalesPipeline";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import type { Ticket, Opportunity } from "@shared/schema";
 
 const activityData = [
   { name: "Mon", value: 120 },

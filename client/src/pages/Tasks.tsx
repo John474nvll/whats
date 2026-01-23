@@ -41,7 +41,7 @@ export default function Tasks() {
                   {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Sin fecha'}
                 </div>
                 <div className="flex items-center gap-1">
-                  <Badge variant="ghost" className="text-[9px] uppercase tracking-tighter">
+                  <Badge variant="outline" className="text-[9px] uppercase tracking-tighter border-primary/20 text-primary">
                     {task.priority}
                   </Badge>
                 </div>
