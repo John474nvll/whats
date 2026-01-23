@@ -351,7 +351,23 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getWidgets(userId: string): Promise<Widget[]> {
-    return await db.select().from(widgets).where(eq(widgets.userId, userId)).orderBy(widgets.position);
+    const existingWidgets = await db.select().from(widgets).where(eq(widgets.userId, userId)).orderBy(widgets.position);
+    if (existingWidgets.length === 0) {
+      // Create default widgets for demo
+      const defaultWidgets: InsertWidget[] = [
+        { userId, type: "crm_stats", position: 0, config: { title: "Resumen CRM" } },
+        { userId, type: "sales_pipeline", position: 1, config: { title: "Pipeline de Ventas" } },
+        { userId, type: "recent_leads", position: 2, config: { title: "Leads Recientes" } },
+        { userId, type: "campaign_metrics", position: 3, config: { title: "Métricas de Campañas" } }
+      ];
+      const created = [];
+      for (const w of defaultWidgets) {
+        const [newW] = await db.insert(widgets).values(w).returning();
+        created.push(newW);
+      }
+      return created;
+    }
+    return existingWidgets;
   }
 
   async createWidget(widget: InsertWidget): Promise<Widget> {

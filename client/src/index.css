@@ -17,16 +17,16 @@
   --popover: 142 80% 3%;
   --popover-foreground: 142 20% 98%;
 
-  --primary: 142 100% 45%; /* Verde Bosque Neon */
+  --primary: 142 100% 50%; /* Pure Neon Forest Green */
   --primary-foreground: 142 40% 2%;
 
-  --secondary: 155 100% 40%; /* Deep Forest */
+  --secondary: 155 100% 45%; /* Deep Forest Mint */
   --secondary-foreground: 155 40% 98%;
 
   --muted: 142 50% 8%;
   --muted-foreground: 142 20% 65%;
 
-  --accent: 142 100% 50%;
+  --accent: 142 100% 60%; /* High Intensity Neon */
   --accent-foreground: 142 40% 98%;
 
   --destructive: 0 62% 30%;
@@ -36,7 +36,7 @@
   --input: 142 60% 8%;
   --ring: 142 100% 45%;
 
-  --radius: 0.75rem; /* Sleek rounded corners */
+  --radius: 3rem; /* Ultra-rounded v3.0 */
 
   /* Enhanced Color Palette */
   --kiwi: 142 90% 50%;
@@ -94,16 +94,16 @@
   --popover: 142 80% 3%;
   --popover-foreground: 210 40% 98%;
 
-  --primary: 142 100% 45%;
+  --primary: 142 100% 50%;
   --primary-foreground: 142 40% 2%;
 
-  --secondary: 155 100% 40%;
+  --secondary: 155 100% 45%;
   --secondary-foreground: 210 40% 98%;
 
   --muted: 142 50% 8%;
   --muted-foreground: 215 20% 65%;
 
-  --accent: 142 100% 50%;
+  --accent: 142 100% 60%;
   --accent-foreground: 210 40% 98%;
 
   --destructive: 0 62% 30%;
@@ -111,7 +111,7 @@
 
   --border: 142 60% 10%;
   --input: 142 60% 8%;
-  --ring: 142 100% 45%;
+  --ring: 142 100% 50%;
 }
 
 @layer base {

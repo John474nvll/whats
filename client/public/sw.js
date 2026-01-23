@@ -1,5 +1,10 @@
 const CACHE_NAME = "socialhub-v3.1";
-const urlsToCache = ["/", "/index.html", "/src/main.tsx", "/src/App.tsx"];
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/favicon.png"
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -7,12 +12,47 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
+  // Only cache GET requests
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).then((response) => {
+        // Don't cache non-successful responses or non-basic responses
+        if (!response || response.status !== 200 || response.type !== "basic") {
+          return response;
+        }
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+        return response;
+      }).catch(() => {
+        // Fallback for offline if needed
+        return caches.match("/");
+      });
     })
   );
 });
