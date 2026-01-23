@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema } from "@shared/schema";
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema, insertTicketSchema, insertOpportunitySchema } from "@shared/schema";
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
@@ -106,6 +106,46 @@ export async function registerRoutes(
       res.status(201).json(newProject);
     } catch (error) {
       res.status(500).json({ error: "Failed to create project" });
+    }
+  });
+
+  // Tickets
+  app.get("/api/crm/tickets", async (req, res) => {
+    try {
+      const allTickets = await storage.getTickets("demo-user");
+      res.json(allTickets);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch tickets" });
+    }
+  });
+
+  app.post("/api/crm/tickets", async (req, res) => {
+    try {
+      const data = insertTicketSchema.parse(req.body);
+      const newTicket = await storage.createTicket({ ...data, userId: "demo-user" });
+      res.status(201).json(newTicket);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create ticket" });
+    }
+  });
+
+  // Opportunities
+  app.get("/api/crm/opportunities", async (req, res) => {
+    try {
+      const allOpportunities = await storage.getOpportunities("demo-user");
+      res.json(allOpportunities);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch opportunities" });
+    }
+  });
+
+  app.post("/api/crm/opportunities", async (req, res) => {
+    try {
+      const data = insertOpportunitySchema.parse(req.body);
+      const newOpportunity = await storage.createOpportunity({ ...data, userId: "demo-user" });
+      res.status(201).json(newOpportunity);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create opportunity" });
     }
   });
   registerImageRoutes(app);

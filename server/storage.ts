@@ -142,6 +142,10 @@ export interface IStorage {
   createSalesGroup(group: InsertSalesGroup): Promise<SalesGroup>;
   getProjects(userId: string): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
+  getTickets(userId: string): Promise<Ticket[]>;
+  createTicket(ticket: InsertTicket): Promise<Ticket>;
+  getOpportunities(userId: string): Promise<Opportunity[]>;
+  createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -599,6 +603,24 @@ export class DatabaseStorage implements IStorage {
   async createProject(project: InsertProject): Promise<Project> {
     const [newProject] = await db.insert(projects).values(project).returning();
     return newProject;
+  }
+
+  async getTickets(userId: string): Promise<Ticket[]> {
+    return await db.select().from(tickets).where(eq(tickets.userId, userId)).orderBy(desc(tickets.createdAt));
+  }
+
+  async createTicket(ticket: InsertTicket): Promise<Ticket> {
+    const [newTicket] = await db.insert(tickets).values(ticket).returning();
+    return newTicket;
+  }
+
+  async getOpportunities(userId: string): Promise<Opportunity[]> {
+    return await db.select().from(opportunities).where(eq(opportunities.userId, userId)).orderBy(desc(opportunities.createdAt));
+  }
+
+  async createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity> {
+    const [newOpportunity] = await db.insert(opportunities).values(opportunity).returning();
+    return newOpportunity;
   }
 }
 

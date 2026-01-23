@@ -302,6 +302,31 @@ export const projects = sqliteTable("projects", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const tickets = sqliteTable("tickets", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  customerId: integer("customer_id").references(() => customers.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status").default("open"), // open, in_progress, resolved, closed
+  priority: text("priority").default("medium"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const opportunities = sqliteTable("opportunities", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  customerId: integer("customer_id").notNull().references(() => customers.id),
+  title: text("title").notNull(),
+  value: real("value").notNull(),
+  stage: text("stage").notNull(), // lead, qualification, proposal, negotiation, closed_won, closed_lost
+  probability: integer("probability"),
+  expectedCloseDate: integer("expected_close_date", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
 // === RELATIONS ===
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -410,11 +435,19 @@ export const insertSalesMetricSchema = createInsertSchema(salesMetrics);
 export const insertSalesGroupSchema = createInsertSchema(salesGroups);
 
 export const insertProjectSchema = createInsertSchema(projects);
+export const insertTicketSchema = createInsertSchema(tickets);
+export const insertOpportunitySchema = createInsertSchema(opportunities);
 
 // === TYPES ===
 
 export type Project = typeof projects.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
+
+export type Ticket = typeof tickets.$inferSelect;
+export type InsertTicket = z.infer<typeof insertTicketSchema>;
+
+export type Opportunity = typeof opportunities.$inferSelect;
+export type InsertOpportunity = z.infer<typeof insertOpportunitySchema>;
 
 export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;
