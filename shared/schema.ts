@@ -247,9 +247,13 @@ export const transactions = sqliteTable("transactions", {
 
 export const phoneConnections = sqliteTable("phone_connections", {
   id: integer("id").primaryKey(),
-  phoneNumber: text("phone_number").notNull().unique(),
-  isVerified: integer("is_verified", { mode: "boolean" }).default(false),
-  verifiedAt: integer("verified_at", { mode: "timestamp" }),
+  userId: text("user_id").notNull().references(() => users.id),
+  platform: text("platform").notNull(), // twilio, whatsapp_business, manual
+  phoneNumber: text("phone_number").notNull(),
+  sid: text("sid"), // For Twilio
+  authToken: text("auth_token"), // For Twilio/WA
+  status: text("status").default("active"),
+  region: text("region").default("Colombia"),
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 

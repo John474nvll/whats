@@ -108,8 +108,9 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
-      <div className="max-w-[1600px] mx-auto p-6 space-y-8">
+    <div className="min-h-screen bg-[#050a06] text-slate-200">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(34,197,94,0.15),transparent_50%)] pointer-events-none" />
+      <div className="max-w-[1600px] mx-auto p-6 space-y-8 relative">
         <header className="flex justify-between items-end">
           <div className="space-y-2">
             <h1 className="text-5xl font-black text-white">
