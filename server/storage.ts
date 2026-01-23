@@ -3,7 +3,7 @@ import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, phoneConnections,
   customerGroups, productCatalogs, products, customLinks, inventory, transactions,
   teams, tasks, finances, emails,
-  invoices, salesMetrics, salesGroups, projects,
+  invoices, salesMetrics, salesGroups, projects, tickets, opportunities,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -29,6 +29,8 @@ import {
   type SalesMetric, type InsertSalesMetric,
   type SalesGroup, type InsertSalesGroup,
   type Project, type InsertProject,
+  type Ticket, type InsertTicket,
+  type Opportunity, type InsertOpportunity,
 } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 
@@ -560,7 +562,7 @@ export class DatabaseStorage implements IStorage {
 
   async updatePhoneConnection(id: number, updates: Partial<InsertPhoneConnection>): Promise<PhoneConnection> {
     const [updated] = await db.update(phoneConnections)
-      .set({ ...updates, verifiedAt: updates.isVerified ? new Date() : undefined })
+      .set(updates)
       .where(eq(phoneConnections.id, id))
       .returning();
     return updated;

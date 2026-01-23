@@ -29,7 +29,7 @@ async function bootstrap() {
   registerMiddleware(app);
   await registerRoutes(httpServer, app);
   
-  const port = process.env.PORT || 3000;
+  const port = parseInt(process.env.PORT || "3000");
   httpServer.listen(port, '0.0.0.0', () => {
     console.log(`Server listening on http://0.0.0.0:${port}`);
   });
