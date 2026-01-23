@@ -89,8 +89,25 @@ export async function registerRoutes(
     }
   });
 
-  // Register integrations
-  registerChatRoutes(app);
+  // Projects
+  app.get("/api/crm/projects", async (req, res) => {
+    try {
+      const allProjects = await storage.getProjects("demo-user");
+      res.json(allProjects);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch projects" });
+    }
+  });
+
+  app.post("/api/crm/projects", async (req, res) => {
+    try {
+      const data = insertProjectSchema.parse(req.body);
+      const newProject = await storage.createProject({ ...data, userId: "demo-user" });
+      res.status(201).json(newProject);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create project" });
+    }
+  });
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
 

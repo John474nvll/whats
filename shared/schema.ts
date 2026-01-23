@@ -286,6 +286,18 @@ export const salesGroups = sqliteTable("sales_groups", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
+export const projects = sqliteTable("projects", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").default("active"), // active, on_hold, completed, cancelled
+  priority: text("priority").default("medium"),
+  dueDate: integer("due_date", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
 // === RELATIONS ===
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -302,6 +314,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   transactions: many(transactions),
   invoices: many(invoices),
   salesMetrics: many(salesMetrics),
+  projects: many(projects),
   tasks: many(tasks, { relationName: "userTasks" }),
   assignedTasks: many(tasks, { relationName: "assignedTasks" }),
   finances: many(finances),
@@ -310,6 +323,14 @@ export const userRelations = relations(users, ({ one, many }) => ({
     fields: [users.teamId],
     references: [teams.id],
   }),
+}));
+
+export const projectRelations = relations(projects, ({ one, many }) => ({
+  user: one(users, {
+    fields: [projects.userId],
+    references: [users.id],
+  }),
+  tasks: many(tasks),
 }));
 
 export const teamRelations = relations(teams, ({ one, many }) => ({
@@ -384,7 +405,12 @@ export const insertInvoiceSchema = createInsertSchema(invoices);
 export const insertSalesMetricSchema = createInsertSchema(salesMetrics);
 export const insertSalesGroupSchema = createInsertSchema(salesGroups);
 
+export const insertProjectSchema = createInsertSchema(projects);
+
 // === TYPES ===
+
+export type Project = typeof projects.$inferSelect;
+export type InsertProject = z.infer<typeof insertProjectSchema>;
 
 export type Invoice = typeof invoices.$inferSelect;
 export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;

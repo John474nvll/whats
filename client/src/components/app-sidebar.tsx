@@ -29,11 +29,20 @@ const menuGroups = [
     ],
   },
   {
-    label: "📱 CRM",
+    label: "📱 CRM & VENTAS",
     items: [
       { title: "Inbox", url: "/inbox", icon: MessageSquare },
       { title: "Contacts", url: "/contacts", icon: Users },
       { title: "Customers", url: "/customers", icon: Users },
+      { title: "Facturación", url: "/billing", icon: Package },
+    ],
+  },
+  {
+    label: "📊 PROYECTOS",
+    items: [
+      { title: "Proyectos", url: "/projects", icon: GitFork },
+      { title: "Tareas", url: "/tasks", icon: Package },
+      { title: "Grupos", url: "/sales-groups", icon: Users },
     ],
   },
   {

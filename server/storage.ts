@@ -3,7 +3,7 @@ import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, phoneConnections,
   customerGroups, productCatalogs, products, customLinks, inventory, transactions,
   teams, tasks, finances, emails,
-  invoices, salesMetrics, salesGroups,
+  invoices, salesMetrics, salesGroups, projects,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -28,6 +28,7 @@ import {
   type Invoice, type InsertInvoice,
   type SalesMetric, type InsertSalesMetric,
   type SalesGroup, type InsertSalesGroup,
+  type Project, type InsertProject,
 } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 
@@ -139,6 +140,8 @@ export interface IStorage {
   getSalesMetrics(userId: string): Promise<SalesMetric[]>;
   getSalesGroups(): Promise<SalesGroup[]>;
   createSalesGroup(group: InsertSalesGroup): Promise<SalesGroup>;
+  getProjects(userId: string): Promise<Project[]>;
+  createProject(project: InsertProject): Promise<Project>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -587,6 +590,15 @@ export class DatabaseStorage implements IStorage {
   async createSalesGroup(group: InsertSalesGroup): Promise<SalesGroup> {
     const [newGroup] = await db.insert(salesGroups).values(group).returning();
     return newGroup;
+  }
+
+  async getProjects(userId: string): Promise<Project[]> {
+    return await db.select().from(projects).where(eq(projects.userId, userId)).orderBy(desc(projects.createdAt));
+  }
+
+  async createProject(project: InsertProject): Promise<Project> {
+    const [newProject] = await db.insert(projects).values(project).returning();
+    return newProject;
   }
 }
 
