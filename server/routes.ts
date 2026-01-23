@@ -148,6 +148,26 @@ export async function registerRoutes(
       res.status(500).json({ error: "Failed to create opportunity" });
     }
   });
+
+  app.post("/api/ai/generate-smart-content", async (req: Request, res: Response) => {
+    try {
+      const { type, topic, includeInventory } = req.body;
+      
+      let context = "";
+      if (includeInventory) {
+        const inventory = await storage.getInventory("demo-user");
+        context = `Inventario disponible: ${JSON.stringify(inventory)}`;
+      }
+
+      const prompt = `Genera un contenido de tipo ${type} sobre el tema: ${topic}. ${context}`;
+      const generated = await aiOrchestrator.generateResponse(prompt, "AI Content Generator");
+      
+      res.json({ generated });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
 
