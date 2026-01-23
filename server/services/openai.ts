@@ -54,5 +54,5 @@ export async function generateImage(prompt: string): Promise<string> {
     size: "1024x1024",
   });
 
-  return image.data[0]?.url || "";
+  return image.data?.[0]?.url || "";
 }
