@@ -123,17 +123,17 @@
   body {
     @apply dark:bg-slate-950 dark:text-slate-100;
     background: 
-      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 40% 12%) 50%, hsl(230 40% 3%) 100%),
-      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 100% 100%, hsl(var(--secondary) / 0.08) 0%, transparent 40%);
+      linear-gradient(135deg, #050a06 0%, #0a1f10 50%, #050a06 100%),
+      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, hsl(var(--secondary) / 0.15) 0%, transparent 40%);
     background-attachment: fixed;
   }
 
   .dark body {
     background: 
-      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 40% 12%) 50%, hsl(230 40% 3%) 100%),
-      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 100% 100%, hsl(var(--secondary) / 0.08) 0%, transparent 40%);
+      linear-gradient(135deg, #050a06 0%, #0a1f10 50%, #050a06 100%),
+      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, hsl(var(--secondary) / 0.15) 0%, transparent 40%);
   }
 
   :not(.dark) body {
