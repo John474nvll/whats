@@ -21,6 +21,8 @@ import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
 import Billing from "@/pages/Billing";
 import Projects from "@/pages/Projects";
+import Tasks from "@/pages/Tasks";
+import SalesGroups from "@/pages/SalesGroups";
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -50,6 +52,8 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/billing" component={Billing} />
       <Route path="/projects" component={Projects} />
+      <Route path="/tasks" component={Tasks} />
+      <Route path="/sales-groups" component={SalesGroups} />
       <Route component={NotFound} />
     </Switch>
   );

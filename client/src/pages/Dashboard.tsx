@@ -76,6 +76,13 @@ export default function Dashboard() {
     queryKey: ["/api/crm/projects"],
   });
 
+  const { data: tickets = [] } = useQuery<Ticket[]>({
+    queryKey: ["/api/crm/tickets"],
+  });
+  const { data: opportunities = [] } = useQuery<Opportunity[]>({
+    queryKey: ["/api/crm/opportunities"],
+  });
+
   const refreshMutation = useMutation({
     mutationFn: async (id: number) => {
       await apiRequest("POST", `/api/social-accounts/${id}/refresh`);
@@ -125,11 +132,12 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-5 gap-6">
           <StatCard label="Clientes" value={customers.length.toString()} icon={Users} color="bg-blue-500" trend="up" change="+12%" />
           <StatCard label="Proyectos" value={projects.length.toString()} icon={Package} color="bg-primary" trend="up" change="+5%" />
-          <StatCard label="Conversaciones" value={conversations.length.toString()} icon={MessageSquare} color="bg-purple-500" trend="up" change="+18%" />
-          <StatCard label="Engagement" value="89%" icon={Activity} color="bg-emerald-500" trend="up" change="+2%" />
+          <StatCard label="Tickets" value={tickets.length.toString()} icon={Activity} color="bg-orange-500" trend="up" change="+3%" />
+          <StatCard label="Oportunidades" value={opportunities.length.toString()} icon={Target} color="bg-emerald-500" trend="up" change="+8%" />
+          <StatCard label="Engagement" value="89%" icon={Activity} color="bg-slate-500" trend="up" change="+2%" />
         </div>
 
         <div className="grid grid-cols-12 gap-6">
