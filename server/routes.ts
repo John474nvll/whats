@@ -29,6 +29,8 @@ function broadcast(event: string, data: unknown) {
   });
 }
 
+import { integratedOrchestrator } from "./services/integrated-orchestrator";
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -38,6 +40,26 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
   registerUnifiedPlatformRoutes(app);
+
+  app.post("/api/integrated/sync-lead", async (req, res) => {
+    try {
+      const { customerId, campaignId } = req.body;
+      const result = await integratedOrchestrator.syncLeadToMarketing(customerId, campaignId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/integrated/auto-post", async (req, res) => {
+    try {
+      const { customerId, platform } = req.body;
+      const result = await integratedOrchestrator.createAutomatedPostFromLead(customerId, platform);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
   // User registration endpoint
   app.post("/api/register", async (req: Request, res: Response) => {
