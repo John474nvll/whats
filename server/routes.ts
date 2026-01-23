@@ -31,10 +31,63 @@ function broadcast(event: string, data: unknown) {
 
 import { integratedOrchestrator } from "./services/integrated-orchestrator";
 
+import { insertInvoiceSchema, insertSalesMetricSchema, insertSalesGroupSchema } from "@shared/schema";
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // ... existing registrations ...
+
+  // Invoices
+  app.get("/api/crm/invoices", async (req, res) => {
+    try {
+      const allInvoices = await storage.getInvoices("demo-user");
+      res.json(allInvoices);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch invoices" });
+    }
+  });
+
+  app.post("/api/crm/invoices", async (req, res) => {
+    try {
+      const data = insertInvoiceSchema.parse(req.body);
+      const newInvoice = await storage.createInvoice({ ...data, userId: "demo-user" });
+      res.status(201).json(newInvoice);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create invoice" });
+    }
+  });
+
+  // Sales Metrics & Analytics
+  app.get("/api/crm/metrics", async (req, res) => {
+    try {
+      const metrics = await storage.getSalesMetrics("demo-user");
+      res.json(metrics);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch sales metrics" });
+    }
+  });
+
+  // Sales Groups
+  app.get("/api/crm/sales-groups", async (req, res) => {
+    try {
+      const groups = await storage.getSalesGroups();
+      res.json(groups);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch sales groups" });
+    }
+  });
+
+  app.post("/api/crm/sales-groups", async (req, res) => {
+    try {
+      const data = insertSalesGroupSchema.parse(req.body);
+      const newGroup = await storage.createSalesGroup(data);
+      res.status(201).json(newGroup);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create sales group" });
+    }
+  });
 
   // Register integrations
   registerChatRoutes(app);
@@ -221,7 +274,7 @@ export async function registerRoutes(
   // CRM & Lead Status Management
   app.get("/api/crm/stats", async (req: Request, res: Response) => {
     try {
-      const allCustomers = await db.select().from(customers);
+      const allCustomers = await storage.getCustomers("demo-user");
       const stats = {
         new: allCustomers.filter(c => c.leadStatus === 'new').length,
         contacting: allCustomers.filter(c => c.leadStatus === 'contacting').length,
@@ -295,7 +348,7 @@ export async function registerRoutes(
 
   app.get("/api/crm/pipeline", async (req: Request, res: Response) => {
     try {
-      const pipeline = await db.select().from(customers).orderBy(desc(customers.updatedAt));
+      const pipeline = await storage.getCustomers("demo-user");
       res.json(pipeline);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch pipeline" });

@@ -3,6 +3,7 @@ import {
   users, contacts, conversations, messages, channelConfigs, socialAccounts, widgets, salesFunnels, campaigns, customers, phoneConnections,
   customerGroups, productCatalogs, products, customLinks, inventory, transactions,
   teams, tasks, finances, emails,
+  invoices, salesMetrics, salesGroups,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -24,6 +25,9 @@ import {
   type Task, type InsertTask,
   type Finance, type InsertFinance,
   type Email, type InsertEmail,
+  type Invoice, type InsertInvoice,
+  type SalesMetric, type InsertSalesMetric,
+  type SalesGroup, type InsertSalesGroup,
 } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 
@@ -130,7 +134,11 @@ export interface IStorage {
   updatePhoneConnection(id: number, updates: Partial<InsertPhoneConnection>): Promise<PhoneConnection>;
   deletePhoneConnection(id: number): Promise<void>;
 
-  getOperations(): Promise<any[]>;
+  getInvoices(userId: string): Promise<Invoice[]>;
+  createInvoice(invoice: InsertInvoice): Promise<Invoice>;
+  getSalesMetrics(userId: string): Promise<SalesMetric[]>;
+  getSalesGroups(): Promise<SalesGroup[]>;
+  createSalesGroup(group: InsertSalesGroup): Promise<SalesGroup>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -557,6 +565,28 @@ export class DatabaseStorage implements IStorage {
 
   async getOperations(): Promise<any[]> {
     return await db.select().from(finances);
+  }
+
+  async getInvoices(userId: string): Promise<Invoice[]> {
+    return await db.select().from(invoices).where(eq(invoices.userId, userId)).orderBy(desc(invoices.createdAt));
+  }
+
+  async createInvoice(invoice: InsertInvoice): Promise<Invoice> {
+    const [newInvoice] = await db.insert(invoices).values(invoice).returning();
+    return newInvoice;
+  }
+
+  async getSalesMetrics(userId: string): Promise<SalesMetric[]> {
+    return await db.select().from(salesMetrics).where(eq(salesMetrics.userId, userId)).orderBy(desc(salesMetrics.date));
+  }
+
+  async getSalesGroups(): Promise<SalesGroup[]> {
+    return await db.select().from(salesGroups);
+  }
+
+  async createSalesGroup(group: InsertSalesGroup): Promise<SalesGroup> {
+    const [newGroup] = await db.insert(salesGroups).values(group).returning();
+    return newGroup;
   }
 }
 

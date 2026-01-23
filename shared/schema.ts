@@ -254,6 +254,38 @@ export const phoneConnections = sqliteTable("phone_connections", {
 });
 
 
+export const invoices = sqliteTable("invoices", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  customerId: integer("customer_id").notNull().references(() => customers.id),
+  invoiceNumber: text("invoice_number").notNull().unique(),
+  amount: real("amount").notNull(),
+  tax: real("tax").default(0),
+  total: real("total").notNull(),
+  status: text("status").default("pending"), // pending, paid, overdue, cancelled
+  dueDate: integer("due_date", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const salesMetrics = sqliteTable("sales_metrics", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  period: text("period").notNull(), // daily, weekly, monthly
+  revenue: real("revenue").default(0),
+  newLeads: integer("new_leads").default(0),
+  conversions: integer("conversions").default(0),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+export const salesGroups = sqliteTable("sales_groups", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull(),
+  managerId: text("manager_id").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
 // === RELATIONS ===
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -268,6 +300,8 @@ export const userRelations = relations(users, ({ one, many }) => ({
   customLinks: many(customLinks),
   inventory: many(inventory),
   transactions: many(transactions),
+  invoices: many(invoices),
+  salesMetrics: many(salesMetrics),
   tasks: many(tasks, { relationName: "userTasks" }),
   assignedTasks: many(tasks, { relationName: "assignedTasks" }),
   finances: many(finances),
@@ -346,7 +380,20 @@ export const insertInventorySchema = createInsertSchema(inventory);
 export const insertTransactionSchema = createInsertSchema(transactions);
 export const insertPhoneConnectionSchema = createInsertSchema(phoneConnections);
 
+export const insertInvoiceSchema = createInsertSchema(invoices);
+export const insertSalesMetricSchema = createInsertSchema(salesMetrics);
+export const insertSalesGroupSchema = createInsertSchema(salesGroups);
+
 // === TYPES ===
+
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = z.infer<typeof insertInvoiceSchema>;
+
+export type SalesMetric = typeof salesMetrics.$inferSelect;
+export type InsertSalesMetric = z.infer<typeof insertSalesMetricSchema>;
+
+export type SalesGroup = typeof salesGroups.$inferSelect;
+export type InsertSalesGroup = z.infer<typeof insertSalesGroupSchema>;
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
