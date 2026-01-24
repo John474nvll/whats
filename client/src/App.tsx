@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Switch, Route, Link } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -15,22 +14,11 @@ import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
 import AccountLinks from "@/pages/AccountLinks";
-import FunnelBuilder from "@/pages/FunnelBuilder";
-import Campaigns from "@/pages/Campaigns";
-import Products from "@/pages/Products";
-import CustomLinks from "@/pages/CustomLinks";
-import Billing from "@/pages/Billing";
-import Projects from "@/pages/Projects";
-import Tasks from "@/pages/Tasks";
-import SalesGroups from "@/pages/SalesGroups";
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import PlatformsHub from "@/pages/PlatformsHub";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
 import VoiceManager from "@/pages/VoiceManager";
 
@@ -47,10 +35,6 @@ function Router() {
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/platforms" component={AccountLinks} />
       <Route path="/settings" component={Settings} />
-      <Route path="/billing" component={Billing} />
-      <Route path="/projects" component={Projects} />
-      <Route path="/tasks" component={Tasks} />
-      <Route path="/sales-groups" component={SalesGroups} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -67,7 +51,6 @@ function AppContent() {
       <div className="flex h-screen w-full bg-slate-950 md:overflow-hidden select-none">
         <AppSidebar />
         <div className="flex flex-col flex-1 relative overflow-hidden w-full">
-          {/* Background decoration - optimized for mobile */}
           <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-kiwi/5 rounded-full blur-[80px] md:blur-[120px] -mr-32 -mt-32 md:-mr-64 md:-mt-64 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-cyan-neon/5 rounded-full blur-[80px] md:blur-[120px] -ml-32 -mb-32 md:-ml-64 md:-mb-64 pointer-events-none" />
           
@@ -122,7 +105,7 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -132,5 +115,3 @@ function App() {
     </QueryClientProvider>
   );
 }
-
-export default App;
