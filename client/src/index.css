@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 :root {
   --font-body: 'Inter', sans-serif;
@@ -371,7 +369,7 @@
 
   /* Mobile card utilities */
   .card-mobile {
-    @apply rounded-lg sm:rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-3 sm:p-4 transition-smooth touch-feedback;
+    @apply rounded-lg sm:rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-3 sm:p-4 transition-all duration-200 active:scale-95;
   }
 
   /* Responsive button sizing */
