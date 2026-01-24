@@ -327,32 +327,66 @@ export const opportunities = sqliteTable("opportunities", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).default(new Date()),
 });
 
-// === RELATIONS ===
+export const retellAgents = sqliteTable("retell_agents", {
+  id: text("id").primaryKey(), // agent_id from Retell
+  userId: text("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  voiceId: text("voice_id"),
+  llmId: text("llm_id"),
+  status: text("status").default("ready"), // ready, calling, maintenance
+  lastCallAt: integer("last_call_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
 
-export const userRelations = relations(users, ({ one, many }) => ({
-  customers: many(customers),
-  socialAccounts: many(socialAccounts),
-  widgets: many(widgets),
-  salesFunnels: many(salesFunnels),
-  campaigns: many(campaigns),
-  customerGroups: many(customerGroups),
-  productCatalogs: many(productCatalogs),
-  products: many(products),
-  customLinks: many(customLinks),
-  inventory: many(inventory),
-  transactions: many(transactions),
-  invoices: many(invoices),
-  salesMetrics: many(salesMetrics),
-  projects: many(projects),
-  tasks: many(tasks, { relationName: "userTasks" }),
-  assignedTasks: many(tasks, { relationName: "assignedTasks" }),
-  finances: many(finances),
-  emails: many(emails),
-  team: one(teams, {
-    fields: [users.teamId],
-    references: [teams.id],
+export const callLogs = sqliteTable("call_logs", {
+  id: integer("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  customerId: integer("customer_id").references(() => customers.id),
+  agentId: text("agent_id").references(() => retellAgents.id),
+  callSid: text("call_sid"), // Twilio Call SID
+  duration: integer("duration"),
+  status: text("status"), // completed, failed, busy
+  recordingUrl: text("recording_url"),
+  summary: text("summary"),
+  sentiment: text("sentiment"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
+});
+
+// ... inside userRelations ...
+  retellAgents: many(retellAgents),
+  callLogs: many(callLogs),
+}));
+
+export const retellAgentRelations = relations(retellAgents, ({ one, many }) => ({
+  user: one(users, {
+    fields: [retellAgents.userId],
+    references: [users.id],
+  }),
+  calls: many(callLogs),
+}));
+
+export const callLogRelations = relations(callLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [callLogs.userId],
+    references: [users.id],
+  }),
+  customer: one(customers, {
+    fields: [callLogs.customerId],
+    references: [customers.id],
+  }),
+  agent: one(retellAgents, {
+    fields: [callLogs.agentId],
+    references: [retellAgents.id],
   }),
 }));
+
+export const insertRetellAgentSchema = createInsertSchema(retellAgents);
+export const insertCallLogSchema = createInsertSchema(callLogs);
+
+export type RetellAgent = typeof retellAgents.$inferSelect;
+export type InsertRetellAgent = z.infer<typeof insertRetellAgentSchema>;
+export type CallLog = typeof callLogs.$inferSelect;
+export type InsertCallLog = z.infer<typeof insertCallLogSchema>;
 
 export const projectRelations = relations(projects, ({ one, many }) => ({
   user: one(users, {

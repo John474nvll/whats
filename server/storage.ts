@@ -146,12 +146,28 @@ export interface IStorage {
   createProject(project: InsertProject): Promise<Project>;
   getTickets(userId: string): Promise<Ticket[]>;
   createTicket(ticket: InsertTicket): Promise<Ticket>;
-  getOpportunities(userId: string): Promise<Opportunity[]>;
-  createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity>;
-  syncPlatformData(userId: string, platform: string): Promise<void>;
+  getRetellAgents(userId: string): Promise<RetellAgent[]>;
+  createRetellAgent(agent: InsertRetellAgent): Promise<RetellAgent>;
+  getCallLogs(userId: string): Promise<CallLog[]>;
+  createCallLog(log: InsertCallLog): Promise<CallLog>;
 }
 
 export class DatabaseStorage implements IStorage {
+  // ... existing methods ...
+  async getRetellAgents(userId: string): Promise<RetellAgent[]> {
+    return await db.select().from(retellAgents).where(eq(retellAgents.userId, userId));
+  }
+  async createRetellAgent(agent: InsertRetellAgent): Promise<RetellAgent> {
+    const [newAgent] = await db.insert(retellAgents).values(agent).returning();
+    return newAgent;
+  }
+  async getCallLogs(userId: string): Promise<CallLog[]> {
+    return await db.select().from(callLogs).where(eq(callLogs.userId, userId)).orderBy(desc(callLogs.createdAt));
+  }
+  async createCallLog(log: InsertCallLog): Promise<CallLog> {
+    const [newLog] = await db.insert(callLogs).values(log).returning();
+    return newLog;
+  }
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
