@@ -15,7 +15,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -35,6 +35,7 @@ const menuGroups = [
       { title: "Contacts", url: "/contacts", icon: Users },
       { title: "Customers", url: "/customers", icon: Users },
       { title: "Facturación", url: "/billing", icon: Package },
+      { title: "Voz & Retell", url: "/voice", icon: Phone },
     ],
   },
   {
@@ -49,7 +50,6 @@ const menuGroups = [
     label: "📢 MARKETING",
     items: [
       { title: "Funnels", url: "/funnels", icon: GitFork },
-      { title: "Voz & Retell", url: "/voice", icon: Globe },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
     ],
   },

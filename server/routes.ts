@@ -475,12 +475,10 @@ export async function registerRoutes(
     }
   });
 
-  // Retell AI Enhanced Integration
   app.get("/api/retell/agents", async (req: Request, res: Response) => {
     try {
       const agents = await storage.getRetellAgents("demo-user");
       if (agents.length === 0) {
-        // Mock data if empty
         return res.json([
           { id: "agent_sales_1", name: "Asistente de Ventas (ES)", status: "ready" },
           { id: "agent_support_1", name: "Soporte Técnico (ES)", status: "ready" }
@@ -489,6 +487,19 @@ export async function registerRoutes(
       res.json(agents);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch agents" });
+    }
+  });
+
+  app.post("/api/retell/agents", async (req: Request, res: Response) => {
+    try {
+      const agentData = req.body;
+      const newAgent = await storage.createRetellAgent({
+        ...agentData,
+        userId: "demo-user",
+      });
+      res.json(newAgent);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create agent" });
     }
   });
 
