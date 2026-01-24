@@ -478,12 +478,32 @@ export async function registerRoutes(
   // Retell AI Enhanced Integration
   app.get("/api/retell/agents", async (req: Request, res: Response) => {
     try {
-      res.json([
-        { id: "agent_sales_1", name: "Asistente de Ventas (ES)", language: "es-ES" },
-        { id: "agent_support_1", name: "Soporte Técnico (ES)", language: "es-ES" }
-      ]);
+      const agents = await storage.getRetellAgents("demo-user");
+      if (agents.length === 0) {
+        // Mock data if empty
+        return res.json([
+          { id: "agent_sales_1", name: "Asistente de Ventas (ES)", status: "ready" },
+          { id: "agent_support_1", name: "Soporte Técnico (ES)", status: "ready" }
+        ]);
+      }
+      res.json(agents);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch agents" });
+    }
+  });
+
+  app.get("/api/retell/calls", async (req: Request, res: Response) => {
+    try {
+      const logs = await storage.getCallLogs("demo-user");
+      if (logs.length === 0) {
+        return res.json([
+          { id: 1, duration: 45, status: "completed", createdAt: new Date() },
+          { id: 2, duration: 120, status: "completed", createdAt: new Date(Date.now() - 3600000) }
+        ]);
+      }
+      res.json(logs);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch call logs" });
     }
   });
 

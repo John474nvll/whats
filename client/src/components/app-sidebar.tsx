@@ -49,6 +49,7 @@ const menuGroups = [
     label: "📢 MARKETING",
     items: [
       { title: "Funnels", url: "/funnels", icon: GitFork },
+      { title: "Voz & Retell", url: "/voice", icon: Globe },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
     ],
   },

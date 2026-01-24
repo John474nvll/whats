@@ -352,9 +352,33 @@ export const callLogs = sqliteTable("call_logs", {
   createdAt: integer("created_at", { mode: "timestamp" }).default(new Date()),
 });
 
-// ... inside userRelations ...
+// === RELATIONS ===
+
+export const userRelations = relations(users, ({ one, many }) => ({
+  customers: many(customers),
+  socialAccounts: many(socialAccounts),
+  widgets: many(widgets),
+  salesFunnels: many(salesFunnels),
+  campaigns: many(campaigns),
+  customerGroups: many(customerGroups),
+  productCatalogs: many(productCatalogs),
+  products: many(products),
+  customLinks: many(customLinks),
+  inventory: many(inventory),
+  transactions: many(transactions),
+  invoices: many(invoices),
+  salesMetrics: many(salesMetrics),
+  projects: many(projects),
+  tasks: many(tasks, { relationName: "userTasks" }),
+  assignedTasks: many(tasks, { relationName: "assignedTasks" }),
+  finances: many(finances),
+  emails: many(emails),
   retellAgents: many(retellAgents),
   callLogs: many(callLogs),
+  team: one(teams, {
+    fields: [users.teamId],
+    references: [teams.id],
+  }),
 }));
 
 export const retellAgentRelations = relations(retellAgents, ({ one, many }) => ({

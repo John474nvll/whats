@@ -32,11 +32,13 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
+import VoiceManager from "@/pages/VoiceManager";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
+      <Route path="/voice" component={VoiceManager} />
       <Route path="/login" component={Login} />
       <Route path="/inbox" component={Inbox} />
       <Route path="/contacts" component={Contacts} />

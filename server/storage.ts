@@ -4,6 +4,7 @@ import {
   customerGroups, productCatalogs, products, customLinks, inventory, transactions,
   teams, tasks, finances, emails,
   invoices, salesMetrics, salesGroups, projects, tickets, opportunities,
+  retellAgents, callLogs,
   type User, type InsertUser,
   type Contact, type InsertContact,
   type Conversation, type InsertConversation,
@@ -31,6 +32,8 @@ import {
   type Project, type InsertProject,
   type Ticket, type InsertTicket,
   type Opportunity, type InsertOpportunity,
+  type RetellAgent, type InsertRetellAgent,
+  type CallLog, type InsertCallLog,
 } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 
@@ -168,6 +171,7 @@ export class DatabaseStorage implements IStorage {
     const [newLog] = await db.insert(callLogs).values(log).returning();
     return newLog;
   }
+
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
