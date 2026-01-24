@@ -45,12 +45,7 @@ function Router() {
       <Route path="/customers" component={Customers} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
-      <Route path="/accounts" component={AccountLinks} />
-      <Route path="/funnels" component={FunnelBuilder} />
-      <Route path="/campaigns" component={Campaigns} />
-      <Route path="/products" component={Products} />
-      <Route path="/links" component={CustomLinks} />
-      <Route path="/platforms" component={PlatformsHub} />
+      <Route path="/platforms" component={AccountLinks} />
       <Route path="/settings" component={Settings} />
       <Route path="/billing" component={Billing} />
       <Route path="/projects" component={Projects} />
