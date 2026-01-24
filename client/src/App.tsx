@@ -19,6 +19,11 @@ import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
 import VoiceManager from "@/pages/VoiceManager";
+import Projects from "@/pages/Projects";
+import Tasks from "@/pages/Tasks";
+import SalesGroups from "@/pages/SalesGroups";
+import Billing from "@/pages/Billing";
+import PlatformsHub from "@/pages/PlatformsHub";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
@@ -40,12 +45,19 @@ function Router() {
       <Route path="/customers" component={Customers} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
-      <Route path="/platforms" component={AccountLinks} />
+      <Route path="/platforms" component={PlatformsHub} />
+      <Route path="/account-links" component={AccountLinks} />
       <Route path="/funnels" component={FunnelBuilder} />
       <Route path="/campaigns" component={Campaigns} />
       <Route path="/products" component={Products} />
       <Route path="/links" component={CustomLinks} />
       <Route path="/settings" component={Settings} />
+      <Route path="/projects" component={Projects} />
+      <Route path="/tasks" component={Tasks} />
+      <Route path="/sales-groups" component={SalesGroups} />
+      <Route path="/billing" component={Billing} />
+      <Route path="/finances" component={Analytics} />
+      <Route path="/tickets" component={Settings} />
       <Route component={NotFound} />
     </Switch>
   );
