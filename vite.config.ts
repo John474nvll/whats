@@ -15,9 +15,14 @@ export default defineConfig({
     runtimeErrorOverlay(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.png", "/icons/**/*.png"],
+      injectRegister: 'auto',
+      includeAssets: ["favicon.png"],
       workbox: {
-        globPatterns: ["**/*.{js,css,html,woff,woff2,ttf,eot}"],
+        globPatterns: ["**/*.{js,css,html,png,svg,json}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        navigateFallback: "index.html",
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,

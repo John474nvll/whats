@@ -3,13 +3,17 @@ const urlsToCache = [
   "/",
   "/index.html",
   "/manifest.json",
-  "/favicon.png"
+  "/favicon.png",
+  "/src/main.tsx",
+  "/src/App.tsx",
+  "/src/index.css"
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
+      // Add error handling for caching
+      return cache.addAll(urlsToCache).catch(err => console.warn("PWA cache warning:", err));
     })
   );
   self.skipWaiting();
