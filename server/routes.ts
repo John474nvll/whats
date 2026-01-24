@@ -430,14 +430,39 @@ export async function registerRoutes(
     }
   });
 
-  // Twilio / WhatsApp Integration
   app.post("/api/whatsapp/connect", async (req: Request, res: Response) => {
     try {
       const { apiKey, apiSecret, phoneNumber } = req.body;
       console.log(`Connecting WhatsApp via Twilio: ${phoneNumber}`);
-      res.json({ success: true, message: "WhatsApp connection initiated" });
+      
+      // Simulate sync
+      await storage.syncPlatformData("demo-user", "whatsapp");
+      
+      res.json({ success: true, message: "WhatsApp connection initiated and data synced" });
     } catch (error) {
       res.status(500).json({ error: "Failed to connect WhatsApp" });
+    }
+  });
+
+  app.post("/api/social-accounts/connect", async (req: Request, res: Response) => {
+    try {
+      const { platform } = req.body;
+      const userId = "demo-user";
+      
+      const newAccount = await db.insert(socialAccounts).values({
+        userId,
+        platform,
+        accessToken: "mock_token_" + Math.random().toString(36).substring(7),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }).returning();
+
+      // Simulate sync
+      await storage.syncPlatformData(userId, platform);
+      
+      res.status(201).json(newAccount[0]);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to connect social account" });
     }
   });
 
