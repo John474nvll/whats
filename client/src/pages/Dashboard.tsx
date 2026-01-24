@@ -103,7 +103,10 @@ export default function Dashboard() {
   if (isLoadingWidgets || isLoadingAccounts || isLoadingCustomers || isLoadingConversations) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-950">
-        <Zap className="w-12 h-12 text-primary animate-pulse" />
+        <div className="flex flex-col items-center gap-4">
+          <Zap className="w-12 h-12 text-primary animate-pulse" />
+          <p className="text-primary font-black animate-pulse uppercase tracking-widest text-xs">SocialHub Initializing...</p>
+        </div>
       </div>
     );
   }
