@@ -26,6 +26,7 @@ const menuGroups = [
     label: "🏠 PRINCIPAL",
     items: [
       { title: "Dashboard", url: "/", icon: Home },
+      { title: "Analytics", url: "/analytics", icon: BarChart3 },
     ],
   },
   {
@@ -36,6 +37,7 @@ const menuGroups = [
       { title: "Customers", url: "/customers", icon: Users },
       { title: "Facturación", url: "/billing", icon: Package },
       { title: "Voz & Retell", url: "/voice", icon: Phone },
+      { title: "Finanzas", url: "/finances", icon: BarChart3 },
     ],
   },
   {
@@ -50,19 +52,21 @@ const menuGroups = [
     label: "📢 MARKETING",
     items: [
       { title: "Funnels", url: "/funnels", icon: GitFork },
-      { title: "Analytics", url: "/analytics", icon: BarChart3 },
+      { title: "Campaigns", url: "/campaigns", icon: Megaphone },
+      { title: "Links", url: "/links", icon: LinkIcon },
     ],
   },
   {
-    label: "✨ IA & Automatización",
+    label: "✨ IA & AUTOMATIZACIÓN",
     items: [
       { title: "AI Generator", url: "/ai-generator", icon: Sparkles },
       { title: "Plataformas", url: "/platforms", icon: Smartphone },
     ],
   },
   {
-    label: "⚙️ SISTEMA",
+    label: "⚙️ SOPORTE & SISTEMA",
     items: [
+      { title: "Soporte", url: "/tickets", icon: ShieldCheck },
       { title: "Settings", url: "/settings", icon: Settings },
     ],
   },

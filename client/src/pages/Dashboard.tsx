@@ -142,6 +142,52 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-12 gap-6">
+          <Card className="col-span-12 lg:col-span-6 bg-slate-900/60 border-primary/20 backdrop-blur-xl rounded-[3rem] p-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-primary" />
+                Estado del Sistema
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">API Latency</span>
+                  <span className="text-kiwi font-bold">24ms</span>
+                </div>
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Database</span>
+                  <Badge className="bg-kiwi/20 text-kiwi border-none uppercase text-[8px]">Stable</Badge>
+                </div>
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Voz AI Nodes</span>
+                  <span className="text-white font-bold">12 Active</span>
+                </div>
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5 flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Sync status</span>
+                  <RefreshCw className="w-3 h-3 text-kiwi animate-spin" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="col-span-12 lg:col-span-6 bg-slate-900/60 border-primary/20 backdrop-blur-xl rounded-[3rem] p-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                <Activity className="w-5 h-5 text-primary" />
+                Live Log Stream
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-black/40 rounded-3xl p-4 font-mono text-[10px] h-[120px] overflow-hidden space-y-2">
+                <p className="text-kiwi flex gap-2"><span className="opacity-50">[INFO]</span> WhatsApp API Sync completed successfully</p>
+                <p className="text-cyan-neon flex gap-2"><span className="opacity-50">[VOICE]</span> Retell Node-4 connected: Ready for calls</p>
+                <p className="text-white/60 flex gap-2"><span className="opacity-50">[CRM]</span> New lead qualified: ID 48293</p>
+                <p className="text-piña flex gap-2"><span className="opacity-50">[WARN]</span> High engagement spike detected in IG-Business</p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* SocialHub Quick Access Widget */}
           <Card className="col-span-12 bg-slate-900/60 border-primary/20 backdrop-blur-xl shadow-[0_0_20px_rgba(0,255,128,0.1)] rounded-[3rem] p-4">
             <CardHeader className="pb-2">
@@ -162,7 +208,9 @@ export default function Dashboard() {
                   { label: "Voz & AI", icon: Phone, href: "/voice", color: "text-kiwi" },
                   { label: "Oportunidades", icon: Target, href: "/opportunities", color: "text-cyan-400" },
                   { label: "Campañas", icon: Zap, href: "/campaigns", color: "text-purple-400" },
-                  { label: "Cuentas", icon: Link2, href: "/accounts", color: "text-pink-400" },
+                  { label: "Cuentas", icon: Link2, href: "/platforms", color: "text-pink-400" },
+                  { label: "Finanzas", icon: BarChart3, href: "/finances", color: "text-green-400" },
+                  { label: "Links", icon: LinkIcon, href: "/links", color: "text-cyan-neon" },
                 ].map((item) => (
                   <Link key={item.label} href={item.href}>
                     <Button variant="ghost" className="w-full h-auto py-6 flex flex-col gap-2 rounded-3xl hover:bg-white/5 transition-all group">
