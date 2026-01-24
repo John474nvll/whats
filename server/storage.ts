@@ -148,6 +148,7 @@ export interface IStorage {
   createTicket(ticket: InsertTicket): Promise<Ticket>;
   getOpportunities(userId: string): Promise<Opportunity[]>;
   createOpportunity(opportunity: InsertOpportunity): Promise<Opportunity>;
+  syncPlatformData(userId: string, platform: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -485,6 +486,32 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCatalog(id: number): Promise<void> {
     await db.delete(productCatalogs).where(eq(productCatalogs.id, id));
+  }
+
+  async syncPlatformData(userId: string, platform: string): Promise<void> {
+    // Mock synchronization logic
+    const phone = await db.select().from(phoneConnections).where(eq(phoneConnections.userId, userId));
+    if (phone.length > 0 || platform !== "whatsapp") {
+      // Create a mock contact if none exists
+      const [contact] = await db.insert(contacts).values({
+        name: `Contact from ${platform}`,
+        phone: `+57${Math.floor(Math.random() * 1000000000)}`,
+        platform: platform,
+      }).returning();
+
+      const [conv] = await db.insert(conversations).values({
+        contactId: contact.id,
+        status: "active",
+        lastMessageAt: new Date(),
+      }).returning();
+
+      await db.insert(messages).values({
+        conversationId: conv.id,
+        role: "user",
+        content: `Hola, vengo de ${platform}. ¿Cómo estás?`,
+        createdAt: new Date(),
+      });
+    }
   }
 
   async getSocialAccountById(id: number): Promise<SocialAccount | undefined> {

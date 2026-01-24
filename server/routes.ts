@@ -11,7 +11,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { registerUnifiedPlatformRoutes } from "./routes/unified-platforms";
 import { loginUser, registerUser, generateToken, verifyToken } from "./services/auth";
 import { publishToInstagram, publishToFacebook, sendWhatsAppMessage } from "./services/social-publisher";
-import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema, insertTicketSchema, insertOpportunitySchema, insertProjectSchema } from "@shared/schema";
+import { loginSchema, registerSchema, insertCustomerSchema, customers, operations, campaigns, insertProductSchema, insertCustomLinkSchema, insertInventorySchema, insertSalesFunnelSchema, insertProductCatalogSchema, insertCustomerGroupSchema, insertPhoneConnectionSchema, insertTaskSchema, insertFinanceSchema, insertTeamSchema, insertEmailSchema, insertTicketSchema, insertOpportunitySchema, insertProjectSchema, socialAccounts } from "@shared/schema";
 import { authMiddleware, type AuthRequest } from "./middleware/auth";
 import { db } from "./db"; // Using Drizzle db
 import { eq, desc, sql } from "drizzle-orm"; // Using Drizzle eq operator
