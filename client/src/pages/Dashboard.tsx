@@ -159,6 +159,7 @@ export default function Dashboard() {
                   { label: "Tareas", icon: Calendar, href: "/tasks", color: "text-yellow-400" },
                   { label: "Ventas", icon: TrendingUp, href: "/sales-groups", color: "text-emerald-400" },
                   { label: "Tickets", icon: Activity, href: "/tickets", color: "text-orange-400" },
+                  { label: "Voz & AI", icon: Phone, href: "/voice", color: "text-kiwi" },
                   { label: "Oportunidades", icon: Target, href: "/opportunities", color: "text-cyan-400" },
                   { label: "Campañas", icon: Zap, href: "/campaigns", color: "text-purple-400" },
                   { label: "Cuentas", icon: Link2, href: "/accounts", color: "text-pink-400" },
