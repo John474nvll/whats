@@ -14,13 +14,19 @@ import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
 import AccountLinks from "@/pages/AccountLinks";
+import FunnelBuilder from "@/pages/FunnelBuilder";
+import Campaigns from "@/pages/Campaigns";
+import Products from "@/pages/Products";
+import CustomLinks from "@/pages/CustomLinks";
+import VoiceManager from "@/pages/VoiceManager";
+
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
 import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
-import VoiceManager from "@/pages/VoiceManager";
 
 function Router() {
   return (
@@ -34,6 +40,10 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/platforms" component={AccountLinks} />
+      <Route path="/funnels" component={FunnelBuilder} />
+      <Route path="/campaigns" component={Campaigns} />
+      <Route path="/products" component={Products} />
+      <Route path="/links" component={CustomLinks} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
