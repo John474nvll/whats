@@ -19,6 +19,7 @@ import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
 import VoiceManager from "@/pages/VoiceManager";
+import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -120,6 +121,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AppContent />
+        <PWAInstallBanner />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

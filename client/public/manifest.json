@@ -1,20 +1,44 @@
 {
-  "name": "SocialHub",
+  "name": "SocialHub - CRM Multicanal",
   "short_name": "SocialHub",
+  "description": "Plataforma unificada para gestionar WhatsApp, Instagram y Facebook desde un solo dashboard",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050a06",
   "theme_color": "#22c55e",
+  "orientation": "any",
+  "scope": "/",
+  "categories": ["business", "productivity", "social"],
   "icons": [
     {
       "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/",
+      "description": "Panel de control principal"
+    },
+    {
+      "name": "Inbox",
+      "url": "/inbox",
+      "description": "Mensajes unificados"
+    },
+    {
+      "name": "Plataformas",
+      "url": "/platforms",
+      "description": "Gestionar cuentas conectadas"
     }
   ]
 }
