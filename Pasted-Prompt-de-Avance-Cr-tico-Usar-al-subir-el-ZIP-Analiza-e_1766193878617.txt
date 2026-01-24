@@ -1,0 +1,34 @@
+Prompt de Avance Crítico (Usar al subir el ZIP)
+"Analiza el código del archivo ZIP adjunto de mi repositorio whats. Actualmente es una base muy simplificada. Necesito que lo evoluciones a una versión funcional Omnicanal con IA siguiendo estas instrucciones:
+
+Integración de Mensajería Real: Modifica el controlador de mensajes para que soporte Webhooks de Facebook Graph API (Instagram/Facebook) y WhatsApp Cloud API. Implementa la validación del hub.challenge de Meta.
+
+Capa de IA (Brain): Crea un servicio llamado AiOrchestrator que use OpenAI/LangChain. Debe recibir el mensaje entrante, buscar contexto en una base de datos simple (o JSON inicial) y generar una respuesta coherente.
+
+Middleware de Estado: Implementa una lógica donde si un mensaje contiene la palabra clave 'AGENTE', la IA se detenga para esa conversación (marcar bot_status: false en la DB) para que el humano tome el control desde la extensión.
+
+Conexión con la Extensión: Crea un endpoint de Server-Sent Events (SSE) o WebSockets para que la extensión de Chrome reciba notificaciones instantáneas sin hacer polling.
+
+Persistencia: Si el repo no tiene, añade un esquema de Prisma o Sequelize para guardar el historial de chats y los tokens de acceso de cada canal.
+
+Entregable: Devuélveme el código completo de los archivos nuevos y las modificaciones necesarias para los archivos existentes en mi ZIP para que el sistema sea administrable y funcional."
+
+Recursos para potenciar tu código (Repositorios de Referencia)
+Para que tu sistema sea profesional, asegúrate de que tu código "mire" cómo lo hacen estos proyectos líderes:
+
+Para la lógica de WhatsApp (No oficial pero muy potente):
+
+Evolution API: Mira cómo manejan múltiples instancias de WhatsApp en un solo servidor.
+
+Para la interfaz de la Extensión:
+
+Chatwoot Chrome Extension: Copia cómo estructuran las llamadas a la API para responder desde el navegador.
+
+Recomendación de configuración
+Cuando la IA te devuelva el código, fíjate que incluya un archivo .env con estas variables:
+
+META_ACCESS_TOKEN (Para enviar mensajes)
+
+META_VERIFY_TOKEN (Para recibir webhooks)
+
+OPENAI_API_KEY (Para la IA)

@@ -1,39 +1,35 @@
-# SocialHub v3.1 - Plataforma PWA AI-Powered de Gestión CRM & Redes Sociales
+# PWA Starter
 
-## 📋 Descripción General
-SocialHub v3.1 es una **plataforma integral renovada** que ahora incluye un potente **CRM con gestión de leads** e integración de **llamadas por IA con Retell**. Sigue siendo una PWA completamente funcional para gestionar redes sociales (Instagram, Facebook, WhatsApp) desde un único dashboard profesional.
+[**Straight to Full Documentation**](https://docs.pwabuilder.com/#/starter/quick-start)
 
-## 🚀 Cómo Ejecutar
-1. **Iniciar la Aplicación:**
-   ```bash
-   npm run dev
-   ```
-2. **Acceder a la Aplicación:**
-   La aplicación estará disponible en el puerto **5000**.
+The PWABuilder pwa-starter is our opinionated, best practices, production tested starter that we use to build all of our PWAs, including [PWABuilder itself](https://blog.pwabuilder.com/posts/introducing-the-brand-new-pwa-builder/)! The pwa-starter is a starter codebase, just like create-react-app or the Angular CLI can generate, that uses the PWABuilder team&#39;s preferred front-end tech stack. We also have a CLI tool to allow you to create a PWA template from the command line.
 
-## ✨ Características Principales (v3.1)
+## Jump Right In
 
-- **AI CRM & Lead Management**: Control de estados de leads (New, Contacting, Qualified, Won, Lost).
-- **Retell AI Integration**: Iniciación de llamadas de voz automatizadas con agentes de IA.
-- **PWA v3.1**: Manifest actualizado y mejoras en la experiencia de instalación.
-- **Autenticación Segura**: Login/registro con JWT.
-- **Gestión de Redes Sociales**: Publicación unificada y gestión de bandejas de entrada.
-- **Generador de Contenido con IA**: Integración con OpenAI.
+Install the PWABuilder CLI:
 
-## 🏗️ Stack Tecnológico
+`npm i -g @pwabuilder/cli`
 
-| Capa | Tecnología |
-|---|---|
-| **Frontend** | React 18 + Vite + Tailwind CSS + Shadcn UI |
-| **Backend** | Express.js + TypeScript |
-| **Base de Datos** | SQLite con Drizzle ORM |
-| **AI** | OpenAI + Retell AI |
-| **PWA** | Vite PWA Plugin |
+And create a new app with this command:
 
-## 🔐 Credenciales de Acceso Rápido
+`pwa create`
 
-El sistema cuenta con las siguientes cuentas preconfiguradas para pruebas:
+And start your app locally with:
 
-- **Administrador:** `socialadmin` / `SocialAdmin2026!`
-- **Ventas:** `ventas_a` / `VentasA2026!`
-- **Soporte:** `soporte_a` / `SoporteA2026!`
+`pwa start`
+
+And that's it! Good luck on your Progressive Web App adventure!
+
+## More Info
+
+[![Get started with the pwa-starter!](https://img.youtube.com/vi/u3pWKpmic_k/0.jpg)](https://www.youtube.com/watch?v=u3pWKpmic_k)
+
+With it you get an app that:
+- Has no build system to set up and no boilerplate code to add. Everything is included out of the box.
+- Has a Service Worker system using [Workbox](https://developers.google.com/web/tools/workbox/)
+- Scores close to 100 on Lighthouse out of the box
+- Has everything needed to be installable in the browser
+- Is ready to be package for the app stores using [PWABuilder](https://www.pwabuilder.com)
+- Uses the [Azure Static Web Apps CLI](https://azure.github.io/static-web-apps-cli) which enables emulating your production environment locally, and gets you ready for deploying to Azure Static Web Apps!
+
+and all with just a few button clicks 😊.

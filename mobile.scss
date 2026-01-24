@@ -1,0 +1,355 @@
+// Mobile-First Responsive Styles with CSS3 & SASS
+
+// Variables
+$mobile-breakpoint: 640px;
+$tablet-breakpoint: 768px;
+$desktop-breakpoint: 1024px;
+$large-desktop: 1280px;
+
+// Timing functions
+$ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+// Spacing scale
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
+
+// Mobile Dashboard Styles
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  
+  @media (min-width: $tablet-breakpoint) {
+    flex-direction: row;
+  }
+}
+
+// Mobile-First Grid System
+@mixin responsive-grid($mobile-cols: 1, $tablet-cols: 2, $desktop-cols: 3) {
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: repeat($mobile-cols, 1fr);
+  
+  @media (min-width: $tablet-breakpoint) {
+    grid-template-columns: repeat($tablet-cols, 1fr);
+    gap: $spacing-lg;
+  }
+  
+  @media (min-width: $desktop-breakpoint) {
+    grid-template-columns: repeat($desktop-cols, 1fr);
+    gap: $spacing-xl;
+  }
+}
+
+// Mobile Stats Grid
+.stats-grid {
+  @include responsive-grid(1, 2, 4);
+  padding: $spacing-md;
+  
+  @media (min-width: $tablet-breakpoint) {
+    padding: $spacing-lg;
+  }
+}
+
+// Mobile Card Styles
+.mobile-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  padding: $spacing-md;
+  transition: all 200ms $ease-smooth;
+  display: flex;
+  flex-direction: column;
+  
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (min-width: $tablet-breakpoint) {
+    padding: $spacing-lg;
+    border-radius: 1.25rem;
+  }
+}
+
+// Mobile Flex Wrap Container
+.flex-wrap-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  
+  @media (min-width: $tablet-breakpoint) {
+    gap: $spacing-md;
+  }
+  
+  & > * {
+    flex: 1;
+    min-width: 120px;
+    
+    @media (min-width: $tablet-breakpoint) {
+      min-width: 150px;
+    }
+  }
+}
+
+// Mobile Sidebar Navigation
+.sidebar-mobile {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  background: hsl(var(--card));
+  border-top: 1px solid hsl(var(--border));
+  z-index: 40;
+  padding: $spacing-sm;
+  
+  @media (max-width: calc($tablet-breakpoint - 1px)) {
+    display: block;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    
+    a, button {
+      flex: 1;
+      min-width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $spacing-xs;
+      padding: $spacing-sm;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      transition: all 150ms $ease-smooth;
+      cursor: pointer;
+      
+      &:active {
+        background: hsl(var(--accent) / 0.1);
+      }
+    }
+  }
+}
+
+// Mobile Header
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  
+  @media (min-width: $tablet-breakpoint) {
+    padding: $spacing-lg;
+  }
+}
+
+// Mobile Content Area with Safe Bottom Padding
+.mobile-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-md $spacing-md calc($spacing-xl * 3) $spacing-md;
+  
+  @media (min-width: $tablet-breakpoint) {
+    padding: $spacing-lg;
+  }
+}
+
+// Mobile Chart Responsiveness
+.chart-wrapper {
+  width: 100%;
+  height: 250px;
+  
+  @media (min-width: $tablet-breakpoint) {
+    height: 300px;
+  }
+  
+  @media (min-width: $desktop-breakpoint) {
+    height: 350px;
+  }
+}
+
+// Mobile Button Group (Wrapping)
+.button-group {
+  @include responsive-grid(1, 2, 3);
+  
+  button, a {
+    width: 100%;
+  }
+}
+
+// Mobile Input Styles
+.mobile-input {
+  width: 100%;
+  padding: $spacing-md;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.75rem;
+  background: hsl(var(--input));
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  transition: all 200ms $ease-smooth;
+  
+  &:focus {
+    border-color: hsl(var(--primary));
+    outline: none;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+  }
+  
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+// Mobile List Optimization
+.mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  
+  @media (min-width: $tablet-breakpoint) {
+    gap: $spacing-md;
+  }
+  
+  > li, > div {
+    padding: $spacing-md;
+    border-radius: 0.75rem;
+    border: 1px solid hsl(var(--border));
+    transition: all 150ms $ease-smooth;
+    cursor: pointer;
+    
+    &:active {
+      background: hsl(var(--accent) / 0.05);
+      transform: translateX(2px);
+    }
+  }
+}
+
+// CSS3 Animations
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slideInUp {
+  animation: slideInUp 300ms $ease-smooth;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 300ms $ease-smooth;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 300ms $ease-smooth;
+}
+
+// Mobile Scroll Behavior
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Touch-friendly Interactive Elements
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Mobile Safe Area Consideration
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max($spacing-md, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-top {
+    padding-top: max($spacing-md, env(safe-area-inset-top));
+  }
+}
+
+// Modal/Dialog Mobile Styles
+.mobile-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 90vh;
+  background: hsl(var(--card));
+  border-radius: 1rem 1rem 0 0;
+  padding: $spacing-lg;
+  animation: slideInUp 300ms $ease-smooth;
+  overflow-y: auto;
+  
+  @media (min-width: $tablet-breakpoint) {
+    position: static;
+    max-height: none;
+    border-radius: 1rem;
+    animation: fadeIn 300ms $ease-smooth;
+  }
+}
+
+// Responsive Typography
+.text-responsive {
+  font-size: clamp(0.875rem, 4vw, 1.125rem);
+  line-height: 1.5;
+}
+
+.heading-responsive {
+  font-size: clamp(1.25rem, 5vw, 1.875rem);
+  line-height: 1.2;
+}
+
+// Loading State
+.loading-pulse {
+  animation: pulse 2s $ease-smooth infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
