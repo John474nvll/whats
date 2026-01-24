@@ -50,7 +50,7 @@ export default function CustomLinks() {
               <TrendingUp className="h-6 w-6 text-cyan-neon" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-lg">{link.platform || "General"}</h3>
+              <h3 className="font-bold text-lg">Social Link</h3>
               <p className="text-sm text-muted-foreground truncate max-w-md">{link.originalUrl}</p>
             </div>
             <div className="text-center px-8 border-x border-border/50">

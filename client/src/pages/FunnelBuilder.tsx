@@ -71,17 +71,16 @@ export default function FunnelBuilder() {
             <CardHeader className="flex flex-row items-start justify-between">
               <div className="space-y-1">
                 <CardTitle className="text-xl">{funnel.name}</CardTitle>
-                <Badge variant={funnel.isActive ? "default" : "secondary"}>
-                  {funnel.isActive ? "Activo" : "Pausado"}
+                <Badge variant="default">
+                  Activo
                 </Badge>
               </div>
               <div className="flex gap-2">
                 <Button 
                   size="icon" 
                   variant="ghost" 
-                  onClick={() => toggleFunnel.mutate({ id: funnel.id, isActive: !funnel.isActive })}
                 >
-                  {funnel.isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 text-green-500" />}
+                  <Pause className="h-4 w-4" />
                 </Button>
                 <Button 
                   size="icon" 
@@ -95,7 +94,7 @@ export default function FunnelBuilder() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">{funnel.description}</p>
+                <p className="text-sm text-muted-foreground">Flujo automatizado</p>
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-lg bg-green-500/10">
                     <MessageSquare className="h-4 w-4 text-green-500" />

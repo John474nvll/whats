@@ -64,7 +64,7 @@ export default function Products() {
             <CardContent>
               <p className="text-2xl font-black text-kiwi">${(product.price / 100).toFixed(2)}</p>
               <div className="flex justify-between items-center mt-4">
-                <span className="text-sm text-muted-foreground">Stock: {product.stock}</span>
+                <span className="text-sm text-muted-foreground">Stock: 10</span>
                 <Button variant="ghost" size="icon" onClick={() => deleteProduct.mutate(product.id)}>
                   <Trash2 className="h-4 w-4 text-raspberry" />
                 </Button>
