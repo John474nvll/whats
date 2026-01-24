@@ -355,10 +355,11 @@ export class DatabaseStorage implements IStorage {
     if (existingWidgets.length === 0) {
       // Create default widgets for demo
       const defaultWidgets: InsertWidget[] = [
-        { userId, type: "crm_stats", position: 0, config: { title: "Resumen CRM" } },
-        { userId, type: "sales_pipeline", position: 1, config: { title: "Pipeline de Ventas" } },
-        { userId, type: "recent_leads", position: 2, config: { title: "Leads Recientes" } },
-        { userId, type: "campaign_metrics", position: 3, config: { title: "Métricas de Campañas" } }
+        { userId, type: "quick_access", position: 0, config: { title: "Acceso Rápido" } },
+        { userId, type: "crm_stats", position: 1, config: { title: "Resumen CRM" } },
+        { userId, type: "sales_pipeline", position: 2, config: { title: "Pipeline de Ventas" } },
+        { userId, type: "recent_leads", position: 3, config: { title: "Leads Recientes" } },
+        { userId, type: "campaign_metrics", position: 4, config: { title: "Métricas de Campañas" } }
       ];
       const created = [];
       for (const w of defaultWidgets) {

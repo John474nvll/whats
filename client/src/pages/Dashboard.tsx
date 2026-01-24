@@ -142,7 +142,41 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-12 gap-6">
-          <Card className="col-span-8 bg-slate-900/40 border-white/5">
+          {/* SocialHub Quick Access Widget */}
+          <Card className="col-span-12 bg-slate-900/60 border-primary/20 backdrop-blur-xl shadow-[0_0_20px_rgba(0,255,128,0.1)] rounded-[3rem] p-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                <Zap className="w-6 h-6 text-primary" />
+                SocialHub Quick Access
+              </CardTitle>
+              <CardDescription className="text-slate-400">Acceso directo a todos los módulos del sistema</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                {[
+                  { label: "Clientes", icon: Users, href: "/customers", color: "text-blue-400" },
+                  { label: "Proyectos", icon: Package, href: "/projects", color: "text-primary" },
+                  { label: "Tareas", icon: Calendar, href: "/tasks", color: "text-yellow-400" },
+                  { label: "Ventas", icon: TrendingUp, href: "/sales-groups", color: "text-emerald-400" },
+                  { label: "Tickets", icon: Activity, href: "/tickets", color: "text-orange-400" },
+                  { label: "Oportunidades", icon: Target, href: "/opportunities", color: "text-cyan-400" },
+                  { label: "Campañas", icon: Zap, href: "/campaigns", color: "text-purple-400" },
+                  { label: "Cuentas", icon: Link2, href: "/accounts", color: "text-pink-400" },
+                ].map((item) => (
+                  <Link key={item.label} href={item.href}>
+                    <Button variant="ghost" className="w-full h-auto py-6 flex flex-col gap-2 rounded-3xl hover:bg-white/5 transition-all group">
+                      <div className={`p-3 rounded-2xl bg-slate-800 group-hover:bg-slate-700 transition-colors ${item.color}`}>
+                        <item.icon className="w-6 h-6" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-300 group-hover:text-white">{item.label}</span>
+                    </Button>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="col-span-8 bg-slate-900/40 border-white/5 rounded-[3rem]">
             <CardHeader>
               <CardTitle>Actividad del Sistema</CardTitle>
             </CardHeader>
@@ -161,7 +195,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="col-span-4 bg-slate-900/40 border-white/5">
+          <Card className="col-span-4 bg-slate-900/40 border-white/5 rounded-[3rem]">
             <CardHeader>
               <CardTitle>Pipeline CRM</CardTitle>
             </CardHeader>
