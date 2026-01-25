@@ -18,11 +18,11 @@ export default defineConfig({
       injectRegister: 'auto',
       includeAssets: ["favicon.png"],
       workbox: {
-        globPatterns: ["**/*.{js,css,html,png,svg,json}"],
+        globPatterns: ["**/*.{js,css,html,png,svg,json,tsx,ts}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        navigateFallback: "index.html",
+        navigateFallback: "/index.html",
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
