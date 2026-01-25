@@ -6,7 +6,29 @@ SocialHub is a comprehensive CRM and social media management platform designed t
 ## User Preferences
 I prefer iterative development with a focus on delivering functional components incrementally. I like clear, concise explanations and prefer to be asked before major architectural changes or significant modifications to existing features. Ensure code is well-documented and follows modern best practices.
 
-## Recent Changes (January 24, 2026)
+## Recent Changes (January 25, 2026)
+
+### Version 9.0 Release
+- Updated all version displays to v9.0 across the application
+- Generated new SocialHub logo for PWA and branding
+- Added @assets path alias for image management
+
+### Database Schema Expansion
+- Added new tables: widgets, tickets, opportunities, channelConfigs, salesFunnels, products, customLinks
+- Added platform field to campaigns table for multi-platform targeting
+- Full type exports for all new entities
+
+### Bug Fixes
+- Fixed TypeScript errors in Dashboard.tsx and AccountLinks.tsx
+- Corrected funnel filtering to use 'stages' instead of 'steps'
+- Fixed null handling for product prices
+
+### Deployment Configuration
+- Configured autoscale deployment for production
+- Build command: npm run build
+- Start command: npm run start
+
+## Previous Changes (January 24, 2026)
 
 ### Navigation Improvements
 - Enhanced sidebar with organized menu groups: Principal, CRM & Ventas, Proyectos, Marketing, IA & Automatizacion, Soporte & Sistema
