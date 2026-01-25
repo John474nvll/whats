@@ -1,8 +1,11 @@
-{ pkgs ? import <nixpkgs> {} }:
+nix
+with import <nixpkgs> {};
 
-pkgs.mkShell {
+mkShell {
   buildInputs = [
-    pkgs.openssl
-    pkgs.nodejs-18_x
+    openssl
+    nodejs-18_x
+    python3
+    python3Packages.pip
   ];
 }
