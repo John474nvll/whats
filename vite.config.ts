@@ -47,18 +47,6 @@ export default defineConfig({
         orientation: "portrait-primary",
         start_url: "/",
         scope: "/",
-        screenshots: [
-          {
-            src: "/icons/icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/icons/icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-        ],
         icons: [
           {
             src: "/icons/icon-192x192.png",
@@ -107,7 +95,7 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5001',
+        target: 'http://0.0.0.0:3000',
         changeOrigin: true,
       },
     },
