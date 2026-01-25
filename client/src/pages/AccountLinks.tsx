@@ -90,8 +90,11 @@ export default function AccountLinks() {
     
     // Filters for specific platform
     const platformCampaigns = campaigns.filter(c => c.platform === platformId || c.platform === 'all');
-    const platformFunnels = funnels.filter(f => f.steps.some((s: any) => s.platform === platformId));
-    const platformLinks = links.filter(l => l.platform === platformId);
+    const platformFunnels = funnels.filter(f => {
+      const stages = f.stages as any[] | null;
+      return stages?.some((s: any) => s.platform === platformId);
+    });
+    const platformLinks = links;
 
     if (!platform) return null;
 
@@ -229,7 +232,7 @@ export default function AccountLinks() {
                       <Package className="w-3 h-3 text-piña" />
                       <span className="text-xs font-bold">{p.name}</span>
                     </div>
-                    <span className="text-xs font-black text-piña">${(p.price / 100).toFixed(2)}</span>
+                    <span className="text-xs font-black text-piña">${((p.price ?? 0) / 100).toFixed(2)}</span>
                   </div>
                 )) : (
                   <p className="text-xs text-slate-500 italic">Catálogo vacío.</p>
@@ -249,7 +252,7 @@ export default function AccountLinks() {
               <CardContent className="space-y-4">
                 {platformLinks.length > 0 ? platformLinks.slice(0, 3).map(l => (
                   <div key={l.id} className="p-3 rounded-xl bg-white/5 flex justify-between items-center">
-                    <span className="text-xs font-bold truncate pr-4">{l.originalUrl}</span>
+                    <span className="text-xs font-bold truncate pr-4">{l.url}</span>
                     <Badge className="bg-cyan-neon/20 text-cyan-neon text-[9px] font-black">{l.clicks} CLICS</Badge>
                   </div>
                 )) : (

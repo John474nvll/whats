@@ -65,6 +65,7 @@ export const campaigns = pgTable("campaigns", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   type: text("type").notNull(),
+  platform: text("platform").default("whatsapp"),
   target: jsonb("target"),
   content: text("content"),
   aiGenerated: boolean("ai_generated").default(false),
@@ -82,6 +83,75 @@ export const socialAccounts = pgTable("social_accounts", {
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const widgets = pgTable("widgets", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  type: text("type").notNull(),
+  config: jsonb("config"),
+  position: integer("position").default(0),
+  enabled: boolean("enabled").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const tickets = pgTable("tickets", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status").default("open"),
+  priority: text("priority").default("medium"),
+  customerId: integer("customer_id"),
+  assignedTo: integer("assigned_to"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const opportunities = pgTable("opportunities", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  value: integer("value").default(0),
+  stage: text("stage").default("prospecting"),
+  probability: integer("probability").default(0),
+  customerId: integer("customer_id"),
+  expectedCloseDate: timestamp("expected_close_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const channelConfigs = pgTable("channel_configs", {
+  id: serial("id").primaryKey(),
+  platform: text("platform").notNull(),
+  config: jsonb("config"),
+  enabled: boolean("enabled").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const salesFunnels = pgTable("sales_funnels", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  stages: jsonb("stages"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  price: integer("price").default(0),
+  category: text("category"),
+  stock: integer("stock").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const customLinks = pgTable("custom_links", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  url: text("url").notNull(),
+  shortCode: text("short_code"),
+  clicks: integer("clicks").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // === RELATIONS ===
@@ -137,6 +207,14 @@ export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
 
 export type SocialAccount = typeof socialAccounts.$inferSelect;
 export type InsertSocialAccount = z.infer<typeof insertSocialAccountSchema>;
+
+export type Widget = typeof widgets.$inferSelect;
+export type Ticket = typeof tickets.$inferSelect;
+export type Opportunity = typeof opportunities.$inferSelect;
+export type ChannelConfig = typeof channelConfigs.$inferSelect;
+export type SalesFunnel = typeof salesFunnels.$inferSelect;
+export type Product = typeof products.$inferSelect;
+export type CustomLink = typeof customLinks.$inferSelect;
 
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
 
