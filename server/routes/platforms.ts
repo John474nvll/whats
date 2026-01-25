@@ -1,77 +1,103 @@
 
 import type { Express } from "express";
-import { z } from "zod";
+import { PrismaClient } from '@prisma/client';
 
-// Almacenamiento en memoria para simulación
-let connectedAccounts: any[] = [];
-let phoneConnections: any[] = [];
+const prisma = new PrismaClient();
+
+// TODO: Replace with a real authentication system
+const TEMP_USER_ID = 1;
+
+// In-memory storage for verification codes is acceptable as it's short-lived.
 let verificationCodes: Record<string, string> = {};
 
 export function registerPlatformRoutes(app: Express) {
 
-  // GET /api/platforms/accounts - Obtener cuentas conectadas (simulado)
-  app.get('/api/platforms/accounts', (req, res) => {
-    res.json(connectedAccounts);
-  });
+  // --- Social Account Routes (DB Connected) ---
 
-  // POST /api/platforms/connect - Conectar una cuenta (simulado)
-  app.post('/api/platforms/connect', (req, res) => {
-    const { platform, accessToken } = req.body;
-    if (!['instagram', 'facebook'].includes(platform) || !accessToken) {
-      return res.status(400).json({ message: 'Plataforma o token inválido' });
+  app.get('/api/platforms/accounts', async (req, res) => {
+    try {
+      const accounts = await prisma.socialAccount.findMany({
+        where: { userId: TEMP_USER_ID },
+      });
+      res.json(accounts);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching social accounts', error });
     }
-
-    // Simular una nueva conexión de cuenta
-    const newAccount = {
-      id: `${platform}-${Date.now()}`,
-      platform,
-      accountName: `${platform.charAt(0).toUpperCase() + platform.slice(1)} User`,
-      accessToken,
-    };
-    connectedAccounts.push(newAccount);
-    res.status(201).json(newAccount);
   });
 
-  // POST /api/platforms/send-phone-code - Enviar código de verificación (simulado)
+  app.post('/api/platforms/connect', async (req, res) => {
+    try {
+      const { platform, accessToken, username } = req.body;
+      if (!['instagram', 'facebook', 'whatsapp'].includes(platform) || !accessToken) {
+        return res.status(400).json({ message: 'Invalid platform or access token' });
+      }
+      const newAccount = await prisma.socialAccount.create({
+        data: {
+          platform,
+          accessToken,
+          username: username || `${platform}-user`,
+          userId: TEMP_USER_ID,
+        },
+      });
+      res.status(201).json(newAccount);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to connect account', error });
+    }
+  });
+
+  // --- Channel / Phone Verification Routes (DB Connected) ---
+
   app.post('/api/platforms/send-phone-code', (req, res) => {
     const { phoneNumber } = req.body;
     if (!phoneNumber) {
-      return res.status(400).json({ message: 'Número de teléfono requerido' });
+      return res.status(400).json({ message: 'Phone number is required' });
     }
-
-    // Generar y almacenar un código de verificación simulado
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     verificationCodes[phoneNumber] = code;
-
-    console.log(`Código de verificación para ${phoneNumber}: ${code}`); // Simula el envío del código
-    res.json({ success: true, message: 'Código de verificación enviado' });
+    console.log(`Verification code for ${phoneNumber}: ${code}`); // Simulate sending SMS
+    res.json({ success: true, message: 'Verification code sent' });
   });
 
-  // POST /api/platforms/verify-phone-code - Verificar código (simulado)
-  app.post('/api/platforms/verify-phone-code', (req, res) => {
+  app.post('/api/platforms/verify-phone-code', async (req, res) => {
     const { phoneNumber, code } = req.body;
-    if (verificationCodes[phoneNumber] === code) {
-      // Simular la conexión del número de teléfono
-      const newConnection = { id: `whatsapp-${Date.now()}`, phoneNumber, platform: 'whatsapp' };
-      phoneConnections.push(newConnection);
-      delete verificationCodes[phoneNumber]; // Limpiar código usado
-      res.json({ success: true, connection: newConnection });
-    } else {
-      res.status(400).json({ success: false, message: 'Código inválido' });
+    if (verificationCodes[phoneNumber] !== code) {
+      return res.status(400).json({ success: false, message: 'Invalid verification code' });
+    }
+
+    try {
+      const newChannel = await prisma.channel.create({
+        data: {
+          platform: 'whatsapp', // Hardcoded for this flow
+          phoneNumberId: phoneNumber,
+          isActive: true,
+          userId: TEMP_USER_ID,
+        }
+      });
+      delete verificationCodes[phoneNumber]; // Clean up used code
+      res.status(201).json({ success: true, channel: newChannel });
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Failed to create channel', error });
     }
   });
 
-  // GET /api/platforms/phone-accounts - Obtener cuentas de teléfono conectadas
-  app.get('/api/platforms/phone-accounts', (req, res) => {
-    res.json(phoneConnections);
+  app.get('/api/platforms/phone-accounts', async (req, res) => {
+    try {
+      const channels = await prisma.channel.findMany({
+        where: { 
+          userId: TEMP_USER_ID,
+          platform: 'whatsapp' 
+        },
+      });
+      res.json(channels);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching phone accounts', error });
+    }
   });
 
-  // POST /api/platforms/send-message - Enviar mensaje (simulado)
+  // --- Generic Message Sending (Simulation) ---
   app.post('/api/platforms/send-message', (req, res) => {
     const { platform, to, content } = req.body;
-
-    console.log(`Enviando mensaje via ${platform} a ${to}: "${content}"`);
-    // Simular un ID de mensaje de la API externa
-    res.json({ success: true, messageId: `msg_${Date.now()}` });
+    console.log(`Simulating sending message via ${platform} to ${to}: "${content}"`);
+    res.json({ success: true, messageId: `sim_msg_${Date.now()}` });
   });
 }

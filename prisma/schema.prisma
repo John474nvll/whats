@@ -15,13 +15,15 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
-  password  String   // In a real app, this should be a hashed password
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  bots      Bot[]
-  channels  Channel[]
-  accounts  SocialAccount[]
+  bots          Bot[]
+  channels      Channel[]
+  accounts      SocialAccount[]
+  contacts      Contact[]
+  customers     Customer[]
 }
 
 // Bot model for Neural Agents
@@ -31,40 +33,88 @@ model Bot {
   description   String?
   systemPrompt  String
   model         String   @default("gpt-3.5-turbo")
-  
   user          User     @relation(fields: [userId], references: [id])
   userId        Int
-
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
 
-// Channel model for platform integrations (from Settings)
+// Channel model for platform integrations
 model Channel {
-  id             Int      @id @default(autoincrement())
-  platform       String   @unique // 'whatsapp', 'instagram', 'facebook'
-  isActive       Boolean  @default(true)
-  accessToken    String?
-  verifyToken    String?
-  phoneNumberId  String?
-
-  user           User     @relation(fields: [userId], references: [id])
-  userId         Int
-
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  platform      String
+  isActive      Boolean  @default(true)
+  accessToken   String?
+  verifyToken   String?
+  phoneNumberId String?
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@unique([platform, userId])
 }
 
-// SocialAccount model for connected accounts (from Sidebar)
+// SocialAccount model for connected accounts
 model SocialAccount {
   id          Int      @id @default(autoincrement())
-  platform    String   // 'instagram', 'facebook', 'whatsapp'
+  platform    String
   username    String?
   accessToken String
-  
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
-  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// === CRM Models ===
+
+model Contact {
+  id         Int      @id @default(autoincrement())
+  platform   String
+  platformId String
+  name       String
+  profilePic String?
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  conversations Conversation[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  @@unique([platform, platformId])
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  channel   String
+  status    String
+  contact   Contact  @relation(fields: [contactId], references: [id])
+  contactId Int
+  messages  Message[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+  content        String
+  role           String
+  sentiment      String?
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId Int
+  createdAt      DateTime @default(now())
+}
+
+model Customer {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String?  @unique
+  phone       String?
+  farmName    String?
+  animalCount Int?
+  address     String?
+  status      String?
+  tags        String?
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
