@@ -62,7 +62,7 @@ export function ContactForm({ contact }: ContactFormProps) {
                 <FormItem>
                   <FormLabel>Nombre *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Juan Pérez" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
+                    <Input placeholder="Juan Pérez" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

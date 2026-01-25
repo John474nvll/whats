@@ -88,8 +88,7 @@ export default function AccountLinks() {
     const account = accounts.find(a => a.platform === platformId);
     const config = configs.find(c => c.platform === platformId);
     
-    // Filters for specific platform
-    const platformCampaigns = campaigns.filter((c: any) => c.platform === platformId || c.platform === 'all');
+    const platformCampaigns = campaigns.filter((c: any) => (c as any).platform === platformId || (c as any).platform === 'all');
     const platformFunnels = funnels.filter((f: any) => f.steps && Array.isArray(f.steps) && f.steps.some((s: any) => s.platform === platformId));
     const platformLinks = links.filter((l: any) => (l as any).platform === platformId);
 

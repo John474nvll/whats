@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertCustomerSchema, type InsertCustomer } from "@shared/schema.ts";
-import { queryClient } from "../../lib/queryClient";
+import { queryClient, apiRequest } from "../../lib/queryClient";
 
 interface CustomerFormProps {
   customer?: any;
