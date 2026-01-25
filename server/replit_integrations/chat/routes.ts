@@ -2,11 +2,10 @@ import type { Express, Request, Response } from "express";
 import OpenAI from "openai";
 import { chatStorage } from "./storage";
 
-const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
-const openai = apiKey ? new OpenAI({
-  apiKey,
+const openai = new OpenAI({
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-}) : null;
+});
 
 export function registerChatRoutes(app: Express): void {
   // Get all conversations
@@ -36,14 +35,33 @@ export function registerChatRoutes(app: Express): void {
     }
   });
 
+  // Create new conversation
+  app.post("/api/conversations", async (req: Request, res: Response) => {
+    try {
+      const { title } = req.body;
+      const conversation = await chatStorage.createConversation(title || "New Chat");
+      res.status(201).json(conversation);
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+      res.status(500).json({ error: "Failed to create conversation" });
+    }
+  });
+
+  // Delete conversation
+  app.delete("/api/conversations/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await chatStorage.deleteConversation(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+      res.status(500).json({ error: "Failed to delete conversation" });
+    }
+  });
 
   // Send message and get AI response (streaming)
   app.post("/api/conversations/:id/messages", async (req: Request, res: Response) => {
     try {
-      if (!openai) {
-        return res.status(503).json({ error: "OpenAI API key not configured. Please set OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY environment variable." });
-      }
-      
       const conversationId = parseInt(req.params.id);
       const { content } = req.body;
 

@@ -1,13 +1,12 @@
 ## Packages
-framer-motion | Complex layout animations and transitions
-recharts | Dashboard analytics charts
-date-fns | Date formatting for chat messages and lists
+framer-motion | Smooth animations for messages and transitions
+date-fns | Formatting timestamps for messages
 clsx | Utility for constructing className strings conditionally
-tailwind-merge | Utility for merging Tailwind CSS classes
+tailwind-merge | Utility for merging Tailwind classes safely
 
 ## Notes
-Tailwind Config - extend fontFamily:
-fontFamily: {
-  display: ["var(--font-display)"],
-  body: ["var(--font-body)"],
-}
+- Using Wouter for routing
+- Using TanStack Query for data fetching
+- Using Lucide React for icons
+- API endpoints defined in @shared/routes
+- Images for avatars will be simulated with UI avatars or placeholders

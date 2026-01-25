@@ -1,96 +1,99 @@
-import { z } from "zod";
-import { insertChannelConfigSchema, channelConfigs, conversations, messages, contacts } from "./schema";
+
+import { z } from 'zod';
+import { insertUserSchema, insertMessageSchema, conversations, messages, contacts } from './schema';
 
 export const errorSchemas = {
-  400: z.object({
-    error: z.string(),
-    issues: z.array(z.object({
-      code: z.string(),
-      expected: z.string(),
-      received: z.string(),
-      path: z.array(z.string()),
-      message: z.string(),
-    })),
+  validation: z.object({
+    message: z.string(),
+    field: z.string().optional(),
   }),
-  401: z.object({
-    error: z.string(),
+  notFound: z.object({
     message: z.string(),
   }),
-  404: z.object({
-    error: z.string(),
-    message: z.string(),
-  }),
-  500: z.object({
-    error: z.string(),
+  internal: z.object({
     message: z.string(),
   }),
 };
 
-export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>
-
 export const api = {
-  channels: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/channels',
-      responses: {
-        200: z.array(z.custom<typeof channelConfigs.$inferSelect>()),
-      },
-    },
-    update: {
-      method: 'PUT' as const,
-      path: '/api/channels/:platform',
-      input: insertChannelConfigSchema.omit({ platform: true }).partial(),
-      responses: {
-        200: z.custom<typeof channelConfigs.$inferSelect>(),
-      },
-    },
-  },
   conversations: {
     list: {
       method: 'GET' as const,
       path: '/api/conversations',
       responses: {
-        200: z.array(z.custom<typeof conversations.$inferSelect & { contact: typeof contacts.$inferSelect }>()),
+        200: z.array(z.custom<any>()), // Todo: precise type
       },
     },
     get: {
       method: 'GET' as const,
       path: '/api/conversations/:id',
       responses: {
-        200: z.custom<typeof conversations.$inferSelect & { messages: (typeof messages.$inferSelect)[] }>(),
+        200: z.custom<any>(),
+        404: errorSchemas.notFound,
       },
     },
-    toggleBot: {
+    messages: {
+      list: {
+        method: 'GET' as const,
+        path: '/api/conversations/:id/messages',
+        responses: {
+          200: z.array(z.custom<typeof messages.$inferSelect>()),
+          404: errorSchemas.notFound,
+        },
+      },
+      create: {
+        method: 'POST' as const,
+        path: '/api/conversations/:id/messages',
+        input: z.object({ content: z.string() }),
+        responses: {
+          201: z.custom<typeof messages.$inferSelect>(),
+          404: errorSchemas.notFound,
+        },
+      },
+    },
+    analyze: {
       method: 'POST' as const,
-      path: '/api/conversations/:id/toggle-bot',
+      path: '/api/conversations/:id/analyze',
       responses: {
-        200: z.custom<typeof conversations.$inferSelect>(),
+        200: z.object({
+          sentiment: z.string(),
+          suggestedResponse: z.string()
+        }),
       },
-    },
+    }
   },
-  messages: {
-    list: {
-      method: 'GET' as const,
-      path: '/api/conversations/:id/messages',
-      responses: {
-        200: z.array(z.custom<typeof messages.$inferSelect>()),
-      },
-    },
-    create: {
+  webhooks: {
+    meta: {
       method: 'POST' as const,
-      path: '/api/conversations/:id/messages',
+      path: '/webhooks/meta',
+      input: z.any(),
       responses: {
-        201: z.custom<typeof messages.$inferSelect>(),
+        200: z.string(),
       },
     },
+    metaVerify: {
+      method: 'GET' as const,
+      path: '/webhooks/meta',
+      input: z.object({
+        'hub.mode': z.string().optional(),
+        'hub.verify_token': z.string().optional(),
+        'hub.challenge': z.string().optional(),
+      }),
+      responses: {
+        200: z.string(),
+      },
+    }
   }
 };
 
-export function buildUrl(path: string, params: Record<string, string | number>) {
+export function buildUrl(path: string, params?: Record<string, string | number>): string {
   let url = path;
-  for (const key in params) {
-    url = url.replace(`:${key}`, String(params[key]));
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (url.includes(`:${key}`)) {
+        url = url.replace(`:${key}`, String(value));
+      }
+    });
   }
   return url;
 }
