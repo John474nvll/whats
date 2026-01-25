@@ -22,7 +22,7 @@ model User {
 
   bots          Bot[]
   channels      Channel[]
-  accounts      SocialAccount[]
+  accounts      PlatformAccount[]
   contacts      Contact[]
   customers     Customer[]
 }
@@ -50,17 +50,19 @@ model Channel {
   phoneNumberId String?
   user          User     @relation(fields: [userId], references: [id])
   userId        Int
+  conversations Conversation[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   @@unique([platform, userId])
 }
 
-// SocialAccount model for connected accounts
-model SocialAccount {
+// PlatformAccount model for connected accounts
+model PlatformAccount {
   id          Int      @id @default(autoincrement())
-  platform    String
-  username    String?
-  accessToken String
+  platform    String   // e.g., "whatsapp", "instagram"
+  accountName String   // e.g., "My Business Page" or "+15551234567"
+  accountId   String?  // The unique ID from the platform (e.g., Facebook Page ID)
+  accessToken String   // Encrypted access token
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
   createdAt   DateTime @default(now())
@@ -71,25 +73,27 @@ model SocialAccount {
 
 model Contact {
   id         Int      @id @default(autoincrement())
-  platform   String
-  platformId String
   name       String
+  phone      String?  @unique
+  email      String?  @unique
+  platform   String   // The initial platform the contact was created from
   profilePic String?
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
   conversations Conversation[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  @@unique([platform, platformId])
 }
 
 model Conversation {
   id        Int      @id @default(autoincrement())
-  channel   String
-  status    String
+  status    String   @default("open")
   contact   Contact  @relation(fields: [contactId], references: [id])
   contactId Int
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  channelId Int
   messages  Message[]
+  lastMessageAt DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -97,8 +101,8 @@ model Conversation {
 model Message {
   id             Int      @id @default(autoincrement())
   content        String
-  role           String
-  sentiment      String?
+  role           String   // "user" or "assistant"
+  sentiment      String?  // e.g., "positive", "negative", "neutral"
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   conversationId Int
   createdAt      DateTime @default(now())
