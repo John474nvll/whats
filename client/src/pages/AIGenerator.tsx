@@ -19,21 +19,22 @@ type ContentType = "post" | "caption" | "message" | "story" | "ad" | "image";
 type Platform = "instagram" | "facebook" | "whatsapp" | "multi";
 
 interface GenerationHistory {
-  id: number;
+  id: string;
+  prompt: string;
+  content: string;
   type: ContentType;
-  topic: string;
-  result: string;
-  timestamp: Date;
+  isImage: boolean;
+  timestamp: string;
 }
 
 export default function AIGenerator() {
   const [contentType, setContentType] = useState<ContentType>("post");
   const [platform, setPlatform] = useState<Platform>("multi");
   const [topic, setTopic] = useState("");
-  const [generated, setGenerated] = useState("");
+  const [context, setContext] = useState("");
+  const [generatedContent, setGeneratedContent] = useState<GenerationHistory | null>(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<GenerationHistory[]>([]);
-  const [imageUrl, setImageUrl] = useState("");
   const { toast } = useToast();
 
   const contentTypes = [
@@ -59,48 +60,25 @@ export default function AIGenerator() {
     }
 
     setLoading(true);
-    setGenerated("");
-    setImageUrl("");
+    setGeneratedContent(null);
 
     try {
-      if (contentType === "image") {
-        const res = await apiRequest("POST", "/api/ai/generate-image", { prompt: topic });
-        const data = await res.json();
-        if (data.url) {
-          setImageUrl(data.url);
-          toast({ title: "Imagen generada", description: "Tu imagen ha sido creada con exito" });
-        } else {
-          throw new Error("No image URL returned");
-        }
-      } else {
-        const res = await apiRequest("POST", "/api/ai/generate-smart-content", {
-          type: contentType,
-          topic,
-          platform: platform !== "multi" ? platform : undefined,
-          includeEmojis: true,
-          language: "es"
-        });
-        const data = await res.json();
-        
-        if (data.generated || data.content) {
-          const content = data.generated || data.content;
-          setGenerated(content);
-          
-          setHistory(prev => [{
-            id: Date.now(),
-            type: contentType,
-            topic,
-            result: content,
-            timestamp: new Date()
-          }, ...prev].slice(0, 10));
-          
-          toast({ title: "Contenido generado", description: "Tu contenido esta listo para usar" });
-        }
-      }
+      const res = await apiRequest("POST", "/api/ai/generate", {
+        prompt: topic,
+        type: contentType,
+        platform: platform !== "multi" ? platform : undefined,
+        context
+      });
+
+      const data: GenerationHistory = await res.json();
+      setGeneratedContent(data);
+      setHistory(prev => [data, ...prev].slice(0, 20));
+      toast({ title: "Contenido Generado", description: "Tu contenido está listo para usar" });
+
     } catch (error) {
       console.error("Generation error:", error);
       toast({
-        title: "Error de generacion",
+        title: "Error de Generación",
         description: "No se pudo generar el contenido. Intenta de nuevo.",
         variant: "destructive",
       });
@@ -114,25 +92,9 @@ export default function AIGenerator() {
     toast({ title: "Copiado", description: "Contenido copiado al portapapeles" });
   };
 
-  const generateHashtags = async () => {
-    if (!topic.trim()) return;
-    
-    setLoading(true);
-    try {
-      const res = await apiRequest("POST", "/api/ai/suggest-hashtags", { 
-        topic, 
-        platform: platform !== "multi" ? platform : "instagram" 
-      });
-      const data = await res.json();
-      if (data.hashtags) {
-        setGenerated(prev => prev + "\n\n" + data.hashtags.join(" "));
-      }
-    } catch (error) {
-      toast({ title: "Error", description: "No se pudieron generar hashtags", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const clearResult = () => {
+    setGeneratedContent(null);
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 p-4 md:p-8">
@@ -237,6 +199,18 @@ export default function AIGenerator() {
                     />
                   </div>
 
+                   <div className="space-y-3">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Contexto Adicional (Opcional)
+                    </label>
+                    <Textarea
+                      placeholder="Ej: Tono amigable, para un público joven..."
+                      value={context}
+                      onChange={(e) => setContext(e.target.value)}
+                      className="min-h-[60px] bg-slate-800 border-white/10 rounded-xl resize-none"
+                    />
+                  </div>
+
                   <Button
                     onClick={generateContent}
                     disabled={loading || !topic.trim()}
@@ -252,41 +226,28 @@ export default function AIGenerator() {
                       </>
                     )}
                   </Button>
-
-                  {contentType !== "image" && generated && (
-                    <Button
-                      variant="outline"
-                      onClick={generateHashtags}
-                      disabled={loading}
-                      className="w-full rounded-xl border-white/10"
-                      data-testid="button-hashtags"
-                    >
-                      <Hash className="h-4 w-4 mr-2" />
-                      Agregar Hashtags
-                    </Button>
-                  )}
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-900/40 border-white/5 rounded-3xl overflow-hidden">
                 <CardHeader className="border-b border-white/5 flex flex-row items-center justify-between">
                   <CardTitle className="text-xl">Resultado</CardTitle>
-                  {(generated || imageUrl) && (
+                  {generatedContent && (
                     <div className="flex gap-2">
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        onClick={() => { setGenerated(""); setImageUrl(""); }}
+                        onClick={clearResult}
                         className="rounded-full"
                         data-testid="button-clear"
                       >
                         <RefreshCw className="h-4 w-4" />
                       </Button>
-                      {generated && (
+                      {!generatedContent.isImage && (
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          onClick={() => copyToClipboard(generated)}
+                          onClick={() => copyToClipboard(generatedContent.content)}
                           className="rounded-full text-primary"
                           data-testid="button-copy"
                         >
@@ -312,39 +273,35 @@ export default function AIGenerator() {
                         </div>
                         <p className="mt-4 text-slate-500 text-sm">Generando contenido...</p>
                       </motion.div>
-                    ) : imageUrl ? (
+                    ) : generatedContent ? (
                       <motion.div
-                        key="image"
-                        initial={{ opacity: 0, scale: 0.95 }}
+                        key="content"
+                        initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="space-y-4"
                       >
-                        <img 
-                          src={imageUrl} 
-                          alt="Generated" 
-                          className="w-full rounded-2xl"
-                        />
-                        <Button 
-                          variant="outline" 
-                          className="w-full rounded-xl"
-                          onClick={() => window.open(imageUrl, '_blank')}
-                        >
-                          <Download className="h-4 w-4 mr-2" />
-                          Descargar Imagen
-                        </Button>
-                      </motion.div>
-                    ) : generated ? (
-                      <motion.div
-                        key="text"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <Textarea
-                          value={generated}
-                          onChange={(e) => setGenerated(e.target.value)}
-                          className="min-h-[350px] bg-slate-800/50 border-white/5 rounded-2xl resize-none text-base leading-relaxed"
-                          data-testid="textarea-result"
-                        />
+                        {generatedContent.isImage ? (
+                          <div className="space-y-4">
+                            <img 
+                              src={generatedContent.content} 
+                              alt="Generated" 
+                              className="w-full rounded-2xl"
+                            />
+                            <Button 
+                              variant="outline" 
+                              className="w-full rounded-xl"
+                              onClick={() => window.open(generatedContent.content, '_blank')}
+                            >
+                              <Download className="h-4 w-4 mr-2" />
+                              Descargar Imagen
+                            </Button>
+                          </div>
+                        ) : (
+                          <Textarea
+                            value={generatedContent.content}
+                            className="min-h-[350px] bg-slate-800/50 border-white/5 rounded-2xl resize-none text-base leading-relaxed"
+                            data-testid="textarea-result"
+                          />
+                        )}
                       </motion.div>
                     ) : (
                       <motion.div
@@ -382,20 +339,20 @@ export default function AIGenerator() {
                               {item.type}
                             </Badge>
                             <span className="text-xs text-slate-500">
-                              {item.timestamp.toLocaleTimeString()}
+                              {new Date(item.timestamp).toLocaleTimeString()}
                             </span>
                           </div>
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => copyToClipboard(item.result)}
+                            onClick={() => copyToClipboard(item.content)}
                             className="opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             <Copy className="h-3 w-3" />
                           </Button>
                         </div>
-                        <p className="text-sm text-slate-400 font-medium mb-1">{item.topic}</p>
-                        <p className="text-xs text-slate-500 line-clamp-2">{item.result}</p>
+                        <p className="text-sm text-slate-400 font-medium mb-1 line-clamp-1">{item.prompt}</p>
+                        <p className="text-xs text-slate-500 line-clamp-2">{item.content}</p>
                       </div>
                     ))}
                   </div>
