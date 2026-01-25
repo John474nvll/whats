@@ -215,7 +215,7 @@ export function AppSidebar() {
         <div className="text-[9px] text-slate-500 flex justify-between items-center group-data-[state=collapsed]/sidebar:hidden px-1">
           <div className="space-y-0.5">
             <p className="font-bold text-slate-400">SocialHub</p>
-            <p className="opacity-50 tracking-tighter">V3.1 Premium</p>
+            <p className="opacity-50 tracking-tighter">V9.0 Premium</p>
           </div>
           <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary text-[7px] font-black tracking-widest px-2 py-0.5 rounded-full">
             LIVE

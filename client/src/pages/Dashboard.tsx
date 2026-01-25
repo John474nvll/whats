@@ -129,7 +129,7 @@ export default function Dashboard() {
             <h1 className="text-5xl font-black text-white">
               Control <span className="text-primary">SocialHub</span>
             </h1>
-            <p className="text-slate-400">Panel de Control Unificado v3.1</p>
+            <p className="text-slate-400">Panel de Control Unificado v9.0</p>
           </div>
           <div className="flex gap-4">
              <Button variant="outline" size="icon" onClick={logout} className="rounded-2xl">

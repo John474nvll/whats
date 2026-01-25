@@ -271,7 +271,7 @@ export default function AccountLinks() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-black text-white">Plataformas <span className="text-kiwi">Multicanal</span></h1>
-          <p className="text-slate-400 italic">Control centralizado v3.1</p>
+          <p className="text-slate-400 italic">Control centralizado v9.0</p>
         </div>
       </header>
 
