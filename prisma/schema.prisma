@@ -29,7 +29,7 @@ model Bot {
   id            Int      @id @default(autoincrement())
   name          String
   description   String?
-  systemPrompt  String   @db.Text
+  systemPrompt  String
   model         String   @default("gpt-3.5-turbo")
   
   user          User     @relation(fields: [userId], references: [id])
@@ -44,8 +44,8 @@ model Channel {
   id             Int      @id @default(autoincrement())
   platform       String   @unique // 'whatsapp', 'instagram', 'facebook'
   isActive       Boolean  @default(true)
-  accessToken    String?  @db.Text
-  verifyToken    String?  @db.Text
+  accessToken    String?
+  verifyToken    String?
   phoneNumberId  String?
 
   user           User     @relation(fields: [userId], references: [id])
@@ -60,7 +60,7 @@ model SocialAccount {
   id          Int      @id @default(autoincrement())
   platform    String   // 'instagram', 'facebook', 'whatsapp'
   username    String?
-  accessToken String   @db.Text
+  accessToken String
   
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
