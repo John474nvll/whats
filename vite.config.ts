@@ -43,7 +43,7 @@ export default defineConfig({
         name: "SocialHub v3.1 - Plataforma de Gestión de Redes Sociales",
         short_name: "SocialHub",
         description: "Plataforma completa para gestionar Instagram, Facebook y WhatsApp desde un único dashboard profesional",
-        theme_color: "#22c55e",
+        theme_color: "#00ff80",
         background_color: "#020617",
         display: "standalone",
         orientation: "portrait-primary",
