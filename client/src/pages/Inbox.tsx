@@ -1,46 +1,85 @@
-import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
+import { useState, useEffect } from "react";
 import { ConversationList } from "@/components/ConversationList";
-import { ChatWindow } from "@/components/ChatWindow";
-import { useConversations } from "@/hooks/use-conversations";
+import { ChatInterface } from "@/components/ChatInterface";
+import { useConversations, useConversation, useMessages, useToggleBot, useSendMessage } from "@/hooks/use-conversations";
 import { MessageSquareDashed } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Inbox() {
-  const [selectedId, setSelectedId] = useState<number | undefined>();
-  const { data: conversations = [], isLoading } = useConversations();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   
-  const selectedConversation = conversations.find(c => c.id === selectedId);
+  const { data: conversations, isLoading: loadingConversations } = useConversations();
+  const activeId = selectedId ?? (Array.isArray(conversations) && conversations.length > 0 ? conversations[0].id : null);
+  const { data: activeConversation } = useConversation(activeId!);
+  const { data: messages } = useMessages(activeId!);
+  
+  const toggleBotMutation = useToggleBot();
+  const sendMessageMutation = useSendMessage();
+
+  useEffect(() => {
+    if (!selectedId && Array.isArray(conversations) && conversations.length > 0) {
+      setSelectedId(conversations[0].id);
+    }
+  }, [conversations, selectedId]);
+
+  const handleToggleBot = (enabled: boolean) => {
+    if (activeId) {
+      toggleBotMutation.mutate({ id: activeId, botStatus: enabled });
+    }
+  };
+
+  const handleSendMessage = (content: string) => {
+    if (activeId) {
+      sendMessageMutation.mutate({ conversationId: activeId, content });
+    }
+  };
+
+  if (loadingConversations) {
+    return (
+      <div className="flex h-screen bg-background text-foreground">
+        <div className="flex-1 flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden font-sans">
-      <Sidebar />
-      
-      <main className="flex-1 flex overflow-hidden">
-        {/* Left List Panel */}
-        <ConversationList 
-          conversations={conversations} 
-          selectedId={selectedId} 
-          onSelect={setSelectedId}
-          isLoading={isLoading}
-        />
+    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+      <div className="flex h-screen gap-4 p-6">
+        <div className="w-96 flex-shrink-0 bg-card rounded-lg border border-border overflow-hidden flex flex-col">
+          <ConversationList 
+            conversations={Array.isArray(conversations) ? conversations : []} 
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+          />
+        </div>
         
-        {/* Right Chat Panel */}
-        <div className="flex-1 flex flex-col h-full bg-muted/30 relative">
-          {selectedConversation ? (
-            <ChatWindow conversation={selectedConversation} />
+        <div className="flex-1 bg-card rounded-lg border border-border overflow-hidden flex flex-col">
+          {activeId && activeConversation && messages ? (
+            <ChatInterface 
+              conversation={activeConversation as any}
+              messages={messages || []}
+              botEnabled={!!activeConversation.botStatus}
+              onToggleBot={handleToggleBot}
+              onSendMessage={handleSendMessage}
+              isSending={sendMessageMutation.isPending}
+            />
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8">
-              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
-                <MessageSquareDashed className="w-10 h-10 text-muted-foreground/50" />
+            <div className="h-full flex flex-col items-center justify-center text-muted-foreground p-8 text-center">
+              <div className="h-24 w-24 rounded-full bg-secondary/50 flex items-center justify-center mb-6 ring-1 ring-white/5">
+                <MessageSquareDashed className="h-10 w-10 opacity-50" />
               </div>
-              <h2 className="text-xl font-display font-semibold text-foreground">No Chat Selected</h2>
-              <p className="text-center max-w-sm mt-2">
-                Select a conversation from the list to start messaging your customers across all channels.
-              </p>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Sin conversación seleccionada</h3>
+              <p className="max-w-sm text-sm">Selecciona una conversación para empezar a chatear.</p>
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
