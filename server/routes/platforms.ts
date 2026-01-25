@@ -10,42 +10,88 @@ const TEMP_USER_ID = 1;
 // In-memory storage for verification codes is acceptable as it's short-lived.
 let verificationCodes: Record<string, string> = {};
 
+/**
+ * Simulates validating a Meta (Facebook/Instagram) access token.
+ * In a real application, this would involve making a call to Meta's Graph API.
+ * @param accessToken The token provided by the user.
+ * @returns A simulated object with a fake user ID if the token is "valid".
+ */
+async function validateMetaToken(accessToken: string): Promise<{ isValid: boolean; accountId?: string }> {
+  console.log(`Simulating validation for token: ${accessToken.substring(0, 10)}...`);
+  // TODO: Implement real token validation with Meta's Graph API.
+  // Example: `https://graph.facebook.com/me?access_token=${accessToken}`
+  if (accessToken && accessToken.length > 10) {
+    // Simulate a successful validation and return a fake, but consistent, account ID.
+    return { isValid: true, accountId: `meta_acc_${Date.now()}` };
+  } else {
+    return { isValid: false };
+  }
+}
+
 export function registerPlatformRoutes(app: Express) {
 
-  // --- Social Account Routes (DB Connected) ---
+  // --- Platform Account Routes (DB Connected) ---
 
   app.get('/api/platforms/accounts', async (req, res) => {
     try {
-      const accounts = await prisma.socialAccount.findMany({
+      const accounts = await prisma.platformAccount.findMany({
         where: { userId: TEMP_USER_ID },
       });
       res.json(accounts);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching social accounts', error });
+      res.status(500).json({ message: 'Error fetching platform accounts', error });
     }
   });
 
   app.post('/api/platforms/connect', async (req, res) => {
+    const { platform, accessToken, accountName } = req.body;
+
+    if (!['instagram', 'facebook'].includes(platform) || !accessToken || !accountName) {
+      return res.status(400).json({ message: 'Platform, access token, and account name are required' });
+    }
+
     try {
-      const { platform, accessToken, username } = req.body;
-      if (!['instagram', 'facebook', 'whatsapp'].includes(platform) || !accessToken) {
-        return res.status(400).json({ message: 'Invalid platform or access token' });
+      // 1. (Simulate) Validate the token with the platform's API
+      const { isValid, accountId } = await validateMetaToken(accessToken);
+
+      if (!isValid) {
+        return res.status(401).json({ message: 'Invalid or expired access token' });
       }
-      const newAccount = await prisma.socialAccount.create({
-        data: {
+
+      // 2. Create or update the account in the database
+      // Using upsert is smart: it updates the token if the account already exists.
+      const account = await prisma.platformAccount.upsert({
+        where: {
+          // A unique identifier for the account should be used here.
+          // For this simulation, we'll use the combination of platform and name.
+          // In a real scenario, the platform-provided accountId would be ideal.
+          userId_platform_accountName: { // This is a composite key I'll need to add to the schema
+            userId: TEMP_USER_ID,
+            platform,
+            accountName,
+          }
+        },
+        update: { accessToken }, // Just update the token if it exists
+        create: {
           platform,
-          accessToken,
-          username: username || `${platform}-user`,
+          accessToken, // In a real app, this should be encrypted
+          accountName,
+          accountId: accountId, // The ID from the platform itself
           userId: TEMP_USER_ID,
         },
       });
-      res.status(201).json(newAccount);
-    } catch (error) {
+
+      res.status(201).json(account);
+    } catch (error: any) {
+        // Catch potential unique constraint errors if the composite key isn't set up
+        if (error.code === 'P2002') {
+             return res.status(409).json({ message: 'This account is already connected.' });
+        }
       res.status(500).json({ message: 'Failed to connect account', error });
     }
   });
 
-  // --- Channel / Phone Verification Routes (DB Connected) ---
+  // --- Channel / Phone Verification Routes (Kept for next steps) ---
 
   app.post('/api/platforms/send-phone-code', (req, res) => {
     const { phoneNumber } = req.body;
@@ -80,21 +126,7 @@ export function registerPlatformRoutes(app: Express) {
     }
   });
 
-  app.get('/api/platforms/phone-accounts', async (req, res) => {
-    try {
-      const channels = await prisma.channel.findMany({
-        where: { 
-          userId: TEMP_USER_ID,
-          platform: 'whatsapp' 
-        },
-      });
-      res.json(channels);
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching phone accounts', error });
-    }
-  });
-
-  // --- Generic Message Sending (Simulation) ---
+  // --- Generic Message Sending (Simulation - to be replaced) ---
   app.post('/api/platforms/send-message', (req, res) => {
     const { platform, to, content } = req.body;
     console.log(`Simulating sending message via ${platform} to ${to}: "${content}"`);
