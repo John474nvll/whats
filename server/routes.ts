@@ -6,7 +6,9 @@ import OpenAI from "openai";
 import { registerPlatformRoutes } from "./routes/platforms";
 import voiceRouter from "./routes/voice";
 import botsRouter from "./routes/bots";
-import crmRouter from "./routes/crm"; // Import the new CRM router
+import crmRouter from "./routes/crm"; 
+import webhooksRouter from "./routes/webhooks";
+import whatsappRouter from "./routes/whatsapp"; // Import the new WhatsApp router
 
 const openai = new OpenAI({
   apiKey: "gpt4free-dummy-key", // This will be replaced by user's key
@@ -33,7 +35,12 @@ export async function registerRoutes(
   registerPlatformRoutes(app);
   app.use("/api/voice", voiceRouter);
   app.use("/api/bots", botsRouter);
-  app.use("/api", crmRouter); // Use the new CRM router for all /api CRM routes
+  app.use("/api", crmRouter); 
+  app.use("/api/whatsapp", whatsappRouter); // Use the new WhatsApp router
+
+  // === Webhooks ===
+  app.use("/webhooks", webhooksRouter); // Use the new webhooks router
+
 
   // === AI & Webhooks (kept separate for clarity) ===
 
@@ -77,19 +84,6 @@ export async function registerRoutes(
           res.status(500).json({ message: "Error generating image." });
       }
   });
-
-  // Webhooks
-  app.get(api.webhooks.metaVerify.path, (req, res) => {
-    // Meta verification logic...
-    res.sendStatus(200);
-  });
-
-  app.post(api.webhooks.meta.path, async (req, res) => {
-    // Webhook event handling...
-    res.sendStatus(200);
-  });
-  
-  // No more database seeding here, Prisma handles it.
 
   return httpServer;
 }
