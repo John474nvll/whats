@@ -14,6 +14,7 @@
         # Tools for running scripts from package.json
         pkgs.nodePackages.tsx
         pkgs.drizzle-kit
+        pkgs.openssl_3
     ];
     startup = {
       init = {
