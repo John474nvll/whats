@@ -4,7 +4,8 @@ import {
   type InsertContact, type Contact,
   type InsertConversation, type Conversation,
   type InsertMessage, type Message,
-  type ConversationWithContact
+  type ConversationWithContact,
+  type Customer, type InsertCustomer
 } from "@shared/schema";
 import { IStorage } from "./storage";
 
@@ -13,8 +14,10 @@ const users: User[] = [];
 const contacts: Contact[] = [];
 const conversations: Conversation[] = [];
 const messages: Message[] = [];
+const customers: Customer[] = [];
 
 export class InMemoryStorage implements IStorage {
+  // Users
   async getUser(id: number): Promise<User | undefined> {
     return users.find(u => u.id === id);
   }
@@ -33,6 +36,11 @@ export class InMemoryStorage implements IStorage {
     return user;
   }
 
+  // Contacts
+  async getContacts(): Promise<Contact[]> {
+    return contacts;
+  }
+
   async getContactByPlatformId(platform: string, platformId: string): Promise<Contact | undefined> {
     return contacts.find(c => c.platform === platform && c.platformId === platformId);
   }
@@ -47,6 +55,23 @@ export class InMemoryStorage implements IStorage {
     return contact;
   }
 
+  async updateContact(id: number, contactUpdate: Partial<InsertContact>): Promise<Contact | undefined> {
+    const index = contacts.findIndex(c => c.id === id);
+    if (index !== -1) {
+      contacts[index] = { ...contacts[index], ...contactUpdate };
+      return contacts[index];
+    }
+    return undefined;
+  }
+
+  async deleteContact(id: number): Promise<void> {
+    const index = contacts.findIndex(c => c.id === id);
+    if (index !== -1) {
+      contacts.splice(index, 1);
+    }
+  }
+
+  // Conversations
   async getConversations(): Promise<ConversationWithContact[]> {
     return conversations.map(c => ({
       ...c,
@@ -84,6 +109,7 @@ export class InMemoryStorage implements IStorage {
     return conversation;
   }
 
+  // Messages
   async getMessages(conversationId: number): Promise<Message[]> {
     return messages.filter(m => m.conversationId === conversationId).sort((a, b) => (a.timestamp?.getTime() || 0) - (b.timestamp?.getTime() || 0));
   }
@@ -103,5 +129,36 @@ export class InMemoryStorage implements IStorage {
   async getLastMessage(conversationId: number): Promise<Message | undefined> {
     const conversationMessages = messages.filter(m => m.conversationId === conversationId);
     return conversationMessages[conversationMessages.length - 1];
+  }
+
+  // Customers
+  async getCustomers(): Promise<Customer[]> {
+    return customers;
+  }
+
+  async createCustomer(insertCustomer: InsertCustomer): Promise<Customer> {
+    const customer: Customer = {
+      id: nextId++,
+      createdAt: new Date(),
+      ...insertCustomer
+    };
+    customers.push(customer);
+    return customer;
+  }
+
+  async updateCustomer(id: number, customerUpdate: Partial<InsertCustomer>): Promise<Customer | undefined> {
+    const index = customers.findIndex(c => c.id === id);
+    if (index !== -1) {
+      customers[index] = { ...customers[index], ...customerUpdate };
+      return customers[index];
+    }
+    return undefined;
+  }
+
+  async deleteCustomer(id: number): Promise<void> {
+    const index = customers.findIndex(c => c.id === id);
+    if (index !== -1) {
+      customers.splice(index, 1);
+    }
   }
 }
