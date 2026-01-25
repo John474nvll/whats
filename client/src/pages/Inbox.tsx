@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "wouter";
 import { ConversationList } from "@/components/ConversationList";
 import { ChatInterface } from "@/components/ChatInterface";
 import { useConversations, useConversation, useMessages, useToggleBot, useSendMessage } from "@/hooks/use-conversations";
@@ -7,7 +7,8 @@ import { MessageSquareDashed } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Inbox() {
-  const [searchParams] = useSearchParams();
+  const [location] = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const conversationIdFromUrl = searchParams.get("conversationId");
   const [selectedId, setSelectedId] = useState<number | null>(null);
   
