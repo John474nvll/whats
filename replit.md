@@ -1,4 +1,4 @@
-# SocialHub v3.2 - CRM & Redes Sociales
+# SocialHub v9.0 - CRM & Redes Sociales
 
 ## Overview
 SocialHub is a comprehensive CRM and social media management platform designed to streamline sales, marketing, and customer engagement. It features a visually driven sales pipeline, robust lead management, and multi-channel campaign capabilities powered by AI. The platform aims to provide a modern, high-performance experience with PWA support, enabling users to manage their social presence and customer interactions efficiently across various platforms. The project's vision is to become the most complete and modern platform for social media management from any device, enhancing user productivity and market reach.
