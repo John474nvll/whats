@@ -11,6 +11,42 @@ const openai = new OpenAI({
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
 });
 
+// AI Text Generation
+async function generateAiContent(prompt: string, type: string, platform: string, context: string): Promise<string> {
+  const systemPrompt = `You are an expert ${platform} content creator. Generate a ${type} based on the following instructions. ${context}`;
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: prompt }
+      ]
+    });
+    return response.choices[0].message.content || "Failed to generate content.";
+  } catch (e) {
+    console.error("AI Error:", e);
+    return "There was an error generating the content.";
+  }
+}
+
+// AI Image Generation
+async function generateAiImage(prompt: string): Promise<string> {
+  try {
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024",
+    });
+    return response.data[0].url || "Failed to generate image.";
+  } catch (e) {
+    console.error("AI Error:", e);
+    // Return a placeholder or error message
+    return `https://placehold.co/1024x1024/000000/FFF?text=Error+Generating+Image`;
+  }
+}
+
+
 async function analyzeSentiment(text: string) {
   try {
     const response = await openai.chat.completions.create({
@@ -98,6 +134,40 @@ export async function registerRoutes(
     res.json({ sentiment, suggestedResponse });
   });
 
+  app.post('/api/ai/generate', async (req, res) => {
+    try {
+      const { prompt, type, platform, context } = req.body;
+      if (!prompt || !type) {
+        return res.status(400).json({ message: "Invalid input: prompt and type are required." });
+      }
+      
+      let content = "";
+      let isImage = false;
+
+      if (type === 'image') {
+        content = await generateAiImage(prompt);
+        isImage = true;
+      } else {
+        content = await generateAiContent(prompt, type, platform, context || '');
+      }
+
+      const result = {
+        id: `gen_${Date.now()}`,
+        prompt,
+        content,
+        type,
+        isImage,
+        timestamp: new Date().toISOString(),
+      };
+      
+      res.json(result);
+
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
   // Contacts
   app.get('/api/contacts', async (req, res) => {
     const contacts = await storage.getContacts();
@@ -105,7 +175,6 @@ export async function registerRoutes(
   });
 
   app.post('/api/contacts', async (req, res) => {
-    // Add validation logic here if needed
     const newContact = await storage.createContact(req.body);
     res.status(201).json(newContact);
   });
@@ -128,7 +197,6 @@ export async function registerRoutes(
   });
 
   app.post('/api/customers', async (req, res) => {
-    // Add validation logic here if needed
     const newCustomer = await storage.createCustomer(req.body);
     res.status(201).json(newCustomer);
   });
