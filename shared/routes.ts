@@ -1,6 +1,7 @@
 
 import { z } from 'zod';
 import { insertUserSchema, insertMessageSchema, conversations, messages, contacts } from './schema';
+import { BotSchema } from './models/bot';
 
 export const errorSchemas = {
   validation: z.object({
@@ -16,6 +17,40 @@ export const errorSchemas = {
 };
 
 export const api = {
+  bots: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/bots',
+      responses: {
+        200: z.array(BotSchema),
+      },
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/bots',
+      input: BotSchema.omit({ id: true, createdAt: true }),
+      responses: {
+        201: BotSchema,
+      },
+    },
+    update: {
+      method: 'PUT' as const,
+      path: '/api/bots/:id',
+      input: BotSchema.partial(),
+      responses: {
+        200: BotSchema,
+        404: errorSchemas.notFound,
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/bots/:id',
+      responses: {
+        204: z.void(),
+        404: errorSchemas.notFound,
+      },
+    },
+  },
   conversations: {
     list: {
       method: 'GET' as const,

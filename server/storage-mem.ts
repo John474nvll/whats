@@ -7,7 +7,8 @@ import {
   type ConversationWithContact,
   type Customer, type InsertCustomer
 } from "@shared/schema";
-import { IStorage } from "./storage";
+import { type Bot } from "@shared/models/bot";
+import { type IStorage, type InsertBot } from "./storage";
 
 let nextId = 1;
 const users: User[] = [];
@@ -15,6 +16,7 @@ const contacts: Contact[] = [];
 const conversations: Conversation[] = [];
 const messages: Message[] = [];
 const customers: Customer[] = [];
+const bots: Bot[] = []; // Array to store bots
 
 export class InMemoryStorage implements IStorage {
   // Users
@@ -159,6 +161,37 @@ export class InMemoryStorage implements IStorage {
     const index = customers.findIndex(c => c.id === id);
     if (index !== -1) {
       customers.splice(index, 1);
+    }
+  }
+
+  // Bots
+  async getBots(): Promise<Bot[]> {
+    return bots;
+  }
+
+  async createBot(insertBot: InsertBot): Promise<Bot> {
+    const bot: Bot = {
+      id: nextId++,
+      createdAt: new Date(),
+      ...insertBot
+    };
+    bots.push(bot);
+    return bot;
+  }
+
+  async updateBot(id: number, botUpdate: Partial<InsertBot>): Promise<Bot | undefined> {
+    const index = bots.findIndex(b => b.id === id);
+    if (index !== -1) {
+      bots[index] = { ...bots[index], ...botUpdate };
+      return bots[index];
+    }
+    return undefined;
+  }
+
+  async deleteBot(id: number): Promise<void> {
+    const index = bots.findIndex(b => b.id === id);
+    if (index !== -1) {
+      bots.splice(index, 1);
     }
   }
 }

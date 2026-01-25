@@ -9,8 +9,11 @@ import {
   type ConversationWithContact,
   type Customer, type InsertCustomer
 } from "@shared/schema";
+import { type Bot, BotSchema } from "@shared/models/bot";
 import { eq, desc } from "drizzle-orm";
 import { InMemoryStorage } from "./storage-mem";
+
+export type InsertBot = Omit<Bot, 'id' | 'createdAt'>;
 
 export interface IStorage {
   // Users
@@ -42,6 +45,12 @@ export interface IStorage {
   createCustomer(customer: InsertCustomer): Promise<Customer>;
   updateCustomer(id: number, customer: Partial<InsertCustomer>): Promise<Customer | undefined>;
   deleteCustomer(id: number): Promise<void>;
+
+  // Bots
+  getBots(): Promise<Bot[]>;
+  createBot(bot: InsertBot): Promise<Bot>;
+  updateBot(id: number, bot: Partial<InsertBot>): Promise<Bot | undefined>;
+  deleteBot(id: number): Promise<void>;
 }
 
 export const storage = new InMemoryStorage();
