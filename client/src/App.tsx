@@ -24,7 +24,8 @@ import Tasks from "@/pages/Tasks";
 import SalesGroups from "@/pages/SalesGroups";
 import Billing from "@/pages/Billing";
 import PlatformsHub from "@/pages/PlatformsHub";
-import { BotsPage } from "@/pages/Bots"; // Import BotsPage
+import { BotsPage } from "@/pages/Bots";
+import { TicketsPage } from "@/pages/Tickets"; // Import TicketsPage
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
@@ -47,7 +48,7 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/platforms" component={PlatformsHub} />
-      <Route path="/bots" component={BotsPage} /> {/* Add Bots Route */}
+      <Route path="/bots" component={BotsPage} />
       <Route path="/account-links" component={AccountLinks} />
       <Route path="/funnels" component={FunnelBuilder} />
       <Route path="/campaigns" component={Campaigns} />
@@ -59,7 +60,7 @@ function Router() {
       <Route path="/sales-groups" component={SalesGroups} />
       <Route path="/billing" component={Billing} />
       <Route path="/finances" component={Analytics} />
-      <Route path="/tickets" component={Settings} />
+      <Route path="/tickets" component={TicketsPage} /> {/* Corrected tickets route */}
       <Route component={NotFound} />
     </Switch>
   );
