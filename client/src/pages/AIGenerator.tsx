@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,24 +63,46 @@ export default function AIGenerator() {
     setLoading(true);
     setGeneratedContent(null);
 
-    try {
-      const res = await apiRequest("POST", "/api/ai/generate", {
-        prompt: topic,
-        type: contentType,
-        platform: platform !== "multi" ? platform : undefined,
-        context
-      });
+    const isImageGeneration = contentType === 'image';
+    const endpoint = isImageGeneration ? '/api/ai/generate/image' : '/api/ai/generate/content';
+    const payload = isImageGeneration
+      ? { prompt: topic }
+      : { topic, type: contentType, platform: platform !== 'multi' ? platform : undefined, context };
 
-      const data: GenerationHistory = await res.json();
-      setGeneratedContent(data);
-      setHistory(prev => [data, ...prev].slice(0, 20));
+    try {
+      const res = await apiRequest("POST", endpoint, payload);
+      if (!res.ok) throw new Error('La respuesta de la red no fue correcta');
+
+      const result = await res.json();
+
+      let finalContent = '';
+      if (isImageGeneration) {
+        finalContent = result.imageUrl;
+      } else {
+        finalContent = result.content;
+        if (result.hashtags) {
+          finalContent += `\n\n${result.hashtags}`;
+        }
+      }
+
+      const newHistoryItem: GenerationHistory = {
+        id: new Date().toISOString(),
+        prompt: topic,
+        content: finalContent,
+        type: contentType,
+        isImage: isImageGeneration,
+        timestamp: new Date().toISOString(),
+      };
+
+      setGeneratedContent(newHistoryItem);
+      setHistory(prev => [newHistoryItem, ...prev].slice(0, 20));
       toast({ title: "Contenido Generado", description: "Tu contenido está listo para usar" });
 
     } catch (error) {
       console.error("Generation error:", error);
       toast({
         title: "Error de Generación",
-        description: "No se pudo generar el contenido. Intenta de nuevo.",
+        description: "No se pudo generar el contenido. Revisa la URL de la API o el estado del servidor.",
         variant: "destructive",
       });
     } finally {
