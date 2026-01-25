@@ -1,87 +1,60 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl } from "@shared/routes";
 
-export function useConversations() {
-  return useQuery({
-    queryKey: [api.conversations.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.conversations.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch conversations");
-      return res.json();
-    },
-    refetchInterval: 5000,
-  });
-}
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
 
-export function useConversation(id: number) {
-  return useQuery({
-    queryKey: [api.conversations.get.path, id],
-    queryFn: async () => {
-      const url = buildUrl(api.conversations.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error("Failed to fetch conversation");
-      return res.json();
-    },
-    enabled: !!id,
-    refetchInterval: 3000,
-  });
-}
+// --- Fetching Data ---
 
-export function useToggleBot() {
+export const useConversations = () => useQuery({
+  queryKey: ['conversations'],
+  queryFn: () => apiRequest('GET', '/api/conversations').then(res => res.json()),
+});
+
+export const useConversation = (id: number) => useQuery({
+  queryKey: ['conversation', id],
+  queryFn: () => apiRequest('GET', `/api/conversations/${id}`).then(res => res.json()),
+  enabled: !!id,
+});
+
+export const useMessages = (conversationId: number) => useQuery({
+  queryKey: ['messages', conversationId],
+  queryFn: () => apiRequest('GET', `/api/conversations/${conversationId}/messages`).then(res => res.json()),
+  enabled: !!conversationId,
+});
+
+// --- Mutations ---
+
+export const useToggleBot = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, botStatus }: { id: number; botStatus: boolean }) => {
-      const url = buildUrl(api.conversations.toggleBot.path, { id });
-      const res = await fetch(url, {
-        method: api.conversations.toggleBot.method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ botStatus }),
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to toggle bot status");
-      return res.json();
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, data.id] });
+    mutationFn: (variables: { id: number; botStatus: boolean }) =>
+      apiRequest('PUT', `/api/conversations/${variables.id}/toggle-bot`, { enabled: variables.botStatus }),
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['conversation', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
   });
-}
+};
 
-export function useMessages(conversationId: number) {
-  return useQuery({
-    queryKey: [api.messages.list.path, conversationId],
-    queryFn: async () => {
-      const url = buildUrl(api.messages.list.path, { id: conversationId });
-      const res = await fetch(url, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch messages");
-      return res.json();
-    },
-    enabled: !!conversationId,
-    refetchInterval: 2000,
-  });
-}
-
-export function useSendMessage() {
+export const useSendMessage = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ conversationId, content, role = "agent" }: { conversationId: number; content: string; role?: string }) => {
-      const data = { content, role };
-      const url = buildUrl(api.messages.create.path, { id: conversationId });
-      const res = await fetch(url, {
-        method: api.messages.create.method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to send message");
-      return res.json();
-    },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [api.messages.list.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
+    mutationFn: (variables: { conversationId: number; content: string }) =>
+      apiRequest('POST', `/api/conversations/${variables.conversationId}/messages`, { content: variables.content }),
+    onSuccess: (data, variables) => {
+      // Instantly update the message list with the new message
+      queryClient.setQueryData(['messages', variables.conversationId], (oldData: any) => 
+        oldData ? [...oldData, data] : [data]
+      );
+      // Invalidate conversation list to update the last message preview
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
   });
-}
+};
+
+export const useFindOrCreateConversation = () => {
+  return useMutation({
+    mutationFn: (contactId: number) => 
+      apiRequest('POST', '/api/crm/conversations/find-or-create', { contactId })
+      .then(res => res.json()),
+  });
+};
