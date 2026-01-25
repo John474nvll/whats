@@ -45,8 +45,8 @@ export function CustomerForm({ customer }: CustomerFormProps) {
       const url = customer ? `/api/customers/${customer.id}` : "/api/customers";
       // Ensure tags are a string before sending
       const payload = { ...data, tags: data.tags || '' };
-      const res = await queryClient.request(method, url, payload);
-      return res;
+      const res = await apiRequest(method, url, payload);
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/customers"] });

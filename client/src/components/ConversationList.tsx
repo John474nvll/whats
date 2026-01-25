@@ -47,9 +47,9 @@ export function ConversationList({ conversations, selectedId, onSelect }: Conver
                 </div>
                 <div className={cn(
                   "absolute -bottom-1 -right-1 h-5 w-5 rounded-full flex items-center justify-center ring-2 ring-background",
-                  conv.channel === 'whatsapp' ? "bg-green-500" : "bg-pink-500"
+                  conv.contact.platform === 'whatsapp' ? "bg-green-500" : "bg-pink-500"
                 )}>
-                  {conv.channel === 'whatsapp' ? (
+                  {conv.contact.platform === 'whatsapp' ? (
                     <MessageCircle className="h-3 w-3 text-white fill-current" />
                   ) : (
                     <Instagram className="h-3 w-3 text-white" />

@@ -64,7 +64,7 @@ export function ChatInterface({
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-green-500" />
               <span className="text-xs text-muted-foreground capitalize">
-                {conversation.channel} • {conversation.status}
+                {conversation.contact.platform} • {conversation.status}
               </span>
             </div>
           </div>

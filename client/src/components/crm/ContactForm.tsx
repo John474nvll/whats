@@ -32,17 +32,8 @@ export function ContactForm({ contact }: ContactFormProps) {
   });
 
   const onSubmit = (data: InsertContact) => {
-    const mutation = contact ? updateContact : createContact;
-    mutation.mutate(contact ? { ...data, id: contact.id } : data, {
-        onSuccess: () => {
-            toast({ title: "Éxito", description: `Contacto ${contact ? 'actualizado' : 'creado'} correctamente` });
-            setIsOpen(false);
-            if (!contact) form.reset();
-        },
-        onError: (error) => {
-            toast({ title: "Error", description: error.message, variant: "destructive" });
-        }
-    });
+    const mutation = contact ? (updateContact as any) : (createContact as any);
+    mutation.mutate(contact ? { ...data, id: contact.id } : data);
   };
 
   return (

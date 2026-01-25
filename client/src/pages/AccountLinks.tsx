@@ -89,9 +89,9 @@ export default function AccountLinks() {
     const config = configs.find(c => c.platform === platformId);
     
     // Filters for specific platform
-    const platformCampaigns = campaigns.filter(c => c.platform === platformId || c.platform === 'all');
-    const platformFunnels = funnels.filter(f => f.steps.some((s: any) => s.platform === platformId));
-    const platformLinks = links.filter(l => l.platform === platformId);
+    const platformCampaigns = campaigns.filter((c: any) => c.platform === platformId || c.platform === 'all');
+    const platformFunnels = funnels.filter((f: any) => f.steps && Array.isArray(f.steps) && f.steps.some((s: any) => s.platform === platformId));
+    const platformLinks = links.filter((l: any) => (l as any).platform === platformId);
 
     if (!platform) return null;
 
@@ -203,7 +203,7 @@ export default function AccountLinks() {
                 {platformFunnels.length > 0 ? platformFunnels.slice(0, 3).map(f => (
                   <div key={f.id} className="p-3 rounded-xl bg-white/5 flex justify-between items-center">
                     <span className="text-xs font-bold truncate pr-4">{f.name}</span>
-                    <Badge variant="outline" className="text-[9px] uppercase border-white/10 text-slate-400">{f.isActive ? "Activo" : "Pausa"}</Badge>
+                    <Badge variant="outline" className="text-[9px] uppercase border-white/10 text-slate-400">{(f as any).isActive ? "Activo" : "Pausa"}</Badge>
                   </div>
                 )) : (
                   <p className="text-xs text-slate-500 italic">No hay embudos vinculados.</p>

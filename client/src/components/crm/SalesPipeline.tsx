@@ -23,7 +23,7 @@ export function SalesPipeline({ customers = [] }) {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {stages.map((stage) => {
-            const stageCustomers = customers.filter(c => c.leadStatus === stage.id);
+            const stageCustomers = (customers || []).filter((c: any) => c.leadStatus === stage.id);
             return (
               <div key={stage.id} className="space-y-3">
                 <div className={`p-3 rounded-xl border ${stage.color} flex items-center justify-between`}>
@@ -33,7 +33,7 @@ export function SalesPipeline({ customers = [] }) {
                   </Badge>
                 </div>
                 <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                  {stageCustomers.map((customer) => (
+                  {stageCustomers.map((customer: any) => (
                     <motion.div
                       key={customer.id}
                       initial={{ opacity: 0, y: 10 }}
