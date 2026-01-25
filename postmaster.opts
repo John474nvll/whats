@@ -1,1 +1,0 @@
-/nix/store/qsmz8pss6j0s2hj65bj5wgx5yrv2qfkz-postgresql-16.9/bin/postgres "-D" "/home/user/whats/pgdata"
