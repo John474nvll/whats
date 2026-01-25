@@ -1,71 +1,77 @@
-import { Router, Request, Response } from "express";
-import { IStorage } from "../storage";
-import { initializePlatform } from "../services/platforms";
 
-export function createPlatformRoutes(storage: IStorage) {
-  const router = Router();
+import type { Express } from "express";
+import { z } from "zod";
 
-  router.post("/platforms/connect", async (req: Request, res: Response) => {
-    try {
-      const { platform, accessToken } = req.body;
+// Almacenamiento en memoria para simulación
+let connectedAccounts: any[] = [];
+let phoneConnections: any[] = [];
+let verificationCodes: Record<string, string> = {};
 
-      if (!platform || !accessToken) {
-        return res
-          .status(400)
-          .json({ error: "Missing platform or accessToken" });
-      }
+export function registerPlatformRoutes(app: Express) {
 
-      const success = await initializePlatform(storage, platform, {
-        accessToken,
-        verifyToken: process.env[`${platform.toUpperCase()}_VERIFY_TOKEN`] || "",
-        isActive: true,
-      });
+  // GET /api/platforms/accounts - Obtener cuentas conectadas (simulado)
+  app.get('/api/platforms/accounts', (req, res) => {
+    res.json(connectedAccounts);
+  });
 
-      if (success) {
-        res.json({ success: true, message: "Platform connected successfully" });
-      } else {
-        res
-          .status(400)
-          .json({ error: "Failed to validate platform credentials" });
-      }
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+  // POST /api/platforms/connect - Conectar una cuenta (simulado)
+  app.post('/api/platforms/connect', (req, res) => {
+    const { platform, accessToken } = req.body;
+    if (!['instagram', 'facebook'].includes(platform) || !accessToken) {
+      return res.status(400).json({ message: 'Plataforma o token inválido' });
+    }
+
+    // Simular una nueva conexión de cuenta
+    const newAccount = {
+      id: `${platform}-${Date.now()}`,
+      platform,
+      accountName: `${platform.charAt(0).toUpperCase() + platform.slice(1)} User`,
+      accessToken,
+    };
+    connectedAccounts.push(newAccount);
+    res.status(201).json(newAccount);
+  });
+
+  // POST /api/platforms/send-phone-code - Enviar código de verificación (simulado)
+  app.post('/api/platforms/send-phone-code', (req, res) => {
+    const { phoneNumber } = req.body;
+    if (!phoneNumber) {
+      return res.status(400).json({ message: 'Número de teléfono requerido' });
+    }
+
+    // Generar y almacenar un código de verificación simulado
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    verificationCodes[phoneNumber] = code;
+
+    console.log(`Código de verificación para ${phoneNumber}: ${code}`); // Simula el envío del código
+    res.json({ success: true, message: 'Código de verificación enviado' });
+  });
+
+  // POST /api/platforms/verify-phone-code - Verificar código (simulado)
+  app.post('/api/platforms/verify-phone-code', (req, res) => {
+    const { phoneNumber, code } = req.body;
+    if (verificationCodes[phoneNumber] === code) {
+      // Simular la conexión del número de teléfono
+      const newConnection = { id: `whatsapp-${Date.now()}`, phoneNumber, platform: 'whatsapp' };
+      phoneConnections.push(newConnection);
+      delete verificationCodes[phoneNumber]; // Limpiar código usado
+      res.json({ success: true, connection: newConnection });
+    } else {
+      res.status(400).json({ success: false, message: 'Código inválido' });
     }
   });
 
-  router.get("/platforms", (req: Request, res: Response) => {
-    try {
-      const platforms = storage.getChannels();
-      res.json(platforms);
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
+  // GET /api/platforms/phone-accounts - Obtener cuentas de teléfono conectadas
+  app.get('/api/platforms/phone-accounts', (req, res) => {
+    res.json(phoneConnections);
   });
 
-  router.post("/platforms/webhook/meta", (req: Request, res: Response) => {
-    try {
-      const { object, entry } = req.body;
+  // POST /api/platforms/send-message - Enviar mensaje (simulado)
+  app.post('/api/platforms/send-message', (req, res) => {
+    const { platform, to, content } = req.body;
 
-      if (object === "instagram" || object === "page") {
-        entry.forEach((item: any) => {
-          item.messaging.forEach((event: any) => {
-            if (event.message) {
-              console.log(
-                "Received message from",
-                event.sender.id,
-                ":",
-                event.message.text
-              );
-            }
-          });
-        });
-      }
-
-      res.status(200).send("EVENT_RECEIVED");
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
+    console.log(`Enviando mensaje via ${platform} a ${to}: "${content}"`);
+    // Simular un ID de mensaje de la API externa
+    res.json({ success: true, messageId: `msg_${Date.now()}` });
   });
-
-  return router;
 }

@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import OpenAI from "openai";
+import { registerPlatformRoutes } from "./routes/platforms";
 
 const openai = new OpenAI({
   apiKey: "gpt4free-dummy-key",
@@ -51,6 +52,7 @@ export async function registerRoutes(
 ): Promise<Server> {
 
   // === API Routes ===
+  registerPlatformRoutes(app);
 
   // Conversations
   app.get(api.conversations.list.path, async (req, res) => {
