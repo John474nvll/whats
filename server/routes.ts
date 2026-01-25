@@ -140,7 +140,7 @@ export async function registerRoutes(
   });
 
   app.delete('/api/customers/:id', async (req, res) => {
-    await storage.deleteCustomer(Number(req.pajrams.id));
+    await storage.deleteCustomer(Number(req.params.id));
     res.status(204).send();
   });
 
