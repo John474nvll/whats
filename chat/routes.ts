@@ -1,5 +1,4 @@
 import type { Express, Request, Response } from "express";
-import OpenAI from "openai";
 import { chatStorage } from "./storage";
 
 const apiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY;

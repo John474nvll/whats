@@ -1,5 +1,6 @@
-import OpenAI from 'openai';
+import { OpenAI } from "openai";
 
+// Aproximación robusta para compatibilidad con CommonJS y ESM
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
@@ -168,7 +169,7 @@ Idioma: ${params.language || "Espanol"}
 ${params.includeEmojis ? "Incluye emojis relevantes." : "Sin emojis."}
 
 El contenido debe ser:
-- Original y creativo
+- Original y creative
 - Optimizado para engagement
 - Adaptado a la plataforma
 - Con call-to-action si aplica`;

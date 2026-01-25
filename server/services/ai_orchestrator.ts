@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 
 // Simple orchestrator service
 export class AiOrchestrator {
