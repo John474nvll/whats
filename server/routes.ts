@@ -8,7 +8,8 @@ import voiceRouter from "./routes/voice";
 import botsRouter from "./routes/bots";
 import crmRouter from "./routes/crm"; 
 import webhooksRouter from "./routes/webhooks";
-import whatsappRouter from "./routes/whatsapp"; // Import the new WhatsApp router
+import whatsappRouter from "./routes/whatsapp";
+import unifiedPlatformsRouter from "./routes/unified-platforms"; // Importar el nuevo enrutador
 
 const openai = new OpenAI({
   apiKey: "gpt4free-dummy-key", // This will be replaced by user's key
@@ -36,10 +37,11 @@ export async function registerRoutes(
   app.use("/api/voice", voiceRouter);
   app.use("/api/bots", botsRouter);
   app.use("/api", crmRouter); 
-  app.use("/api/whatsapp", whatsappRouter); // Use the new WhatsApp router
+  app.use("/api/whatsapp", whatsappRouter);
+  app.use("/api/unified-platforms", unifiedPlatformsRouter); // Usar el nuevo enrutador
 
   // === Webhooks ===
-  app.use("/webhooks", webhooksRouter); // Use the new webhooks router
+  app.use("/webhooks", webhooksRouter);
 
 
   // === AI & Webhooks (kept separate for clarity) ===
