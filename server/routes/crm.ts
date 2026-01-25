@@ -1,82 +1,106 @@
 
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { api } from '@shared/routes';
 
 const prisma = new PrismaClient();
 const crmRouter = Router();
 
-// TODO: This should be tied to an authenticated user
-const TEMP_USER_ID = 1;
+// ====== Contacts Endpoints ======
 
-// === Contacts ===
 crmRouter.get('/contacts', async (req, res) => {
-  const contacts = await prisma.contact.findMany({ where: { userId: TEMP_USER_ID }});
+  const contacts = await prisma.contact.findMany();
   res.json(contacts);
 });
 
 crmRouter.post('/contacts', async (req, res) => {
-  const newContact = await prisma.contact.create({ 
-    data: { ...req.body, userId: TEMP_USER_ID } 
+  const { name, phone, platform, email } = req.body;
+  const newContact = await prisma.contact.create({
+    data: { name, phone, platform, email, userId: 1 }, // Assuming a default user for now
   });
   res.status(201).json(newContact);
 });
 
-// === Customers ===
+crmRouter.put('/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, phone, platform, email } = req.body;
+  const updatedContact = await prisma.contact.update({
+    where: { id: parseInt(id) },
+    data: { name, phone, platform, email },
+  });
+  res.json(updatedContact);
+});
+
+crmRouter.delete('/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+  await prisma.contact.delete({ where: { id: parseInt(id) } });
+  res.status(204).send();
+});
+
+// ====== Customers Endpoints ======
+
 crmRouter.get('/customers', async (req, res) => {
-  const customers = await prisma.customer.findMany({ where: { userId: TEMP_USER_ID }});
+  const customers = await prisma.customer.findMany();
   res.json(customers);
 });
 
 crmRouter.post('/customers', async (req, res) => {
-  const newCustomer = await prisma.customer.create({ 
-    data: { ...req.body, userId: TEMP_USER_ID } 
-  });
+  const newCustomer = await prisma.customer.create({ data: req.body });
   res.status(201).json(newCustomer);
 });
 
-// === Conversations ===
-crmRouter.get(api.conversations.list.path, async (req, res) => {
-    const conversations = await prisma.conversation.findMany({ 
-        include: { contact: true }, // Also fetch the related contact info
-        orderBy: { updatedAt: 'desc' }
-    });
-    res.json(conversations);
-});
+// ====== NEW: Conversation Endpoint ======
 
-crmRouter.get(api.conversations.get.path, async (req, res) => {
-    const conversation = await prisma.conversation.findUnique({
-        where: { id: Number(req.params.id) },
-        include: { contact: true, messages: true },
-    });
-    if (!conversation) return res.status(404).json({ message: "Not found" });
-    res.json(conversation);
-});
+crmRouter.post('/conversations/find-or-create', async (req, res) => {
+  const { contactId } = req.body;
 
-// === Messages ===
-crmRouter.get(api.conversations.messages.list.path, async (req, res) => {
-    const messages = await prisma.message.findMany({
-        where: { conversationId: Number(req.params.id) },
-        orderBy: { createdAt: 'asc' }
-    });
-    res.json(messages);
-});
+  if (!contactId) {
+    return res.status(400).json({ message: 'El ID del contacto es requerido' });
+  }
 
-crmRouter.post(api.conversations.messages.create.path, async (req, res) => {
-    try {
-      const input = api.conversations.messages.create.input.parse(req.body);
-      const message = await prisma.message.create({
-        data: {
-          conversationId: Number(req.params.id),
-          content: input.content,
-          role: "agent",
-          sentiment: "neutral" // AI sentiment can be added later
-        }
-      });
-      res.status(201).json(message);
-    } catch (e) {
-      res.status(400).json({ message: "Invalid input" });
+  try {
+    // 1. Check for an existing conversation
+    let conversation = await prisma.conversation.findFirst({
+      where: { contactId: parseInt(contactId) },
+    });
+
+    // 2. If it exists, return its ID
+    if (conversation) {
+      return res.json({ conversationId: conversation.id });
     }
+
+    // 3. If not, create a new one
+    const contact = await prisma.contact.findUnique({ where: { id: parseInt(contactId) } });
+    if (!contact) {
+      return res.status(404).json({ message: 'Contacto no encontrado' });
+    }
+
+    // Find a channel that matches the contact's platform
+    const channel = await prisma.channel.findFirst({
+      where: { platform: contact.platform },
+    });
+
+    if (!channel) {
+      // If no channel exists, create a placeholder or return an error
+      return res.status(404).json({ message: `No se encontró un canal para la plataforma: ${contact.platform}. Por favor, configure uno.` });
+    }
+    
+    // Create the new conversation
+    const newConversation = await prisma.conversation.create({
+      data: {
+        contactId: contact.id,
+        channelId: channel.id,
+        status: 'open', // Default status
+        lastMessageAt: new Date(),
+      },
+    });
+
+    return res.status(201).json({ conversationId: newConversation.id });
+
+  } catch (error) {
+    console.error("Error en find-or-create conversation:", error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
 });
+
 
 export default crmRouter;
