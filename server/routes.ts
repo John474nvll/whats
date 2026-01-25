@@ -6,6 +6,7 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import OpenAI from "openai";
 import { registerPlatformRoutes } from "./routes/platforms";
+import voiceRouter from "./routes/voice"; // Import the new voice router
 
 const openai = new OpenAI({
   apiKey: "gpt4free-dummy-key",
@@ -53,6 +54,7 @@ export async function registerRoutes(
 
   // === API Routes ===
   registerPlatformRoutes(app);
+  app.use("/api/voice", voiceRouter); // Register the voice routes
 
   // Conversations
   app.get(api.conversations.list.path, async (req, res) => {
