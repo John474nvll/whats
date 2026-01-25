@@ -1,7 +1,7 @@
 {
-  "name": "SocialHub - CRM Multicanal",
+  "name": "SocialHub - CRM con IA",
   "short_name": "SocialHub",
-  "description": "Plataforma unificada para gestionar WhatsApp, Instagram y Facebook desde un solo dashboard",
+  "description": "CRM multicanal con IA para potenciar tus ventas. Gestiona WhatsApp, Instagram y Facebook, y crea contenido con inteligencia artificial.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050a06",

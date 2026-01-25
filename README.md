@@ -1,35 +1,98 @@
-# PWA Starter
+# SocialHub PWA - Unified Communications & AI CRM
 
-[**Straight to Full Documentation**](https://docs.pwabuilder.com/#/starter/quick-start)
+**SocialHub PWA** is a next-generation, mobile-first Progressive Web App designed to centralize all your customer communications. It integrates with major social platforms like WhatsApp, Instagram, and Facebook, offering a unified inbox and a powerful AI-powered CRM to manage your business interactions seamlessly.
 
-The PWABuilder pwa-starter is our opinionated, best practices, production tested starter that we use to build all of our PWAs, including [PWABuilder itself](https://blog.pwabuilder.com/posts/introducing-the-brand-new-pwa-builder/)! The pwa-starter is a starter codebase, just like create-react-app or the Angular CLI can generate, that uses the PWABuilder team&#39;s preferred front-end tech stack. We also have a CLI tool to allow you to create a PWA template from the command line.
+This project is built with a modern tech stack, featuring a React/Vite frontend and a Node.js/Express backend, and is designed to be deployed effortlessly on Firebase.
 
-## Jump Right In
+---
 
-Install the PWABuilder CLI:
+## ✨ Key Features
 
-`npm i -g @pwabuilder/cli`
+- **Unified Inbox**: Manage conversations from WhatsApp, Instagram, and Facebook Messenger in a single, intuitive interface.
+- **AI Content Generation**: Create engaging social media posts, replies, and campaigns using the integrated GPT-4o-mini model.
+- **AI Image Generation**: Generate stunning visuals for your content with DALL-E 3 integration.
+- **Platform Hub**: Easily connect and manage your business accounts for Meta (Facebook, Instagram) and WhatsApp via Twilio.
+- **CRM Functionality**: A built-in CRM to manage customer data, track interactions, and organize sales pipelines.
+- **PWA & Mobile-First**: Installable as a PWA on any device, offering a native-like experience with offline capabilities.
+- **Extensible & Scalable**: The architecture is designed for easy integration with additional platforms and services (like external CRMs).
+- **Real-time Analytics**: (Future) Dashboards to monitor engagement, response times, and campaign performance.
 
-And create a new app with this command:
+---
 
-`pwa create`
+## 🚀 Getting Started
 
-And start your app locally with:
+### Prerequisites
 
-`pwa start`
+- Node.js (v20.x or higher)
+- npm / pnpm / yarn
+- Access to Firebase for deployment
+- API keys for:
+  - OpenAI
+  - Meta for Developers (for Instagram/Facebook)
+  - Twilio (for WhatsApp)
 
-And that's it! Good luck on your Progressive Web App adventure!
+### Installation & Setup
 
-## More Info
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd socialhub-pwa
+    ```
 
-[![Get started with the pwa-starter!](https://img.youtube.com/vi/u3pWKpmic_k/0.jpg)](https://www.youtube.com/watch?v=u3pWKpmic_k)
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-With it you get an app that:
-- Has no build system to set up and no boilerplate code to add. Everything is included out of the box.
-- Has a Service Worker system using [Workbox](https://developers.google.com/web/tools/workbox/)
-- Scores close to 100 on Lighthouse out of the box
-- Has everything needed to be installable in the browser
-- Is ready to be package for the app stores using [PWABuilder](https://www.pwabuilder.com)
-- Uses the [Azure Static Web Apps CLI](https://azure.github.io/static-web-apps-cli) which enables emulating your production environment locally, and gets you ready for deploying to Azure Static Web Apps!
+3.  **Configure environment variables:**
+    Create a `.env` file in the root directory and add your API keys:
+    ```
+    # .env
+    META_VERIFY_TOKEN=your_meta_webhook_verification_token
+    OPENAI_API_KEY=your_openai_api_key
+    TWILIO_ACCOUNT_SID=your_twilio_account_sid
+    TWILIO_AUTH_TOKEN=your_twilio_auth_token
+    GPT4FREE_BASE_URL=http://localhost:8080/v1 # Replace with your gpt4free instance URL
+    ```
 
-and all with just a few button clicks 😊.
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:9002`.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, Vite, TypeScript, Tailwind CSS, Shadcn/UI
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: Drizzle ORM (conceptual), in-memory storage (for simulation)
+- **Real-time**: TanStack Query for data synchronization
+- **AI**: OpenAI (GPT-4o-mini, DALL-E 3), gpt4free
+- **Integrations**: Twilio API, Meta Graph API
+
+---
+
+## 📋 Project Structure
+
+```
+/client/        # Frontend PWA (React + Vite)
+/server/        # Backend API (Node.js + Express)
+  /routes/      # API route definitions
+  /services/    # Business logic for external services (AI, Twilio, etc.)
+/shared/        # Code shared between client and server (types, schemas)
+/public/        # Static assets and PWA manifest
+drizzle.config.ts # Database ORM configuration
+```
+
+---
+
+## 🔮 Future Roadmap
+
+- **Full CRM Integration**: Connect to a production-ready CRM like SuiteCRM or HubSpot.
+- **Real-time WebSocket**: Implement a WebSocket layer for instant message updates.
+- **Advanced Analytics**: Build out the analytics dashboard with detailed metrics.
+- **Team Collaboration**: Introduce multi-agent support and conversation assignments.
+- **Automated Workflows**: Create rules and triggers for automated messaging and lead nurturing.
+
