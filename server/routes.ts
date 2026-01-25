@@ -7,52 +7,16 @@ import { z } from "zod";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || "dummy",
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+  apiKey: "gpt4free-dummy-key",
+  baseURL: "http://localhost:8080/v1", // <-- USER: Replace with your gpt4free server URL
 });
-
-// AI Text Generation
-async function generateAiContent(prompt: string, type: string, platform: string, context: string): Promise<string> {
-  const systemPrompt = `You are an expert ${platform} content creator. Generate a ${type} based on the following instructions. ${context}`;
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt }
-      ]
-    });
-    return response.choices[0].message.content || "Failed to generate content.";
-  } catch (e) {
-    console.error("AI Error:", e);
-    return "There was an error generating the content.";
-  }
-}
-
-// AI Image Generation
-async function generateAiImage(prompt: string): Promise<string> {
-  try {
-    const response = await openai.images.generate({
-      model: "dall-e-3",
-      prompt: prompt,
-      n: 1,
-      size: "1024x1024",
-    });
-    return response.data[0].url || "Failed to generate image.";
-  } catch (e) {
-    console.error("AI Error:", e);
-    // Return a placeholder or error message
-    return `https://placehold.co/1024x1024/000000/FFF?text=Error+Generating+Image`;
-  }
-}
-
 
 async function analyzeSentiment(text: string) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "Analyze the sentiment of this text. Return only one word: 'positive', 'negative', or 'neutral'." },
+        { role: "system", content: "Analyze the sentiment of this text. Return only one word: 'positive', 'negative', or 'neutral'.'" },
         { role: "user", content: text }
       ]
     });
@@ -68,7 +32,7 @@ async function analyzeSentiment(text: string) {
 async function generateResponse(text: string, sentiment: string) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: `You are a helpful customer support agent. The customer is feeling ${sentiment}. Draft a polite, concise response.` },
         { role: "user", content: text }
@@ -134,38 +98,56 @@ export async function registerRoutes(
     res.json({ sentiment, suggestedResponse });
   });
 
-  app.post('/api/ai/generate', async (req, res) => {
+  app.post('/api/ai/generate/content', async (req, res) => {
     try {
-      const { prompt, type, platform, context } = req.body;
-      if (!prompt || !type) {
-        return res.status(400).json({ message: "Invalid input: prompt and type are required." });
-      }
+      const { topic, platform, type } = req.body;
+      const prompt = `Generate a social media ${type} for ${platform} about ${topic}.`;
       
-      let content = "";
-      let isImage = false;
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are an expert social media content creator." },
+          { role: "user", content: prompt }
+        ]
+      });
 
-      if (type === 'image') {
-        content = await generateAiImage(prompt);
-        isImage = true;
-      } else {
-        content = await generateAiContent(prompt, type, platform, context || '');
-      }
-
-      const result = {
-        id: `gen_${Date.now()}`,
-        prompt,
-        content,
-        type,
-        isImage,
-        timestamp: new Date().toISOString(),
-      };
+      const content = response.choices[0].message.content;
       
-      res.json(result);
+      const hashtagResponse = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+              { role: "system", content: "You are a hashtag generation expert." },
+              { role: "user", content: `Generate 5 relevant hashtags for a post about: ${content}` }
+          ]
+      });
+      const hashtags = hashtagResponse.choices[0].message.content;
+
+      res.json({ content, hashtags });
 
     } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: "Internal Server Error" });
+      console.error("AI Content Generation Error:", e);
+      res.status(500).json({ message: "Error generating content." });
     }
+  });
+
+  app.post('/api/ai/generate/image', async (req, res) => {
+      try {
+          const { prompt } = req.body;
+  
+          const response = await openai.images.generate({
+              model: "dall-e-3",
+              prompt: prompt,
+              n: 1,
+              size: "1024x1024",
+          });
+  
+          const imageUrl = response.data[0].url;
+          res.json({ imageUrl });
+  
+      } catch (e) {
+          console.error("AI Image Generation Error:", e);
+          res.status(500).json({ message: "Error generating image." });
+      }
   });
 
   // Contacts
