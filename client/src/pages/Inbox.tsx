@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ConversationList } from "@/components/ConversationList";
 import { ChatInterface } from "@/components/ChatInterface";
 import { useConversations, useConversation, useMessages, useToggleBot, useSendMessage } from "@/hooks/use-conversations";
@@ -6,6 +7,8 @@ import { MessageSquareDashed } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Inbox() {
+  const [searchParams] = useSearchParams();
+  const conversationIdFromUrl = searchParams.get("conversationId");
   const [selectedId, setSelectedId] = useState<number | null>(null);
   
   const { data: conversations, isLoading: loadingConversations } = useConversations();
@@ -17,10 +20,13 @@ export default function Inbox() {
   const sendMessageMutation = useSendMessage();
 
   useEffect(() => {
-    if (!selectedId && Array.isArray(conversations) && conversations.length > 0) {
+    const initialId = conversationIdFromUrl ? parseInt(conversationIdFromUrl) : null;
+    if (initialId) {
+      setSelectedId(initialId);
+    } else if (!selectedId && Array.isArray(conversations) && conversations.length > 0) {
       setSelectedId(conversations[0].id);
     }
-  }, [conversations, selectedId]);
+  }, [conversations, selectedId, conversationIdFromUrl]);
 
   const handleToggleBot = (enabled: boolean) => {
     if (activeId) {
