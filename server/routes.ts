@@ -4,7 +4,7 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
@@ -14,7 +14,7 @@ const openai = new OpenAI({
 async function analyzeSentiment(text: string) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-5.1",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: "Analyze the sentiment of this text. Return only one word: 'positive', 'negative', or 'neutral'." },
         { role: "user", content: text }
@@ -32,7 +32,7 @@ async function analyzeSentiment(text: string) {
 async function generateResponse(text: string, sentiment: string) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-5.1",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: `You are a helpful customer support agent. The customer is feeling ${sentiment}. Draft a polite, concise response.` },
         { role: "user", content: text }
