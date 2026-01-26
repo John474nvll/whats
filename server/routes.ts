@@ -58,9 +58,6 @@ export async function registerRoutes(
   app.use("/api", twilioRoutes);
   app.use("/api", aiRoutes);
   app.use("/api", whatsappRoutes);
-  app.use("/api", retellRoutes);
-
-  // === AI Provider Status ===
   app.get("/api/ai/status", (req, res) => {
     res.json(getAIProviderStatus());
   });

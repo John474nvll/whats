@@ -11,9 +11,6 @@ import Inbox from "@/pages/Inbox";
 import Contacts from "@/pages/Contacts";
 import Customers from "@/pages/Customers";
 import Settings from "@/pages/Settings";
-import Analytics from "@/pages/Analytics";
-import AIGenerator from "@/pages/AIGenerator";
-import AccountLinks from "@/pages/AccountLinks";
 import FunnelBuilder from "@/pages/FunnelBuilder";
 import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
@@ -55,10 +52,6 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/tasks" component={Tasks} />
       <Route path="/sales-groups" component={SalesGroups} />
-      <Route path="/billing" component={Billing} />
-      <Route path="/finances" component={Analytics} />
-      <Route path="/tickets" component={Settings} />
-      <Route component={NotFound} />
     </Switch>
   );
 }
