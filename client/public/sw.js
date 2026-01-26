@@ -1,87 +1,60 @@
-const CACHE_NAME = "socialhub-v3.2";
-const STATIC_ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-  "/favicon.png"
-];
+// Service Worker for Softgan SocialHub PWA
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
+import { registerRoute, NavigationRoute } from 'workbox-routing';
+import { NetworkFirst, StaleWhileRevalidate, CacheFirst } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
+import { BackgroundSyncPlugin } from 'workbox-background-sync';
 
-const API_CACHE_NAME = "socialhub-api-v1";
+cleanupOutdatedCaches();
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch(err => {
-        console.warn("PWA cache warning:", err);
-      });
-    })
-  );
-  self.skipWaiting();
+// VitePWA will inject the manifest here
+precacheAndRoute(self.__WB_MANIFEST || []);
+
+// Offline Navigation Fallback
+const navigationRoute = new NavigationRoute(new NetworkFirst({
+  cacheName: 'navigations',
+}));
+registerRoute(navigationRoute);
+
+// Cache Google Fonts with a Cache First strategy
+registerRoute(
+  ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
+  new CacheFirst({
+    cacheName: 'google-fonts-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+      }),
+    ],
+  })
+);
+
+// API calls with Network First strategy and Background Sync
+const bgSyncPlugin = new BackgroundSyncPlugin('api-sync-queue', {
+  maxRetentionTime: 24 * 60, // Retry for max 24 Hours
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME && name !== API_CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
-  );
-  self.clients.claim();
-});
+registerRoute(
+  ({ url }) => url.pathname.startsWith('/api/'),
+  new NetworkFirst({
+    cacheName: 'api-cache',
+    plugins: [
+      bgSyncPlugin,
+      new ExpirationPlugin({
+        maxAgeSeconds: 60 * 5, // 5 minutes
+      }),
+    ],
+  })
+);
 
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  if (request.method !== "GET") return;
-
-  if (url.pathname.startsWith("/api/")) {
-    event.respondWith(networkFirst(request, API_CACHE_NAME));
-    return;
-  }
-
-  if (url.origin === location.origin) {
-    event.respondWith(staleWhileRevalidate(request, CACHE_NAME));
-    return;
-  }
-
-  event.respondWith(fetch(request));
-});
-
-async function networkFirst(request, cacheName) {
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) return cachedResponse;
-    return new Response(JSON.stringify({ error: "offline" }), {
-      status: 503,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
-}
-
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cachedResponse = await cache.match(request);
-  
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => null);
-
-  return cachedResponse || fetchPromise || caches.match("/");
-}
+// Static assets with Stale While Revalidate
+registerRoute(
+  ({ request }) => request.destination === 'style' || request.destination === 'script' || request.destination === 'worker' || request.destination === 'image',
+  new StaleWhileRevalidate({
+    cacheName: 'static-resources',
+  })
+);
 
 self.addEventListener("message", (event) => {
   if (event.data === "SKIP_WAITING") {
@@ -90,19 +63,25 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener("push", (event) => {
+  const data = event.data?.json() || { 
+    title: "Softgan SocialHub", 
+    body: "Nueva actualización de Softgan",
+    icon: "/icons/icon-192x192.png" 
+  };
+  
   const options = {
-    body: event.data?.text() || "Nueva notificación de SocialHub",
-    icon: "/favicon.png",
-    badge: "/favicon.png",
+    body: data.body,
+    icon: data.icon || "/icons/icon-192x192.png",
+    badge: "/icons/icon-192x192.png",
     vibrate: [100, 50, 100],
-    data: { url: "/" },
+    data: { url: data.url || "/" },
     actions: [
-      { action: "open", title: "Abrir" },
+      { action: "open", title: "Ver ahora" },
       { action: "close", title: "Cerrar" }
     ]
   };
   event.waitUntil(
-    self.registration.showNotification("SocialHub", options)
+    self.registration.showNotification(data.title, options)
   );
 });
 
