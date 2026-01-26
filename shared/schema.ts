@@ -84,6 +84,26 @@ export const socialAccounts = pgTable("social_accounts", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const tickets = pgTable("tickets", {
+  id: serial("id").primaryKey(),
+  customerId: integer("customer_id").references(() => customers.id),
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+  status: text("status").default("open").notNull(), // 'open', 'in_progress', 'resolved', 'closed'
+  priority: text("priority").default("medium").notNull(), // 'low', 'medium', 'high', 'urgent'
+  category: text("category"),
+  assignedTo: integer("assigned_to").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const roles = pgTable("roles", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // 'admin', 'manager', 'agent'
+  permissions: jsonb("permissions").notNull(), // { "can_delete_leads": true, ... }
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const conversationsRelations = relations(conversations, ({ one, many }) => ({
@@ -114,6 +134,8 @@ export const insertMessageSchema = createInsertSchema(messages).omit({ id: true,
 export const insertCustomerSchema = createInsertSchema(customers).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertTicketSchema = createInsertSchema(tickets).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertRoleSchema = createInsertSchema(roles).omit({ id: true, createdAt: true });
 
 // === TYPES ===
 
@@ -137,6 +159,12 @@ export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
 
 export type SocialAccount = typeof socialAccounts.$inferSelect;
 export type InsertSocialAccount = z.infer<typeof insertSocialAccountSchema>;
+
+export type Ticket = typeof tickets.$inferSelect;
+export type InsertTicket = z.infer<typeof insertTicketSchema>;
+
+export type Role = typeof roles.$inferSelect;
+export type InsertRole = z.infer<typeof insertRoleSchema>;
 
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
 
