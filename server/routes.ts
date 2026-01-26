@@ -6,6 +6,8 @@ import { z } from "zod";
 import OpenAI from "openai";
 import twilioRoutes from "./routes/twilio";
 import aiRoutes from "./routes/ai";
+import whatsappRoutes from "./routes/whatsapp";
+import retellRoutes from "./routes/retell";
 import { getAIProviderStatus } from "./services/openai";
 
 const openai = new OpenAI({
@@ -55,6 +57,8 @@ export async function registerRoutes(
   // === Register route modules ===
   app.use("/api", twilioRoutes);
   app.use("/api", aiRoutes);
+  app.use("/api", whatsappRoutes);
+  app.use("/api", retellRoutes);
 
   // === AI Provider Status ===
   app.get("/api/ai/status", (req, res) => {
