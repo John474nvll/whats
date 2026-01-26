@@ -65,6 +65,15 @@ The application is built with a full-stack architecture:
 -   **Database Schema:** Detailed schemas for `Users`, `Customers`, `Campaigns`, `Social_Accounts`, `Contacts`, `Conversations`, `Messages`, `Widgets`, `SalesFunnels`, `ChannelConfigs`, `ArtistProfiles`, and `MusicContent`.
 -   **PWA First:** Prioritization of PWA features for enhanced offline capabilities, installability, and performance.
 
+## Replit Environment Setup (January 26, 2026)
+- **Node.js:** nodejs-20 module installed
+- **Database:** PostgreSQL database configured via Replit (DATABASE_URL environment variable)
+- **Session:** SESSION_SECRET configured via Replit Secrets
+- **Development:** `npm run dev` - runs tsx server/index.ts with Vite middleware
+- **Production:** `npm run build` then `npm run start`
+- **Port:** Application serves on port 5000 (both frontend and API)
+- **Deployment:** Configured for autoscale deployment
+
 ## External Dependencies
 -   **Replit AI Integrations:** (GPT-4o for chat, gpt-image-1 for images)
 -   **Retell AI:** (Mock integration)
