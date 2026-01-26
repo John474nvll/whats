@@ -4,6 +4,9 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import OpenAI from "openai";
+import twilioRoutes from "./routes/twilio";
+import aiRoutes from "./routes/ai";
+import { getAIProviderStatus } from "./services/openai";
 
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || "dummy",
@@ -48,6 +51,15 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  // === Register route modules ===
+  app.use("/api", twilioRoutes);
+  app.use("/api", aiRoutes);
+
+  // === AI Provider Status ===
+  app.get("/api/ai/status", (req, res) => {
+    res.json(getAIProviderStatus());
+  });
 
   // === API Routes ===
 
