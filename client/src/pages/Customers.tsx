@@ -55,9 +55,9 @@ export default function Customers() {
 
   const getStatusColor = (status: string | null) => {
     switch (status) {
-      case "active": return "bg-green-500/20 text-green-600 border-green-500/30";
-      case "inactive": return "bg-yellow-500/20 text-yellow-600 border-yellow-500/30";
-      case "blocked": return "bg-red-500/20 text-red-600 border-red-500/30";
+      case "active": return "bg-primary/20 text-primary border-primary/30";
+      case "inactive": return "bg-slate-700/20 text-slate-400 border-slate-700/30";
+      case "blocked": return "bg-destructive/20 text-destructive border-destructive/30";
       default: return "bg-slate-500/20 text-slate-600 border-slate-500/30";
     }
   };

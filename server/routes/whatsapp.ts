@@ -139,4 +139,28 @@ router.post("/whatsapp/webhook", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/whatsapp/send/bulk", async (req: Request, res: Response) => {
+  try {
+    const { recipients, message } = req.body;
+
+    if (!Array.isArray(recipients) || !message) {
+      return res.status(400).json({ error: "Missing 'recipients' array or 'message'" });
+    }
+
+    const results = [];
+    for (const to of recipients) {
+      try {
+        const response = await sendTextMessage(to, message);
+        results.push({ to, success: true, response });
+      } catch (err: any) {
+        results.push({ to, success: false, error: err.message });
+      }
+    }
+    
+    res.json({ success: true, results });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

@@ -5,19 +5,26 @@ import { motion } from "framer-motion";
 import { Target, ArrowRight, User, TrendingUp } from "lucide-react";
 
 const stages = [
-  { id: 'new', label: 'Nuevo Lead', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  { id: 'contacting', label: 'Contactando', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-  { id: 'qualified', label: 'Cualificado', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
-  { id: 'won', label: 'Ganado', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' }
+  { id: 'new', label: 'Nuevo Lead', color: 'bg-primary/20 text-primary border-primary/30' },
+  { id: 'contacting', label: 'Contactando', color: 'bg-kiwi/20 text-kiwi border-kiwi/30' },
+  { id: 'qualified', label: 'Cualificado', color: 'bg-cyan-neon/20 text-cyan-neon border-cyan-neon/30' },
+  { id: 'won', label: 'Ganado', color: 'bg-accent/20 text-accent border-accent/30' }
 ];
 
-export function SalesPipeline({ customers = [] }) {
+interface Customer {
+  id: number;
+  name: string;
+  leadStatus: string;
+  estimatedValue?: string | number | null;
+}
+
+export function SalesPipeline({ customers = [] }: { customers: Customer[] }) {
   return (
     <Card className="bg-slate-900/40 backdrop-blur-3xl border-white/5 shadow-2xl">
       <CardHeader>
         <CardTitle className="text-xl font-black flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-primary" />
-          Pipeline de Ventas
+          Pipeline de Ventas Softgan
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -26,7 +33,7 @@ export function SalesPipeline({ customers = [] }) {
             const stageCustomers = customers.filter(c => c.leadStatus === stage.id);
             return (
               <div key={stage.id} className="space-y-3">
-                <div className={`p-3 rounded-xl border ${stage.color} flex items-center justify-between`}>
+                <div className={`p-3 rounded-xl border ${stage.color} flex items-center justify-between shadow-lg shadow-black/20`}>
                   <span className="text-xs font-black uppercase tracking-wider">{stage.label}</span>
                   <Badge variant="outline" className="bg-white/5 border-white/10 text-white font-black">
                     {stageCustomers.length}
@@ -38,7 +45,7 @@ export function SalesPipeline({ customers = [] }) {
                       key={customer.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-pointer group"
+                      className="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-primary/30 transition-all cursor-pointer group hover:bg-white/10"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center border border-white/10 text-primary">
