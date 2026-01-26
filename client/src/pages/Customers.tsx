@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Search, Filter, Trash2, Edit, MessageCircle, Instagram, Facebook, User, Home, MapPin, PawPrint } from "lucide-react";
 import { CustomerForm } from "@/components/crm/CustomerForm";
-import { queryClient } from "@/lib/queryClient";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Customer } from "@shared/schema"; // Import the type
 
 export default function Customers() {
@@ -22,7 +22,7 @@ export default function Customers() {
 
   const deleteCustomer = useMutation({
     mutationFn: async (id: number) => {
-      await queryClient.delete(`/api/customers/${id}`);
+      await apiRequest("DELETE", `/api/customers/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/customers"] });
