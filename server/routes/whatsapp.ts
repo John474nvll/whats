@@ -110,8 +110,8 @@ router.post("/whatsapp/webhook", async (req: Request, res: Response) => {
         contact = await storage.createContact({
           platform: "whatsapp",
           platformId: msg.from,
-          name: `WhatsApp ${msg.from}`,
-          profilePic: `https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.from}`
+          name: msg.senderName || `WhatsApp ${msg.from}`,
+          profilePic: msg.senderPic || `https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.from}`
         });
       }
 
