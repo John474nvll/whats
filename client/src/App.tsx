@@ -87,7 +87,7 @@ function AppContent() {
                     <img src={logoImage} alt="SocialHub" className="w-full h-full object-contain p-0.5" />
                   </div>
                 </div>
-                <h1 className="font-black text-base md:text-lg tracking-tighter text-white hidden xs:block">Social<span className="text-kiwi">Hub</span></h1>
+                <h1 className="font-black text-base md:text-lg tracking-tighter text-white hidden xs:block">Softgan<span className="text-kiwi">Hub</span></h1>
               </div>
               
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1 mask-fade-right">
@@ -105,7 +105,7 @@ function AppContent() {
               <div className="hidden lg:flex items-center gap-2">
                 <div className="h-4 w-px bg-white/10 mx-2" />
                 <Badge variant="outline" className="border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[9px] tracking-[0.15em] px-3 py-1 rounded-full whitespace-nowrap">
-                  V3.1 PWA
+                  V9.0 Softgan
                 </Badge>
               </div>
             </div>
