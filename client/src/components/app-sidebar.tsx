@@ -65,6 +65,7 @@ const menuGroups = [
   {
     label: "⚙️ SOPORTE & SISTEMA",
     items: [
+      { title: "Usuarios", url: "/users", icon: Users },
       { title: "Soporte", url: "/tickets", icon: ShieldCheck },
       { title: "Settings", url: "/settings", icon: Settings },
     ],

@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import type { Server } from "http";
-import { storage } from "./storage";
+import { users as usersTable } from "@shared/schema";
+import { db } from "./db";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import OpenAI from "openai";
@@ -84,6 +85,16 @@ export async function registerRoutes(
   });
   app.get("/api/ai/status", (req, res) => {
     res.json(getAIProviderStatus());
+  });
+
+  // === Users API ===
+  app.get("/api/users", async (_req, res) => {
+    try {
+      const allUsers = await db.select().from(usersTable);
+      res.json(allUsers);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching users" });
+    }
   });
 
   // === API Routes ===

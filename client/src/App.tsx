@@ -14,6 +14,7 @@ import Settings from "@/pages/Settings";
 import Analytics from "@/pages/Analytics";
 import AIGenerator from "@/pages/AIGenerator";
 import Support from "@/pages/Support";
+import UsersManagement from "@/pages/UsersManagement";
 import AccountLinks from "@/pages/AccountLinks";
 import FunnelBuilder from "@/pages/FunnelBuilder";
 import Campaigns from "@/pages/Campaigns";
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/analytics" component={Analytics} />
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/tickets" component={Support} />
+      <Route path="/users" component={UsersManagement} />
       <Route path="/projects" component={Projects} />
       <Route path="/tasks" component={Tasks} />
       <Route path="/sales-groups" component={SalesGroups} />
