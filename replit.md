@@ -31,15 +31,15 @@ Desarrollo iterativo con entrega funcional incremental. Documentación clara y c
 - Interactive messages (buttons, lists)
 
 ### API Routes
-- `/api/whatsapp/send/text` - Send text messages
-- `/api/whatsapp/send/bulk` - Bulk messaging
-- `/api/whatsapp/send/template` - Template messages
-- `/api/whatsapp/send/media` - Media messages
-- `/api/whatsapp/webhook` - Receive incoming messages
-- `/api/platforms/accounts` - Get connected accounts
-- `/api/platforms/send-message` - Unified message sending
-- `/api/platforms/publish` - Publish to Instagram/Facebook
-- `/api/platforms/campaigns` - Create sales campaigns
+- /api/whatsapp/send/text - Send text messages
+- /api/whatsapp/send/bulk - Bulk messaging
+- /api/whatsapp/send/template - Template messages
+- /api/whatsapp/send/media - Media messages
+- /api/whatsapp/webhook - Receive incoming messages
+- /api/platforms/accounts - Get connected accounts
+- /api/platforms/send-message - Unified message sending
+- /api/platforms/publish - Publish to Instagram/Facebook
+- /api/platforms/campaigns - Create sales campaigns
 
 ## System Architecture
 
@@ -59,55 +59,55 @@ Desarrollo iterativo con entrega funcional incremental. Documentación clara y c
 - **Voice:** Twilio Voice SDK integration
 
 ### Database Schema
-- `users` - User accounts with roles
-- `contacts` - Platform contacts (WhatsApp, Instagram, Facebook)
-- `conversations` - Chat conversations
-- `messages` - Individual messages with sentiment
-- `customers` - CRM customer records
-- `campaigns` - Marketing campaigns
-- `social_accounts` - Connected social platforms
-- `tickets` - Support tickets
-- `roles` - Permission roles
+- users - User accounts with roles
+- contacts - Platform contacts (WhatsApp, Instagram, Facebook)
+- conversations - Chat conversations
+- messages - Individual messages with sentiment
+- customers - CRM customer records
+- campaigns - Marketing campaigns
+- social_accounts - Connected social platforms
+- tickets - Support tickets
+- roles - Permission roles
 
 ## Environment Variables Required
 
 ### WhatsApp Business (Meta Cloud API)
-- `WHATSAPP_ACCESS_TOKEN` - Meta permanent access token
-- `WHATSAPP_PHONE_NUMBER_ID` - Phone number ID from Meta
-- `WHATSAPP_VERIFY_TOKEN` - Webhook verification token
-- `WHATSAPP_BUSINESS_ID` - WhatsApp Business Account ID
+- WHATSAPP_ACCESS_TOKEN - Meta permanent access token
+- WHATSAPP_PHONE_NUMBER_ID - Phone number ID from Meta
+- WHATSAPP_VERIFY_TOKEN - Webhook verification token
+- WHATSAPP_BUSINESS_ID - WhatsApp Business Account ID
 
 ### Twilio Voice
-- `TWILIO_ACCOUNT_SID`
-- `TWILIO_API_KEY`
-- `TWILIO_API_SECRET`
-- `TWILIO_APP_SID`
-- `TWILIO_PHONE_NUMBER`
+- TWILIO_ACCOUNT_SID
+- TWILIO_API_KEY
+- TWILIO_API_SECRET
+- TWILIO_APP_SID
+- TWILIO_PHONE_NUMBER
 
 ### AI Services
-- `AI_INTEGRATIONS_OPENAI_API_KEY` (auto-configured by Replit)
-- `AI_INTEGRATIONS_OPENAI_BASE_URL` (auto-configured by Replit)
+- AI_INTEGRATIONS_OPENAI_API_KEY (auto-configured by Replit)
+- AI_INTEGRATIONS_OPENAI_BASE_URL (auto-configured by Replit)
 
 ## Routes
-- `/` - Dashboard with system status
-- `/inbox` - Unified Inbox (WhatsApp, Instagram, Facebook)
-- `/contacts` - Contact Management
-- `/customers` - Customer Database / CRM
-- `/campaigns` - Marketing Studio
-- `/platforms` - Platforms Hub (connections)
-- `/ai-generator` - AI Content Generator
-- `/projects` - Project Management
-- `/tasks` - Task Board
-- `/analytics` - Analytics Dashboard
-- `/funnels` - Funnel Builder
-- `/settings` - Application Settings
-- `/billing` - Billing & Invoicing
-- `/voice` - Voice & Retell Manager
+- / - Dashboard with system status
+- /inbox - Unified Inbox (WhatsApp, Instagram, Facebook)
+- /contacts - Contact Management
+- /customers - Customer Database / CRM
+- /campaigns - Marketing Studio
+- /platforms - Platforms Hub (connections)
+- /ai-generator - AI Content Generator
+- /projects - Project Management
+- /tasks - Task Board
+- /analytics - Analytics Dashboard
+- /funnels - Funnel Builder
+- /settings - Application Settings
+- /billing - Billing & Invoicing
+- /voice - Voice & Retell Manager
 
 ## Development Commands
-- `npm run dev` - Development server
-- `npm run db:push` - Push database schema
-- `npm run build` - Production build
+- npm run dev - Development server
+- npm run db:push - Push database schema
+- npm run build - Production build
 
 ---
-© 2026 Softgam.com - Tecnología que impulsa tu crecimiento
+2026 Softgam.com - Tecnologia que impulsa tu crecimiento
