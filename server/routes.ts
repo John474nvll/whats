@@ -58,6 +58,30 @@ export async function registerRoutes(
   app.use("/api", twilioRoutes);
   app.use("/api", aiRoutes);
   app.use("/api", whatsappRoutes);
+
+  // === Support Tickets API ===
+  app.get("/api/tickets", async (_req, res) => {
+    const tickets = await storage.getTickets();
+    res.json(tickets);
+  });
+
+  app.post("/api/tickets", async (req, res) => {
+    try {
+      const ticket = await storage.createTicket(req.body);
+      res.status(201).json(ticket);
+    } catch (e) {
+      res.status(400).json({ message: "Invalid input" });
+    }
+  });
+
+  app.patch("/api/tickets/:id", async (req, res) => {
+    try {
+      const ticket = await storage.updateTicket(Number(req.params.id), req.body);
+      res.json(ticket);
+    } catch (e) {
+      res.status(400).json({ message: "Invalid update" });
+    }
+  });
   app.get("/api/ai/status", (req, res) => {
     res.json(getAIProviderStatus());
   });
