@@ -1,5 +1,24 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl } from "@shared/routes";
+
+const api = {
+  conversations: {
+    list: { path: "/api/conversations" },
+    get: { path: "/api/conversations/:id" },
+    toggleBot: { path: "/api/conversations/:id/toggle-bot", method: "POST" },
+  },
+  messages: {
+    list: { path: "/api/conversations/:id/messages" },
+    create: { path: "/api/conversations/:id/messages", method: "POST" },
+  }
+};
+
+function buildUrl(path: string, params: Record<string, any>) {
+  let url = path;
+  for (const [key, value] of Object.entries(params)) {
+    url = url.replace(`:${key}`, String(value));
+  }
+  return url;
+}
 
 export function useConversations() {
   return useQuery({

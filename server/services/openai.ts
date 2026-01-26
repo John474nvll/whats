@@ -1,11 +1,10 @@
 import OpenAI from "openai";
 
-const G4F_BASE_URL = process.env.G4F_BASE_URL || "http://127.0.0.1:5002/v1";
-const USE_G4F = process.env.USE_G4F === "true" || !process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
-
+const G4F_BASE_URL = process.env.G4F_BASE_URL || "http://127.0.0.1:5000/v1";
+const USE_G4F = process.env.USE_G4F === "true";
 const openai = new OpenAI({
-  apiKey: USE_G4F ? "g4f-key" : (process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY || "dummy"),
-  baseURL: USE_G4F ? G4F_BASE_URL : process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY || "dummy",
+  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || "https://api.openai.com/v1",
 });
 
 export function getAIProviderStatus() {

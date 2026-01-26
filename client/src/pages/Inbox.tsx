@@ -9,9 +9,13 @@ export default function Inbox() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   
   const { data: conversations, isLoading: loadingConversations } = useConversations();
-  const activeId = selectedId ?? (Array.isArray(conversations) && conversations.length > 0 ? conversations[0].id : null);
-  const { data: activeConversation } = useConversation(activeId!);
-  const { data: messages } = useMessages(activeId!);
+  
+  // Use a fallback ID safely
+  const firstConvId = Array.isArray(conversations) && conversations.length > 0 ? conversations[0].id : null;
+  const activeId = selectedId ?? firstConvId;
+  
+  const { data: activeConversation } = useConversation(activeId as number);
+  const { data: messages } = useMessages(activeId as number);
   
   const toggleBotMutation = useToggleBot();
   const sendMessageMutation = useSendMessage();
