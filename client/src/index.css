@@ -1,49 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
 
-  /* HSL Colors - Clean, Professional, Trustworthy Blue Theme */
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
+  /* HSL Colors - Softgan Branding: Dark Blue & Slate */
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
   
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
   
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
   
-  --primary: 221 83% 53%; /* Distinctive Blue */
+  --primary: 221 83% 53%; /* Softgan Indigo */
   --primary-foreground: 210 40% 98%;
   
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 217 32% 17%;
+  --secondary-foreground: 210 40% 98%;
   
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 65%;
   
-  --accent: 262 83% 58%; /* Purple accent for AI features */
+  --accent: 217 32% 17%;
   --accent-foreground: 210 40% 98%;
   
-  --destructive: 0 84% 60%;
+  --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
   
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 221 83% 53%;
+  --border: 217 32% 17%;
+  --input: 217 32% 17%;
+  --ring: 224 76% 48%;
   
   --radius: 0.75rem;
+  
+  /* Brand Accents */
+  --kiwi: 142 71% 45%;
+  --cyan-neon: 189 94% 43%;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    @apply bg-background text-foreground antialiased selection:bg-primary/30;
     font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -53,29 +58,33 @@
 }
 
 @layer utilities {
-  .glass-panel {
-    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl shadow-black/5;
+  .hover-elevate {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10;
   }
   
-  .scrollbar-hide::-webkit-scrollbar {
+  .active-elevate-2 {
+    @apply active:scale-95 transition-transform;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  }
+
+  .bg-glass {
+    @apply bg-slate-950/40 backdrop-blur-xl border border-white/5;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  
-  .scrollbar-hide {
+
+  .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-
-  .message-bubble-user {
-    border-radius: 18px 18px 4px 18px;
-  }
-
-  .message-bubble-agent {
-    border-radius: 18px 18px 18px 4px;
-  }
 }
 
-/* Custom Scrollbar for dashboard feel */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
