@@ -37,13 +37,13 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: "SocialHub v9 - Plataforma de Gestión de Redes Sociales",
-        short_name: "SocialHub",
-        description: "Plataforma completa para gestionar Instagram, Facebook y WhatsApp desde un único dashboard profesional",
-        theme_color: "#22c55e",
-        background_color: "#020617",
+        name: "Softgan SocialHub - CRM & Gestión de Redes Sociales",
+        short_name: "Softgan Hub",
+        description: "Plataforma de Softgan para gestionar Instagram, Facebook y WhatsApp con IA",
+        theme_color: "#1e40af",
+        background_color: "#0f172a",
         display: "standalone",
-        orientation: "portrait-primary",
+        orientation: "portrait",
         start_url: "/",
         scope: "/",
         icons: [
@@ -51,14 +51,26 @@ export default defineConfig({
             src: "/icons/icon-192x192.png",
             sizes: "192x192",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "any"
           },
           {
             src: "/icons/icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "any"
           },
+          {
+            src: "/icons/icon_192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable"
+          },
+          {
+            src: "/icons/icon_512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
+          }
         ],
         categories: ["business", "productivity", "social"],
       },
