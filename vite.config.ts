@@ -14,6 +14,10 @@ export default defineConfig({
       registerType: "autoUpdate",
       injectRegister: 'auto',
       includeAssets: ["favicon.png"],
+      devOptions: {
+        enabled: true,
+        type: 'module',
+      },
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,svg,json}"],
         cleanupOutdatedCaches: true,
@@ -43,7 +47,7 @@ export default defineConfig({
         theme_color: "#22c55e",
         background_color: "#020617",
         display: "standalone",
-        orientation: "portrait-primary",
+        orientation: "portrait",
         start_url: "/",
         scope: "/",
         icons: [
@@ -51,14 +55,26 @@ export default defineConfig({
             src: "/icons/icon-192x192.png",
             sizes: "192x192",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "any"
           },
           {
             src: "/icons/icon-512x512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "any"
           },
+          {
+            src: "/icons/icon_192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "maskable"
+          },
+          {
+            src: "/icons/icon_512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
+          }
         ],
         categories: ["business", "productivity", "social"],
       },
