@@ -1,139 +1,113 @@
-# SocialHub v9.0 - CRM & Redes Sociales
+# SocialHub v11.0 - CRM & Redes Sociales (Softgam Edition)
 
 ## Overview
-SocialHub is a comprehensive CRM and social media management platform designed to streamline sales, marketing, and customer engagement. It features a visually driven sales pipeline, robust lead management, and multi-channel campaign capabilities powered by AI. The platform aims to provide a modern, high-performance experience with PWA support, enabling users to manage their social presence and customer interactions efficiently across various platforms. The project's vision is to become the most complete and modern platform for social media management from any device, enhancing user productivity and market reach.
+SocialHub v11.0 es la plataforma definitiva de CRM y gestión de redes sociales para el mercado colombiano. Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, y una estructura PWA optimizada para movilidad total.
 
 ## User Preferences
-I prefer iterative development with a focus on delivering functional components incrementally. I like clear, concise explanations and prefer to be asked before major architectural changes or significant modifications to existing features. Ensure code is well-documented and follows modern best practices.
+Desarrollo iterativo con entrega funcional incremental. Documentación clara y código siguiendo mejores prácticas modernas.
 
-## Recent Changes (January 24, 2026)
+## Recent Changes (January 26, 2026)
 
-### Navigation Improvements
-- Enhanced sidebar with organized menu groups: Principal, CRM & Ventas, Proyectos, Marketing, IA & Automatizacion, Soporte & Sistema
-- Added quick access buttons in header (DASH, PLAT, AI)
-- Connected accounts display with disconnect functionality
+### Upgrade to v11 from GitHub
+- Imported full v11 branch from https://github.com/John474nvll/whats.git
+- Enhanced navigation with MARKETING and PROYECTOS quick access
+- Improved all modules with better functionality and design
 
-### AI Generator v3.2
-- Rebuilt with full functionality using Replit AI Integrations (GPT-4o)
-- Content types: Post, Caption, Message, Story, Ad, Image
-- Platform selection: Multi-platform, Instagram, Facebook, WhatsApp
-- Generation history tracking
-- Template library for quick starts
-- Hashtag suggestion feature
-- Image generation with DALL-E
+### Key Features
+- **Omni-Channel Inbox**: WhatsApp Business, Instagram, Facebook unified messaging
+- **AI Generator v3.2**: GPT-4o powered content generation with 6 types
+- **Marketing Studio**: Campaign orchestration with mass messaging
+- **Platforms Hub**: Unified connection management for all social platforms
+- **CRM Dynamic**: Lead pipeline with visual tracking
+- **Project Engine**: Projects and Tasks with agile methodology
+- **Invoicing Pro**: Billing and sales metrics
 
-### New/Improved Pages
-- **Projects**: Full project management with progress tracking, filters, grid/list views, and creation dialog
-- **Tasks**: Kanban-style task board with status columns (Pending, In Progress, Completed), checkboxes, and priority labels
-- **Sales Groups**: Team management with performance metrics, monthly targets, and progress visualization
-- **Platforms Hub**: Unified platform management for WhatsApp, Instagram, Facebook with connection interface
+### WhatsApp Business Integration
+- Real WhatsApp Cloud API integration
+- Webhook support for incoming messages
+- Bulk messaging capability
+- Template messages support
+- Media messages (images, documents, audio)
+- Interactive messages (buttons, lists)
 
-### API Improvements
-- `/api/ai/generate-smart-content` - Multi-type content generation
-- `/api/ai/generate-campaign` - Campaign content generation
-- `/api/ai/suggest-hashtags` - Hashtag suggestions
-- `/api/ai/generate-image` - Image generation with gpt-image-1
+### API Routes
+- `/api/whatsapp/send/text` - Send text messages
+- `/api/whatsapp/send/bulk` - Bulk messaging
+- `/api/whatsapp/send/template` - Template messages
+- `/api/whatsapp/send/media` - Media messages
+- `/api/whatsapp/webhook` - Receive incoming messages
+- `/api/platforms/accounts` - Get connected accounts
+- `/api/platforms/send-message` - Unified message sending
+- `/api/platforms/publish` - Publish to Instagram/Facebook
+- `/api/platforms/campaigns` - Create sales campaigns
 
 ## System Architecture
 
-### UI/UX Decisions
-The user interface features a Glassmorphism design with a vibrant neon color palette, including Kiwi Green (primary), Cyan Neon (secondary), Intense Raspberry (accent), and Neon Pineapple (complementary). It uses an ultra-rounded border radius (3rem), neon effects, animated gradients, and backgrounds. The design is fully responsive for both mobile and desktop, leveraging Shadcn UI components for a modern look and feel.
+### UI/UX Design: Neon Forest Green
+- Primary: Kiwi Green (#22c55e)
+- Secondary: Cyan Neon
+- Accent: Intense Raspberry
+- Glassmorphism with ultra-rounded borders (3rem)
+- Dark theme optimized
 
-### Technical Implementations
-The application is built with a full-stack architecture:
--   **Frontend:** React 18 with Vite, Tailwind CSS, Shadcn UI, React Hook Form for forms, Zod for validation, TanStack React Query v5 for state management, Wouter for routing, and Framer Motion for animations.
--   **Backend:** Express.js with TypeScript.
--   **Database:** PostgreSQL with Drizzle ORM, optimized with WAL mode for performance.
--   **Authentication:** JWT and bcrypt for secure password hashing and token-based authentication.
--   **PWA:** Implemented with a Service Worker using `networkFirst` for API requests and `staleWhileRevalidate` for assets, including push notifications, a smart PWA installation banner, offline mode detection, and automatic app updates via a manifest.json.
--   **AI:** Replit AI Integrations with GPT-4o for content generation and gpt-image-1 for image generation.
+### Technical Stack
+- **Frontend:** React 18, Vite, Tailwind CSS, Shadcn UI, Framer Motion
+- **Backend:** Express.js with TypeScript
+- **Database:** PostgreSQL with Drizzle ORM (WAL mode)
+- **AI:** Replit AI Integrations (GPT-4o, gpt-image-1)
+- **PWA:** Service Workers, offline mode, push notifications
+- **Voice:** Twilio Voice SDK integration
 
-### Feature Specifications
--   **CRM & Lead Management:** Visual sales pipeline, lead status tracking (New, Contacting, Qualified, Won, Lost), customer database with CRUD operations, tags, metadata, and status management.
--   **AI Integration:** Content generation (text and images) via Replit AI Integrations (GPT-4o), interactive AI chat, automatic suggestions, and hashtag generation.
--   **Multi-channel Campaigns:** AI-powered campaign creation, multi-platform support, scheduling, metrics tracking, and content preview.
--   **Social Media Integration:** Secure account linking, management of multiple social accounts, and direct dashboard connection.
--   **Unified Inbox:** Centralized messaging across platforms.
--   **Analytics:** Real-time metrics and data analysis.
--   **Project Management:** Projects, Tasks, and Sales Groups with full CRUD operations.
--   **Module Management:** Comprehensive pages for Login, Dashboard, Customers, Contacts, Campaigns, Inbox, Analytics, AI Generator, Platforms Hub, Settings, Funnel Builder, Projects, Tasks, Sales Groups, Billing, and Voice Manager.
--   **User Management:** Login/registration with JWT, bearer token authentication, bcrypt password hashing, and role-based access (admin/manager).
+### Database Schema
+- `users` - User accounts with roles
+- `contacts` - Platform contacts (WhatsApp, Instagram, Facebook)
+- `conversations` - Chat conversations
+- `messages` - Individual messages with sentiment
+- `customers` - CRM customer records
+- `campaigns` - Marketing campaigns
+- `social_accounts` - Connected social platforms
+- `tickets` - Support tickets
+- `roles` - Permission roles
 
-### System Design Choices
--   **Monorepo Structure:** Divided into `client/`, `server/`, and `shared/` directories for clear separation of concerns.
--   **API Endpoints:** A comprehensive set of RESTful API endpoints for authentication, customer management, campaigns, social accounts, publishing, messaging, contacts, AI services, projects, tasks, and sales groups.
--   **Database Schema:** Detailed schemas for `Users`, `Customers`, `Campaigns`, `Social_Accounts`, `Contacts`, `Conversations`, `Messages`, `Widgets`, `SalesFunnels`, `ChannelConfigs`, `ArtistProfiles`, and `MusicContent`.
--   **PWA First:** Prioritization of PWA features for enhanced offline capabilities, installability, and performance.
+## Environment Variables Required
 
-## Replit Environment Setup (January 26, 2026)
-- **Node.js:** nodejs-20 module installed
-- **Python:** python-3.11 module installed for GPT4Free
-- **Database:** PostgreSQL database configured via Replit (DATABASE_URL environment variable)
-- **Session:** SESSION_SECRET configured via Replit Secrets
-- **Development:** `npm run dev` - runs tsx server/index.ts with Vite middleware
-- **Production:** `npm run build` then `npm run start`
-- **Port:** Application serves on port 5000 (both frontend and API)
-- **Deployment:** Configured for autoscale deployment
+### WhatsApp Business (Meta Cloud API)
+- `WHATSAPP_ACCESS_TOKEN` - Meta permanent access token
+- `WHATSAPP_PHONE_NUMBER_ID` - Phone number ID from Meta
+- `WHATSAPP_VERIFY_TOKEN` - Webhook verification token
+- `WHATSAPP_BUSINESS_ID` - WhatsApp Business Account ID
 
-## Integrated Repositories (January 26, 2026)
+### Twilio Voice
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_API_KEY`
+- `TWILIO_API_SECRET`
+- `TWILIO_APP_SID`
+- `TWILIO_PHONE_NUMBER`
 
-### Twilio Voice SDK Integration
-- **Source:** https://github.com/John474nvll/twilio-voice.js.git
-- **Package:** @twilio/voice-sdk
-- **Features:**
-  - Browser-based voice calls (make/receive)
-  - Real-time call status and duration tracking
-  - Mute/unmute functionality
-  - DTMF tone sending
-  - Incoming call notifications
-- **Configuration Required:**
-  - TWILIO_ACCOUNT_SID
-  - TWILIO_API_KEY
-  - TWILIO_API_SECRET
-  - TWILIO_APP_SID
-  - TWILIO_PHONE_NUMBER
-
-### GPT4Free Integration
-- **Source:** https://github.com/John474nvll/gpt4free.git
-- **Package:** g4f (Python)
-- **Features:**
-  - OpenAI-compatible API endpoint
-  - Multiple LLM provider support (GPT-4, Claude, etc.)
-  - Fallback when OpenAI API key not available
-- **Configuration:**
-  - Set USE_G4F=true to force GPT4Free
-  - G4F_BASE_URL for custom endpoint
-  - Falls back automatically if AI_INTEGRATIONS_OPENAI_API_KEY is not set
-
-## External Dependencies
--   **Replit AI Integrations:** (GPT-4o for chat, gpt-image-1 for images)
--   **Retell AI:** (Mock integration)
--   **Twilio:** (Via Replit Secrets)
--   **PostgreSQL:** (Database)
--   **JWT:** (Authentication)
--   **Bcrypt:** (Password hashing)
--   **Vite:** (Frontend build tool)
--   **Tailwind CSS:** (Styling framework)
--   **Shadcn UI:** (UI component library)
--   **React Hook Form:** (Form management)
--   **Zod:** (Schema validation)
--   **TanStack React Query v5:** (Server state management)
--   **Wouter:** (Client-side routing)
--   **Framer Motion:** (Animations)
+### AI Services
+- `AI_INTEGRATIONS_OPENAI_API_KEY` (auto-configured by Replit)
+- `AI_INTEGRATIONS_OPENAI_BASE_URL` (auto-configured by Replit)
 
 ## Routes
-- `/` - Dashboard
-- `/ai-generator` - AI Content Generator
-- `/platforms` - Platforms Hub (social media connections)
+- `/` - Dashboard with system status
+- `/inbox` - Unified Inbox (WhatsApp, Instagram, Facebook)
+- `/contacts` - Contact Management
+- `/customers` - Customer Database / CRM
 - `/campaigns` - Marketing Studio
+- `/platforms` - Platforms Hub (connections)
+- `/ai-generator` - AI Content Generator
 - `/projects` - Project Management
 - `/tasks` - Task Board
-- `/sales-groups` - Sales Team Management
-- `/inbox` - Unified Inbox
-- `/contacts` - Contact Management
-- `/customers` - Customer Database
 - `/analytics` - Analytics Dashboard
 - `/funnels` - Funnel Builder
 - `/settings` - Application Settings
 - `/billing` - Billing & Invoicing
 - `/voice` - Voice & Retell Manager
+
+## Development Commands
+- `npm run dev` - Development server
+- `npm run db:push` - Push database schema
+- `npm run build` - Production build
+
+---
+© 2026 Softgam.com - Tecnología que impulsa tu crecimiento
