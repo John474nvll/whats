@@ -67,12 +67,43 @@ The application is built with a full-stack architecture:
 
 ## Replit Environment Setup (January 26, 2026)
 - **Node.js:** nodejs-20 module installed
+- **Python:** python-3.11 module installed for GPT4Free
 - **Database:** PostgreSQL database configured via Replit (DATABASE_URL environment variable)
 - **Session:** SESSION_SECRET configured via Replit Secrets
 - **Development:** `npm run dev` - runs tsx server/index.ts with Vite middleware
 - **Production:** `npm run build` then `npm run start`
 - **Port:** Application serves on port 5000 (both frontend and API)
 - **Deployment:** Configured for autoscale deployment
+
+## Integrated Repositories (January 26, 2026)
+
+### Twilio Voice SDK Integration
+- **Source:** https://github.com/John474nvll/twilio-voice.js.git
+- **Package:** @twilio/voice-sdk
+- **Features:**
+  - Browser-based voice calls (make/receive)
+  - Real-time call status and duration tracking
+  - Mute/unmute functionality
+  - DTMF tone sending
+  - Incoming call notifications
+- **Configuration Required:**
+  - TWILIO_ACCOUNT_SID
+  - TWILIO_API_KEY
+  - TWILIO_API_SECRET
+  - TWILIO_APP_SID
+  - TWILIO_PHONE_NUMBER
+
+### GPT4Free Integration
+- **Source:** https://github.com/John474nvll/gpt4free.git
+- **Package:** g4f (Python)
+- **Features:**
+  - OpenAI-compatible API endpoint
+  - Multiple LLM provider support (GPT-4, Claude, etc.)
+  - Fallback when OpenAI API key not available
+- **Configuration:**
+  - Set USE_G4F=true to force GPT4Free
+  - G4F_BASE_URL for custom endpoint
+  - Falls back automatically if AI_INTEGRATIONS_OPENAI_API_KEY is not set
 
 ## External Dependencies
 -   **Replit AI Integrations:** (GPT-4o for chat, gpt-image-1 for images)
