@@ -1,35 +1,36 @@
-# PWA Starter
+# Softgan SocialHub v9.0
 
-[**Straight to Full Documentation**](https://docs.pwabuilder.com/#/starter/quick-start)
+## 🚀 Descripción
+Softgan SocialHub es una plataforma integral de CRM y gestión de redes sociales diseñada para optimizar las ventas, el marketing y el compromiso del cliente. Desarrollado por **Softgan.com**, el Hub permite gestionar de manera unificada canales como WhatsApp, Instagram y Facebook mediante herramientas de Inteligencia Artificial (IA) avanzada.
 
-The PWABuilder pwa-starter is our opinionated, best practices, production tested starter that we use to build all of our PWAs, including [PWABuilder itself](https://blog.pwabuilder.com/posts/introducing-the-brand-new-pwa-builder/)! The pwa-starter is a starter codebase, just like create-react-app or the Angular CLI can generate, that uses the PWABuilder team&#39;s preferred front-end tech stack. We also have a CLI tool to allow you to create a PWA template from the command line.
+## ✨ Características Principales
+- **Dashboard Unificado**: Control total de tus plataformas sociales desde un solo lugar.
+- **Generador de IA v3.2**: Creación de contenido inteligente (posts, captions, mensajes, anuncios e imágenes) potenciado por GPT-4o y DALL-E.
+- **CRM & Ventas**: Pipeline de ventas visual, gestión de leads y seguimiento de prospectos.
+- **PWA Ready**: Aplicación web progresiva optimizada para una experiencia móvil nativa.
+- **Marketing Studio**: Creación y gestión de campañas multicanal con analíticas en tiempo real.
+- **Gestión de Proyectos**: Tableros Kanban para tareas y seguimiento de objetivos por grupos de ventas.
 
-## Jump Right In
+## 🛠️ Tecnologías
+- **Frontend**: React 18, Vite, Tailwind CSS, Shadcn UI, Framer Motion.
+- **Backend**: Node.js, Express, TypeScript.
+- **Base de Datos**: PostgreSQL con Drizzle ORM.
+- **IA**: Replit AI Integrations (GPT-4o, gpt-image-1).
+- **Voz**: Integración con Twilio Voice SDK.
 
-Install the PWABuilder CLI:
+## 📦 Instalación y Desarrollo
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Ejecutar en modo desarrollo:
+   ```bash
+   npm run dev
+   ```
+3. Construir para producción:
+   ```bash
+   npm run build
+   ```
 
-`npm i -g @pwabuilder/cli`
-
-And create a new app with this command:
-
-`pwa create`
-
-And start your app locally with:
-
-`pwa start`
-
-And that's it! Good luck on your Progressive Web App adventure!
-
-## More Info
-
-[![Get started with the pwa-starter!](https://img.youtube.com/vi/u3pWKpmic_k/0.jpg)](https://www.youtube.com/watch?v=u3pWKpmic_k)
-
-With it you get an app that:
-- Has no build system to set up and no boilerplate code to add. Everything is included out of the box.
-- Has a Service Worker system using [Workbox](https://developers.google.com/web/tools/workbox/)
-- Scores close to 100 on Lighthouse out of the box
-- Has everything needed to be installable in the browser
-- Is ready to be package for the app stores using [PWABuilder](https://www.pwabuilder.com)
-- Uses the [Azure Static Web Apps CLI](https://azure.github.io/static-web-apps-cli) which enables emulating your production environment locally, and gets you ready for deploying to Azure Static Web Apps!
-
-and all with just a few button clicks 😊.
+---
+© 2026 [Softgan.com](https://softgan.com). Todos los derechos reservados.
