@@ -2,6 +2,7 @@ import type { Express } from "express";
 import type { Server } from "http";
 import { users as usersTable } from "@shared/schema";
 import { db } from "./db";
+import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import OpenAI from "openai";
