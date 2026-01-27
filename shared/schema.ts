@@ -115,6 +115,35 @@ export const channelConfigs = pgTable("channel_configs", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const purchaseOrders = pgTable("purchase_orders", {
+  id: serial("id").primaryKey(),
+  orderNumber: text("order_number").notNull().unique(),
+  customerId: integer("customer_id").references(() => customers.id),
+  status: text("status").default("pendiente").notNull(), // 'pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'
+  subtotal: integer("subtotal").default(0),
+  tax: integer("tax").default(0),
+  total: integer("total").default(0),
+  currency: text("currency").default("USD"),
+  notes: text("notes"),
+  shippingAddress: text("shipping_address"),
+  paymentMethod: text("payment_method"),
+  paymentStatus: text("payment_status").default("pendiente"), // 'pendiente', 'pagado', 'reembolsado'
+  items: jsonb("items"), // Array of order items
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const orderTemplates = pgTable("order_templates", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // 'factura', 'cotizacion', 'orden'
+  content: text("content"),
+  variables: jsonb("variables"),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const conversationsRelations = relations(conversations, ({ one, many }) => ({
@@ -148,6 +177,8 @@ export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit
 export const insertTicketSchema = createInsertSchema(tickets).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertRoleSchema = createInsertSchema(roles).omit({ id: true, createdAt: true });
 export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertPurchaseOrderSchema = createInsertSchema(purchaseOrders).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertOrderTemplateSchema = createInsertSchema(orderTemplates).omit({ id: true, createdAt: true, updatedAt: true });
 
 // === TYPES ===
 
@@ -181,7 +212,14 @@ export type InsertRole = z.infer<typeof insertRoleSchema>;
 export type ChannelConfig = typeof channelConfigs.$inferSelect;
 export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
+export type PurchaseOrder = typeof purchaseOrders.$inferSelect;
+export type InsertPurchaseOrder = z.infer<typeof insertPurchaseOrderSchema>;
+
+export type OrderTemplate = typeof orderTemplates.$inferSelect;
+export type InsertOrderTemplate = z.infer<typeof insertOrderTemplateSchema>;
+
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
+export type PurchaseOrderWithCustomer = PurchaseOrder & { customer?: Customer };
 
 // === API TYPES ===
 
