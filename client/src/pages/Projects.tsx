@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -20,44 +20,12 @@ import {
   LayoutGrid,
   List,
   TrendingUp,
-  Loader2
+  Loader2,
+  ShoppingCart
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  status: "active" | "completed" | "paused" | "planning";
-  progress: number;
-  dueDate: string;
-  priority: "low" | "medium" | "high";
-  teamSize: number;
-  tasksCompleted: number;
-  totalTasks: number;
-}
-
-const statusColors: Record<string, string> = {
-  active: "bg-primary/20 text-primary border-primary/30",
-  completed: "bg-green-500/20 text-green-400 border-green-500/30",
-  paused: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  planning: "bg-blue-500/20 text-blue-400 border-blue-500/30"
-};
-
-const priorityColors: Record<string, string> = {
-  low: "bg-slate-500/20 text-slate-400",
-  medium: "bg-amber-500/20 text-amber-400",
-  high: "bg-red-500/20 text-red-400"
-};
-
-const mockProjects: Project[] = [
-  { id: 1, name: "Campana Q1 2026", description: "Lanzamiento de nuevos productos", status: "active", progress: 65, dueDate: "2026-03-31", priority: "high", teamSize: 5, tasksCompleted: 13, totalTasks: 20 },
-  { id: 2, name: "Rediseno Web", description: "Modernizacion del sitio corporativo", status: "planning", progress: 15, dueDate: "2026-02-28", priority: "medium", teamSize: 3, tasksCompleted: 3, totalTasks: 20 },
-  { id: 3, name: "Integracion CRM", description: "Conectar sistemas de ventas", status: "active", progress: 80, dueDate: "2026-01-30", priority: "high", teamSize: 4, tasksCompleted: 16, totalTasks: 20 },
-  { id: 4, name: "Automatizacion Marketing", description: "Flujos automaticos de email", status: "completed", progress: 100, dueDate: "2025-12-15", priority: "medium", teamSize: 2, tasksCompleted: 12, totalTasks: 12 },
-];
 
 export default function Projects() {
   const { toast } = useToast();
@@ -72,33 +40,36 @@ export default function Projects() {
     dueDate: ""
   });
 
-  const { data: projects = mockProjects, isLoading } = useQuery<Project[]>({
-    queryKey: ["/api/crm/projects"],
+  const { data: projects = [], isLoading: projectsLoading } = useQuery({
+    queryKey: ["/api/projects"],
     queryFn: async () => {
-      try {
-        const res = await apiRequest("GET", "/api/crm/projects");
-        const data = await res.json();
-        return data.length > 0 ? data : mockProjects;
-      } catch {
-        return mockProjects;
-      }
+      const res = await apiRequest("GET", "/api/projects");
+      return res.json();
+    }
+  });
+
+  const { data: purchaseOrders = [] } = useQuery({
+    queryKey: ["/api/purchase-orders"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/purchase-orders");
+      return res.json();
     }
   });
 
   const createProjectMutation = useMutation({
     mutationFn: async (data: typeof newProject) => {
-      const res = await apiRequest("POST", "/api/crm/projects", data);
+      const res = await apiRequest("POST", "/api/projects", data);
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/crm/projects"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/projects"] });
       toast({ title: "Proyecto creado", description: "El proyecto se ha creado exitosamente" });
       setIsDialogOpen(false);
       setNewProject({ name: "", description: "", priority: "medium", dueDate: "" });
     }
   });
 
-  const filteredProjects = projects.filter(p => {
+  const filteredProjects = projects.filter((p: any) => {
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || p.status === statusFilter;
     return matchesSearch && matchesStatus;
@@ -106,9 +77,17 @@ export default function Projects() {
 
   const stats = {
     total: projects.length,
-    active: projects.filter(p => p.status === "active").length,
-    completed: projects.filter(p => p.status === "completed").length,
-    avgProgress: Math.round(projects.reduce((sum, p) => sum + p.progress, 0) / projects.length) || 0
+    active: projects.filter((p: any) => p.status === "active").length,
+    completed: projects.filter((p: any) => p.status === "completed").length,
+    avgProgress: Math.round(projects.reduce((sum: number, p: any) => sum + (p.progress || 0), 0) / projects.length) || 0
+  };
+
+  const statusColors: Record<string, string> = {
+    active: "bg-primary/20 text-primary border-primary/30",
+    completed: "bg-green-500/20 text-green-400 border-green-500/30",
+    paused: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    planning: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    pending: "bg-slate-500/20 text-slate-400 border-slate-500/30"
   };
 
   return (
@@ -116,9 +95,9 @@ export default function Projects() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-black text-white">
-            Proyectos <span className="text-primary">Activos</span>
+            Softgan <span className="text-primary">Proyectos</span>
           </h1>
-          <p className="text-slate-400 text-sm">Gestiona todos tus proyectos en un solo lugar</p>
+          <p className="text-slate-400 text-sm">Gestión de proyectos y órdenes de compra (OC)</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -135,19 +114,19 @@ export default function Projects() {
                 placeholder="Nombre del proyecto"
                 value={newProject.name}
                 onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-                className="bg-slate-800 border-white/10"
+                className="bg-slate-800 border-white/10 text-white"
                 data-testid="input-project-name"
               />
               <Textarea
-                placeholder="Descripcion"
+                placeholder="Descripción"
                 value={newProject.description}
                 onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                className="bg-slate-800 border-white/10"
+                className="bg-slate-800 border-white/10 text-white"
                 data-testid="input-project-description"
               />
               <div className="grid grid-cols-2 gap-4">
                 <Select value={newProject.priority} onValueChange={(v) => setNewProject({ ...newProject, priority: v })}>
-                  <SelectTrigger className="bg-slate-800 border-white/10" data-testid="select-priority">
+                  <SelectTrigger className="bg-slate-800 border-white/10 text-white" data-testid="select-priority">
                     <SelectValue placeholder="Prioridad" />
                   </SelectTrigger>
                   <SelectContent>
@@ -160,7 +139,7 @@ export default function Projects() {
                   type="date"
                   value={newProject.dueDate}
                   onChange={(e) => setNewProject({ ...newProject, dueDate: e.target.value })}
-                  className="bg-slate-800 border-white/10"
+                  className="bg-slate-800 border-white/10 text-white"
                   data-testid="input-due-date"
                 />
               </div>
@@ -206,12 +185,12 @@ export default function Projects() {
               placeholder="Buscar proyectos..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-slate-900/40 border-white/10 rounded-xl"
+              className="pl-10 bg-slate-900/40 border-white/10 rounded-xl text-white"
               data-testid="input-search-projects"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-40 bg-slate-900/40 border-white/10 rounded-xl" data-testid="select-status-filter">
+            <SelectTrigger className="w-40 bg-slate-900/40 border-white/10 rounded-xl text-white" data-testid="select-status-filter">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
@@ -221,33 +200,14 @@ export default function Projects() {
               <SelectItem value="planning">Planificando</SelectItem>
               <SelectItem value="paused">Pausados</SelectItem>
               <SelectItem value="completed">Completados</SelectItem>
+              <SelectItem value="pending">Pendientes</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        <div className="flex gap-1">
-          <Button
-            variant={viewMode === "grid" ? "secondary" : "ghost"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-            className="rounded-lg"
-            data-testid="button-view-grid"
-          >
-            <LayoutGrid className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "secondary" : "ghost"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-            className="rounded-lg"
-            data-testid="button-view-list"
-          >
-            <List className="h-4 w-4" />
-          </Button>
         </div>
       </div>
 
       <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "space-y-3"}>
-        {filteredProjects.map((project, i) => (
+        {filteredProjects.map((project: any, i: number) => (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, y: 20 }}
@@ -261,7 +221,7 @@ export default function Projects() {
                     <h3 className="font-bold text-white text-lg group-hover:text-primary transition-colors">{project.name}</h3>
                     <p className="text-sm text-slate-400 line-clamp-2">{project.description}</p>
                   </div>
-                  <Badge className={`${statusColors[project.status]} border uppercase text-[9px] font-black`}>
+                  <Badge className={`${statusColors[project.status] || "bg-slate-500/20 text-slate-400 border-slate-500/30"} border uppercase text-[9px] font-black`}>
                     {project.status}
                   </Badge>
                 </div>
@@ -269,29 +229,30 @@ export default function Projects() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-slate-500">Progreso</span>
-                    <span className="text-primary font-bold">{project.progress}%</span>
+                    <span className="text-primary font-bold">{project.progress || 0}%</span>
                   </div>
-                  <Progress value={project.progress} className="h-2" />
+                  <Progress value={project.progress || 0} className="h-2" />
+                </div>
+
+                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ShoppingCart className="h-4 w-4 text-cyan-neon" />
+                    <span className="text-xs font-bold text-slate-300">Órdenes de Compra</span>
+                  </div>
+                  <Badge className="bg-cyan-neon/10 text-cyan-neon border-cyan-neon/20">
+                    {purchaseOrders.filter((po: any) => po.projectId === project.id).length}
+                  </Badge>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-slate-500">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
-                      <Users className="h-3 w-3" /> {project.teamSize}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <CheckCircle2 className="h-3 w-3" /> {project.tasksCompleted}/{project.totalTasks}
+                      <Users className="h-3 w-3" /> {project.teamSize || 0}
                     </span>
                   </div>
                   <span className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" /> {new Date(project.dueDate).toLocaleDateString()}
+                    <Calendar className="h-3 w-3" /> {project.dueDate ? new Date(project.dueDate).toLocaleDateString() : "S/F"}
                   </span>
-                </div>
-
-                <div className="flex gap-2 pt-2">
-                  <Badge className={priorityColors[project.priority]}>
-                    {project.priority === "high" ? "Alta" : project.priority === "medium" ? "Media" : "Baja"}
-                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -299,7 +260,7 @@ export default function Projects() {
         ))}
       </div>
 
-      {filteredProjects.length === 0 && !isLoading && (
+      {filteredProjects.length === 0 && !projectsLoading && (
         <div className="text-center py-12">
           <FolderOpen className="h-12 w-12 text-slate-600 mx-auto mb-4" />
           <p className="text-slate-500">No se encontraron proyectos</p>

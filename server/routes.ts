@@ -51,10 +51,62 @@ async function generateResponse(text: string, sentiment: string) {
   }
 }
 
+import { projects as projectsTable, purchaseOrders as purchaseOrdersTable, salesGroups as salesGroupsTable, insertProjectSchema, insertPurchaseOrderSchema, insertSalesGroupSchema } from "@shared/schema";
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  // === Projects API ===
+  app.get("/api/projects", async (_req, res) => {
+    try {
+      const projects = await db.select().from(projectsTable);
+      res.json(projects);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching projects" });
+    }
+  });
+
+  app.post("/api/projects", async (req, res) => {
+    try {
+      const parsed = insertProjectSchema.parse(req.body);
+      const [project] = await db.insert(projectsTable).values(parsed).returning();
+      res.json(project);
+    } catch (e) {
+      res.status(400).json({ message: "Invalid project input" });
+    }
+  });
+
+  // === Purchase Orders API ===
+  app.get("/api/purchase-orders", async (_req, res) => {
+    try {
+      const orders = await db.select().from(purchaseOrdersTable);
+      res.json(orders);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching purchase orders" });
+    }
+  });
+
+  // === Sales Groups API ===
+  app.get("/api/sales-groups", async (_req, res) => {
+    try {
+      const groups = await db.select().from(salesGroupsTable);
+      res.json(groups);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching sales groups" });
+    }
+  });
+
+  app.post("/api/sales-groups", async (req, res) => {
+    try {
+      const parsed = insertSalesGroupSchema.parse(req.body);
+      const [group] = await db.insert(salesGroupsTable).values(parsed).returning();
+      res.json(group);
+    } catch (e) {
+      res.status(400).json({ message: "Invalid sales group input" });
+    }
+  });
 
   // === Register route modules ===
   app.use("/api", twilioRoutes);
