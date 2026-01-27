@@ -119,7 +119,27 @@ export async function registerRoutes(
     }
   });
 
-  // === Register route modules ===
+  // === Channels API ===
+  app.get("/api/channels", async (_req, res) => {
+    try {
+      const channels = await db.select().from(socialAccountsTable);
+      res.json(channels);
+    } catch (e) {
+      res.status(500).json({ message: "Error fetching channels" });
+    }
+  });
+
+  app.patch("/api/channels/:platform", async (req, res) => {
+    try {
+      const [account] = await db.update(socialAccountsTable)
+        .set({ ...req.body, updatedAt: new Date() })
+        .where(eq(socialAccountsTable.platform, req.params.platform))
+        .returning();
+      res.json(account);
+    } catch (e) {
+      res.status(400).json({ message: "Error updating channel" });
+    }
+  });
   app.use("/api", twilioRoutes);
   app.use("/api", aiRoutes);
   app.use("/api", whatsappRoutes);
