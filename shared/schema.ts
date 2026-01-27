@@ -14,6 +14,40 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const projects = pgTable("projects", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const tasks = pgTable("tasks", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id),
+  title: text("title").notNull(),
+  status: text("status").default("pending").notNull(),
+});
+
+export const purchaseOrders = pgTable("purchase_orders", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id),
+  orderNumber: text("order_number").notNull().unique(),
+  supplier: text("supplier").notNull(),
+  amount: integer("amount").notNull(),
+  status: text("status").default("pending").notNull(),
+  items: jsonb("items"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const salesGroups = pgTable("sales_groups", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  members: jsonb("members"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
   platform: text("platform").notNull(), // 'whatsapp', 'facebook', 'instagram'
@@ -128,6 +162,10 @@ export const contactsRelations = relations(contacts, ({ many }) => ({
 // === BASE SCHEMAS ===
 
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
+export const insertProjectSchema = createInsertSchema(projects).omit({ id: true, createdAt: true });
+export const insertTaskSchema = createInsertSchema(tasks).omit({ id: true });
+export const insertPurchaseOrderSchema = createInsertSchema(purchaseOrders).omit({ id: true, createdAt: true });
+export const insertSalesGroupSchema = createInsertSchema(salesGroups).omit({ id: true, createdAt: true });
 export const insertContactSchema = createInsertSchema(contacts).omit({ id: true, createdAt: true });
 export const insertConversationSchema = createInsertSchema(conversations).omit({ id: true, lastMessageAt: true, unreadCount: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, timestamp: true });

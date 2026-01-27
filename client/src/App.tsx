@@ -108,6 +108,12 @@ function AppContent() {
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
                   <Link href="/projects">Proyectos</Link>
                 </Button>
+                <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
+                  <Link href="/users">Usuarios</Link>
+                </Button>
+                <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
+                  <Link href="/tickets">Soporte</Link>
+                </Button>
               </div>
 
               <div className="hidden lg:flex items-center gap-2">
