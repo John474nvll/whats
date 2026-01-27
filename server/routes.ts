@@ -88,6 +88,17 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/purchase-orders", async (req, res) => {
+    try {
+      const parsed = insertPurchaseOrderSchema.parse(req.body);
+      const [order] = await db.insert(purchaseOrdersTable).values(parsed).returning();
+      res.status(201).json(order);
+    } catch (e) {
+      console.error("OC Create Error:", e);
+      res.status(400).json({ message: "Invalid purchase order input" });
+    }
+  });
+
   // === Sales Groups API ===
   app.get("/api/sales-groups", async (_req, res) => {
     try {
