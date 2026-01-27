@@ -1,4 +1,4 @@
-// Service Worker for Softgan SocialHub PWA
+// Service Worker for Softgan SocialHub PWA - Version 2026.1
 import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
 import { NetworkFirst, StaleWhileRevalidate, CacheFirst } from 'workbox-strategies';
