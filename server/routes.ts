@@ -143,6 +143,23 @@ export async function registerRoutes(
     res.json({ sentiment, suggestedResponse });
   });
 
+  // === Channels API ===
+
+  app.get(api.channels.list.path, async (_req, res) => {
+    const channels = await storage.getChannelConfigs();
+    res.json(channels);
+  });
+
+  app.put(api.channels.update.path, async (req, res) => {
+    try {
+      const { platform } = req.params;
+      const channel = await storage.upsertChannelConfig(platform, req.body);
+      res.json(channel);
+    } catch (e) {
+      res.status(400).json({ message: "Invalid update" });
+    }
+  });
+
   // === Webhooks ===
 
   app.get(api.webhooks.metaVerify.path, (req, res) => {

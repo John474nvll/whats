@@ -3,13 +3,14 @@ import { db } from "./db";
 import {
   users, contacts, conversations, messages,
   customers, campaigns, socialAccounts,
-  tickets, roles,
+  tickets, roles, channelConfigs,
   type InsertUser, type User,
   type InsertContact, type Contact,
   type InsertConversation, type Conversation,
   type InsertMessage, type Message,
   type InsertTicket, type Ticket,
   type InsertRole, type Role,
+  type ChannelConfig, type InsertChannelConfig,
   type ConversationWithContact
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
@@ -45,6 +46,11 @@ export interface IStorage {
   // Roles
   getRoles(): Promise<Role[]>;
   createRole(role: InsertRole): Promise<Role>;
+
+  // Channel Configs
+  getChannelConfigs(): Promise<ChannelConfig[]>;
+  getChannelConfig(platform: string): Promise<ChannelConfig | undefined>;
+  upsertChannelConfig(platform: string, config: Partial<InsertChannelConfig>): Promise<ChannelConfig>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -163,6 +169,32 @@ export class DatabaseStorage implements IStorage {
   async createRole(insertRole: InsertRole): Promise<Role> {
     const [role] = await db.insert(roles).values(insertRole).returning();
     return role;
+  }
+
+  // Channel Configs
+  async getChannelConfigs(): Promise<ChannelConfig[]> {
+    return await db.select().from(channelConfigs);
+  }
+
+  async getChannelConfig(platform: string): Promise<ChannelConfig | undefined> {
+    const [config] = await db.select().from(channelConfigs).where(eq(channelConfigs.platform, platform));
+    return config;
+  }
+
+  async upsertChannelConfig(platform: string, update: Partial<InsertChannelConfig>): Promise<ChannelConfig> {
+    const existing = await this.getChannelConfig(platform);
+    if (existing) {
+      const [config] = await db.update(channelConfigs)
+        .set({ ...update, updatedAt: new Date() })
+        .where(eq(channelConfigs.platform, platform))
+        .returning();
+      return config;
+    } else {
+      const [config] = await db.insert(channelConfigs)
+        .values({ platform, ...update })
+        .returning();
+      return config;
+    }
   }
 }
 

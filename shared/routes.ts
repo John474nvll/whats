@@ -1,6 +1,8 @@
 
 import { z } from 'zod';
-import { insertUserSchema, insertMessageSchema, conversations, messages, contacts } from './schema';
+import { insertUserSchema, insertMessageSchema, conversations, messages, contacts, insertChannelConfigSchema, channelConfigs } from './schema';
+
+export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
 export const errorSchemas = {
   validation: z.object({
@@ -83,7 +85,43 @@ export const api = {
         200: z.string(),
       },
     }
-  }
+  },
+  channels: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/channels',
+      responses: {
+        200: z.array(z.object({
+          id: z.number(),
+          platform: z.string(),
+          accessToken: z.string().nullable(),
+          verifyToken: z.string().nullable(),
+          phoneNumberId: z.string().nullable(),
+          isActive: z.boolean().nullable(),
+          createdAt: z.string().nullable(),
+          updatedAt: z.string().nullable(),
+        })),
+      },
+    },
+    update: {
+      method: 'PUT' as const,
+      path: '/api/channels/:platform',
+      input: insertChannelConfigSchema.partial(),
+      responses: {
+        200: z.object({
+          id: z.number(),
+          platform: z.string(),
+          accessToken: z.string().nullable(),
+          verifyToken: z.string().nullable(),
+          phoneNumberId: z.string().nullable(),
+          isActive: z.boolean().nullable(),
+          createdAt: z.string().nullable(),
+          updatedAt: z.string().nullable(),
+        }),
+        404: errorSchemas.notFound,
+      },
+    },
+  },
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {

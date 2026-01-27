@@ -104,6 +104,17 @@ export const roles = pgTable("roles", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const channelConfigs = pgTable("channel_configs", {
+  id: serial("id").primaryKey(),
+  platform: text("platform").notNull().unique(), // 'whatsapp', 'instagram', 'facebook'
+  accessToken: text("access_token"),
+  verifyToken: text("verify_token"),
+  phoneNumberId: text("phone_number_id"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const conversationsRelations = relations(conversations, ({ one, many }) => ({
@@ -136,6 +147,7 @@ export const insertCampaignSchema = createInsertSchema(campaigns).omit({ id: tru
 export const insertSocialAccountSchema = createInsertSchema(socialAccounts).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertTicketSchema = createInsertSchema(tickets).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertRoleSchema = createInsertSchema(roles).omit({ id: true, createdAt: true });
+export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, createdAt: true, updatedAt: true });
 
 // === TYPES ===
 
@@ -165,6 +177,9 @@ export type InsertTicket = z.infer<typeof insertTicketSchema>;
 
 export type Role = typeof roles.$inferSelect;
 export type InsertRole = z.infer<typeof insertRoleSchema>;
+
+export type ChannelConfig = typeof channelConfigs.$inferSelect;
+export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
 
