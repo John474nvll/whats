@@ -51,7 +51,8 @@ async function generateResponse(text: string, sentiment: string) {
   }
 }
 
-import { projects as projectsTable, purchaseOrders as purchaseOrdersTable, salesGroups as salesGroupsTable, insertProjectSchema, insertPurchaseOrderSchema, insertSalesGroupSchema } from "@shared/schema";
+import { projects as projectsTable, purchaseOrders as purchaseOrdersTable, salesGroups as salesGroupsTable, socialAccounts as socialAccountsTable, insertProjectSchema, insertPurchaseOrderSchema, insertSalesGroupSchema } from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 export async function registerRoutes(
   httpServer: Server,
