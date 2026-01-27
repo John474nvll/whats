@@ -8,36 +8,36 @@
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-display: 'Plus Jakarta Sans', sans-serif;
 
-  /* HSL Colors - Softgan Branding: Dark Blue & Slate */
-  --background: 222 47% 11%;
+  /* HSL Colors - Softgan Branding: Indigo & Deep Slate */
+  --background: 222 47% 8%;
   --foreground: 210 40% 98%;
   
-  --card: 222 47% 11%;
+  --card: 222 47% 8%;
   --card-foreground: 210 40% 98%;
   
-  --popover: 222 47% 11%;
+  --popover: 222 47% 8%;
   --popover-foreground: 210 40% 98%;
   
-  --primary: 221 83% 53%; /* Softgan Indigo */
+  --primary: 226 100% 64%; /* Softgan Indigo Vivid */
   --primary-foreground: 210 40% 98%;
   
-  --secondary: 217 32% 17%;
+  --secondary: 222 47% 12%;
   --secondary-foreground: 210 40% 98%;
   
-  --muted: 217 32% 17%;
+  --muted: 222 47% 12%;
   --muted-foreground: 215 20% 65%;
   
-  --accent: 217 32% 17%;
+  --accent: 226 100% 64%;
   --accent-foreground: 210 40% 98%;
   
-  --destructive: 0 62.8% 30.6%;
+  --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
   
-  --border: 217 32% 17%;
-  --input: 217 32% 17%;
-  --ring: 224 76% 48%;
+  --border: 222 47% 15%;
+  --input: 222 47% 15%;
+  --ring: 226 100% 64%;
   
-  --radius: 0.75rem;
+  --radius: 1rem;
   
   /* Brand Accents */
   --kiwi: 142 71% 45%;

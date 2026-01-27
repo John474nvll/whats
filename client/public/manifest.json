@@ -1,11 +1,11 @@
 {
-  "name": "SocialHub - CRM Multicanal",
-  "short_name": "SocialHub",
-  "description": "Plataforma unificada para gestionar WhatsApp, Instagram y Facebook desde un solo dashboard",
+  "name": "SoftganHub - CRM Inteligente",
+  "short_name": "SoftganHub",
+  "description": "Plataforma inteligente de Softgan para gestión de clientes y WhatsApp",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050a06",
-  "theme_color": "#22c55e",
+  "background_color": "#0b111b",
+  "theme_color": "#2563eb",
   "orientation": "any",
   "scope": "/",
   "categories": ["business", "productivity", "social"],
@@ -23,22 +23,16 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [],
   "shortcuts": [
     {
-      "name": "Dashboard",
+      "name": "Softgan Dash",
       "url": "/",
-      "description": "Panel de control principal"
+      "description": "Panel principal Softgan"
     },
     {
-      "name": "Inbox",
+      "name": "Softgan Inbox",
       "url": "/inbox",
-      "description": "Mensajes unificados"
-    },
-    {
-      "name": "Plataformas",
-      "url": "/platforms",
-      "description": "Gestionar cuentas conectadas"
+      "description": "Mensajes Softgan"
     }
   ]
 }

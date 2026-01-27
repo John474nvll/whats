@@ -234,14 +234,26 @@ export default function Projects() {
                   <Progress value={project.progress || 0} className="h-2" />
                 </div>
 
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ShoppingCart className="h-4 w-4 text-cyan-neon" />
-                    <span className="text-xs font-bold text-slate-300">Órdenes de Compra</span>
+                <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Smartphone className="h-4 w-4 text-kiwi" />
+                      <span className="text-xs font-bold text-slate-300">Sincronización WhatsApp</span>
+                    </div>
+                    <Badge variant="outline" className="border-kiwi/20 text-kiwi text-[9px] uppercase font-black">Activa</Badge>
                   </div>
-                  <Badge className="bg-cyan-neon/10 text-cyan-neon border-cyan-neon/20">
-                    {purchaseOrders.filter((po: any) => po.projectId === project.id).length}
-                  </Badge>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ShoppingCart className="h-4 w-4 text-cyan-neon" />
+                      <span className="text-xs font-bold text-slate-300">Órdenes de Compra</span>
+                    </div>
+                    <Badge className="bg-cyan-neon/10 text-cyan-neon border-cyan-neon/20">
+                      {purchaseOrders.filter((po: any) => po.projectId === project.id).length}
+                    </Badge>
+                  </div>
+                  <Button size="sm" className="w-full bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-[9px] font-black uppercase tracking-widest">
+                    Gestionar OC & Sync
+                  </Button>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-slate-500">
