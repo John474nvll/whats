@@ -36,6 +36,7 @@ export const purchaseOrders = pgTable("purchase_orders", {
   supplier: text("supplier").notNull(),
   amount: integer("amount").notNull(),
   status: text("status").default("pending").notNull(),
+  template: text("template").default("standard").notNull(), // 'standard', 'hardware', 'service'
   items: jsonb("items"),
   createdAt: timestamp("created_at").defaultNow(),
 });

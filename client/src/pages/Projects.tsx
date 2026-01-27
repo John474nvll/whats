@@ -76,8 +76,32 @@ export default function Projects() {
     return matchesSearch && matchesStatus;
   });
 
+  const [newOrder, setNewOrder] = useState({
+    projectId: null as number | null,
+    orderNumber: `OC-${Date.now()}`,
+    supplier: "",
+    amount: 0,
+    template: "standard",
+    items: [] as any[]
+  });
+
+  const createOrderMutation = useMutation({
+    mutationFn: async (data: typeof newOrder) => {
+      const res = await apiRequest("POST", "/api/purchase-orders", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/purchase-orders"] });
+      toast({ title: "Orden de Compra creada", description: "La OC se ha generado exitosamente" });
+    }
+  });
+
+  const templates = {
+    standard: { label: "Estándar", icon: ShoppingCart },
+    hardware: { label: "Hardware/Equipos", icon: Smartphone },
+    service: { label: "Servicios/Mantenimiento", icon: Clock }
+  };
   const stats = {
-    total: projects.length,
     active: projects.filter((p: any) => p.status === "active").length,
     completed: projects.filter((p: any) => p.status === "completed").length,
     avgProgress: Math.round(projects.reduce((sum: number, p: any) => sum + (p.progress || 0), 0) / projects.length) || 0
@@ -252,9 +276,57 @@ export default function Projects() {
                       {purchaseOrders.filter((po: any) => po.projectId === project.id).length}
                     </Badge>
                   </div>
-                  <Button size="sm" className="w-full bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-[9px] font-black uppercase tracking-widest">
-                    Gestionar OC & Sync
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button 
+                        size="sm" 
+                        className="w-full bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-[9px] font-black uppercase tracking-widest"
+                        onClick={() => setNewOrder({ ...newOrder, projectId: project.id })}
+                      >
+                        Nueva OC (Plantilla)
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-slate-900 border-white/10">
+                      <DialogHeader>
+                        <DialogTitle className="text-white">Nueva Orden de Compra - {project.name}</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4 pt-4">
+                        <div className="grid grid-cols-3 gap-2">
+                          {Object.entries(templates).map(([key, template]) => (
+                            <Button
+                              key={key}
+                              variant={newOrder.template === key ? "default" : "outline"}
+                              className={`h-20 flex flex-col gap-2 rounded-xl border-white/10 ${newOrder.template === key ? 'bg-primary text-black' : 'bg-slate-800 text-slate-400'}`}
+                              onClick={() => setNewOrder({ ...newOrder, template: key })}
+                            >
+                              <template.icon className="h-5 w-5" />
+                              <span className="text-[10px] font-black uppercase">{template.label}</span>
+                            </Button>
+                          ))}
+                        </div>
+                        <Input
+                          placeholder="Proveedor"
+                          value={newOrder.supplier}
+                          onChange={(e) => setNewOrder({ ...newOrder, supplier: e.target.value })}
+                          className="bg-slate-800 border-white/10 text-white"
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Monto"
+                          value={newOrder.amount || ""}
+                          onChange={(e) => setNewOrder({ ...newOrder, amount: parseInt(e.target.value) })}
+                          className="bg-slate-800 border-white/10 text-white"
+                        />
+                        <Button 
+                          className="w-full bg-primary text-black font-bold"
+                          onClick={() => createOrderMutation.mutate(newOrder)}
+                          disabled={!newOrder.supplier || !newOrder.amount || createOrderMutation.isPending}
+                        >
+                          Generar OC {newOrder.template.toUpperCase()}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-slate-500">
