@@ -26,6 +26,7 @@ import Tasks from "@/pages/Tasks";
 import SalesGroups from "@/pages/SalesGroups";
 import Billing from "@/pages/Billing";
 import PlatformsHub from "@/pages/PlatformsHub";
+import PurchaseOrders from "@/pages/PurchaseOrders";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 import { MessageSquare, Users, BarChart3, Sparkles, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Zap, Settings as SettingsIcon } from "lucide-react";
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/tasks" component={Tasks} />
       <Route path="/sales-groups" component={SalesGroups} />
+      <Route path="/orders" component={PurchaseOrders} />
     </Switch>
   );
 }

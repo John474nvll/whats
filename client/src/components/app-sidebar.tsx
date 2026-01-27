@@ -15,7 +15,7 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Phone, ShieldCheck } from "lucide-react";
+import { MessageSquare, Users, BarChart3, Sparkles, Settings, Home, GitFork, Megaphone, Instagram, Facebook, Smartphone, LinkIcon, Package, Lock, Globe, Phone, ShieldCheck, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -33,8 +33,9 @@ const menuGroups = [
     label: "📱 CRM & VENTAS",
     items: [
       { title: "Inbox", url: "/inbox", icon: MessageSquare },
-      { title: "Contacts", url: "/contacts", icon: Users },
-      { title: "Customers", url: "/customers", icon: Users },
+      { title: "Contactos", url: "/contacts", icon: Users },
+      { title: "Clientes", url: "/customers", icon: Users },
+      { title: "Órdenes", url: "/orders", icon: ShoppingCart },
       { title: "Facturación", url: "/billing", icon: Package },
       { title: "Voz & Retell", url: "/voice", icon: Phone },
     ],

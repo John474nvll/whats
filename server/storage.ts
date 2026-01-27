@@ -3,7 +3,7 @@ import { db } from "./db";
 import {
   users, contacts, conversations, messages,
   customers, campaigns, socialAccounts,
-  tickets, roles, channelConfigs,
+  tickets, roles, channelConfigs, purchaseOrders,
   type InsertUser, type User,
   type InsertContact, type Contact,
   type InsertConversation, type Conversation,
@@ -11,6 +11,7 @@ import {
   type InsertTicket, type Ticket,
   type InsertRole, type Role,
   type ChannelConfig, type InsertChannelConfig,
+  type PurchaseOrder, type InsertPurchaseOrder,
   type ConversationWithContact
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
@@ -51,6 +52,13 @@ export interface IStorage {
   getChannelConfigs(): Promise<ChannelConfig[]>;
   getChannelConfig(platform: string): Promise<ChannelConfig | undefined>;
   upsertChannelConfig(platform: string, config: Partial<InsertChannelConfig>): Promise<ChannelConfig>;
+
+  // Purchase Orders
+  getPurchaseOrders(): Promise<PurchaseOrder[]>;
+  getPurchaseOrder(id: number): Promise<PurchaseOrder | undefined>;
+  createPurchaseOrder(order: InsertPurchaseOrder): Promise<PurchaseOrder>;
+  updatePurchaseOrder(id: number, order: Partial<InsertPurchaseOrder>): Promise<PurchaseOrder>;
+  deletePurchaseOrder(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -195,6 +203,36 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return config;
     }
+  }
+
+  // Purchase Orders
+  async getPurchaseOrders(): Promise<PurchaseOrder[]> {
+    return await db.select().from(purchaseOrders).orderBy(desc(purchaseOrders.createdAt));
+  }
+
+  async getPurchaseOrder(id: number): Promise<PurchaseOrder | undefined> {
+    const [order] = await db.select().from(purchaseOrders).where(eq(purchaseOrders.id, id));
+    return order;
+  }
+
+  async createPurchaseOrder(insertOrder: InsertPurchaseOrder): Promise<PurchaseOrder> {
+    const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
+    const [order] = await db.insert(purchaseOrders)
+      .values({ ...insertOrder, orderNumber })
+      .returning();
+    return order;
+  }
+
+  async updatePurchaseOrder(id: number, update: Partial<InsertPurchaseOrder>): Promise<PurchaseOrder> {
+    const [order] = await db.update(purchaseOrders)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(purchaseOrders.id, id))
+      .returning();
+    return order;
+  }
+
+  async deletePurchaseOrder(id: number): Promise<void> {
+    await db.delete(purchaseOrders).where(eq(purchaseOrders.id, id));
   }
 }
 

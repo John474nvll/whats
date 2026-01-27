@@ -143,6 +143,46 @@ export async function registerRoutes(
     res.json({ sentiment, suggestedResponse });
   });
 
+  // === Purchase Orders API ===
+
+  app.get("/api/orders", async (_req, res) => {
+    const orders = await storage.getPurchaseOrders();
+    res.json(orders);
+  });
+
+  app.get("/api/orders/:id", async (req, res) => {
+    const order = await storage.getPurchaseOrder(Number(req.params.id));
+    if (!order) return res.status(404).json({ message: "Orden no encontrada" });
+    res.json(order);
+  });
+
+  app.post("/api/orders", async (req, res) => {
+    try {
+      const order = await storage.createPurchaseOrder(req.body);
+      res.status(201).json(order);
+    } catch (e) {
+      res.status(400).json({ message: "Error al crear orden" });
+    }
+  });
+
+  app.patch("/api/orders/:id", async (req, res) => {
+    try {
+      const order = await storage.updatePurchaseOrder(Number(req.params.id), req.body);
+      res.json(order);
+    } catch (e) {
+      res.status(400).json({ message: "Error al actualizar orden" });
+    }
+  });
+
+  app.delete("/api/orders/:id", async (req, res) => {
+    try {
+      await storage.deletePurchaseOrder(Number(req.params.id));
+      res.status(204).send();
+    } catch (e) {
+      res.status(400).json({ message: "Error al eliminar orden" });
+    }
+  });
+
   // === Channels API ===
 
   app.get(api.channels.list.path, async (_req, res) => {
