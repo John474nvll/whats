@@ -21,7 +21,8 @@ import {
   List,
   TrendingUp,
   Loader2,
-  ShoppingCart
+  ShoppingCart,
+  Smartphone
 } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
