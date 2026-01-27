@@ -119,10 +119,10 @@ export default function Projects() {
     <div className="p-4 md:p-6 space-y-6 bg-slate-950 min-h-screen">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black text-white">
+          <h1 className="text-2xl md:text-3xl font-black text-white">
             Softgan <span className="text-primary">Proyectos</span>
           </h1>
-          <p className="text-slate-400 text-sm">Gestión de proyectos y órdenes de compra (OC)</p>
+          <p className="text-slate-400 text-xs">Gestión de proyectos y OC</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>

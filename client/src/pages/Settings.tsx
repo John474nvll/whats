@@ -58,8 +58,8 @@ export default function Settings() {
     <div className="min-h-screen bg-slate-950 text-slate-200 pb-20 md:pb-8">
       <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8">
           <div className="space-y-1">
-            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">Configuración</h1>
-            <p className="text-slate-400 font-medium text-sm md:text-base">Gestiona integraciones, tokens y herramientas de IA.</p>
+            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">Configuración</h1>
+            <p className="text-slate-400 font-medium text-xs md:text-sm">Gestiona integraciones y herramientas de IA.</p>
           </div>
 
           <Tabs defaultValue="platforms" className="space-y-6">

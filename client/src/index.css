@@ -37,36 +37,19 @@
   --input: 222 47% 15%;
   --ring: 226 100% 64%;
   
-  --radius: 1rem;
+  --radius: 0.75rem;
   
   /* Brand Accents */
   --kiwi: 142 71% 45%;
   --cyan-neon: 189 94% 43%;
 }
 
-.dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 98%;
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 217 32% 17%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217 32% 17%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 217 32% 17%;
-  --accent-foreground: 210 40% 98%;
-  --border: 217 32% 17%;
-  --input: 217 32% 17%;
-}
-
-:root:not(.dark) {
+.light {
   --background: 210 40% 98%;
   --foreground: 222 47% 11%;
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
-  --primary: 221 83% 53%;
+  --primary: 226 100% 64%;
   --primary-foreground: 210 40% 98%;
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222 47% 11.2%;
@@ -76,7 +59,7 @@
   --accent-foreground: 222 47% 11.2%;
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
+  --ring: 226 100% 64%;
 }
 
 @layer base {

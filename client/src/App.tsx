@@ -94,19 +94,19 @@ function AppContent() {
               
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1 mask-fade-right">
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/">Dash</Link>
+                  <Link href="/">Escritorio</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
                   <Link href="/platforms">Plat</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/ai-generator">AI</Link>
+                  <Link href="/ai-generator">IA</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/campaigns">Marketing</Link>
+                  <Link href="/campaigns">Campaña</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/projects">Proyectos</Link>
+                  <Link href="/projects">Proy</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
                   <Link href="/users">Usuarios</Link>

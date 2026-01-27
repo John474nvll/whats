@@ -25,16 +25,16 @@ const menuGroups = [
   {
     label: "🏠 PRINCIPAL",
     items: [
-      { title: "Dashboard", url: "/", icon: Home },
-      { title: "Analytics", url: "/analytics", icon: BarChart3 },
+      { title: "Escritorio", url: "/", icon: Home },
+      { title: "Analítica", url: "/analytics", icon: BarChart3 },
     ],
   },
   {
     label: "📱 CRM & VENTAS",
     items: [
-      { title: "Inbox", url: "/inbox", icon: MessageSquare },
-      { title: "Contacts", url: "/contacts", icon: Users },
-      { title: "Customers", url: "/customers", icon: Users },
+      { title: "Bandeja", url: "/inbox", icon: MessageSquare },
+      { title: "Contactos", url: "/contacts", icon: Users },
+      { title: "Clientes", url: "/customers", icon: Users },
       { title: "Facturación", url: "/billing", icon: Package },
       { title: "Voz & Retell", url: "/voice", icon: Phone },
     ],
@@ -50,15 +50,15 @@ const menuGroups = [
   {
     label: "📢 MARKETING",
     items: [
-      { title: "Funnels", url: "/funnels", icon: GitFork },
-      { title: "Campaigns", url: "/campaigns", icon: Megaphone },
-      { title: "Links", url: "/links", icon: LinkIcon },
+      { title: "Embudos", url: "/funnels", icon: GitFork },
+      { title: "Campañas", url: "/campaigns", icon: Megaphone },
+      { title: "Enlaces", url: "/links", icon: LinkIcon },
     ],
   },
   {
     label: "✨ IA & AUTOMATIZACIÓN",
     items: [
-      { title: "AI Generator", url: "/ai-generator", icon: Sparkles },
+      { title: "IA Generador", url: "/ai-generator", icon: Sparkles },
       { title: "Plataformas", url: "/platforms", icon: Smartphone },
     ],
   },
@@ -67,7 +67,7 @@ const menuGroups = [
     items: [
       { title: "Usuarios", url: "/users", icon: Users },
       { title: "Soporte", url: "/tickets", icon: ShieldCheck },
-      { title: "Settings", url: "/settings", icon: Settings },
+      { title: "Ajustes", url: "/settings", icon: Settings },
     ],
   },
 ];
