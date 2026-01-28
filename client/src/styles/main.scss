@@ -1,7 +1,7 @@
 // Import new SCSS files
-@use './scss/variables';
-@use './scss/mixins';
-@use './scss/globals';
+@use './scss/variables.scss';
+@use './scss/mixins.scss';
+@use './scss/globals.scss';
 
 // Import Bootstrap
-@import 'bootstrap/scss/bootstrap';
+@use 'bootstrap/scss/bootstrap';
