@@ -343,10 +343,31 @@ export async function registerRoutes(
 
   app.post("/api/widgets", async (req, res) => {
     try {
-      const widget = await db.insert(schema.widgets).values(req.body).returning();
+      const widget = await db.insert(schema.widgets).values({
+        ...req.body,
+        config: req.body.config || {}
+      }).returning();
       res.status(201).json(widget[0]);
     } catch (e) {
       res.status(400).json({ message: "Error al crear widget" });
+    }
+  });
+
+  app.get("/api/sales-groups", async (_req, res) => {
+    try {
+      const groups = await db.select().from(schema.salesGroups);
+      res.json(groups);
+    } catch (e) {
+      res.status(500).json({ message: "Error al obtener grupos de ventas" });
+    }
+  });
+
+  app.post("/api/sales-groups", async (req, res) => {
+    try {
+      const group = await db.insert(schema.salesGroups).values(req.body).returning();
+      res.status(201).json(group[0]);
+    } catch (e) {
+      res.status(400).json({ message: "Error al crear grupo de ventas" });
     }
   });
 

@@ -158,6 +158,19 @@ export const funnels = pgTable("funnels", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const salesGroups = pgTable("sales_groups", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  leaderId: integer("leader_id").references(() => users.id),
+  members: jsonb("members"), // Array of user IDs
+  target: integer("target").default(0),
+  currentProgress: integer("current_progress").default(0),
+  status: text("status").default("active"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const voiceConfigs = pgTable("voice_configs", {
   id: serial("id").primaryKey(),
   provider: text("provider").notNull(), // 'twilio', 'retell'
@@ -263,6 +276,7 @@ export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit
 export const insertPurchaseOrderSchema = createInsertSchema(purchaseOrders).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertOrderTemplateSchema = createInsertSchema(orderTemplates).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertFunnelSchema = createInsertSchema(funnels).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertSalesGroupSchema = createInsertSchema(salesGroups).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertVoiceConfigSchema = createInsertSchema(voiceConfigs).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertVoiceAgentSchema = createInsertSchema(voiceAgents).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCallLogSchema = createInsertSchema(callLogs).omit({ id: true, createdAt: true });
@@ -309,6 +323,9 @@ export type InsertOrderTemplate = z.infer<typeof insertOrderTemplateSchema>;
 
 export type Funnel = typeof funnels.$inferSelect;
 export type InsertFunnel = z.infer<typeof insertFunnelSchema>;
+
+export type SalesGroup = typeof salesGroups.$inferSelect;
+export type InsertSalesGroup = z.infer<typeof insertSalesGroupSchema>;
 
 export type VoiceConfig = typeof voiceConfigs.$inferSelect;
 export type InsertVoiceConfig = z.infer<typeof insertVoiceConfigSchema>;
