@@ -1,22 +1,40 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { 
-  Loader2, Copy, RefreshCw, Wand2, Sparkles, Zap, 
-  Image, MessageSquare, Hash, Send, Download,
-  Instagram, Facebook, Smartphone, Target
-} from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import {
+  Loader2,
+  Copy,
+  RefreshCw,
+  Wand2,
+  Sparkles,
+  Zap,
+  Image,
+  MessageSquare,
+  Hash,
+  Send,
+  Download,
+  Instagram,
+  Facebook,
+  Smartphone,
+  Target,
+} from 'lucide-react';
+import { apiRequest } from '@/lib/queryClient';
+import { motion, AnimatePresence } from 'framer-motion';
 
-type ContentType = "post" | "caption" | "message" | "story" | "ad" | "image";
-type Platform = "instagram" | "facebook" | "whatsapp" | "multi";
+type ContentType = 'post' | 'caption' | 'message' | 'story' | 'ad' | 'image';
+type Platform = 'instagram' | 'facebook' | 'whatsapp' | 'multi';
 
 interface GenerationHistory {
   id: number;
@@ -27,92 +45,110 @@ interface GenerationHistory {
 }
 
 export default function AIGenerator() {
-  const [contentType, setContentType] = useState<ContentType>("post");
-  const [platform, setPlatform] = useState<Platform>("multi");
-  const [topic, setTopic] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [contentType, setContentType] = useState<ContentType>('post');
+  const [platform, setPlatform] = useState<Platform>('multi');
+  const [topic, setTopic] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [sending, setSending] = useState(false);
 
   const sendToWhatsApp = async () => {
     if (!generated || !phoneNumber) {
-      toast({ title: "Error", description: "Genera contenido e ingresa un número de teléfono" });
+      toast({
+        title: 'Error',
+        description: 'Genera contenido e ingresa un número de teléfono',
+      });
       return;
     }
 
     setSending(true);
     try {
-      await apiRequest("POST", "/api/whatsapp/send-ia", {
+      await apiRequest('POST', '/api/whatsapp/send-ia', {
         content: generated,
-        phoneNumber
+        phoneNumber,
       });
-      toast({ title: "Enviado", description: "Mensaje enviado por WhatsApp correctamente" });
+      toast({
+        title: 'Enviado',
+        description: 'Mensaje enviado por WhatsApp correctamente',
+      });
     } catch (e) {
-      toast({ title: "Error", description: "No se pudo enviar el mensaje", variant: "destructive" });
+      toast({
+        title: 'Error',
+        description: 'No se pudo enviar el mensaje',
+        variant: 'destructive',
+      });
     } finally {
       setSending(false);
     }
   };
   const [history, setHistory] = useState<GenerationHistory[]>([]);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const { toast } = useToast();
 
   const contentTypes = [
-    { value: "post", label: "Post", icon: MessageSquare },
-    { value: "caption", label: "Caption", icon: Hash },
-    { value: "message", label: "Mensaje", icon: Send },
-    { value: "story", label: "Story", icon: Sparkles },
-    { value: "ad", label: "Anuncio", icon: Target },
-    { value: "image", label: "Imagen", icon: Image },
+    { value: 'post', label: 'Post', icon: MessageSquare },
+    { value: 'caption', label: 'Caption', icon: Hash },
+    { value: 'message', label: 'Mensaje', icon: Send },
+    { value: 'story', label: 'Story', icon: Sparkles },
+    { value: 'ad', label: 'Anuncio', icon: Target },
+    { value: 'image', label: 'Imagen', icon: Image },
   ];
 
   const platforms = [
-    { value: "multi", label: "Multi-plataforma", icon: Zap },
-    { value: "instagram", label: "Instagram", icon: Instagram },
-    { value: "facebook", label: "Facebook", icon: Facebook },
-    { value: "whatsapp", label: "WhatsApp", icon: Smartphone },
+    { value: 'multi', label: 'Multi-plataforma', icon: Zap },
+    { value: 'instagram', label: 'Instagram', icon: Instagram },
+    { value: 'facebook', label: 'Facebook', icon: Facebook },
+    { value: 'whatsapp', label: 'WhatsApp', icon: Smartphone },
   ];
 
   const generateContent = async () => {
     if (!topic.trim()) {
-      toast({ title: "Error", description: "Por favor ingresa un tema o instruccion" });
+      toast({
+        title: 'Error',
+        description: 'Por favor ingresa un tema o instruccion',
+      });
       return;
     }
 
     setLoading(true);
-    setGenerated("");
-    setImageUrl("");
+    setGenerated('');
+    setImageUrl('');
 
     try {
-      if (contentType === "image") {
-        const res = await apiRequest("POST", "/api/generate-image", { prompt: topic });
+      if (contentType === 'image') {
+        const res = await apiRequest('POST', '/api/generate-image', {
+          prompt: topic,
+        });
         const data = await res.json();
         if (data.url || data.b64_json) {
           setImageUrl(data.url || `data:image/png;base64,${data.b64_json}`);
-          toast({ title: "Imagen generada", description: "Tu imagen ha sido creada con exito" });
+          toast({
+            title: 'Imagen generada',
+            description: 'Tu imagen ha sido creada con exito',
+          });
         } else {
-          throw new Error("No image data returned");
+          throw new Error('No image data returned');
         }
       } else {
-        const res = await apiRequest("POST", `/api/conversations/1/messages`, {
+        const res = await apiRequest('POST', `/api/conversations/1/messages`, {
           content: `Genera un ${contentType} para ${platform} sobre: ${topic}. Idioma: es.`,
         });
-        
+
         // Handle streaming response
         const reader = res.body?.getReader();
-        if (!reader) throw new Error("No reader");
-        
-        let fullContent = "";
+        if (!reader) throw new Error('No reader');
+
+        let fullContent = '';
         const decoder = new TextDecoder();
-        
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          
+
           const chunk = decoder.decode(value);
-          const lines = chunk.split("\n");
-          
+          const lines = chunk.split('\n');
+
           for (const line of lines) {
-            if (line.startsWith("data: ")) {
+            if (line.startsWith('data: ')) {
               try {
                 const data = JSON.parse(line.slice(6));
                 if (data.content) {
@@ -123,23 +159,31 @@ export default function AIGenerator() {
             }
           }
         }
-        
-        setHistory(prev => [{
-          id: Date.now(),
-          type: contentType,
-          topic,
-          result: fullContent,
-          timestamp: new Date()
-        }, ...prev].slice(0, 10));
-        
-        toast({ title: "Contenido generado", description: "Tu contenido esta listo para usar" });
+
+        setHistory((prev) =>
+          [
+            {
+              id: Date.now(),
+              type: contentType,
+              topic,
+              result: fullContent,
+              timestamp: new Date(),
+            },
+            ...prev,
+          ].slice(0, 10),
+        );
+
+        toast({
+          title: 'Contenido generado',
+          description: 'Tu contenido esta listo para usar',
+        });
       }
     } catch (error) {
-      console.error("Generation error:", error);
+      console.error('Generation error:', error);
       toast({
-        title: "Error de generacion",
-        description: "No se pudo generar el contenido. Intenta de nuevo.",
-        variant: "destructive",
+        title: 'Error de generacion',
+        description: 'No se pudo generar el contenido. Intenta de nuevo.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -148,24 +192,31 @@ export default function AIGenerator() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast({ title: "Copiado", description: "Contenido copiado al portapapeles" });
+    toast({
+      title: 'Copiado',
+      description: 'Contenido copiado al portapapeles',
+    });
   };
 
   const generateHashtags = async () => {
     if (!topic.trim()) return;
-    
+
     setLoading(true);
     try {
-      const res = await apiRequest("POST", "/api/ai/suggest-hashtags", { 
-        topic, 
-        platform: platform !== "multi" ? platform : "instagram" 
+      const res = await apiRequest('POST', '/api/ai/suggest-hashtags', {
+        topic,
+        platform: platform !== 'multi' ? platform : 'instagram',
       });
       const data = await res.json();
       if (data.hashtags) {
-        setGenerated(prev => prev + "\n\n" + data.hashtags.join(" "));
+        setGenerated((prev) => prev + '\n\n' + data.hashtags.join(' '));
       }
     } catch (error) {
-      toast({ title: "Error", description: "No se pudieron generar hashtags", variant: "destructive" });
+      toast({
+        title: 'Error',
+        description: 'No se pudieron generar hashtags',
+        variant: 'destructive',
+      });
     } finally {
       setLoading(false);
     }
@@ -184,7 +235,9 @@ export default function AIGenerator() {
                 <h1 className="text-4xl md:text-5xl font-black text-white">
                   AI<span className="text-primary">Gen</span>
                 </h1>
-                <p className="text-slate-400 text-sm">Motor de contenido inteligente v3.2</p>
+                <p className="text-slate-400 text-sm">
+                  Motor de contenido inteligente v3.2
+                </p>
               </div>
             </div>
           </div>
@@ -196,13 +249,22 @@ export default function AIGenerator() {
 
         <Tabs defaultValue="generator" className="space-y-6">
           <TabsList className="bg-slate-900/60 p-1 rounded-2xl border border-white/5">
-            <TabsTrigger value="generator" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold">
+            <TabsTrigger
+              value="generator"
+              className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold"
+            >
               Generador
             </TabsTrigger>
-            <TabsTrigger value="history" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold">
+            <TabsTrigger
+              value="history"
+              className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold"
+            >
               Historial ({history.length})
             </TabsTrigger>
-            <TabsTrigger value="templates" className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold">
+            <TabsTrigger
+              value="templates"
+              className="rounded-xl data-[state=active]:bg-primary data-[state=active]:text-black font-bold"
+            >
               Plantillas
             </TabsTrigger>
           </TabsList>
@@ -218,31 +280,45 @@ export default function AIGenerator() {
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                   <div className="space-y-3">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Tipo de Contenido</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Tipo de Contenido
+                    </label>
                     <div className="grid grid-cols-3 gap-2">
                       {contentTypes.map((type) => (
                         <Button
                           key={type.value}
                           variant="outline"
-                          onClick={() => setContentType(type.value as ContentType)}
+                          onClick={() =>
+                            setContentType(type.value as ContentType)
+                          }
                           className={`h-auto py-3 flex flex-col gap-1 rounded-xl border-white/10 transition-all ${
-                            contentType === type.value 
-                              ? "bg-primary text-black border-primary" 
-                              : "bg-white/5 hover:bg-white/10"
+                            contentType === type.value
+                              ? 'bg-primary text-black border-primary'
+                              : 'bg-white/5 hover:bg-white/10'
                           }`}
                           data-testid={`button-type-${type.value}`}
                         >
                           <type.icon className="h-4 w-4" />
-                          <span className="text-[10px] font-bold uppercase">{type.label}</span>
+                          <span className="text-[10px] font-bold uppercase">
+                            {type.label}
+                          </span>
                         </Button>
                       ))}
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Plataforma Destino</label>
-                    <Select value={platform} onValueChange={(v) => setPlatform(v as Platform)}>
-                      <SelectTrigger className="bg-slate-800 border-white/10 rounded-xl h-12" data-testid="select-platform">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Plataforma Destino
+                    </label>
+                    <Select
+                      value={platform}
+                      onValueChange={(v) => setPlatform(v as Platform)}
+                    >
+                      <SelectTrigger
+                        className="bg-slate-800 border-white/10 rounded-xl h-12"
+                        data-testid="select-platform"
+                      >
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -260,12 +336,15 @@ export default function AIGenerator() {
 
                   <div className="space-y-3">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      {contentType === "image" ? "Descripcion de la imagen" : "Tema o Instruccion"}
+                      {contentType === 'image'
+                        ? 'Descripcion de la imagen'
+                        : 'Tema o Instruccion'}
                     </label>
                     <Textarea
-                      placeholder={contentType === "image" 
-                        ? "Describe la imagen que quieres generar con detalle..."
-                        : "Describe el contenido que necesitas generar..."
+                      placeholder={
+                        contentType === 'image'
+                          ? 'Describe la imagen que quieres generar con detalle...'
+                          : 'Describe el contenido que necesitas generar...'
                       }
                       value={topic}
                       onChange={(e) => setTopic(e.target.value)}
@@ -284,7 +363,9 @@ export default function AIGenerator() {
                       <Loader2 className="h-6 w-6 animate-spin" />
                     ) : (
                       <>
-                        {contentType === "image" ? "Generar Imagen" : "Generar Contenido"}
+                        {contentType === 'image'
+                          ? 'Generar Imagen'
+                          : 'Generar Contenido'}
                         <Zap className="ml-2 h-5 w-5" />
                       </>
                     )}
@@ -293,27 +374,33 @@ export default function AIGenerator() {
                   {generated && (
                     <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase text-slate-500">Enviar por WhatsApp</label>
+                        <label className="text-[10px] font-bold uppercase text-slate-500">
+                          Enviar por WhatsApp
+                        </label>
                         <div className="flex gap-2">
-                          <Input 
-                            placeholder="Ej: +549..." 
+                          <Input
+                            placeholder="Ej: +549..."
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
                             className="bg-slate-800 border-white/10 rounded-xl h-10"
                           />
-                          <Button 
+                          <Button
                             onClick={sendToWhatsApp}
                             disabled={sending}
                             className="bg-kiwi hover:bg-kiwi/90 text-black font-bold px-4 rounded-xl"
                           >
-                            {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                            {sending ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Send className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {contentType !== "image" && generated && (
+                  {contentType !== 'image' && generated && (
                     <Button
                       variant="outline"
                       onClick={generateHashtags}
@@ -333,19 +420,22 @@ export default function AIGenerator() {
                   <CardTitle className="text-xl">Resultado</CardTitle>
                   {(generated || imageUrl) && (
                     <div className="flex gap-2">
-                      <Button 
-                        size="icon" 
-                        variant="ghost" 
-                        onClick={() => { setGenerated(""); setImageUrl(""); }}
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => {
+                          setGenerated('');
+                          setImageUrl('');
+                        }}
                         className="rounded-full"
                         data-testid="button-clear"
                       >
                         <RefreshCw className="h-4 w-4" />
                       </Button>
                       {generated && (
-                        <Button 
-                          size="icon" 
-                          variant="ghost" 
+                        <Button
+                          size="icon"
+                          variant="ghost"
                           onClick={() => copyToClipboard(generated)}
                           className="rounded-full text-primary"
                           data-testid="button-copy"
@@ -370,7 +460,9 @@ export default function AIGenerator() {
                           <div className="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
                           <Sparkles className="absolute inset-0 m-auto h-6 w-6 text-primary" />
                         </div>
-                        <p className="mt-4 text-slate-500 text-sm">Generando contenido...</p>
+                        <p className="mt-4 text-slate-500 text-sm">
+                          Generando contenido...
+                        </p>
                       </motion.div>
                     ) : imageUrl ? (
                       <motion.div
@@ -379,13 +471,13 @@ export default function AIGenerator() {
                         animate={{ opacity: 1, scale: 1 }}
                         className="space-y-4"
                       >
-                        <img 
-                          src={imageUrl} 
-                          alt="Generated" 
+                        <img
+                          src={imageUrl}
+                          alt="Generated"
                           className="w-full rounded-2xl"
                         />
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           className="w-full rounded-xl"
                           onClick={() => window.open(imageUrl, '_blank')}
                         >
@@ -412,7 +504,9 @@ export default function AIGenerator() {
                         className="h-[350px] flex flex-col items-center justify-center text-slate-600 border-2 border-dashed border-white/5 rounded-2xl"
                       >
                         <Sparkles className="h-12 w-12 mb-4 opacity-30" />
-                        <p className="text-xs font-bold uppercase tracking-wider">Esperando instrucciones...</p>
+                        <p className="text-xs font-bold uppercase tracking-wider">
+                          Esperando instrucciones...
+                        </p>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -432,13 +526,16 @@ export default function AIGenerator() {
                 ) : (
                   <div className="space-y-4">
                     {history.map((item) => (
-                      <div 
+                      <div
                         key={item.id}
                         className="p-4 rounded-xl bg-slate-800/50 border border-white/5 hover:border-white/10 transition-all group"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-[9px] uppercase">
+                            <Badge
+                              variant="outline"
+                              className="text-[9px] uppercase"
+                            >
                               {item.type}
                             </Badge>
                             <span className="text-xs text-slate-500">
@@ -454,8 +551,12 @@ export default function AIGenerator() {
                             <Copy className="h-3 w-3" />
                           </Button>
                         </div>
-                        <p className="text-sm text-slate-400 font-medium mb-1">{item.topic}</p>
-                        <p className="text-xs text-slate-500 line-clamp-2">{item.result}</p>
+                        <p className="text-sm text-slate-400 font-medium mb-1">
+                          {item.topic}
+                        </p>
+                        <p className="text-xs text-slate-500 line-clamp-2">
+                          {item.result}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -467,14 +568,44 @@ export default function AIGenerator() {
           <TabsContent value="templates">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { title: "Promocion de Producto", topic: "Genera un post promocional para [producto] destacando sus beneficios principales", type: "post" },
-                { title: "Historia Detras de Escenas", topic: "Crea contenido casual mostrando el proceso de trabajo en [negocio]", type: "story" },
-                { title: "Anuncio con CTA", topic: "Escribe un anuncio persuasivo para [producto/servicio] con llamada a la accion clara", type: "ad" },
-                { title: "Respuesta a Cliente", topic: "Genera una respuesta profesional y empatica para un cliente que pregunta sobre [tema]", type: "message" },
-                { title: "Caption Engagement", topic: "Crea un caption que genere interaccion preguntando a la audiencia sobre [tema]", type: "caption" },
-                { title: "Lanzamiento de Producto", topic: "Escribe un anuncio emocionante para el lanzamiento de [nuevo producto]", type: "post" },
+                {
+                  title: 'Promocion de Producto',
+                  topic:
+                    'Genera un post promocional para [producto] destacando sus beneficios principales',
+                  type: 'post',
+                },
+                {
+                  title: 'Historia Detras de Escenas',
+                  topic:
+                    'Crea contenido casual mostrando el proceso de trabajo en [negocio]',
+                  type: 'story',
+                },
+                {
+                  title: 'Anuncio con CTA',
+                  topic:
+                    'Escribe un anuncio persuasivo para [producto/servicio] con llamada a la accion clara',
+                  type: 'ad',
+                },
+                {
+                  title: 'Respuesta a Cliente',
+                  topic:
+                    'Genera una respuesta profesional y empatica para un cliente que pregunta sobre [tema]',
+                  type: 'message',
+                },
+                {
+                  title: 'Caption Engagement',
+                  topic:
+                    'Crea un caption que genere interaccion preguntando a la audiencia sobre [tema]',
+                  type: 'caption',
+                },
+                {
+                  title: 'Lanzamiento de Producto',
+                  topic:
+                    'Escribe un anuncio emocionante para el lanzamiento de [nuevo producto]',
+                  type: 'post',
+                },
               ].map((template, i) => (
-                <Card 
+                <Card
                   key={i}
                   className="bg-slate-900/40 border-white/5 rounded-2xl hover:border-primary/30 transition-all cursor-pointer group"
                   onClick={() => {
@@ -486,8 +617,13 @@ export default function AIGenerator() {
                     <h3 className="font-bold text-white group-hover:text-primary transition-colors mb-2">
                       {template.title}
                     </h3>
-                    <p className="text-xs text-slate-500 line-clamp-2">{template.topic}</p>
-                    <Badge className="mt-3 text-[9px] uppercase" variant="outline">
+                    <p className="text-xs text-slate-500 line-clamp-2">
+                      {template.topic}
+                    </p>
+                    <Badge
+                      className="mt-3 text-[9px] uppercase"
+                      variant="outline"
+                    >
                       {template.type}
                     </Badge>
                   </CardContent>

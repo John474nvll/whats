@@ -1,26 +1,31 @@
 # SoftganHub v12.0 - CRM & Redes Sociales
 
 ## Overview
+
 SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, bot de ventas inteligente, widgets dinámicos, y una estructura PWA optimizada para vendedores en movilidad con soporte v12 mejorado.
 
 ## Recent Changes (January 28, 2026) - v12 Update
 
 ### Sincronización & Widgets (Nuevo)
+
 - Sistema de widgets dinámicos para el dashboard (gráficos, estadísticas, IA)
 - Endpoints de sincronización con GitHub para actualizaciones de versión
 - Registro de logs de sincronización para auditoría
 
 ### Grupos de Ventas (Nuevo)
+
 - Gestión de equipos comerciales con líderes y miembros
 - Seguimiento de objetivos y progreso en tiempo real
 - Dashboard de rendimiento grupal
 
 ### UI/UX Refinado
+
 - Main container optimizado para scroll suave y visualización en tarjetas
 - Branding Softgan V12.0 aplicado en toda la interfaz
 - Traducción y compactación mobile-first completada
 
 ### Funnels de Ventas (Nuevo)
+
 - Página completa de gestión de embudos de conversión
 - 4 tipos de funnels: Ventas, Leads, Webinar, Producto
 - CRUD completo con etapas personalizables
@@ -28,6 +33,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Funciones: duplicar, pausar/activar, eliminar
 
 ### Voz & Twilio Mejorado
+
 - Panel de llamadas con marcador numérico integrado
 - Configuración de Twilio (Account SID, Auth Token) desde UI
 - Integración Retell AI con gestión de agentes IA
@@ -35,12 +41,14 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Pestañas: Marcador, Números, Agentes IA, Historial
 
 ### Órdenes de Compra
+
 - Sistema completo de gestión de pedidos
 - Estados: pendiente, aprobada, en_proceso, completada, cancelada
 - Filtros por estado y búsqueda
 - Soporte dark/light completo
 
 ### Base de Datos Ampliada
+
 - funnels: embudos de ventas con etapas JSON
 - voiceConfigs: configuración Twilio/Retell
 - voiceAgents: agentes de IA para llamadas
@@ -50,6 +58,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - sales_groups: gestión de equipos de ventas
 
 ### Funnels de Ventas (Nuevo)
+
 - Página completa de gestión de embudos de conversión
 - 4 tipos de funnels: Ventas, Leads, Webinar, Producto
 - CRUD completo con etapas personalizables
@@ -57,6 +66,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Funciones: duplicar, pausar/activar, eliminar
 
 ### Voz & Twilio Mejorado
+
 - Panel de llamadas con marcador numérico integrado
 - Configuración de Twilio (Account SID, Auth Token) desde UI
 - Integración Retell AI con gestión de agentes IA
@@ -64,23 +74,27 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Pestañas: Marcador, Números, Agentes IA, Historial
 
 ### Órdenes de Compra
+
 - Sistema completo de gestión de pedidos
 - Estados: pendiente, aprobada, en_proceso, completada, cancelada
 - Filtros por estado y búsqueda
 - Soporte dark/light completo
 
 ### Base de Datos Ampliada
+
 - funnels: embudos de ventas con etapas JSON
 - voiceConfigs: configuración Twilio/Retell
 - voiceAgents: agentes de IA para llamadas
 - callLogs: registro de llamadas
 
 ### Upgrade to v11 from GitHub (Jan 26)
+
 - Imported full v11 branch from https://github.com/John474nvll/whats.git
 - Enhanced navigation with MARKETING and PROYECTOS quick access
 - Improved all modules with better functionality and design
 
 ### Key Features
+
 - **Omni-Channel Inbox**: WhatsApp Business, Instagram, Facebook unified messaging
 - **AI Generator v3.2**: GPT-4o powered content generation with 6 types
 - **Marketing Studio**: Campaign orchestration with mass messaging
@@ -90,6 +104,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - **Invoicing Pro**: Billing and sales metrics
 
 ### WhatsApp Business Integration
+
 - Real WhatsApp Cloud API integration
 - Webhook support for incoming messages
 - Bulk messaging capability
@@ -98,6 +113,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Interactive messages (buttons, lists)
 
 ### API Routes
+
 - /api/whatsapp/send/text - Send text messages
 - /api/whatsapp/send/bulk - Bulk messaging
 - /api/whatsapp/send/template - Template messages
@@ -111,6 +127,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 ## System Architecture
 
 ### UI/UX Design: Neon Forest Green
+
 - Primary: Kiwi Green (#22c55e)
 - Secondary: Cyan Neon
 - Accent: Intense Raspberry
@@ -118,6 +135,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - Dark theme optimized
 
 ### Technical Stack
+
 - **Frontend:** React 18, Vite, Tailwind CSS, Shadcn UI, Framer Motion
 - **Backend:** Express.js with TypeScript
 - **Database:** PostgreSQL with Drizzle ORM (WAL mode)
@@ -126,6 +144,7 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - **Voice:** Twilio Voice SDK integration
 
 ### Database Schema
+
 - users - User accounts with roles
 - contacts - Platform contacts (WhatsApp, Instagram, Facebook)
 - conversations - Chat conversations
@@ -139,12 +158,14 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 ## Environment Variables Required
 
 ### WhatsApp Business (Meta Cloud API)
+
 - WHATSAPP_ACCESS_TOKEN - Meta permanent access token
 - WHATSAPP_PHONE_NUMBER_ID - Phone number ID from Meta
 - WHATSAPP_VERIFY_TOKEN - Webhook verification token
 - WHATSAPP_BUSINESS_ID - WhatsApp Business Account ID
 
 ### Twilio Voice
+
 - TWILIO_ACCOUNT_SID
 - TWILIO_API_KEY
 - TWILIO_API_SECRET
@@ -152,10 +173,12 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - TWILIO_PHONE_NUMBER
 
 ### AI Services
+
 - AI_INTEGRATIONS_OPENAI_API_KEY (auto-configured by Replit)
 - AI_INTEGRATIONS_OPENAI_BASE_URL (auto-configured by Replit)
 
 ## Routes
+
 - / - Dashboard with system status
 - /inbox - Unified Inbox (WhatsApp, Instagram, Facebook)
 - /contacts - Contact Management
@@ -172,9 +195,11 @@ SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales
 - /voice - Voice & Retell Manager
 
 ## Development Commands
+
 - npm run dev - Development server
 - npm run db:push - Push database schema
 - npm run build - Production build
 
 ---
+
 2026 Softgam.com - Tecnologia que impulsa tu crecimiento

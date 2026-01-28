@@ -1,15 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const api = {
   conversations: {
-    list: { path: "/api/conversations" },
-    get: { path: "/api/conversations/:id" },
-    toggleBot: { path: "/api/conversations/:id/toggle-bot", method: "POST" },
+    list: { path: '/api/conversations' },
+    get: { path: '/api/conversations/:id' },
+    toggleBot: { path: '/api/conversations/:id/toggle-bot', method: 'POST' },
   },
   messages: {
-    list: { path: "/api/conversations/:id/messages" },
-    create: { path: "/api/conversations/:id/messages", method: "POST" },
-  }
+    list: { path: '/api/conversations/:id/messages' },
+    create: { path: '/api/conversations/:id/messages', method: 'POST' },
+  },
 };
 
 function buildUrl(path: string, params: Record<string, any>) {
@@ -24,8 +24,10 @@ export function useConversations() {
   return useQuery({
     queryKey: [api.conversations.list.path],
     queryFn: async () => {
-      const res = await fetch(api.conversations.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch conversations");
+      const res = await fetch(api.conversations.list.path, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Failed to fetch conversations');
       return res.json();
     },
     refetchInterval: 5000,
@@ -37,9 +39,9 @@ export function useConversation(id: number) {
     queryKey: [api.conversations.get.path, id],
     queryFn: async () => {
       const url = buildUrl(api.conversations.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
+      const res = await fetch(url, { credentials: 'include' });
       if (res.status === 404) return null;
-      if (!res.ok) throw new Error("Failed to fetch conversation");
+      if (!res.ok) throw new Error('Failed to fetch conversation');
       return res.json();
     },
     enabled: !!id,
@@ -50,20 +52,30 @@ export function useConversation(id: number) {
 export function useToggleBot() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, botStatus }: { id: number; botStatus: boolean }) => {
+    mutationFn: async ({
+      id,
+      botStatus,
+    }: {
+      id: number;
+      botStatus: boolean;
+    }) => {
       const url = buildUrl(api.conversations.toggleBot.path, { id });
       const res = await fetch(url, {
         method: api.conversations.toggleBot.method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ botStatus }),
-        credentials: "include",
+        credentials: 'include',
       });
-      if (!res.ok) throw new Error("Failed to toggle bot status");
+      if (!res.ok) throw new Error('Failed to toggle bot status');
       return res.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, data.id] });
+      queryClient.invalidateQueries({
+        queryKey: [api.conversations.list.path],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [api.conversations.get.path, data.id],
+      });
     },
   });
 }
@@ -73,8 +85,8 @@ export function useMessages(conversationId: number) {
     queryKey: [api.messages.list.path, conversationId],
     queryFn: async () => {
       const url = buildUrl(api.messages.list.path, { id: conversationId });
-      const res = await fetch(url, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch messages");
+      const res = await fetch(url, { credentials: 'include' });
+      if (!res.ok) throw new Error('Failed to fetch messages');
       return res.json();
     },
     enabled: !!conversationId,
@@ -85,22 +97,36 @@ export function useMessages(conversationId: number) {
 export function useSendMessage() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ conversationId, content, role = "agent" }: { conversationId: number; content: string; role?: string }) => {
+    mutationFn: async ({
+      conversationId,
+      content,
+      role = 'agent',
+    }: {
+      conversationId: number;
+      content: string;
+      role?: string;
+    }) => {
       const data = { content, role };
       const url = buildUrl(api.messages.create.path, { id: conversationId });
       const res = await fetch(url, {
         method: api.messages.create.method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-        credentials: "include",
+        credentials: 'include',
       });
-      if (!res.ok) throw new Error("Failed to send message");
+      if (!res.ok) throw new Error('Failed to send message');
       return res.json();
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [api.messages.list.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, variables.conversationId] });
-      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
+      queryClient.invalidateQueries({
+        queryKey: [api.messages.list.path, variables.conversationId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [api.conversations.get.path, variables.conversationId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [api.conversations.list.path],
+      });
     },
   });
 }

@@ -1,22 +1,24 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Send, Copy } from "lucide-react";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Sparkles, Send, Copy } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 export function AIContentGenerator() {
-  const [topic, setTopic] = useState("");
-  const [platform, setPlatform] = useState<"instagram" | "facebook" | "whatsapp">("instagram");
-  const [generated, setGenerated] = useState("");
+  const [topic, setTopic] = useState('');
+  const [platform, setPlatform] = useState<
+    'instagram' | 'facebook' | 'whatsapp'
+  >('instagram');
+  const [generated, setGenerated] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
@@ -24,16 +26,16 @@ export function AIContentGenerator() {
 
     setLoading(true);
     try {
-      const response = await fetch("/api/ai/generate-caption", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/ai/generate-caption', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic, platform }),
       });
 
       const data = await response.json();
       setGenerated(data.content);
     } catch (error) {
-      console.error("Error generating content:", error);
+      console.error('Error generating content:', error);
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,10 @@ export function AIContentGenerator() {
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium mb-2 block">Plataforma</label>
-            <Select value={platform} onValueChange={(v) => setPlatform(v as any)}>
+            <Select
+              value={platform}
+              onValueChange={(v) => setPlatform(v as any)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -89,7 +94,7 @@ export function AIContentGenerator() {
             data-testid="button-generate-content"
           >
             {loading ? (
-              "Generando..."
+              'Generando...'
             ) : (
               <>
                 <Sparkles className="h-4 w-4 mr-2" />

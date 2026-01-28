@@ -24,7 +24,7 @@ $spacing-2xl: 3rem;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  
+
   @media (min-width: $tablet-breakpoint) {
     flex-direction: row;
   }
@@ -35,12 +35,12 @@ $spacing-2xl: 3rem;
   display: grid;
   gap: $spacing-md;
   grid-template-columns: repeat($mobile-cols, 1fr);
-  
+
   @media (min-width: $tablet-breakpoint) {
     grid-template-columns: repeat($tablet-cols, 1fr);
     gap: $spacing-lg;
   }
-  
+
   @media (min-width: $desktop-breakpoint) {
     grid-template-columns: repeat($desktop-cols, 1fr);
     gap: $spacing-xl;
@@ -51,7 +51,7 @@ $spacing-2xl: 3rem;
 .stats-grid {
   @include responsive-grid(1, 2, 4);
   padding: $spacing-md;
-  
+
   @media (min-width: $tablet-breakpoint) {
     padding: $spacing-lg;
   }
@@ -66,12 +66,12 @@ $spacing-2xl: 3rem;
   transition: all 200ms $ease-smooth;
   display: flex;
   flex-direction: column;
-  
+
   &:active {
     transform: scale(0.98);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
-  
+
   @media (min-width: $tablet-breakpoint) {
     padding: $spacing-lg;
     border-radius: 1.25rem;
@@ -83,15 +83,15 @@ $spacing-2xl: 3rem;
   display: flex;
   flex-wrap: wrap;
   gap: $spacing-sm;
-  
+
   @media (min-width: $tablet-breakpoint) {
     gap: $spacing-md;
   }
-  
+
   & > * {
     flex: 1;
     min-width: 120px;
-    
+
     @media (min-width: $tablet-breakpoint) {
       min-width: 150px;
     }
@@ -110,18 +110,19 @@ $spacing-2xl: 3rem;
   border-top: 1px solid hsl(var(--border));
   z-index: 40;
   padding: $spacing-sm;
-  
+
   @media (max-width: calc($tablet-breakpoint - 1px)) {
     display: block;
   }
-  
+
   nav {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     gap: $spacing-xs;
-    
-    a, button {
+
+    a,
+    button {
       flex: 1;
       min-width: 50px;
       display: flex;
@@ -133,7 +134,7 @@ $spacing-2xl: 3rem;
       font-size: 0.75rem;
       transition: all 150ms $ease-smooth;
       cursor: pointer;
-      
+
       &:active {
         background: hsl(var(--accent) / 0.1);
       }
@@ -152,7 +153,7 @@ $spacing-2xl: 3rem;
   position: sticky;
   top: 0;
   z-index: 30;
-  
+
   @media (min-width: $tablet-breakpoint) {
     padding: $spacing-lg;
   }
@@ -163,7 +164,7 @@ $spacing-2xl: 3rem;
   flex: 1;
   overflow-y: auto;
   padding: $spacing-md $spacing-md calc($spacing-xl * 3) $spacing-md;
-  
+
   @media (min-width: $tablet-breakpoint) {
     padding: $spacing-lg;
   }
@@ -173,11 +174,11 @@ $spacing-2xl: 3rem;
 .chart-wrapper {
   width: 100%;
   height: 250px;
-  
+
   @media (min-width: $tablet-breakpoint) {
     height: 300px;
   }
-  
+
   @media (min-width: $desktop-breakpoint) {
     height: 350px;
   }
@@ -186,8 +187,9 @@ $spacing-2xl: 3rem;
 // Mobile Button Group (Wrapping)
 .button-group {
   @include responsive-grid(1, 2, 3);
-  
-  button, a {
+
+  button,
+  a {
     width: 100%;
   }
 }
@@ -202,13 +204,13 @@ $spacing-2xl: 3rem;
   color: hsl(var(--foreground));
   font-size: 1rem;
   transition: all 200ms $ease-smooth;
-  
+
   &:focus {
     border-color: hsl(var(--primary));
     outline: none;
     box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
   }
-  
+
   &:active {
     transform: scale(0.99);
   }
@@ -219,18 +221,19 @@ $spacing-2xl: 3rem;
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;
-  
+
   @media (min-width: $tablet-breakpoint) {
     gap: $spacing-md;
   }
-  
-  > li, > div {
+
+  > li,
+  > div {
     padding: $spacing-md;
     border-radius: 0.75rem;
     border: 1px solid hsl(var(--border));
     transition: all 150ms $ease-smooth;
     cursor: pointer;
-    
+
     &:active {
       background: hsl(var(--accent) / 0.05);
       transform: translateX(2px);
@@ -302,7 +305,7 @@ $spacing-2xl: 3rem;
   .safe-area-bottom {
     padding-bottom: max($spacing-md, env(safe-area-inset-bottom));
   }
-  
+
   .safe-area-top {
     padding-top: max($spacing-md, env(safe-area-inset-top));
   }
@@ -320,7 +323,7 @@ $spacing-2xl: 3rem;
   padding: $spacing-lg;
   animation: slideInUp 300ms $ease-smooth;
   overflow-y: auto;
-  
+
   @media (min-width: $tablet-breakpoint) {
     position: static;
     max-height: none;
@@ -346,7 +349,8 @@ $spacing-2xl: 3rem;
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

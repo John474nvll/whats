@@ -1,10 +1,10 @@
 import twilio from 'twilio';
 
-const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || "";
-const TWILIO_API_KEY = process.env.TWILIO_API_KEY || "";
-const TWILIO_API_SECRET = process.env.TWILIO_API_SECRET || "";
-const TWILIO_APP_SID = process.env.TWILIO_APP_SID || "";
-const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || "";
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
+const TWILIO_API_KEY = process.env.TWILIO_API_KEY || '';
+const TWILIO_API_SECRET = process.env.TWILIO_API_SECRET || '';
+const TWILIO_APP_SID = process.env.TWILIO_APP_SID || '';
+const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '';
 
 export class TwilioCredentialsError extends Error {
   constructor(message: string) {
@@ -19,9 +19,13 @@ class TwilioService {
 
   private constructor() {
     if (!TWILIO_ACCOUNT_SID || !TWILIO_API_KEY || !TWILIO_API_SECRET) {
-      throw new TwilioCredentialsError('Twilio credentials are not fully configured in environment variables.');
+      throw new TwilioCredentialsError(
+        'Twilio credentials are not fully configured in environment variables.',
+      );
     }
-    this.client = twilio(TWILIO_ACCOUNT_SID, TWILIO_API_SECRET, { accountSid: TWILIO_ACCOUNT_SID });
+    this.client = twilio(TWILIO_ACCOUNT_SID, TWILIO_API_SECRET, {
+      accountSid: TWILIO_ACCOUNT_SID,
+    });
   }
 
   public static getInstance(): TwilioService {
@@ -48,7 +52,7 @@ class TwilioService {
       TWILIO_ACCOUNT_SID,
       TWILIO_API_KEY,
       TWILIO_API_SECRET,
-      { identity }
+      { identity },
     );
     token.addGrant(voiceGrant);
 
@@ -60,7 +64,9 @@ class TwilioService {
 
   getVoiceResponse(to: string) {
     if (!TWILIO_PHONE_NUMBER) {
-      throw new TwilioCredentialsError('Twilio Phone Number is not configured.');
+      throw new TwilioCredentialsError(
+        'Twilio Phone Number is not configured.',
+      );
     }
 
     const voiceResponse = new twilio.twiml.VoiceResponse();
@@ -73,18 +79,21 @@ class TwilioService {
 
   getIncomingCallResponse() {
     const voiceResponse = new twilio.twiml.VoiceResponse();
-    voiceResponse.say({ voice: 'alice', language: 'es-MX' }, 'Bienvenido a SocialHub. Un momento por favor.');
+    voiceResponse.say(
+      { voice: 'alice', language: 'es-MX' },
+      'Bienvenido a SocialHub. Un momento por favor.',
+    );
     // The client name is hardcoded to 'support-agent' as this is the only client that can receive calls.
     voiceResponse.dial().client({}, 'support-agent');
     return voiceResponse.toString();
   }
 
   getStatus() {
-      return {
-          configured: !!(TWILIO_ACCOUNT_SID && TWILIO_API_KEY && TWILIO_API_SECRET),
-          hasPhoneNumber: !!TWILIO_PHONE_NUMBER,
-          hasAppSid: !!TWILIO_APP_SID
-      }
+    return {
+      configured: !!(TWILIO_ACCOUNT_SID && TWILIO_API_KEY && TWILIO_API_SECRET),
+      hasPhoneNumber: !!TWILIO_PHONE_NUMBER,
+      hasAppSid: !!TWILIO_APP_SID,
+    };
   }
 }
 

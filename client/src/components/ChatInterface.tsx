@@ -1,9 +1,17 @@
-import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Smartphone, MoreVertical, Paperclip, Smile } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import type { Message, Conversation, Contact } from "@shared/schema";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from 'react';
+import {
+  Send,
+  Bot,
+  User,
+  Smartphone,
+  MoreVertical,
+  Paperclip,
+  Smile,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
+import type { Message, Conversation, Contact } from '@shared/schema';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ChatInterfaceProps {
   conversation: Conversation & { contact: Contact };
@@ -14,19 +22,19 @@ interface ChatInterfaceProps {
   isSending: boolean;
 }
 
-export function ChatInterface({ 
-  conversation, 
-  messages, 
-  botEnabled, 
+export function ChatInterface({
+  conversation,
+  messages,
+  botEnabled,
   onToggleBot,
   onSendMessage,
-  isSending
+  isSending,
 }: ChatInterfaceProps) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -36,7 +44,7 @@ export function ChatInterface({
   const handleSend = () => {
     if (!inputValue.trim()) return;
     onSendMessage(inputValue);
-    setInputValue("");
+    setInputValue('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -71,30 +79,32 @@ export function ChatInterface({
         </div>
 
         <div className="flex items-center gap-2">
-          <div 
+          <div
             className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300",
-              botEnabled 
-                ? "bg-primary/10 border-primary/20 text-primary" 
-                : "bg-secondary/50 border-white/5 text-muted-foreground"
+              'flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all duration-300',
+              botEnabled
+                ? 'bg-primary/10 border-primary/20 text-primary'
+                : 'bg-secondary/50 border-white/5 text-muted-foreground',
             )}
           >
-            <Bot className={cn("h-4 w-4", botEnabled && "animate-pulse")} />
+            <Bot className={cn('h-4 w-4', botEnabled && 'animate-pulse')} />
             <span className="text-xs font-medium">AI Pilot</span>
             <button
               onClick={() => onToggleBot(!botEnabled)}
               className={cn(
-                "ml-2 w-8 h-4 rounded-full relative transition-colors duration-300",
-                botEnabled ? "bg-primary" : "bg-muted"
+                'ml-2 w-8 h-4 rounded-full relative transition-colors duration-300',
+                botEnabled ? 'bg-primary' : 'bg-muted',
               )}
             >
-              <span className={cn(
-                "absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform duration-300 shadow-sm",
-                botEnabled ? "left-[18px]" : "left-0.5"
-              )} />
+              <span
+                className={cn(
+                  'absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform duration-300 shadow-sm',
+                  botEnabled ? 'left-[18px]' : 'left-0.5',
+                )}
+              />
             </button>
           </div>
-          
+
           <button className="h-9 w-9 rounded-lg hover:bg-white/5 flex items-center justify-center text-muted-foreground transition-colors">
             <MoreVertical className="h-5 w-5" />
           </button>
@@ -108,42 +118,61 @@ export function ChatInterface({
             const isMe = msg.role === 'agent' || msg.role === 'system';
             const isBot = msg.role === 'assistant';
             const isUser = msg.role === 'user';
-            
+
             return (
               <motion.div
                 key={msg.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={cn(
-                  "flex gap-3 max-w-[80%]",
-                  (isMe || isBot) ? "ml-auto flex-row-reverse" : ""
+                  'flex gap-3 max-w-[80%]',
+                  isMe || isBot ? 'ml-auto flex-row-reverse' : '',
                 )}
               >
-                <div className={cn(
-                  "h-8 w-8 rounded-full flex items-center justify-center shrink-0 border border-white/5 shadow-sm",
-                  isMe ? "bg-primary/20 text-primary" : 
-                  isBot ? "bg-accent/20 text-accent" : 
-                  "bg-secondary text-muted-foreground"
-                )}>
-                  {isMe ? <User className="h-4 w-4" /> : 
-                   isBot ? <Bot className="h-4 w-4" /> : 
-                   <Smartphone className="h-4 w-4" />}
+                <div
+                  className={cn(
+                    'h-8 w-8 rounded-full flex items-center justify-center shrink-0 border border-white/5 shadow-sm',
+                    isMe
+                      ? 'bg-primary/20 text-primary'
+                      : isBot
+                        ? 'bg-accent/20 text-accent'
+                        : 'bg-secondary text-muted-foreground',
+                  )}
+                >
+                  {isMe ? (
+                    <User className="h-4 w-4" />
+                  ) : isBot ? (
+                    <Bot className="h-4 w-4" />
+                  ) : (
+                    <Smartphone className="h-4 w-4" />
+                  )}
                 </div>
 
-                <div className={cn(
-                  "flex flex-col",
-                  (isMe || isBot) ? "items-end" : "items-start"
-                )}>
-                  <div className={cn(
-                    "px-4 py-2.5 rounded-2xl text-sm shadow-md border leading-relaxed",
-                    isMe ? "bg-primary text-primary-foreground border-primary/20 rounded-tr-none" :
-                    isBot ? "bg-card text-foreground border-accent/20 rounded-tr-none" :
-                    "bg-secondary/80 text-secondary-foreground border-white/5 rounded-tl-none"
-                  )}>
+                <div
+                  className={cn(
+                    'flex flex-col',
+                    isMe || isBot ? 'items-end' : 'items-start',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'px-4 py-2.5 rounded-2xl text-sm shadow-md border leading-relaxed',
+                      isMe
+                        ? 'bg-primary text-primary-foreground border-primary/20 rounded-tr-none'
+                        : isBot
+                          ? 'bg-card text-foreground border-accent/20 rounded-tr-none'
+                          : 'bg-secondary/80 text-secondary-foreground border-white/5 rounded-tl-none',
+                    )}
+                  >
                     {msg.content}
                   </div>
                   <span className="text-[10px] text-muted-foreground mt-1 px-1">
-                    {msg.role === 'assistant' ? 'AI Assistant' : msg.role === 'agent' ? 'You' : 'Customer'} • {format(new Date(msg.createdAt || Date.now()), "HH:mm")}
+                    {msg.role === 'assistant'
+                      ? 'AI Assistant'
+                      : msg.role === 'agent'
+                        ? 'You'
+                        : 'Customer'}{' '}
+                    • {format(new Date(msg.createdAt || Date.now()), 'HH:mm')}
                   </span>
                 </div>
               </motion.div>
@@ -163,7 +192,7 @@ export function ChatInterface({
           </div>
 
           <div className="flex-1 bg-secondary/50 rounded-2xl border border-border/50 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all flex items-end">
-             <textarea
+            <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}

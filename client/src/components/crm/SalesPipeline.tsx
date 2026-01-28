@@ -1,14 +1,29 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
-import { Target, ArrowRight, User, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
+import { Target, ArrowRight, User, TrendingUp } from 'lucide-react';
 
 const stages = [
-  { id: 'new', label: 'Nuevo Lead', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  { id: 'contacting', label: 'Contactando', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-  { id: 'qualified', label: 'Cualificado', color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
-  { id: 'won', label: 'Ganado', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' }
+  {
+    id: 'new',
+    label: 'Nuevo Lead',
+    color: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  },
+  {
+    id: 'contacting',
+    label: 'Contactando',
+    color: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+  },
+  {
+    id: 'qualified',
+    label: 'Cualificado',
+    color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  },
+  {
+    id: 'won',
+    label: 'Ganado',
+    color: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  },
 ];
 
 export function SalesPipeline({ customers = [] }) {
@@ -23,12 +38,21 @@ export function SalesPipeline({ customers = [] }) {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {stages.map((stage) => {
-            const stageCustomers = customers.filter(c => c.leadStatus === stage.id);
+            const stageCustomers = customers.filter(
+              (c) => c.leadStatus === stage.id,
+            );
             return (
               <div key={stage.id} className="space-y-3">
-                <div className={`p-3 rounded-xl border ${stage.color} flex items-center justify-between`}>
-                  <span className="text-xs font-black uppercase tracking-wider">{stage.label}</span>
-                  <Badge variant="outline" className="bg-white/5 border-white/10 text-white font-black">
+                <div
+                  className={`p-3 rounded-xl border ${stage.color} flex items-center justify-between`}
+                >
+                  <span className="text-xs font-black uppercase tracking-wider">
+                    {stage.label}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className="bg-white/5 border-white/10 text-white font-black"
+                  >
                     {stageCustomers.length}
                   </Badge>
                 </div>
@@ -45,8 +69,12 @@ export function SalesPipeline({ customers = [] }) {
                           <User className="w-4 h-4" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-white truncate">{customer.name}</p>
-                          <p className="text-[10px] text-slate-500 truncate">${customer.estimatedValue || 0}</p>
+                          <p className="text-sm font-bold text-white truncate">
+                            {customer.name}
+                          </p>
+                          <p className="text-[10px] text-slate-500 truncate">
+                            ${customer.estimatedValue || 0}
+                          </p>
                         </div>
                         <ArrowRight className="w-3 h-3 text-slate-600 group-hover:text-primary transition-colors" />
                       </div>

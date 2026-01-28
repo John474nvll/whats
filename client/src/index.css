@@ -11,34 +11,34 @@
   /* HSL Colors - Softgan Branding: Dark Blue & Slate */
   --background: 222 47% 11%;
   --foreground: 210 40% 98%;
-  
+
   --card: 222 47% 11%;
   --card-foreground: 210 40% 98%;
-  
+
   --popover: 222 47% 11%;
   --popover-foreground: 210 40% 98%;
-  
+
   --primary: 221 83% 53%; /* Softgan Indigo */
   --primary-foreground: 210 40% 98%;
-  
+
   --secondary: 217 32% 17%;
   --secondary-foreground: 210 40% 98%;
-  
+
   --muted: 217 32% 17%;
   --muted-foreground: 215 20% 65%;
-  
+
   --accent: 217 32% 17%;
   --accent-foreground: 210 40% 98%;
-  
+
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
-  
+
   --border: 217 32% 17%;
   --input: 217 32% 17%;
   --ring: 224 76% 48%;
-  
+
   --radius: 0.75rem;
-  
+
   /* Brand Accents */
   --kiwi: 142 71% 45%;
   --cyan-neon: 189 94% 43%;
@@ -83,10 +83,17 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/30;
     font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     @apply font-bold tracking-tight text-foreground;
   }
@@ -96,7 +103,7 @@
   .hover-elevate {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10;
   }
-  
+
   .active-elevate-2 {
     @apply active:scale-95 transition-transform;
   }

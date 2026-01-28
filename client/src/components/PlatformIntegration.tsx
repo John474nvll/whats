@@ -1,16 +1,16 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { motion } from 'framer-motion';
 import {
   Instagram,
   Facebook,
   MessageCircle,
   CheckCircle2,
   AlertCircle,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
 interface Platform {
   name: string;
@@ -21,22 +21,22 @@ interface Platform {
 
 const platforms: Record<string, Platform> = {
   instagram: {
-    name: "Instagram",
+    name: 'Instagram',
     icon: Instagram,
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
+    color: 'text-pink-500',
+    bgColor: 'bg-pink-500/10',
   },
   facebook: {
-    name: "Facebook",
+    name: 'Facebook',
     icon: Facebook,
-    color: "text-blue-600",
-    bgColor: "bg-blue-600/10",
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-600/10',
   },
   whatsapp: {
-    name: "WhatsApp",
+    name: 'WhatsApp',
     icon: MessageCircle,
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
+    color: 'text-green-500',
+    bgColor: 'bg-green-500/10',
   },
 };
 
@@ -50,9 +50,9 @@ export function PlatformIntegration() {
 
     setLoading(true);
     try {
-      const response = await fetch("/api/platforms/connect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/platforms/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           platform: platformKey,
           accessToken: tokens[platformKey],
@@ -63,7 +63,7 @@ export function PlatformIntegration() {
         setConnected({ ...connected, [platformKey]: true });
       }
     } catch (error) {
-      console.error("Connection error:", error);
+      console.error('Connection error:', error);
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,9 @@ export function PlatformIntegration() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
           >
-            <Card className={`p-6 ${platform.bgColor} border-2 border-transparent hover:border-primary/50 transition-all`}>
+            <Card
+              className={`p-6 ${platform.bgColor} border-2 border-transparent hover:border-primary/50 transition-all`}
+            >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <platform.icon className={`h-8 w-8 ${platform.color}`} />
@@ -116,7 +118,7 @@ export function PlatformIntegration() {
                     <Input
                       type="password"
                       placeholder="Ingresa tu access token"
-                      value={tokens[key] || ""}
+                      value={tokens[key] || ''}
                       onChange={(e) =>
                         setTokens({ ...tokens, [key]: e.target.value })
                       }
@@ -130,7 +132,7 @@ export function PlatformIntegration() {
                     className="w-full text-xs"
                     data-testid={`button-connect-${key}`}
                   >
-                    {loading ? "Conectando..." : "Conectar"}
+                    {loading ? 'Conectando...' : 'Conectar'}
                   </Button>
                 </div>
               )}

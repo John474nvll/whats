@@ -10,12 +10,12 @@ Esta guía está diseñada para administradores del sistema SoftganHub. Cubre la
 
 ### Tipos de Usuario
 
-| Rol | Permisos | Descripción |
-|-----|----------|-------------|
-| **Admin** | Completo | Acceso total al sistema, configuración y usuarios |
-| **Vendedor** | Medio | Gestión de clientes, órdenes y comunicaciones |
-| **Agente** | Limitado | Solo inbox y atención al cliente |
-| **Developer** | Técnico | Acceso a APIs y configuración técnica |
+| Rol           | Permisos | Descripción                                       |
+| ------------- | -------- | ------------------------------------------------- |
+| **Admin**     | Completo | Acceso total al sistema, configuración y usuarios |
+| **Vendedor**  | Medio    | Gestión de clientes, órdenes y comunicaciones     |
+| **Agente**    | Limitado | Solo inbox y atención al cliente                  |
+| **Developer** | Técnico  | Acceso a APIs y configuración técnica             |
 
 ---
 
@@ -24,11 +24,13 @@ Esta guía está diseñada para administradores del sistema SoftganHub. Cubre la
 ### WhatsApp Business API
 
 **Requisitos:**
+
 - Cuenta de Meta Business verificada
 - WhatsApp Business API aprobada
 - Token de acceso permanente
 
 **Configuración:**
+
 1. Ve a **Configuración > Plataformas > WhatsApp**
 2. Ingresa el Phone Number ID
 3. Ingresa el WhatsApp Business ID
@@ -37,6 +39,7 @@ Esta guía está diseñada para administradores del sistema SoftganHub. Cubre la
 6. Verifica la conexión
 
 **Variables de entorno requeridas:**
+
 ```
 WHATSAPP_ACCESS_TOKEN=tu_token_aqui
 WHATSAPP_PHONE_NUMBER_ID=tu_phone_id
@@ -47,11 +50,13 @@ WHATSAPP_VERIFY_TOKEN=token_verificacion
 ### Instagram Business
 
 **Requisitos:**
+
 - Cuenta de Instagram Business o Creator
 - Página de Facebook vinculada
 - Permisos de API de Instagram
 
 **Configuración:**
+
 1. Ve a **Plataformas > Instagram**
 2. Haz clic en "Conectar con Facebook"
 3. Autoriza los permisos solicitados
@@ -60,6 +65,7 @@ WHATSAPP_VERIFY_TOKEN=token_verificacion
 ### Facebook Messenger
 
 **Configuración:**
+
 1. Ve a **Plataformas > Facebook**
 2. Conecta tu página de Facebook
 3. Activa la integración de Messenger
@@ -100,11 +106,13 @@ WHATSAPP_VERIFY_TOKEN=token_verificacion
 ### Integración Twilio
 
 **Requisitos:**
+
 - Cuenta de Twilio activa
 - Número de teléfono comprado
 - SID y Auth Token
 
 **Configuración:**
+
 1. Ve a **Voz & Retell > Configurar APIs**
 2. Ingresa:
    - Account SID
@@ -141,13 +149,13 @@ WHATSAPP_VERIFY_TOKEN=token_verificacion
 
 ### Etapas Predefinidas
 
-| Etapa | Descripción |
-|-------|-------------|
-| Visitante | Primer contacto |
-| Lead | Mostró interés |
+| Etapa       | Descripción      |
+| ----------- | ---------------- |
+| Visitante   | Primer contacto  |
+| Lead        | Mostró interés   |
 | Cualificado | Cumple criterios |
-| Oportunidad | En negociación |
-| Cliente | Venta cerrada |
+| Oportunidad | En negociación   |
+| Cliente     | Venta cerrada    |
 
 ---
 
@@ -250,16 +258,19 @@ Pendiente → Aprobada → En Proceso → Completada
 ## Solución de Problemas
 
 ### WhatsApp no envía mensajes
+
 1. Verifica el token de acceso
 2. Revisa los límites de la API
 3. Confirma que el número esté verificado
 
 ### Bot no responde
+
 1. Verifica que el agente esté activo
 2. Revisa la configuración del canal
 3. Comprueba la conexión con la API de IA
 
 ### Órdenes no se actualizan
+
 1. Revisa la conexión a la base de datos
 2. Verifica permisos del usuario
 3. Limpia la caché del navegador
@@ -269,9 +280,10 @@ Pendiente → Aprobada → En Proceso → Completada
 ## Contacto de Soporte
 
 **Soporte Técnico SoftganHub**
+
 - Email: soporte@softgan.com
 - Documentación: docs.softgan.com
 
 ---
 
-*SoftganHub v11.0 | softgan.com | Tecnología que impulsa tu crecimiento*
+_SoftganHub v11.0 | softgan.com | Tecnología que impulsa tu crecimiento_

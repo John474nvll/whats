@@ -1,14 +1,20 @@
-
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Package, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useQuery } from '@tanstack/react-query';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Package, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Billing() {
   const { data: invoices = [], isLoading } = useQuery<any[]>({
-    queryKey: ["/api/crm/invoices"],
+    queryKey: ['/api/crm/invoices'],
   });
 
   return (
@@ -40,16 +46,27 @@ export default function Billing() {
             </TableHeader>
             <TableBody>
               {invoices.map((invoice) => (
-                <TableRow key={invoice.id} className="border-white/5 hover:bg-white/5">
+                <TableRow
+                  key={invoice.id}
+                  className="border-white/5 hover:bg-white/5"
+                >
                   <TableCell className="font-mono">#{invoice.id}</TableCell>
                   <TableCell>Cliente {invoice.customerId}</TableCell>
                   <TableCell className="font-bold">${invoice.amount}</TableCell>
                   <TableCell>
-                    <Badge className={invoice.status === 'paid' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-amber-500/20 text-amber-500'}>
+                    <Badge
+                      className={
+                        invoice.status === 'paid'
+                          ? 'bg-emerald-500/20 text-emerald-500'
+                          : 'bg-amber-500/20 text-amber-500'
+                      }
+                    >
                       {invoice.status.toUpperCase()}
                     </Badge>
                   </TableCell>
-                  <TableCell>{new Date(invoice.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Date(invoice.createdAt).toLocaleDateString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

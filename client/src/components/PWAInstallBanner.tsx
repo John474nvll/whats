@@ -1,11 +1,12 @@
-import { usePWA } from "@/hooks/use-pwa";
-import { Button } from "@/components/ui/button";
-import { Download, RefreshCw, X, WifiOff, Smartphone } from "lucide-react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { usePWA } from '@/hooks/use-pwa';
+import { Button } from '@/components/ui/button';
+import { Download, RefreshCw, X, WifiOff, Smartphone } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function PWAInstallBanner() {
-  const { isInstallable, isUpdateAvailable, isOffline, installApp, updateApp } = usePWA();
+  const { isInstallable, isUpdateAvailable, isOffline, installApp, updateApp } =
+    usePWA();
   const [dismissed, setDismissed] = useState(false);
 
   if (dismissed || (!isInstallable && !isUpdateAvailable && !isOffline)) {
@@ -56,7 +57,9 @@ export function PWAInstallBanner() {
                 <Smartphone className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-white mb-1">Instalar SocialHub</h3>
+                <h3 className="font-bold text-white mb-1">
+                  Instalar SocialHub
+                </h3>
                 <p className="text-sm text-slate-400 mb-3">
                   Accede m&aacute;s r&aacute;pido desde tu pantalla de inicio
                 </p>

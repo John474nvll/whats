@@ -1,42 +1,42 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Settings } from "lucide-react";
-import { motion } from "framer-motion";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface Account {
   id: string;
   name: string;
-  platform: "instagram" | "facebook" | "whatsapp";
+  platform: 'instagram' | 'facebook' | 'whatsapp';
   email: string;
   isAdmin: boolean;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
 }
 
 const accounts: Account[] = [
   {
-    id: "1",
-    name: "Cuenta Principal",
-    platform: "instagram",
-    email: "admin@socialhub.com",
+    id: '1',
+    name: 'Cuenta Principal',
+    platform: 'instagram',
+    email: 'admin@socialhub.com',
     isAdmin: true,
-    status: "active",
+    status: 'active',
   },
   {
-    id: "2",
-    name: "Facebook Business",
-    platform: "facebook",
-    email: "fb@socialhub.com",
+    id: '2',
+    name: 'Facebook Business',
+    platform: 'facebook',
+    email: 'fb@socialhub.com',
     isAdmin: true,
-    status: "active",
+    status: 'active',
   },
   {
-    id: "3",
-    name: "WhatsApp Business",
-    platform: "whatsapp",
-    email: "whatsapp@socialhub.com",
+    id: '3',
+    name: 'WhatsApp Business',
+    platform: 'whatsapp',
+    email: 'whatsapp@socialhub.com',
     isAdmin: false,
-    status: "active",
+    status: 'active',
   },
 ];
 
@@ -62,7 +62,9 @@ export function AccountManager() {
             <Card className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${account.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}`} />
+                  <div
+                    className={`w-3 h-3 rounded-full ${account.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}`}
+                  />
                   <h3 className="font-bold text-foreground">{account.name}</h3>
                 </div>
                 <Button variant="ghost" size="icon">
@@ -76,9 +78,7 @@ export function AccountManager() {
                   <Badge variant="outline" className="capitalize">
                     {account.platform}
                   </Badge>
-                  {account.isAdmin && (
-                    <Badge variant="default">Admin</Badge>
-                  )}
+                  {account.isAdmin && <Badge variant="default">Admin</Badge>}
                 </div>
               </div>
 

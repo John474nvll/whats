@@ -4,7 +4,10 @@ const META_API_VERSION = 'v18.0';
 const META_BASE_URL = `https://graph.facebook.com/${META_API_VERSION}`;
 
 export class MetaAPIError extends Error {
-  constructor(message: string, public response?: any) {
+  constructor(
+    message: string,
+    public response?: any,
+  ) {
     super(message);
     this.name = 'MetaAPIError';
   }
@@ -21,16 +24,18 @@ export class MetaService {
       },
     });
 
-    this.apiClient.interceptors.request.use(config => {
-        config.params = { ...config.params, access_token: this.accessToken };
-        return config;
+    this.apiClient.interceptors.request.use((config) => {
+      config.params = { ...config.params, access_token: this.accessToken };
+      return config;
     });
 
     this.apiClient.interceptors.response.use(
-        response => response,
-        error => {
-            return Promise.reject(new MetaAPIError(error.message, error.response?.data));
-        }
+      (response) => response,
+      (error) => {
+        return Promise.reject(
+          new MetaAPIError(error.message, error.response?.data),
+        );
+      },
     );
   }
 
@@ -43,45 +48,60 @@ export class MetaService {
     }
   }
 
-  async publishToInstagram(instagramAccountId: string, caption: string, imageUrl: string) {
-      const mediaRes = await this.apiClient.post(`/${instagramAccountId}/media`, {
-        image_url: imageUrl,
-        caption: caption,
-      });
-      const creationId = mediaRes.data.id;
-      const publishRes = await this.apiClient.post(`/${instagramAccountId}/media_publish`, {
+  async publishToInstagram(
+    instagramAccountId: string,
+    caption: string,
+    imageUrl: string,
+  ) {
+    const mediaRes = await this.apiClient.post(`/${instagramAccountId}/media`, {
+      image_url: imageUrl,
+      caption: caption,
+    });
+    const creationId = mediaRes.data.id;
+    const publishRes = await this.apiClient.post(
+      `/${instagramAccountId}/media_publish`,
+      {
         creation_id: creationId,
-      });
-      return publishRes.data;
+      },
+    );
+    return publishRes.data;
   }
 
   async publishToFacebook(pageId: string, message: string, link?: string) {
-      const res = await this.apiClient.post(`/${pageId}/feed`, {
-        message,
-        link,
-      });
-      return res.data;
+    const res = await this.apiClient.post(`/${pageId}/feed`, {
+      message,
+      link,
+    });
+    return res.data;
   }
 
   async sendWhatsAppMessage(phoneNumberId: string, to: string, text: string) {
-      const res = await this.apiClient.post(`/${phoneNumberId}/messages`, {
-        messaging_product: 'whatsapp',
-        to,
-        type: 'text',
-        text: { body: text },
-      });
-      return res.data;
+    const res = await this.apiClient.post(`/${phoneNumberId}/messages`, {
+      messaging_product: 'whatsapp',
+      to,
+      type: 'text',
+      text: { body: text },
+    });
+    return res.data;
   }
 
   async fetchMessages(pageId: string, platform: 'instagram' | 'facebook') {
-      const endpoint = platform === 'instagram' ? `/${pageId}/conversations` : `/${pageId}/conversations`;
-      const params = platform === 'instagram' ? { fields: 'id,senders,former_participants,info' } : { fields: 'id,senders' };
-      const response = await this.apiClient.get(endpoint, { params });
-      return response.data.data || [];
+    const endpoint =
+      platform === 'instagram'
+        ? `/${pageId}/conversations`
+        : `/${pageId}/conversations`;
+    const params =
+      platform === 'instagram'
+        ? { fields: 'id,senders,former_participants,info' }
+        : { fields: 'id,senders' };
+    const response = await this.apiClient.get(endpoint, { params });
+    return response.data.data || [];
   }
 
   async sendMessage(conversationId: string, message: string) {
-      const response = await this.apiClient.post(`/${conversationId}/messages`, { message });
-      return response.data;
+    const response = await this.apiClient.post(`/${conversationId}/messages`, {
+      message,
+    });
+    return response.data;
   }
 }

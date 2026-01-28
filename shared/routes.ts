@@ -1,6 +1,13 @@
-
 import { z } from 'zod';
-import { insertUserSchema, insertMessageSchema, conversations, messages, contacts, insertChannelConfigSchema, channelConfigs } from './schema';
+import {
+  insertUserSchema,
+  insertMessageSchema,
+  conversations,
+  messages,
+  contacts,
+  insertChannelConfigSchema,
+  channelConfigs,
+} from './schema';
 
 export type InsertChannelConfig = z.infer<typeof insertChannelConfigSchema>;
 
@@ -59,10 +66,10 @@ export const api = {
       responses: {
         200: z.object({
           sentiment: z.string(),
-          suggestedResponse: z.string()
+          suggestedResponse: z.string(),
         }),
       },
-    }
+    },
   },
   webhooks: {
     meta: {
@@ -84,23 +91,25 @@ export const api = {
       responses: {
         200: z.string(),
       },
-    }
+    },
   },
   channels: {
     list: {
       method: 'GET' as const,
       path: '/api/channels',
       responses: {
-        200: z.array(z.object({
-          id: z.number(),
-          platform: z.string(),
-          accessToken: z.string().nullable(),
-          verifyToken: z.string().nullable(),
-          phoneNumberId: z.string().nullable(),
-          isActive: z.boolean().nullable(),
-          createdAt: z.string().nullable(),
-          updatedAt: z.string().nullable(),
-        })),
+        200: z.array(
+          z.object({
+            id: z.number(),
+            platform: z.string(),
+            accessToken: z.string().nullable(),
+            verifyToken: z.string().nullable(),
+            phoneNumberId: z.string().nullable(),
+            isActive: z.boolean().nullable(),
+            createdAt: z.string().nullable(),
+            updatedAt: z.string().nullable(),
+          }),
+        ),
       },
     },
     update: {
@@ -124,7 +133,10 @@ export const api = {
   },
 };
 
-export function buildUrl(path: string, params?: Record<string, string | number>): string {
+export function buildUrl(
+  path: string,
+  params?: Record<string, string | number>,
+): string {
   let url = path;
   if (params) {
     Object.entries(params).forEach(([key, value]) => {

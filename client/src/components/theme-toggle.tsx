@@ -1,6 +1,6 @@
-import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 export function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
@@ -9,34 +9,36 @@ export function ThemeToggle() {
   useEffect(() => {
     setMounted(true);
     // Check localStorage first, then check system preference
-    const storedTheme = localStorage.getItem("theme");
-    const isDarkMode = storedTheme === "light" ? false : true;
-    
+    const storedTheme = localStorage.getItem('theme');
+    const isDarkMode = storedTheme === 'light' ? false : true;
+
     setIsDark(isDarkMode);
-    
+
     // Apply theme
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
   const toggleTheme = () => {
     const htmlElement = document.documentElement;
     const newIsDark = !isDark;
-    
+
     if (newIsDark) {
-      htmlElement.classList.add("dark");
+      htmlElement.classList.add('dark');
     } else {
-      htmlElement.classList.remove("dark");
+      htmlElement.classList.remove('dark');
     }
-    
+
     setIsDark(newIsDark);
-    localStorage.setItem("theme", newIsDark ? "dark" : "light");
-    
+    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+
     // Dispatch event for any listeners
-    window.dispatchEvent(new CustomEvent("themechange", { detail: { isDark: newIsDark } }));
+    window.dispatchEvent(
+      new CustomEvent('themechange', { detail: { isDark: newIsDark } }),
+    );
   };
 
   if (!mounted) {

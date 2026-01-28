@@ -1,25 +1,47 @@
-
-import { db } from "./db";
+import { db } from './db';
 import {
-  users, contacts, conversations, messages,
-  customers, campaigns, socialAccounts,
-  tickets, roles, channelConfigs, purchaseOrders,
-  funnels, voiceConfigs, voiceAgents, callLogs,
-  type InsertUser, type User,
-  type InsertContact, type Contact,
-  type InsertConversation, type Conversation,
-  type InsertMessage, type Message,
-  type InsertTicket, type Ticket,
-  type InsertRole, type Role,
-  type ChannelConfig, type InsertChannelConfig,
-  type PurchaseOrder, type InsertPurchaseOrder,
-  type Funnel, type InsertFunnel,
-  type VoiceConfig, type InsertVoiceConfig,
-  type VoiceAgent, type InsertVoiceAgent,
-  type CallLog, type InsertCallLog,
-  type ConversationWithContact
-} from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+  users,
+  contacts,
+  conversations,
+  messages,
+  customers,
+  campaigns,
+  socialAccounts,
+  tickets,
+  roles,
+  channelConfigs,
+  purchaseOrders,
+  funnels,
+  voiceConfigs,
+  voiceAgents,
+  callLogs,
+  type InsertUser,
+  type User,
+  type InsertContact,
+  type Contact,
+  type InsertConversation,
+  type Conversation,
+  type InsertMessage,
+  type Message,
+  type InsertTicket,
+  type Ticket,
+  type InsertRole,
+  type Role,
+  type ChannelConfig,
+  type InsertChannelConfig,
+  type PurchaseOrder,
+  type InsertPurchaseOrder,
+  type Funnel,
+  type InsertFunnel,
+  type VoiceConfig,
+  type InsertVoiceConfig,
+  type VoiceAgent,
+  type InsertVoiceAgent,
+  type CallLog,
+  type InsertCallLog,
+  type ConversationWithContact,
+} from '@shared/schema';
+import { eq, desc } from 'drizzle-orm';
 
 export interface IStorage {
   // Users
@@ -28,13 +50,18 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
 
   // Contacts
-  getContactByPlatformId(platform: string, platformId: string): Promise<Contact | undefined>;
+  getContactByPlatformId(
+    platform: string,
+    platformId: string,
+  ): Promise<Contact | undefined>;
   createContact(contact: InsertContact): Promise<Contact>;
 
   // Conversations
   getConversations(): Promise<ConversationWithContact[]>;
   getConversation(id: number): Promise<ConversationWithContact | undefined>;
-  getConversationByContactId(contactId: number): Promise<Conversation | undefined>;
+  getConversationByContactId(
+    contactId: number,
+  ): Promise<Conversation | undefined>;
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   updateConversationStatus(id: number, status: string): Promise<Conversation>;
 
@@ -56,13 +83,19 @@ export interface IStorage {
   // Channel Configs
   getChannelConfigs(): Promise<ChannelConfig[]>;
   getChannelConfig(platform: string): Promise<ChannelConfig | undefined>;
-  upsertChannelConfig(platform: string, config: Partial<InsertChannelConfig>): Promise<ChannelConfig>;
+  upsertChannelConfig(
+    platform: string,
+    config: Partial<InsertChannelConfig>,
+  ): Promise<ChannelConfig>;
 
   // Purchase Orders
   getPurchaseOrders(): Promise<PurchaseOrder[]>;
   getPurchaseOrder(id: number): Promise<PurchaseOrder | undefined>;
   createPurchaseOrder(order: InsertPurchaseOrder): Promise<PurchaseOrder>;
-  updatePurchaseOrder(id: number, order: Partial<InsertPurchaseOrder>): Promise<PurchaseOrder>;
+  updatePurchaseOrder(
+    id: number,
+    order: Partial<InsertPurchaseOrder>,
+  ): Promise<PurchaseOrder>;
   deletePurchaseOrder(id: number): Promise<void>;
 
   // Funnels
@@ -74,7 +107,10 @@ export interface IStorage {
 
   // Voice Configs
   getVoiceConfig(provider: string): Promise<VoiceConfig | undefined>;
-  upsertVoiceConfig(provider: string, config: Partial<InsertVoiceConfig>): Promise<VoiceConfig>;
+  upsertVoiceConfig(
+    provider: string,
+    config: Partial<InsertVoiceConfig>,
+  ): Promise<VoiceConfig>;
 
   // Voice Agents
   getVoiceAgents(): Promise<VoiceAgent[]>;
@@ -92,7 +128,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, username));
     return user;
   }
 
@@ -101,46 +140,71 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getContactByPlatformId(platform: string, platformId: string): Promise<Contact | undefined> {
-    const [contact] = await db.select().from(contacts).where(
-      eq(contacts.platform, platform) && eq(contacts.platformId, platformId)
-    );
+  async getContactByPlatformId(
+    platform: string,
+    platformId: string,
+  ): Promise<Contact | undefined> {
+    const [contact] = await db
+      .select()
+      .from(contacts)
+      .where(
+        eq(contacts.platform, platform) && eq(contacts.platformId, platformId),
+      );
     return contact;
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
-    const [contact] = await db.insert(contacts).values(insertContact).returning();
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertContact)
+      .returning();
     return contact;
   }
 
   async getConversations(): Promise<ConversationWithContact[]> {
     const result = await db.query.conversations.findMany({
       with: { contact: true },
-      orderBy: [desc(conversations.lastMessageAt)]
+      orderBy: [desc(conversations.lastMessageAt)],
     });
     return result as ConversationWithContact[];
   }
 
-  async getConversation(id: number): Promise<ConversationWithContact | undefined> {
+  async getConversation(
+    id: number,
+  ): Promise<ConversationWithContact | undefined> {
     const result = await db.query.conversations.findFirst({
       where: eq(conversations.id, id),
-      with: { contact: true }
+      with: { contact: true },
     });
     return result as ConversationWithContact | undefined;
   }
 
-  async getConversationByContactId(contactId: number): Promise<Conversation | undefined> {
-    const [conversation] = await db.select().from(conversations).where(eq(conversations.contactId, contactId));
+  async getConversationByContactId(
+    contactId: number,
+  ): Promise<Conversation | undefined> {
+    const [conversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.contactId, contactId));
     return conversation;
   }
 
-  async createConversation(insertConversation: InsertConversation): Promise<Conversation> {
-    const [conversation] = await db.insert(conversations).values(insertConversation).returning();
+  async createConversation(
+    insertConversation: InsertConversation,
+  ): Promise<Conversation> {
+    const [conversation] = await db
+      .insert(conversations)
+      .values(insertConversation)
+      .returning();
     return conversation;
   }
 
-  async updateConversationStatus(id: number, status: string): Promise<Conversation> {
-    const [conversation] = await db.update(conversations)
+  async updateConversationStatus(
+    id: number,
+    status: string,
+  ): Promise<Conversation> {
+    const [conversation] = await db
+      .update(conversations)
       .set({ status })
       .where(eq(conversations.id, id))
       .returning();
@@ -148,22 +212,30 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getMessages(conversationId: number): Promise<Message[]> {
-    return await db.select().from(messages)
+    return await db
+      .select()
+      .from(messages)
       .where(eq(messages.conversationId, conversationId))
       .orderBy(messages.timestamp);
   }
 
   async createMessage(insertMessage: InsertMessage): Promise<Message> {
-    const [message] = await db.insert(messages).values(insertMessage).returning();
+    const [message] = await db
+      .insert(messages)
+      .values(insertMessage)
+      .returning();
     // Update conversation last message timestamp
-    await db.update(conversations)
+    await db
+      .update(conversations)
       .set({ lastMessageAt: new Date() })
       .where(eq(conversations.id, insertMessage.conversationId));
     return message;
   }
 
   async getLastMessage(conversationId: number): Promise<Message | undefined> {
-    const [message] = await db.select().from(messages)
+    const [message] = await db
+      .select()
+      .from(messages)
       .where(eq(messages.conversationId, conversationId))
       .orderBy(desc(messages.timestamp))
       .limit(1);
@@ -185,8 +257,12 @@ export class DatabaseStorage implements IStorage {
     return ticket;
   }
 
-  async updateTicket(id: number, update: Partial<InsertTicket>): Promise<Ticket> {
-    const [ticket] = await db.update(tickets)
+  async updateTicket(
+    id: number,
+    update: Partial<InsertTicket>,
+  ): Promise<Ticket> {
+    const [ticket] = await db
+      .update(tickets)
       .set({ ...update, updatedAt: new Date() })
       .where(eq(tickets.id, id))
       .returning();
@@ -209,20 +285,28 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getChannelConfig(platform: string): Promise<ChannelConfig | undefined> {
-    const [config] = await db.select().from(channelConfigs).where(eq(channelConfigs.platform, platform));
+    const [config] = await db
+      .select()
+      .from(channelConfigs)
+      .where(eq(channelConfigs.platform, platform));
     return config;
   }
 
-  async upsertChannelConfig(platform: string, update: Partial<InsertChannelConfig>): Promise<ChannelConfig> {
+  async upsertChannelConfig(
+    platform: string,
+    update: Partial<InsertChannelConfig>,
+  ): Promise<ChannelConfig> {
     const existing = await this.getChannelConfig(platform);
     if (existing) {
-      const [config] = await db.update(channelConfigs)
+      const [config] = await db
+        .update(channelConfigs)
         .set({ ...update, updatedAt: new Date() })
         .where(eq(channelConfigs.platform, platform))
         .returning();
       return config;
     } else {
-      const [config] = await db.insert(channelConfigs)
+      const [config] = await db
+        .insert(channelConfigs)
         .values({ platform, ...update })
         .returning();
       return config;
@@ -231,24 +315,37 @@ export class DatabaseStorage implements IStorage {
 
   // Purchase Orders
   async getPurchaseOrders(): Promise<PurchaseOrder[]> {
-    return await db.select().from(purchaseOrders).orderBy(desc(purchaseOrders.createdAt));
+    return await db
+      .select()
+      .from(purchaseOrders)
+      .orderBy(desc(purchaseOrders.createdAt));
   }
 
   async getPurchaseOrder(id: number): Promise<PurchaseOrder | undefined> {
-    const [order] = await db.select().from(purchaseOrders).where(eq(purchaseOrders.id, id));
+    const [order] = await db
+      .select()
+      .from(purchaseOrders)
+      .where(eq(purchaseOrders.id, id));
     return order;
   }
 
-  async createPurchaseOrder(insertOrder: InsertPurchaseOrder): Promise<PurchaseOrder> {
+  async createPurchaseOrder(
+    insertOrder: InsertPurchaseOrder,
+  ): Promise<PurchaseOrder> {
     const orderNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
-    const [order] = await db.insert(purchaseOrders)
+    const [order] = await db
+      .insert(purchaseOrders)
       .values({ ...insertOrder, orderNumber })
       .returning();
     return order;
   }
 
-  async updatePurchaseOrder(id: number, update: Partial<InsertPurchaseOrder>): Promise<PurchaseOrder> {
-    const [order] = await db.update(purchaseOrders)
+  async updatePurchaseOrder(
+    id: number,
+    update: Partial<InsertPurchaseOrder>,
+  ): Promise<PurchaseOrder> {
+    const [order] = await db
+      .update(purchaseOrders)
       .set({ ...update, updatedAt: new Date() })
       .where(eq(purchaseOrders.id, id))
       .returning();
@@ -274,8 +371,12 @@ export class DatabaseStorage implements IStorage {
     return funnel;
   }
 
-  async updateFunnel(id: number, update: Partial<InsertFunnel>): Promise<Funnel> {
-    const [funnel] = await db.update(funnels)
+  async updateFunnel(
+    id: number,
+    update: Partial<InsertFunnel>,
+  ): Promise<Funnel> {
+    const [funnel] = await db
+      .update(funnels)
       .set({ ...update, updatedAt: new Date() })
       .where(eq(funnels.id, id))
       .returning();
@@ -288,20 +389,28 @@ export class DatabaseStorage implements IStorage {
 
   // Voice Configs
   async getVoiceConfig(provider: string): Promise<VoiceConfig | undefined> {
-    const [config] = await db.select().from(voiceConfigs).where(eq(voiceConfigs.provider, provider));
+    const [config] = await db
+      .select()
+      .from(voiceConfigs)
+      .where(eq(voiceConfigs.provider, provider));
     return config;
   }
 
-  async upsertVoiceConfig(provider: string, update: Partial<InsertVoiceConfig>): Promise<VoiceConfig> {
+  async upsertVoiceConfig(
+    provider: string,
+    update: Partial<InsertVoiceConfig>,
+  ): Promise<VoiceConfig> {
     const existing = await this.getVoiceConfig(provider);
     if (existing) {
-      const [config] = await db.update(voiceConfigs)
+      const [config] = await db
+        .update(voiceConfigs)
         .set({ ...update, updatedAt: new Date() })
         .where(eq(voiceConfigs.provider, provider))
         .returning();
       return config;
     } else {
-      const [config] = await db.insert(voiceConfigs)
+      const [config] = await db
+        .insert(voiceConfigs)
         .values({ provider, ...update })
         .returning();
       return config;
@@ -310,7 +419,10 @@ export class DatabaseStorage implements IStorage {
 
   // Voice Agents
   async getVoiceAgents(): Promise<VoiceAgent[]> {
-    return await db.select().from(voiceAgents).orderBy(desc(voiceAgents.createdAt));
+    return await db
+      .select()
+      .from(voiceAgents)
+      .orderBy(desc(voiceAgents.createdAt));
   }
 
   async createVoiceAgent(agent: InsertVoiceAgent): Promise<VoiceAgent> {

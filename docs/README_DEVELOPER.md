@@ -9,6 +9,7 @@ Esta guía está diseñada para desarrolladores que trabajan con SoftganHub. Cub
 ## Stack Tecnológico
 
 ### Frontend
+
 - **React 18** - Biblioteca de UI
 - **TypeScript** - Tipado estático
 - **Vite** - Bundler y dev server
@@ -20,16 +21,19 @@ Esta guía está diseñada para desarrolladores que trabajan con SoftganHub. Cub
 - **Wouter** - Enrutamiento
 
 ### Backend
+
 - **Express.js** - Framework HTTP
 - **TypeScript** - Tipado estático
 - **Drizzle ORM** - ORM para PostgreSQL
 - **Zod** - Validación de esquemas
 
 ### Base de Datos
+
 - **PostgreSQL** - Base de datos relacional
 - **Drizzle ORM** - Migraciones y queries
 
 ### IA y Servicios
+
 - **OpenAI GPT-4o** - Generación de contenido y análisis
 - **Twilio** - Voz y SMS
 - **Retell AI** - Agentes de voz IA
@@ -85,9 +89,9 @@ users = {
   id: serial,
   username: text,
   password: text,
-  role: text,        // 'admin' | 'vendedor' | 'agente' | 'developer'
-  createdAt: timestamp
-}
+  role: text, // 'admin' | 'vendedor' | 'agente' | 'developer'
+  createdAt: timestamp,
+};
 
 // customers - Clientes
 customers = {
@@ -96,30 +100,30 @@ customers = {
   email: text,
   phone: text,
   farmName: text,
-  status: text,      // 'active' | 'inactive'
-  leadStatus: text,  // 'new' | 'contacted' | 'qualified' | 'won' | 'lost'
+  status: text, // 'active' | 'inactive'
+  leadStatus: text, // 'new' | 'contacted' | 'qualified' | 'won' | 'lost'
   estimatedValue: integer,
-  createdAt: timestamp
-}
+  createdAt: timestamp,
+};
 
 // conversations - Conversaciones
 conversations = {
   id: serial,
   contactId: integer,
-  status: text,      // 'active' | 'closed'
-  channel: text,     // 'whatsapp' | 'instagram' | 'facebook'
-  lastMessageAt: timestamp
-}
+  status: text, // 'active' | 'closed'
+  channel: text, // 'whatsapp' | 'instagram' | 'facebook'
+  lastMessageAt: timestamp,
+};
 
 // messages - Mensajes
 messages = {
   id: serial,
   conversationId: integer,
   content: text,
-  role: text,        // 'user' | 'agent' | 'system'
-  sentiment: text,   // 'positive' | 'neutral' | 'negative'
-  timestamp: timestamp
-}
+  role: text, // 'user' | 'agent' | 'system'
+  sentiment: text, // 'positive' | 'neutral' | 'negative'
+  timestamp: timestamp,
+};
 
 // purchaseOrders - Órdenes de compra
 purchaseOrders = {
@@ -127,31 +131,31 @@ purchaseOrders = {
   customerId: integer,
   orderNumber: text,
   totalAmount: integer,
-  status: text,      // 'pendiente' | 'aprobada' | 'en_proceso' | 'completada' | 'cancelada'
+  status: text, // 'pendiente' | 'aprobada' | 'en_proceso' | 'completada' | 'cancelada'
   items: jsonb,
-  createdAt: timestamp
-}
+  createdAt: timestamp,
+};
 
 // funnels - Embudos de ventas
 funnels = {
   id: serial,
   name: text,
   description: text,
-  type: text,        // 'sales' | 'leads' | 'webinar' | 'product'
+  type: text, // 'sales' | 'leads' | 'webinar' | 'product'
   stages: jsonb,
   isActive: boolean,
-  createdAt: timestamp
-}
+  createdAt: timestamp,
+};
 
 // voiceConfigs - Configuración de voz
 voiceConfigs = {
   id: serial,
-  provider: text,    // 'twilio' | 'retell'
+  provider: text, // 'twilio' | 'retell'
   accountSid: text,
   authToken: text,
   apiKey: text,
-  isConnected: boolean
-}
+  isConnected: boolean,
+};
 
 // voiceAgents - Agentes de IA
 voiceAgents = {
@@ -160,8 +164,8 @@ voiceAgents = {
   provider: text,
   voiceId: text,
   instructions: text,
-  isActive: boolean
-}
+  isActive: boolean,
+};
 ```
 
 ### Comandos de Base de Datos
@@ -338,7 +342,7 @@ export default function NuevaPagina() {
 }
 
 // client/src/App.tsx
-<Route path="/nueva-pagina" component={NuevaPagina} />
+<Route path="/nueva-pagina" component={NuevaPagina} />;
 ```
 
 ### Agregar Nueva API
@@ -368,10 +372,10 @@ async getMiRecurso() {
 
 ```typescript
 // shared/schema.ts
-export const miTabla = pgTable("mi_tabla", {
-  id: serial("id").primaryKey(),
-  nombre: text("nombre").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
+export const miTabla = pgTable('mi_tabla', {
+  id: serial('id').primaryKey(),
+  nombre: text('nombre').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 export type MiTabla = typeof miTabla.$inferSelect;
@@ -389,25 +393,25 @@ export type InsertMiTabla = typeof miTabla.$inferInsert;
 const response = await fetch(
   `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
   {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      messaging_product: "whatsapp",
+      messaging_product: 'whatsapp',
       to: phoneNumber,
-      type: "text",
+      type: 'text',
       text: { body: message },
     }),
-  }
+  },
 );
 ```
 
 ### OpenAI GPT-4o
 
 ```typescript
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
@@ -415,10 +419,10 @@ const openai = new OpenAI({
 });
 
 const response = await openai.chat.completions.create({
-  model: "gpt-4o",
+  model: 'gpt-4o',
   messages: [
-    { role: "system", content: "Eres un asistente de ventas." },
-    { role: "user", content: "Ayúdame a responder este mensaje" },
+    { role: 'system', content: 'Eres un asistente de ventas.' },
+    { role: 'user', content: 'Ayúdame a responder este mensaje' },
   ],
 });
 ```
@@ -436,6 +440,7 @@ const response = await openai.chat.completions.create({
 ### Variables de Producción
 
 Asegúrate de configurar en producción:
+
 - `DATABASE_URL` (base de datos de producción)
 - Todos los tokens y secretos de APIs
 - `SESSION_SECRET` único
@@ -445,18 +450,21 @@ Asegúrate de configurar en producción:
 ## Mejores Prácticas
 
 ### Código
+
 1. Usa TypeScript en todo el proyecto
 2. Valida inputs con Zod
 3. Maneja errores apropiadamente
 4. Documenta funciones complejas
 
 ### Seguridad
+
 1. Nunca expongas secretos en logs
 2. Valida todos los inputs del usuario
 3. Usa HTTPS en producción
 4. Rota tokens regularmente
 
 ### Rendimiento
+
 1. Usa índices en consultas frecuentes
 2. Implementa paginación
 3. Cachea respuestas cuando sea posible
@@ -471,4 +479,4 @@ Asegúrate de configurar en producción:
 
 ---
 
-*SoftganHub v11.0 | softgan.com | Tecnología que impulsa tu crecimiento*
+_SoftganHub v11.0 | softgan.com | Tecnología que impulsa tu crecimiento_

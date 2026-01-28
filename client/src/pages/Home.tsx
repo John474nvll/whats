@@ -1,29 +1,51 @@
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Zap, Shield, Sparkles, BarChart3, MessageSquare, Users, TrendingUp, Check } from "lucide-react";
-import { useLocation } from "wouter";
-import logoImage from "@assets/generated_images/socialhub_app_logo_design.png";
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  ArrowRight,
+  Zap,
+  Shield,
+  Sparkles,
+  BarChart3,
+  MessageSquare,
+  Users,
+  TrendingUp,
+  Check,
+} from 'lucide-react';
+import { useLocation } from 'wouter';
+import logoImage from '@assets/generated_images/socialhub_app_logo_design.png';
 
 export default function Home() {
   const [, setLocation] = useLocation();
 
   const features = [
-    { icon: MessageSquare, title: "Unified Inbox", desc: "All messages in one place" },
-    { icon: Users, title: "Team Management", desc: "Collaborate with your team" },
-    { icon: BarChart3, title: "Advanced Analytics", desc: "Deep insights & reporting" },
-    { icon: Sparkles, title: "AI Assistant", desc: "Smart content generation" },
-    { icon: TrendingUp, title: "Growth Tools", desc: "Optimize your reach" },
-    { icon: Zap, title: "Automation", desc: "Save time with workflows" },
+    {
+      icon: MessageSquare,
+      title: 'Unified Inbox',
+      desc: 'All messages in one place',
+    },
+    {
+      icon: Users,
+      title: 'Team Management',
+      desc: 'Collaborate with your team',
+    },
+    {
+      icon: BarChart3,
+      title: 'Advanced Analytics',
+      desc: 'Deep insights & reporting',
+    },
+    { icon: Sparkles, title: 'AI Assistant', desc: 'Smart content generation' },
+    { icon: TrendingUp, title: 'Growth Tools', desc: 'Optimize your reach' },
+    { icon: Zap, title: 'Automation', desc: 'Save time with workflows' },
   ];
 
   const benefits = [
-    "Manage Instagram, Facebook, WhatsApp & TikTok from one dashboard",
-    "AI-powered content suggestions and scheduling",
-    "Real-time analytics and performance tracking",
-    "Team collaboration and role management",
-    "Secure API connections and data encryption",
-    "24/7 customer support and updates",
+    'Manage Instagram, Facebook, WhatsApp & TikTok from one dashboard',
+    'AI-powered content suggestions and scheduling',
+    'Real-time analytics and performance tracking',
+    'Team collaboration and role management',
+    'Secure API connections and data encryption',
+    '24/7 customer support and updates',
   ];
 
   return (
@@ -43,20 +65,37 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <motion.nav initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative z-20 flex items-center justify-between p-6 border-b border-white/10 backdrop-blur-xl">
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-20 flex items-center justify-between p-6 border-b border-white/10 backdrop-blur-xl"
+      >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary p-0.5">
             <div className="w-full h-full bg-slate-950 rounded-md overflow-hidden flex items-center justify-center">
-              <img src={logoImage} alt="SocialHub" className="w-full h-full object-cover" />
+              <img
+                src={logoImage}
+                alt="SocialHub"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
-          <span className="font-black text-lg">Social<span className="text-primary">Hub</span></span>
+          <span className="font-black text-lg">
+            Social<span className="text-primary">Hub</span>
+          </span>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="ghost" onClick={() => setLocation("/")} className="text-slate-300 hover:text-white">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation('/')}
+            className="text-slate-300 hover:text-white"
+          >
             Features
           </Button>
-          <Button className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50 font-black rounded-lg" onClick={() => setLocation("/")}>
+          <Button
+            className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50 font-black rounded-lg"
+            onClick={() => setLocation('/')}
+          >
             Get Started <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
@@ -69,33 +108,64 @@ export default function Home() {
         transition={{ duration: 0.8 }}
         className="relative z-10 py-24 px-6 text-center max-w-6xl mx-auto"
       >
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-6"
+        >
           Master Your Social <br />
-          <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Media Empire</span>
+          <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            Media Empire
+          </span>
         </motion.h1>
 
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-          The ultimate platform for managing all your social media accounts, teams, and campaigns in one unified dashboard.
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-8"
+        >
+          The ultimate platform for managing all your social media accounts,
+          teams, and campaigns in one unified dashboard.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex flex-col sm:flex-row gap-4 justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
           <Button
             size="lg"
             className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50 font-black rounded-lg text-base px-8"
-            onClick={() => setLocation("/")}
+            onClick={() => setLocation('/')}
           >
             Launch Dashboard <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-          <Button variant="outline" size="lg" className="border-white/20 hover:border-primary/50 font-black rounded-lg text-base">
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-white/20 hover:border-primary/50 font-black rounded-lg text-base"
+          >
             View Demo
           </Button>
         </motion.div>
       </motion.section>
 
       {/* Features Grid */}
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="relative z-10 py-20 px-6 max-w-6xl mx-auto">
-        <h2 className="text-4xl font-black text-center mb-4 tracking-tight">Powerful Features</h2>
-        <p className="text-slate-400 text-center mb-12 max-w-2xl mx-auto">Everything you need to succeed in social media management</p>
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="relative z-10 py-20 px-6 max-w-6xl mx-auto"
+      >
+        <h2 className="text-4xl font-black text-center mb-4 tracking-tight">
+          Powerful Features
+        </h2>
+        <p className="text-slate-400 text-center mb-12 max-w-2xl mx-auto">
+          Everything you need to succeed in social media management
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, i) => (
@@ -120,10 +190,17 @@ export default function Home() {
       </motion.section>
 
       {/* Benefits Section */}
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="relative z-10 py-20 px-6 max-w-6xl mx-auto">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+        className="relative z-10 py-20 px-6 max-w-6xl mx-auto"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-4xl font-black mb-6 tracking-tight">Why Choose SocialHub?</h2>
+            <h2 className="text-4xl font-black mb-6 tracking-tight">
+              Why Choose SocialHub?
+            </h2>
             <ul className="space-y-4">
               {benefits.map((benefit, i) => (
                 <motion.li
@@ -161,14 +238,23 @@ export default function Home() {
       </motion.section>
 
       {/* CTA Section */}
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="relative z-10 py-20 px-6">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9 }}
+        className="relative z-10 py-20 px-6"
+      >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-black mb-6 tracking-tight">Ready to Transform Your Social Media?</h2>
-          <p className="text-xl text-slate-300 mb-8">Join thousands of businesses already using SocialHub</p>
+          <h2 className="text-4xl font-black mb-6 tracking-tight">
+            Ready to Transform Your Social Media?
+          </h2>
+          <p className="text-xl text-slate-300 mb-8">
+            Join thousands of businesses already using SocialHub
+          </p>
           <Button
             size="lg"
             className="bg-gradient-to-r from-primary via-secondary to-accent hover:shadow-lg hover:shadow-primary/50 font-black rounded-lg text-base px-10"
-            onClick={() => setLocation("/")}
+            onClick={() => setLocation('/')}
           >
             Get Started Now <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
@@ -182,7 +268,10 @@ export default function Home() {
         transition={{ delay: 1 }}
         className="relative z-10 border-t border-white/10 py-8 px-6 text-center text-slate-400 backdrop-blur-xl"
       >
-        <p>© 2025 SocialHub. All rights reserved. | Made with passion for social media creators</p>
+        <p>
+          © 2025 SocialHub. All rights reserved. | Made with passion for social
+          media creators
+        </p>
       </motion.footer>
     </div>
   );

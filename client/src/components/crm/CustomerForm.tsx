@@ -1,17 +1,35 @@
-
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { useToast } from "../../hooks/use-toast";
-import { Plus, Edit } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCustomerSchema, type InsertCustomer } from "@shared/schema.ts";
-import { queryClient } from "../../lib/queryClient";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { useToast } from '../../hooks/use-toast';
+import { Plus, Edit } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { insertCustomerSchema, type InsertCustomer } from '@shared/schema.ts';
+import { queryClient } from '../../lib/queryClient';
 
 interface CustomerFormProps {
   customer?: any;
@@ -22,17 +40,19 @@ export function CustomerForm({ customer }: CustomerFormProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Convert comma-separated string back to array for editing if needed, but schema expects string.
-  const defaultVals = customer ? { ...customer, tags: customer.tags || "" } : {
-    name: "",
-    email: "",
-    phone: "",
-    farmName: "",
-    address: "",
-    animalCount: 0,
-    platform: "whatsapp",
-    status: "active",
-    tags: "",
-  }
+  const defaultVals = customer
+    ? { ...customer, tags: customer.tags || '' }
+    : {
+        name: '',
+        email: '',
+        phone: '',
+        farmName: '',
+        address: '',
+        animalCount: 0,
+        platform: 'whatsapp',
+        status: 'active',
+        tags: '',
+      };
 
   const form = useForm<InsertCustomer>({
     resolver: zodResolver(insertCustomerSchema),
@@ -41,21 +61,28 @@ export function CustomerForm({ customer }: CustomerFormProps) {
 
   const customerMutation = useMutation({
     mutationFn: async (data: InsertCustomer) => {
-      const method = customer ? "PUT" : "POST";
-      const url = customer ? `/api/customers/${customer.id}` : "/api/customers";
+      const method = customer ? 'PUT' : 'POST';
+      const url = customer ? `/api/customers/${customer.id}` : '/api/customers';
       // Ensure tags are a string before sending
       const payload = { ...data, tags: data.tags || '' };
       const res = await queryClient.request(method, url, payload);
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/customers"] });
-      toast({ title: "Éxito", description: `Cliente ${customer ? 'actualizado' : 'creado'} correctamente` });
+      queryClient.invalidateQueries({ queryKey: ['/api/customers'] });
+      toast({
+        title: 'Éxito',
+        description: `Cliente ${customer ? 'actualizado' : 'creado'} correctamente`,
+      });
       setIsOpen(false);
       if (!customer) form.reset();
     },
     onError: (error) => {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
     },
   });
 
@@ -67,18 +94,24 @@ export function CustomerForm({ customer }: CustomerFormProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {customer ? (
-            <Button size="sm" variant="outline" className="flex-1 border-slate-600 rounded-lg h-9">
-                <Edit className="h-3 w-3 mr-1" /> Editar
-            </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="flex-1 border-slate-600 rounded-lg h-9"
+          >
+            <Edit className="h-3 w-3 mr-1" /> Editar
+          </Button>
         ) : (
-            <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-black font-bold rounded-lg gap-2 h-11">
-                <Plus className="h-5 w-5" /> Nuevo Cliente
-            </Button>
+          <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-black font-bold rounded-lg gap-2 h-11">
+            <Plus className="h-5 w-5" /> Nuevo Cliente
+          </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] bg-slate-900/50 border-slate-700">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">{customer ? 'Editar' : 'Crear Nuevo'} Cliente</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">
+            {customer ? 'Editar' : 'Crear Nuevo'} Cliente
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -89,20 +122,29 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                 <FormItem>
                   <FormLabel>Nombre *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Juan Pérez" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" />
+                    <Input
+                      placeholder="Juan Pérez"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="farmName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre de la Finca</FormLabel>
                   <FormControl>
-                    <Input placeholder="Finca La Esperanza" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input
+                      placeholder="Finca La Esperanza"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,7 +157,13 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="juan@example.com" type="email" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input
+                      placeholder="juan@example.com"
+                      type="email"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -128,7 +176,12 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                 <FormItem>
                   <FormLabel>Teléfono</FormLabel>
                   <FormControl>
-                    <Input placeholder="+1234567890" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input
+                      placeholder="+1234567890"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,20 +194,33 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                 <FormItem>
                   <FormLabel>Dirección</FormLabel>
                   <FormControl>
-                    <Input placeholder="Vereda El Carmen, Finca #5" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input
+                      placeholder="Vereda El Carmen, Finca #5"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="animalCount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cantidad de Animales</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="50" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
+                    <Input
+                      type="number"
+                      placeholder="50"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value, 10) || 0)
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -167,59 +233,74 @@ export function CustomerForm({ customer }: CustomerFormProps) {
                 <FormItem>
                   <FormLabel>Etiquetas</FormLabel>
                   <FormControl>
-                    <Input placeholder="Lechería, Engorde, Genética" {...field} className="bg-slate-800/50 border-slate-700 h-10 rounded-lg" value={field.value || ''} />
+                    <Input
+                      placeholder="Lechería, Engorde, Genética"
+                      {...field}
+                      className="bg-slate-800/50 border-slate-700 h-10 rounded-lg"
+                      value={field.value || ''}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex gap-4">
-                <FormField
+              <FormField
                 control={form.control}
                 name="platform"
                 render={({ field }) => (
-                    <FormItem className="flex-1">
+                  <FormItem className="flex-1">
                     <FormLabel>Plataforma</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value || "whatsapp"}>
-                        <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || 'whatsapp'}
+                    >
+                      <FormControl>
                         <SelectTrigger className="bg-slate-800/50 border-slate-700 h-10 rounded-lg">
-                            <SelectValue />
+                          <SelectValue />
                         </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
+                      </FormControl>
+                      <SelectContent>
                         <SelectItem value="whatsapp">WhatsApp</SelectItem>
                         <SelectItem value="instagram">Instagram</SelectItem>
                         <SelectItem value="facebook">Facebook</SelectItem>
-                        </SelectContent>
+                      </SelectContent>
                     </Select>
                     <FormMessage />
-                    </FormItem>
+                  </FormItem>
                 )}
-                />
-                <FormField
+              />
+              <FormField
                 control={form.control}
                 name="status"
                 render={({ field }) => (
-                    <FormItem className="flex-1">
+                  <FormItem className="flex-1">
                     <FormLabel>Estado</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value || "active"}>
-                        <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || 'active'}
+                    >
+                      <FormControl>
                         <SelectTrigger className="bg-slate-800/50 border-slate-700 h-10 rounded-lg">
-                            <SelectValue />
+                          <SelectValue />
                         </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
+                      </FormControl>
+                      <SelectContent>
                         <SelectItem value="active">Activo</SelectItem>
                         <SelectItem value="inactive">Inactivo</SelectItem>
                         <SelectItem value="blocked">Bloqueado</SelectItem>
-                        </SelectContent>
+                      </SelectContent>
                     </Select>
                     <FormMessage />
-                    </FormItem>
+                  </FormItem>
                 )}
-                />
+              />
             </div>
-            <Button type="submit" disabled={customerMutation.isPending} className="w-full bg-primary hover:opacity-90 text-black font-bold rounded-lg h-10">
+            <Button
+              type="submit"
+              disabled={customerMutation.isPending}
+              className="w-full bg-primary hover:opacity-90 text-black font-bold rounded-lg h-10"
+            >
               {customerMutation.isPending ? 'Guardando...' : 'Guardar'}
             </Button>
           </form>

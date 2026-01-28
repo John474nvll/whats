@@ -18,7 +18,7 @@ async function buildApp() {
       build: {
         outDir: path.resolve(root, 'dist/public'),
         emptyOutDir: true,
-      }
+      },
     });
 
     // Build server
@@ -36,7 +36,7 @@ async function buildApp() {
             console.log(stdout);
             resolve(undefined);
           }
-        }
+        },
       );
     });
 

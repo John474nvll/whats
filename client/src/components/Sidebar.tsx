@@ -1,12 +1,18 @@
-import { Link, useLocation } from "wouter";
-import { MessageSquare, Users, BarChart3, Settings, Shield } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Link, useLocation } from 'wouter';
+import {
+  MessageSquare,
+  Users,
+  BarChart3,
+  Settings,
+  Shield,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
-  { icon: MessageSquare, label: "Inbox", href: "/" },
-  { icon: Users, label: "Contacts", href: "/contacts" },
-  { icon: BarChart3, label: "Analytics", href: "/analytics" },
-  { icon: Settings, label: "Settings", href: "/settings" },
+  { icon: MessageSquare, label: 'Inbox', href: '/' },
+  { icon: Users, label: 'Contacts', href: '/contacts' },
+  { icon: BarChart3, label: 'Analytics', href: '/analytics' },
+  { icon: Settings, label: 'Settings', href: '/settings' },
 ];
 
 export function Sidebar() {
@@ -29,18 +35,24 @@ export function Sidebar() {
         {NAV_ITEMS.map((item) => {
           const isActive = location === item.href;
           const Icon = item.icon;
-          
+
           return (
-            <Link key={item.href} href={item.href} className={cn(
-              "group flex items-center px-3 py-3 rounded-xl transition-all duration-200",
-              isActive 
-                ? "bg-primary/10 text-primary font-medium shadow-sm" 
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
-            )}>
-              <Icon className={cn(
-                "w-6 h-6 shrink-0 transition-transform duration-300",
-                isActive ? "text-primary scale-110" : "group-hover:scale-105"
-              )} />
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'group flex items-center px-3 py-3 rounded-xl transition-all duration-200',
+                isActive
+                  ? 'bg-primary/10 text-primary font-medium shadow-sm'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+            >
+              <Icon
+                className={cn(
+                  'w-6 h-6 shrink-0 transition-transform duration-300',
+                  isActive ? 'text-primary scale-110' : 'group-hover:scale-105',
+                )}
+              />
               <span className="hidden lg:block ml-3 truncate">
                 {item.label}
               </span>
@@ -59,8 +71,12 @@ export function Sidebar() {
             JD
           </div>
           <div className="hidden lg:block overflow-hidden">
-            <p className="text-sm font-semibold text-foreground truncate">John Doe</p>
-            <p className="text-xs text-muted-foreground truncate">Senior Agent</p>
+            <p className="text-sm font-semibold text-foreground truncate">
+              John Doe
+            </p>
+            <p className="text-xs text-muted-foreground truncate">
+              Senior Agent
+            </p>
           </div>
         </div>
       </div>
