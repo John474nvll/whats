@@ -13,7 +13,6 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      includeAssets: ['favicon.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,json}'],
         cleanupOutdatedCaches: true,
@@ -26,7 +25,7 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts-cache',
-              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              expiration: { maxEntries: 20, maxAgeSeconds: 365 * 24 * 60 * 60 }, // 1 year
             },
           },
           {
@@ -34,7 +33,20 @@ export default defineConfig({
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
-              expiration: { maxAgeSeconds: 60 * 5 },
+              networkTimeoutSeconds: 10,
+              expiration: { maxEntries: 50, maxAgeSeconds: 5 * 60 }, // 5 minutes
+              backgroundSync: {
+                name: 'api-sync-queue',
+                options: { maxRetentionTime: 24 * 60 },
+              },
+            },
+          },
+          {
+            urlPattern: /.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+              expiration: { maxEntries: 60, maxAgeSeconds: 24 * 60 * 60 }, // 1 day
             },
           },
         ],
@@ -51,29 +63,20 @@ export default defineConfig({
         start_url: '/',
         scope: '/',
         icons: [
+          { src: '/icons/icon_48.png', sizes: '48x48', type: 'image/png' },
+          { src: '/icons/icon_72.png', sizes: '72x72', type: 'image/png' },
+          { src: '/icons/icon_96.png', sizes: '96x96', type: 'image/png' },
+          { src: '/icons/icon_144.png', sizes: '144x144', type: 'image/png' },
+          { src: '/icons/icon_192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+          { src: '/icons/icon_512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+        ],
+        screenshots: [
           {
-            src: '/icons/icon-192x192.png',
-            sizes: '192x192',
+            src: '/screenshots/screenshot1.png',
+            sizes: '1080x1920',
             type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: '/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: '/icons/icon_192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-          {
-            src: '/icons/icon_512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
+            form_factor: 'narrow',
+            label: 'App en móvil',
           },
         ],
         categories: ['business', 'productivity', 'social'],
