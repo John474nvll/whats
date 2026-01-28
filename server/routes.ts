@@ -5,53 +5,9 @@ import { users as usersTable } from "@shared/schema";
 import { db } from "./db";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
-import { z } from "zod";
-import OpenAI from "openai";
 import twilioRoutes from "./routes/twilio";
 import aiRoutes from "./routes/ai";
-import whatsappRoutes from "./routes/whatsapp";
-import retellRoutes from "./routes/retell";
-import { getAIProviderStatus } from "./services/openai";
 import { desc, eq } from "drizzle-orm";
-
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || "dummy",
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
-
-async function analyzeSentiment(text: string) {
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: "Analyze the sentiment of this text. Return only one word: 'positive', 'negative', or 'neutral'." },
-        { role: "user", content: text }
-      ]
-    });
-    const sentiment = response.choices[0].message.content?.toLowerCase().trim();
-    if (sentiment && ['positive', 'negative', 'neutral'].includes(sentiment)) return sentiment;
-    return 'neutral';
-  } catch (e) {
-    console.error("AI Error:", e);
-    return 'neutral';
-  }
-}
-
-async function generateResponse(text: string, sentiment: string) {
-  try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: `You are a helpful customer support agent. The customer is feeling ${sentiment}. Draft a polite, concise response.` },
-        { role: "user", content: text }
-      ]
-    });
-    return response.choices[0].message.content || "I am unable to generate a response at this time.";
-  } catch (e) {
-    console.error("AI Error:", e);
-    return "Thank you for your message. How can I assist you today?";
-  }
-}
 
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
@@ -66,8 +22,7 @@ export async function registerRoutes(
 
   // === Register route modules ===
   app.use("/api", aiRoutes);
-  app.use("/api", whatsappRoutes);
-  app.use("/api", retellRoutes);
+  app.use("/api", twilioRoutes);
 
   // === Support Tickets API ===
   app.get("/api/tickets", async (_req, res) => {
@@ -91,9 +46,6 @@ export async function registerRoutes(
     } catch (e) {
       res.status(400).json({ message: "Invalid update" });
     }
-  });
-  app.get("/api/ai/status", (req, res) => {
-    res.json(getAIProviderStatus());
   });
 
   // === Users API ===
@@ -140,17 +92,10 @@ export async function registerRoutes(
   });
 
   app.post(api.conversations.analyze.path, async (req, res) => {
-    const messages = await storage.getMessages(Number(req.params.id));
-    const lastMessage = messages[messages.length - 1];
-    
-    if (!lastMessage) return res.json({ sentiment: "neutral", suggestedResponse: "" });
-
-    const sentiment = await analyzeSentiment(lastMessage.content);
-    const suggestedResponse = await generateResponse(lastMessage.content, sentiment);
-
-    res.json({ sentiment, suggestedResponse });
+    // This is a mocked response as the AI service was removed.
+    res.json({ sentiment: "neutral", suggestedResponse: "This is a mocked response." });
   });
-
+  
   // === Purchase Orders API ===
 
   app.get("/api/orders", async (_req, res) => {
@@ -461,96 +406,6 @@ export async function registerRoutes(
       const results = [];
       for (const phone of phoneNumbers) {
         // Simular envío masivo
-        results.push({ phone, status: "sent" });
-      }
-
-      await db.insert(schema.syncLogs).values({
-        platform: "whatsapp",
-        status: "success",
-        message: `Envío masivo completado: ${phoneNumbers.length} destinatarios`,
-        metadata: { results, type: "bulk_send" }
-      });
-
-      res.json({ success: true, results });
-    } catch (e) {
-      res.status(500).json({ message: "Error en envío masivo" });
-    }
-  });
-
-  app.post("/api/whatsapp/send-ia", async (req, res) => {
-    try {
-      const { content, phoneNumber } = req.body;
-      if (!content || !phoneNumber) return res.status(400).json({ message: "Contenido y teléfono requeridos" });
-
-      console.log(`Enviando a ${phoneNumber}: ${content}`);
-      
-      await db.insert(schema.syncLogs).values({
-        platform: "whatsapp",
-        status: "success",
-        message: `Mensaje IA enviado a ${phoneNumber}`,
-        metadata: { content, type: "ia_send" }
-      });
-
-      res.json({ success: true, message: "Mensaje enviado correctamente" });
-    } catch (e) {
-      res.status(500).json({ message: "Error al enviar mensaje" });
-    }
-  });
-
-  app.post("/api/whatsapp/bulk-send", async (req, res) => {
-    try {
-      const { content, phoneNumbers } = req.body;
-      if (!content || !phoneNumbers || !Array.isArray(phoneNumbers)) {
-        return res.status(400).json({ message: "Contenido y lista de teléfonos requeridos" });
-      }
-
-      const results = [];
-      for (const phone of phoneNumbers) {
-        results.push({ phone, status: "sent" });
-      }
-
-      await db.insert(schema.syncLogs).values({
-        platform: "whatsapp",
-        status: "success",
-        message: `Envío masivo completado: ${phoneNumbers.length} destinatarios`,
-        metadata: { results, type: "bulk_send" }
-      });
-
-      res.json({ success: true, results });
-    } catch (e) {
-      res.status(500).json({ message: "Error en envío masivo" });
-    }
-  });
-
-  app.post("/api/whatsapp/send-ia", async (req, res) => {
-    try {
-      const { content, phoneNumber } = req.body;
-      if (!content || !phoneNumber) return res.status(400).json({ message: "Contenido y teléfono requeridos" });
-
-      console.log(`Enviando a ${phoneNumber}: ${content}`);
-      
-      await db.insert(schema.syncLogs).values({
-        platform: "whatsapp",
-        status: "success",
-        message: `Mensaje IA enviado a ${phoneNumber}`,
-        metadata: { content, type: "ia_send" }
-      });
-
-      res.json({ success: true, message: "Mensaje enviado correctamente" });
-    } catch (e) {
-      res.status(500).json({ message: "Error al enviar mensaje" });
-    }
-  });
-
-  app.post("/api/whatsapp/bulk-send", async (req, res) => {
-    try {
-      const { content, phoneNumbers } = req.body;
-      if (!content || !phoneNumbers || !Array.isArray(phoneNumbers)) {
-        return res.status(400).json({ message: "Contenido y lista de teléfonos requeridos" });
-      }
-
-      const results = [];
-      for (const phone of phoneNumbers) {
         results.push({ phone, status: "sent" });
       }
 
