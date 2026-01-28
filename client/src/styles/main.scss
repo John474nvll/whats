@@ -5,6 +5,6 @@
 @import '../index.css';
 
 // Import new SCSS files
-@import './scss/_variables.scss';
-@import './scss/_mixins.scss';
-@import './scss/_globals.scss';
+@use './scss/variables';
+@use './scss/mixins';
+@use './scss/globals';
