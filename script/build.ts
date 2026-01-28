@@ -24,7 +24,7 @@ async function buildApp() {
     // Build server
     await new Promise((resolve, reject) => {
       const esbuildProcess = exec(
-        'esbuild server/index.ts --bundle --platform=node --outfile=dist/index.cjs --format=cjs',
+        'esbuild server/index.ts --bundle --platform=node --outfile=dist/index.cjs --format=cjs --external:@babel/preset-typescript --external:@vite-pwa/assets-generator',
         { cwd: root },
         (error, stdout, stderr) => {
           if (error) {
