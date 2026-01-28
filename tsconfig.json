@@ -17,5 +17,8 @@
       "@/*": ["./client/src/*"],
       "@shared/*": ["./shared/*"]
     }
-  }
+  },
+  "references": [
+    { "path": "./shared" }
+  ]
 }
