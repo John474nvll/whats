@@ -1,0 +1,23 @@
+// client/src/styles/scss/_globals.scss
+
+@import 'variables';
+@import 'mixins';
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--light-gray);
+}

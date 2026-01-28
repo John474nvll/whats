@@ -19,11 +19,9 @@ export function createPlatformRoutes(storage: IStorage) {
       }
 
       if (platform !== 'instagram' && platform !== 'facebook') {
-        return res
-          .status(400)
-          .json({
-            error: `Platform '${platform}' not supported for connection via this endpoint.`,
-          });
+        return res.status(400).json({
+          error: `Platform '${platform}' not supported for connection via this endpoint.`,
+        });
       }
 
       const metaService = new MetaService(accessToken);
@@ -45,12 +43,10 @@ export function createPlatformRoutes(storage: IStorage) {
     } catch (error: any) {
       if (error instanceof MetaAPIError) {
         console.error('Meta API Error:', error.response);
-        res
-          .status(500)
-          .json({
-            error: 'Failed to connect platform due to Meta API error.',
-            details: error.message,
-          });
+        res.status(500).json({
+          error: 'Failed to connect platform due to Meta API error.',
+          details: error.message,
+        });
       } else {
         console.error('Unknown error during platform connection:', error);
         res.status(500).json({ error: error.message });

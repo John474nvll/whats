@@ -1,0 +1,5 @@
+// client/src/styles/scss/_mixins.scss
+
+@mixin gradient-background($direction, $start-color, $end-color) {
+  background: linear-gradient($direction, $start-color, $end-color);
+}

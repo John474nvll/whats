@@ -14,6 +14,10 @@
         # Tools for running scripts from package.json
         pkgs.nodePackages.tsx
         pkgs.drizzle-kit
+
+        # Python and Go
+        pkgs.python3
+        pkgs.go
     ];
     startup = {
       init = {
