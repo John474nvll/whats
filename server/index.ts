@@ -6,9 +6,11 @@ import passport from 'passport';
 import { setupAuth } from './middleware/auth';
 import { setupRoutes } from './routes';
 import { setupMiddleware } from './middleware';
+import http from 'http';
 
 const app = express();
 const MemoryStore = memorystore(session);
+const httpServer = http.createServer(app);
 
 //
 // Express-session configuration
@@ -31,7 +33,7 @@ setupAuth(passport);
 // Middleware and routes
 //
 setupMiddleware(app);
-setupRoutes(app);
+setupRoutes(app, httpServer);
 
 //
 // Vite and server startup

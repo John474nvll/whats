@@ -509,3 +509,7 @@ async function seedDatabase() {
     });
   }
 }
+
+export const setupRoutes = async (app: Express, httpServer: Server) => {
+  await registerRoutes(httpServer, app);
+};

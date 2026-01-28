@@ -20,3 +20,7 @@ export function registerMiddleware(app: Express) {
     return authMiddleware(req, res, next);
   });
 }
+
+export function setupMiddleware(app: Express) {
+  registerMiddleware(app);
+}
