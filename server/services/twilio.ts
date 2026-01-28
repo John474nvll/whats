@@ -1,11 +1,6 @@
 import twilio from 'twilio';
 
-const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
-const TWILIO_API_KEY = process.env.TWILIO_API_KEY || '';
-const TWILIO_API_SECRET = process.env.TWILIO_API_SECRET || '';
-const TWILIO_APP_SID = process.env.TWILIO_APP_SID || '';
-const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || '';
-
+// Custom error for credential issues
 export class TwilioCredentialsError extends Error {
   constructor(message: string) {
     super(message);
@@ -13,30 +8,41 @@ export class TwilioCredentialsError extends Error {
   }
 }
 
-class TwilioService {
-  private static instance: TwilioService;
+// Interface for our service to ensure both real and mock services have the same methods.
+interface ITwilioService {
+  generateAccessToken(identity: string): { identity: string; token: string };
+  getVoiceResponse(to: string): string;
+  getIncomingCallResponse(): string;
+  getStatus(): { configured: boolean; hasPhoneNumber: boolean; hasAppSid: boolean };
+}
+
+// --- Real Twilio Service (for production) ---
+class RealTwilioService implements ITwilioService {
+  private static instance: RealTwilioService;
   private client: twilio.Twilio;
-
+  
   private constructor() {
-    if (!TWILIO_ACCOUNT_SID || !TWILIO_API_KEY || !TWILIO_API_SECRET) {
-      throw new TwilioCredentialsError(
-        'Twilio credentials are not fully configured in environment variables.',
-      );
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const apiKey = process.env.TWILIO_API_KEY;
+    const apiSecret = process.env.TWILIO_API_SECRET;
+
+    if (!accountSid || !apiKey || !apiSecret) {
+      throw new TwilioCredentialsError('Twilio credentials are not fully configured.');
     }
-    this.client = twilio(TWILIO_ACCOUNT_SID, TWILIO_API_SECRET, {
-      accountSid: TWILIO_ACCOUNT_SID,
-    });
+    // The Twilio constructor uses apiKey and apiSecret for auth
+    this.client = twilio(apiKey, apiSecret, { accountSid });
   }
 
-  public static getInstance(): TwilioService {
-    if (!TwilioService.instance) {
-      TwilioService.instance = new TwilioService();
+  public static getInstance(): RealTwilioService {
+    if (!RealTwilioService.instance) {
+      RealTwilioService.instance = new RealTwilioService();
     }
-    return TwilioService.instance;
+    return RealTwilioService.instance;
   }
-
-  generateAccessToken(identity: string) {
-    if (!TWILIO_APP_SID) {
+  
+  generateAccessToken(identity: string): { identity: string; token: string } {
+    const appSid = process.env.TWILIO_APP_SID;
+    if (!appSid) {
       throw new TwilioCredentialsError('Twilio App SID is not configured.');
     }
 
@@ -44,14 +50,14 @@ class TwilioService {
     const { VoiceGrant } = AccessToken;
 
     const voiceGrant = new VoiceGrant({
-      outgoingApplicationSid: TWILIO_APP_SID,
+      outgoingApplicationSid: appSid,
       incomingAllow: true,
     });
 
     const token = new AccessToken(
-      TWILIO_ACCOUNT_SID,
-      TWILIO_API_KEY,
-      TWILIO_API_SECRET,
+      process.env.TWILIO_ACCOUNT_SID!,
+      process.env.TWILIO_API_KEY!,
+      process.env.TWILIO_API_SECRET!,
       { identity },
     );
     token.addGrant(voiceGrant);
@@ -62,39 +68,81 @@ class TwilioService {
     };
   }
 
-  getVoiceResponse(to: string) {
-    if (!TWILIO_PHONE_NUMBER) {
-      throw new TwilioCredentialsError(
-        'Twilio Phone Number is not configured.',
-      );
+  getVoiceResponse(to: string): string {
+    const phoneNumber = process.env.TWILIO_PHONE_NUMBER;
+    if (!phoneNumber) {
+      throw new TwilioCredentialsError('Twilio Phone Number is not configured.');
     }
 
     const voiceResponse = new twilio.twiml.VoiceResponse();
-    const dial = voiceResponse.dial({
-      callerId: TWILIO_PHONE_NUMBER,
-    });
+    const dial = voiceResponse.dial({ callerId: phoneNumber });
     dial.number({}, to);
     return voiceResponse.toString();
   }
 
-  getIncomingCallResponse() {
+  getIncomingCallResponse(): string {
     const voiceResponse = new twilio.twiml.VoiceResponse();
     voiceResponse.say(
       { voice: 'alice', language: 'es-MX' },
       'Bienvenido a SocialHub. Un momento por favor.',
     );
-    // The client name is hardcoded to 'support-agent' as this is the only client that can receive calls.
     voiceResponse.dial().client({}, 'support-agent');
     return voiceResponse.toString();
   }
-
-  getStatus() {
+  
+  getStatus(): { configured: boolean; hasPhoneNumber: boolean; hasAppSid: boolean } {
     return {
-      configured: !!(TWILIO_ACCOUNT_SID && TWILIO_API_KEY && TWILIO_API_SECRET),
-      hasPhoneNumber: !!TWILIO_PHONE_NUMBER,
-      hasAppSid: !!TWILIO_APP_SID,
+      configured: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_API_KEY && process.env.TWILIO_API_SECRET),
+      hasPhoneNumber: !!process.env.TWILIO_PHONE_NUMBER,
+      hasAppSid: !!process.env.TWILIO_APP_SID,
     };
   }
 }
 
-export const twilioService = TwilioService.getInstance();
+// --- Mock Twilio Service (for development) ---
+class MockTwilioService implements ITwilioService {
+  generateAccessToken(identity: string): { identity: string; token: string } {
+    console.log('MockTwilioService: generateAccessToken called');
+    return {
+      identity,
+      token: 'mock_jwt_token_for_development',
+    };
+  }
+
+  getVoiceResponse(to: string): string {
+    console.log(`MockTwilioService: getVoiceResponse called for ${to}`);
+    // We need to use the real twilio package to create a valid TwiML response
+    const voiceResponse = new twilio.twiml.VoiceResponse();
+    voiceResponse.say('This is a mock voice response from the development server.');
+    return voiceResponse.toString();
+  }
+  
+  getIncomingCallResponse(): string {
+    console.log('MockTwilioService: getIncomingCallResponse called');
+    const voiceResponse = new twilio.twiml.VoiceResponse();
+    voiceResponse.say('This is a mock incoming call response from the development server.');
+    return voiceResponse.toString();
+  }
+
+  getStatus(): { configured: boolean; hasPhoneNumber: boolean; hasAppSid: boolean } {
+    console.log('MockTwilioService: getStatus called');
+    return {
+      configured: false,
+      hasPhoneNumber: false,
+      hasAppSid: false,
+    };
+  }
+}
+
+// --- Service Factory ---
+function createTwilioService(): ITwilioService {
+  // Use the real service only in production
+  if (process.env.NODE_ENV === 'production') {
+    return RealTwilioService.getInstance();
+  }
+  // Otherwise, use the mock service to avoid credential validation issues
+  return new MockTwilioService();
+}
+
+// Export a single instance of the service, which will be either the real or mock one.
+export const twilioService = createTwilioService();
