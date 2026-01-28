@@ -4,6 +4,7 @@ import {
   users, contacts, conversations, messages,
   customers, campaigns, socialAccounts,
   tickets, roles, channelConfigs, purchaseOrders,
+  funnels, voiceConfigs, voiceAgents, callLogs,
   type InsertUser, type User,
   type InsertContact, type Contact,
   type InsertConversation, type Conversation,
@@ -12,6 +13,10 @@ import {
   type InsertRole, type Role,
   type ChannelConfig, type InsertChannelConfig,
   type PurchaseOrder, type InsertPurchaseOrder,
+  type Funnel, type InsertFunnel,
+  type VoiceConfig, type InsertVoiceConfig,
+  type VoiceAgent, type InsertVoiceAgent,
+  type CallLog, type InsertCallLog,
   type ConversationWithContact
 } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
@@ -59,6 +64,25 @@ export interface IStorage {
   createPurchaseOrder(order: InsertPurchaseOrder): Promise<PurchaseOrder>;
   updatePurchaseOrder(id: number, order: Partial<InsertPurchaseOrder>): Promise<PurchaseOrder>;
   deletePurchaseOrder(id: number): Promise<void>;
+
+  // Funnels
+  getFunnels(): Promise<Funnel[]>;
+  getFunnel(id: number): Promise<Funnel | undefined>;
+  createFunnel(funnel: InsertFunnel): Promise<Funnel>;
+  updateFunnel(id: number, funnel: Partial<InsertFunnel>): Promise<Funnel>;
+  deleteFunnel(id: number): Promise<void>;
+
+  // Voice Configs
+  getVoiceConfig(provider: string): Promise<VoiceConfig | undefined>;
+  upsertVoiceConfig(provider: string, config: Partial<InsertVoiceConfig>): Promise<VoiceConfig>;
+
+  // Voice Agents
+  getVoiceAgents(): Promise<VoiceAgent[]>;
+  createVoiceAgent(agent: InsertVoiceAgent): Promise<VoiceAgent>;
+
+  // Call Logs
+  getCallLogs(): Promise<CallLog[]>;
+  createCallLog(log: InsertCallLog): Promise<CallLog>;
 }
 
 export class DatabaseStorage implements IStorage {

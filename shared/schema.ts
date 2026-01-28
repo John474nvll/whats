@@ -144,6 +144,56 @@ export const orderTemplates = pgTable("order_templates", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const funnels = pgTable("funnels", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").default("draft").notNull(), // 'active', 'paused', 'draft'
+  type: text("type").default("sales").notNull(), // 'sales', 'leads', 'webinar', 'product'
+  stages: jsonb("stages"), // Array of funnel stages
+  totalVisitors: integer("total_visitors").default(0),
+  totalConversions: integer("total_conversions").default(0),
+  revenue: integer("revenue").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const voiceConfigs = pgTable("voice_configs", {
+  id: serial("id").primaryKey(),
+  provider: text("provider").notNull(), // 'twilio', 'retell'
+  accountSid: text("account_sid"),
+  authToken: text("auth_token"),
+  apiKey: text("api_key"),
+  isConnected: boolean("is_connected").default(false),
+  phoneNumbers: jsonb("phone_numbers"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const voiceAgents = pgTable("voice_agents", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  voiceId: text("voice_id"),
+  language: text("language").default("es-ES"),
+  systemPrompt: text("system_prompt"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const callLogs = pgTable("call_logs", {
+  id: serial("id").primaryKey(),
+  direction: text("direction").notNull(), // 'inbound', 'outbound'
+  fromNumber: text("from_number"),
+  toNumber: text("to_number"),
+  duration: integer("duration").default(0),
+  status: text("status").default("completed"), // 'completed', 'missed', 'failed'
+  agentId: integer("agent_id").references(() => voiceAgents.id),
+  recordingUrl: text("recording_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const conversationsRelations = relations(conversations, ({ one, many }) => ({
@@ -179,6 +229,10 @@ export const insertRoleSchema = createInsertSchema(roles).omit({ id: true, creat
 export const insertChannelConfigSchema = createInsertSchema(channelConfigs).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertPurchaseOrderSchema = createInsertSchema(purchaseOrders).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertOrderTemplateSchema = createInsertSchema(orderTemplates).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertFunnelSchema = createInsertSchema(funnels).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertVoiceConfigSchema = createInsertSchema(voiceConfigs).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertVoiceAgentSchema = createInsertSchema(voiceAgents).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertCallLogSchema = createInsertSchema(callLogs).omit({ id: true, createdAt: true });
 
 // === TYPES ===
 
@@ -217,6 +271,18 @@ export type InsertPurchaseOrder = z.infer<typeof insertPurchaseOrderSchema>;
 
 export type OrderTemplate = typeof orderTemplates.$inferSelect;
 export type InsertOrderTemplate = z.infer<typeof insertOrderTemplateSchema>;
+
+export type Funnel = typeof funnels.$inferSelect;
+export type InsertFunnel = z.infer<typeof insertFunnelSchema>;
+
+export type VoiceConfig = typeof voiceConfigs.$inferSelect;
+export type InsertVoiceConfig = z.infer<typeof insertVoiceConfigSchema>;
+
+export type VoiceAgent = typeof voiceAgents.$inferSelect;
+export type InsertVoiceAgent = z.infer<typeof insertVoiceAgentSchema>;
+
+export type CallLog = typeof callLogs.$inferSelect;
+export type InsertCallLog = z.infer<typeof insertCallLogSchema>;
 
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
 export type PurchaseOrderWithCustomer = PurchaseOrder & { customer?: Customer };

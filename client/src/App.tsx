@@ -17,6 +17,7 @@ import Support from "@/pages/Support";
 import UsersManagement from "@/pages/UsersManagement";
 import AccountLinks from "@/pages/AccountLinks";
 import FunnelBuilder from "@/pages/FunnelBuilder";
+import Funnels from "@/pages/Funnels";
 import Campaigns from "@/pages/Campaigns";
 import Products from "@/pages/Products";
 import CustomLinks from "@/pages/CustomLinks";
@@ -50,7 +51,7 @@ function Router() {
       <Route path="/ai-generator" component={AIGenerator} />
       <Route path="/platforms" component={PlatformsHub} />
       <Route path="/account-links" component={AccountLinks} />
-      <Route path="/funnels" component={FunnelBuilder} />
+      <Route path="/funnels" component={Funnels} />
       <Route path="/campaigns" component={Campaigns} />
       <Route path="/products" component={Products} />
       <Route path="/links" component={CustomLinks} />

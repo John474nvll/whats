@@ -183,6 +183,135 @@ export async function registerRoutes(
     }
   });
 
+  // === Funnels API ===
+
+  app.get("/api/funnels", async (_req, res) => {
+    try {
+      const funnels = await storage.getFunnels();
+      res.json(funnels);
+    } catch (e) {
+      res.status(500).json({ message: "Error al obtener funnels" });
+    }
+  });
+
+  app.get("/api/funnels/:id", async (req, res) => {
+    const funnel = await storage.getFunnel(Number(req.params.id));
+    if (!funnel) return res.status(404).json({ message: "Funnel no encontrado" });
+    res.json(funnel);
+  });
+
+  app.post("/api/funnels", async (req, res) => {
+    try {
+      const funnel = await storage.createFunnel(req.body);
+      res.status(201).json(funnel);
+    } catch (e) {
+      res.status(400).json({ message: "Error al crear funnel" });
+    }
+  });
+
+  app.patch("/api/funnels/:id", async (req, res) => {
+    try {
+      const funnel = await storage.updateFunnel(Number(req.params.id), req.body);
+      res.json(funnel);
+    } catch (e) {
+      res.status(400).json({ message: "Error al actualizar funnel" });
+    }
+  });
+
+  app.delete("/api/funnels/:id", async (req, res) => {
+    try {
+      await storage.deleteFunnel(Number(req.params.id));
+      res.status(204).send();
+    } catch (e) {
+      res.status(400).json({ message: "Error al eliminar funnel" });
+    }
+  });
+
+  app.post("/api/funnels/:id/duplicate", async (req, res) => {
+    try {
+      const original = await storage.getFunnel(Number(req.params.id));
+      if (!original) return res.status(404).json({ message: "Funnel no encontrado" });
+      const copy = await storage.createFunnel({
+        name: `${original.name} (Copia)`,
+        description: original.description,
+        type: original.type,
+        stages: original.stages,
+      });
+      res.status(201).json(copy);
+    } catch (e) {
+      res.status(400).json({ message: "Error al duplicar funnel" });
+    }
+  });
+
+  // === Voice & Twilio API ===
+
+  app.get("/api/twilio/status", async (_req, res) => {
+    const config = await storage.getVoiceConfig("twilio");
+    res.json({ isConnected: config?.isConnected || false, phoneNumbers: config?.phoneNumbers || [] });
+  });
+
+  app.post("/api/twilio/configure", async (req, res) => {
+    try {
+      const { accountSid, authToken } = req.body;
+      const config = await storage.upsertVoiceConfig("twilio", {
+        provider: "twilio",
+        accountSid,
+        authToken,
+        isConnected: true,
+      });
+      res.json(config);
+    } catch (e) {
+      res.status(400).json({ message: "Error al configurar Twilio" });
+    }
+  });
+
+  app.get("/api/twilio/numbers", async (_req, res) => {
+    const config = await storage.getVoiceConfig("twilio");
+    res.json(config?.phoneNumbers || []);
+  });
+
+  app.post("/api/twilio/sync-numbers", async (_req, res) => {
+    res.json({ message: "Sincronización simulada - números obtenidos de Twilio" });
+  });
+
+  app.get("/api/retell/status", async (_req, res) => {
+    const config = await storage.getVoiceConfig("retell");
+    res.json({ isConnected: config?.isConnected || false });
+  });
+
+  app.post("/api/retell/configure", async (req, res) => {
+    try {
+      const { apiKey } = req.body;
+      const config = await storage.upsertVoiceConfig("retell", {
+        provider: "retell",
+        apiKey,
+        isConnected: true,
+      });
+      res.json(config);
+    } catch (e) {
+      res.status(400).json({ message: "Error al configurar Retell" });
+    }
+  });
+
+  app.get("/api/retell/agents", async (_req, res) => {
+    const agents = await storage.getVoiceAgents();
+    res.json(agents);
+  });
+
+  app.post("/api/retell/agents", async (req, res) => {
+    try {
+      const agent = await storage.createVoiceAgent(req.body);
+      res.status(201).json(agent);
+    } catch (e) {
+      res.status(400).json({ message: "Error al crear agente" });
+    }
+  });
+
+  app.get("/api/voice/calls", async (_req, res) => {
+    const calls = await storage.getCallLogs();
+    res.json(calls);
+  });
+
   // === Channels API ===
 
   app.get(api.channels.list.path, async (_req, res) => {
