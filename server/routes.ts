@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import type { Server } from "http";
+import * as schema from "@shared/schema";
 import { users as usersTable } from "@shared/schema";
 import { db } from "./db";
 import { storage } from "./storage";
@@ -11,6 +12,7 @@ import aiRoutes from "./routes/ai";
 import whatsappRoutes from "./routes/whatsapp";
 import retellRoutes from "./routes/retell";
 import { getAIProviderStatus } from "./services/openai";
+import { desc, eq } from "drizzle-orm";
 
 const openai = new OpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || "dummy",
@@ -310,6 +312,42 @@ export async function registerRoutes(
   app.get("/api/voice/calls", async (_req, res) => {
     const calls = await storage.getCallLogs();
     res.json(calls);
+  });
+
+  // === Sync & Widgets API ===
+
+  app.get("/api/sync/status", async (_req, res) => {
+    const logs = await db.select().from(schema.syncLogs).orderBy(desc(schema.syncLogs.createdAt)).limit(10);
+    res.json(logs);
+  });
+
+  app.post("/api/sync/github", async (req, res) => {
+    try {
+      // Simular sincronización con GitHub v12
+      await db.insert(schema.syncLogs).values({
+        platform: "github",
+        status: "success",
+        message: "Sincronizado con v12 exitosamente",
+        metadata: { version: "12.0.0", timestamp: new Date().toISOString() }
+      });
+      res.json({ message: "Sincronización con v12 completada" });
+    } catch (e) {
+      res.status(500).json({ message: "Error en sincronización" });
+    }
+  });
+
+  app.get("/api/widgets", async (_req, res) => {
+    const widgets = await db.select().from(schema.widgets).where(eq(schema.widgets.isActive, true));
+    res.json(widgets);
+  });
+
+  app.post("/api/widgets", async (req, res) => {
+    try {
+      const widget = await db.insert(schema.widgets).values(req.body).returning();
+      res.status(201).json(widget[0]);
+    } catch (e) {
+      res.status(400).json({ message: "Error al crear widget" });
+    }
   });
 
   // === Channels API ===

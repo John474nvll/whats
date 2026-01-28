@@ -194,6 +194,39 @@ export const callLogs = pgTable("call_logs", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const voiceLogs = pgTable("voice_logs", {
+  id: serial("id").primaryKey(),
+  direction: text("direction").notNull(), // 'inbound', 'outbound'
+  fromNumber: text("from_number"),
+  toNumber: text("to_number"),
+  duration: integer("duration").default(0),
+  status: text("status").default("completed"), // 'completed', 'missed', 'failed'
+  agentId: integer("agent_id").references(() => voiceAgents.id),
+  recordingUrl: text("recording_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const widgets = pgTable("widgets", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  type: text("type").notNull(), // 'chart', 'stat', 'list', 'ai_summary'
+  title: text("title").notNull(),
+  config: jsonb("config"), // { "metric": "revenue", "period": "7d" }
+  position: integer("position").default(0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const syncLogs = pgTable("sync_logs", {
+  id: serial("id").primaryKey(),
+  platform: text("platform").notNull(), // 'whatsapp', 'github', 'facebook'
+  status: text("status").notNull(), // 'success', 'error', 'pending'
+  message: text("message"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === RELATIONS ===
 
 export const conversationsRelations = relations(conversations, ({ one, many }) => ({
@@ -233,6 +266,8 @@ export const insertFunnelSchema = createInsertSchema(funnels).omit({ id: true, c
 export const insertVoiceConfigSchema = createInsertSchema(voiceConfigs).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertVoiceAgentSchema = createInsertSchema(voiceAgents).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCallLogSchema = createInsertSchema(callLogs).omit({ id: true, createdAt: true });
+export const insertWidgetSchema = createInsertSchema(widgets).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertSyncLogSchema = createInsertSchema(syncLogs).omit({ id: true, createdAt: true });
 
 // === TYPES ===
 
@@ -283,6 +318,12 @@ export type InsertVoiceAgent = z.infer<typeof insertVoiceAgentSchema>;
 
 export type CallLog = typeof callLogs.$inferSelect;
 export type InsertCallLog = z.infer<typeof insertCallLogSchema>;
+
+export type Widget = typeof widgets.$inferSelect;
+export type InsertWidget = z.infer<typeof insertWidgetSchema>;
+
+export type SyncLog = typeof syncLogs.$inferSelect;
+export type InsertSyncLog = z.infer<typeof insertSyncLogSchema>;
 
 export type ConversationWithContact = Conversation & { contact: Contact; lastMessage?: Message };
 export type PurchaseOrderWithCustomer = PurchaseOrder & { customer?: Customer };
