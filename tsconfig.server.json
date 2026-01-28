@@ -3,12 +3,10 @@
   "compilerOptions": {
     "module": "Node16",
     "outDir": "./dist",
-    "moduleResolution": "Node16",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./client/src/*"],
-      "@shared/*": ["./shared/*"]
-    }
+    "moduleResolution": "Node16"
   },
-  "include": ["./server"]
+  "include": ["./server"],
+  "references": [
+    { "path": "./shared" }
+  ]
 }
