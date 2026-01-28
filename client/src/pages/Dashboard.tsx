@@ -58,14 +58,32 @@ export default function Dashboard() {
 
   const { data: syncStatus = [] } = useQuery({
     queryKey: ['/api/sync/status'],
+    onError: (error) => {
+      console.error('Error fetching sync status:', error);
+    },
+    onSuccess: (data) => {
+      console.log('Sync status fetched successfully:', data);
+    },
   });
 
   const { data: purchaseOrders = [] } = useQuery({
     queryKey: ['/api/orders'],
+    onError: (error) => {
+      console.error('Error fetching purchase orders:', error);
+    },
+    onSuccess: (data) => {
+      console.log('Purchase orders fetched successfully:', data);
+    },
   });
 
   const { data: funnels = [] } = useQuery({
     queryKey: ['/api/funnels'],
+    onError: (error) => {
+      console.error('Error fetching funnels:', error);
+    },
+    onSuccess: (data) => {
+      console.log('Funnels fetched successfully:', data);
+    },
   });
 
   const handleSync = async () => {
@@ -186,8 +204,8 @@ export default function Dashboard() {
                       id="colorMensajes"
                       x1="0"
                       y1="0"
-                      x2="0"
                       y2="1"
+                      x2="0"
                     >
                       <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
                       <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
