@@ -1,3 +1,4 @@
+import { OpenAI } from "openai";
 import type { Express, Request, Response } from "express";
 import { chatStorage } from "./storage";
 
@@ -114,4 +115,3 @@ export function registerChatRoutes(app: Express): void {
     }
   });
 }
-
