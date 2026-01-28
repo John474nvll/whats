@@ -115,7 +115,7 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 4002,
+    port: 5000,
     allowedHosts: true,
     proxy: {
       '/api': {
