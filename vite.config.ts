@@ -123,8 +123,5 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-    hmr: {
-      port: 4003,
-    },
   },
 });
