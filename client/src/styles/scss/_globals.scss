@@ -1,7 +1,7 @@
 // client/src/styles/scss/_globals.scss
 
-@import 'variables';
-@import 'mixins';
+@use 'variables.scss';
+@use 'mixins.scss';
 
 body {
   font-family: 'Roboto', sans-serif;
