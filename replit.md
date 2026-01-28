@@ -6,9 +6,35 @@ SocialHub v11.0 es la plataforma definitiva de CRM y gestión de redes sociales 
 ## User Preferences
 Desarrollo iterativo con entrega funcional incremental. Documentación clara y código siguiendo mejores prácticas modernas.
 
-## Recent Changes (January 26, 2026)
+## Recent Changes (January 28, 2026)
 
-### Upgrade to v11 from GitHub
+### Funnels de Ventas (Nuevo)
+- Página completa de gestión de embudos de conversión
+- 4 tipos de funnels: Ventas, Leads, Webinar, Producto
+- CRUD completo con etapas personalizables
+- Estadísticas: total, activos, visitantes, ingresos
+- Funciones: duplicar, pausar/activar, eliminar
+
+### Voz & Twilio Mejorado
+- Panel de llamadas con marcador numérico integrado
+- Configuración de Twilio (Account SID, Auth Token) desde UI
+- Integración Retell AI con gestión de agentes IA
+- Historial de llamadas con duración y estado
+- Pestañas: Marcador, Números, Agentes IA, Historial
+
+### Órdenes de Compra
+- Sistema completo de gestión de pedidos
+- Estados: pendiente, aprobada, en_proceso, completada, cancelada
+- Filtros por estado y búsqueda
+- Soporte dark/light completo
+
+### Base de Datos Ampliada
+- funnels: embudos de ventas con etapas JSON
+- voiceConfigs: configuración Twilio/Retell
+- voiceAgents: agentes de IA para llamadas
+- callLogs: registro de llamadas
+
+### Upgrade to v11 from GitHub (Jan 26)
 - Imported full v11 branch from https://github.com/John474nvll/whats.git
 - Enhanced navigation with MARKETING and PROYECTOS quick access
 - Improved all modules with better functionality and design
