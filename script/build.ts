@@ -23,8 +23,8 @@ async function buildApp() {
 
     // Build server
     await new Promise((resolve, reject) => {
-      const tscProcess = exec(
-        'tsc --project tsconfig.server.json',
+      const esbuildProcess = exec(
+        'esbuild server/index.ts --bundle --platform=node --outfile=dist/index.cjs --format=cjs',
         { cwd: root },
         (error, stdout, stderr) => {
           if (error) {
