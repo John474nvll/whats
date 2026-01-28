@@ -5,9 +5,9 @@ const WA_BUSINESS_ACCOUNT_ID = process.env.WA_BUSINESS_ACCOUNT_ID || "";
 const WA_ACCESS_TOKEN = process.env.WA_ACCESS_TOKEN || process.env.META_ACCESS_TOKEN || "";
 const WA_WEBHOOK_VERIFY_TOKEN = process.env.WA_WEBHOOK_VERIFY_TOKEN || "socialhub_verify_token";
 
-let whatsappClient: WhatsApp | null = null;
+let whatsappClient: any = null;
 
-export function initWhatsApp(): WhatsApp | null {
+export function initWhatsApp(): any {
   if (!WA_PHONE_NUMBER_ID || !WA_ACCESS_TOKEN) {
     console.log("WhatsApp SDK not configured - missing credentials");
     return null;
@@ -23,7 +23,7 @@ export function initWhatsApp(): WhatsApp | null {
   }
 }
 
-export function getWhatsAppClient(): WhatsApp | null {
+export function getWhatsAppClient(): any {
   return whatsappClient;
 }
 
