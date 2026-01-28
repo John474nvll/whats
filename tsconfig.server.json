@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "es2020",
+    "module": "Node16",
     "outDir": "./dist",
-    "moduleResolution": "node16"
+    "moduleResolution": "Node16"
   },
   "include": ["./server"]
 }
