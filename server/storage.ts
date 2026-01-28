@@ -258,6 +258,75 @@ export class DatabaseStorage implements IStorage {
   async deletePurchaseOrder(id: number): Promise<void> {
     await db.delete(purchaseOrders).where(eq(purchaseOrders.id, id));
   }
+
+  // Funnels
+  async getFunnels(): Promise<Funnel[]> {
+    return await db.select().from(funnels).orderBy(desc(funnels.createdAt));
+  }
+
+  async getFunnel(id: number): Promise<Funnel | undefined> {
+    const [funnel] = await db.select().from(funnels).where(eq(funnels.id, id));
+    return funnel;
+  }
+
+  async createFunnel(insertFunnel: InsertFunnel): Promise<Funnel> {
+    const [funnel] = await db.insert(funnels).values(insertFunnel).returning();
+    return funnel;
+  }
+
+  async updateFunnel(id: number, update: Partial<InsertFunnel>): Promise<Funnel> {
+    const [funnel] = await db.update(funnels)
+      .set({ ...update, updatedAt: new Date() })
+      .where(eq(funnels.id, id))
+      .returning();
+    return funnel;
+  }
+
+  async deleteFunnel(id: number): Promise<void> {
+    await db.delete(funnels).where(eq(funnels.id, id));
+  }
+
+  // Voice Configs
+  async getVoiceConfig(provider: string): Promise<VoiceConfig | undefined> {
+    const [config] = await db.select().from(voiceConfigs).where(eq(voiceConfigs.provider, provider));
+    return config;
+  }
+
+  async upsertVoiceConfig(provider: string, update: Partial<InsertVoiceConfig>): Promise<VoiceConfig> {
+    const existing = await this.getVoiceConfig(provider);
+    if (existing) {
+      const [config] = await db.update(voiceConfigs)
+        .set({ ...update, updatedAt: new Date() })
+        .where(eq(voiceConfigs.provider, provider))
+        .returning();
+      return config;
+    } else {
+      const [config] = await db.insert(voiceConfigs)
+        .values({ provider, ...update })
+        .returning();
+      return config;
+    }
+  }
+
+  // Voice Agents
+  async getVoiceAgents(): Promise<VoiceAgent[]> {
+    return await db.select().from(voiceAgents).orderBy(desc(voiceAgents.createdAt));
+  }
+
+  async createVoiceAgent(agent: InsertVoiceAgent): Promise<VoiceAgent> {
+    const [result] = await db.insert(voiceAgents).values(agent).returning();
+    return result;
+  }
+
+  // Call Logs
+  async getCallLogs(): Promise<CallLog[]> {
+    return await db.select().from(callLogs).orderBy(desc(callLogs.createdAt));
+  }
+
+  async createCallLog(log: InsertCallLog): Promise<CallLog> {
+    const [result] = await db.insert(callLogs).values(log).returning();
+    return result;
+  }
 }
 
 export const storage = new DatabaseStorage();
