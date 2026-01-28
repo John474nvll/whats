@@ -74,6 +74,27 @@ export const customers = pgTable('customers', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+export const corporateClients = pgTable('corporate_clients', {
+  id: serial('id').primaryKey(),
+  companyName: text('company_name').notNull(),
+  contactPerson: text('contact_person'),
+  vatNumber: text('vat_number'),
+  industry: text('industry'),
+  notes: text('notes'),
+  customerId: integer('customer_id').references(() => customers.id),
+});
+
+export const calendarEvents = pgTable('calendar_events', {
+  id: serial('id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description'),
+  startTime: timestamp('start_time').notNull(),
+  endTime: timestamp('end_time').notNull(),
+  customerId: integer('customer_id').references(() => customers.id),
+  userId: integer('user_id').references(() => users.id),
+});
+
+
 export const deals = pgTable('deals', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
@@ -166,6 +187,9 @@ export const purchaseOrders = pgTable('purchase_orders', {
   paymentMethod: text('payment_method'),
   paymentStatus: text('payment_status').default('pendiente'), // 'pendiente', 'pagado', 'reembolsado'
   items: jsonb('items'), // Array of order items
+  trackingNumber: text('tracking_number'),
+  shippingProvider: text('shipping_provider'),
+  estimatedDeliveryDate: date('estimated_delivery_date'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -284,10 +308,33 @@ export const usersRelations = relations(users, ({ many }) => ({
   deals: many(deals),
 }));
 
-export const customersRelations = relations(customers, ({ many }) => ({
+export const customersRelations = relations(customers, ({ many, one }) => ({
   deals: many(deals),
   tasks: many(tasks),
+  corporateClient: one(corporateClients, {
+    fields: [customers.id],
+    references: [corporateClients.customerId],
+  }),
 }));
+
+export const corporateClientsRelations = relations(corporateClients, ({ one }) => ({
+  customer: one(customers, {
+    fields: [corporateClients.customerId],
+    references: [customers.id],
+  }),
+}));
+
+export const calendarEventsRelations = relations(calendarEvents, ({ one }) => ({
+  customer: one(customers, {
+    fields: [calendarEvents.customerId],
+    references: [customers.id],
+  }),
+  user: one(users, {
+    fields: [calendarEvents.userId],
+    references: [users.id],
+  }),
+}));
+
 
 export const dealsRelations = relations(deals, ({ one, many }) => ({
   customer: one(customers, {
@@ -362,6 +409,15 @@ export const insertCustomerSchema = createInsertSchema(customers).omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export const insertCorporateClientSchema = createInsertSchema(corporateClients).omit({
+  id: true,
+});
+
+export const insertCalendarEventSchema = createInsertSchema(calendarEvents).omit({
+  id: true,
+});
+
 export const insertDealSchema = createInsertSchema(deals).omit({
   id: true,
   createdAt: true,
@@ -448,6 +504,12 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 
 export type Customer = typeof customers.$inferSelect;
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
+
+export type CorporateClient = typeof corporateClients.$inferSelect;
+export type InsertCorporateClient = z.infer<typeof insertCorporateClientSchema>;
+
+export type CalendarEvent = typeof calendarEvents.$inferSelect;
+export type InsertCalendarEvent = z.infer<typeof insertCalendarEventSchema>;
 
 export type Deal = typeof deals.$inferSelect;
 export type InsertDeal = z.infer<typeof insertDealSchema>;
