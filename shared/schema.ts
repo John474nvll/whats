@@ -6,6 +6,7 @@ import {
   boolean,
   timestamp,
   jsonb,
+  date,
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
@@ -71,6 +72,30 @@ export const customers = pgTable('customers', {
   tags: text('tags'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const deals = pgTable('deals', {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    value: integer('value').notNull(),
+    stage: text('stage').notNull(), // e.g., 'lead', 'qualified', 'proposal', 'negotiation', 'won', 'lost'
+    customerId: integer('customer_id').references(() => customers.id),
+    assignedTo: integer('assigned_to').references(() => users.id),
+    closingDate: date('closing_date'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const tasks = pgTable('tasks', {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    status: text('status').default('pending').notNull(), // 'pending', 'completed'
+    dueDate: date('due_date'),
+    assignedTo: integer('assigned_to').references(() => users.id),
+    customerId: integer('customer_id').references(() => customers.id),
+    dealId: integer('deal_id').references(() => deals.id),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const campaigns = pgTable('campaigns', {
@@ -254,6 +279,43 @@ export const syncLogs = pgTable('sync_logs', {
 
 // === RELATIONS ===
 
+export const usersRelations = relations(users, ({ many }) => ({
+    tasks: many(tasks),
+    deals: many(deals),
+}));
+
+export const customersRelations = relations(customers, ({ many }) => ({
+    deals: many(deals),
+    tasks: many(tasks),
+}));
+
+export const dealsRelations = relations(deals, ({ one, many }) => ({
+    customer: one(customers, {
+        fields: [deals.customerId],
+        references: [customers.id],
+    }),
+    assignedTo: one(users, {
+        fields: [deals.assignedTo],
+        references: [users.id],
+    }),
+    tasks: many(tasks),
+}));
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+    assignedTo: one(users, {
+        fields: [tasks.assignedTo],
+        references: [users.id],
+    }),
+    customer: one(customers, {
+        fields: [tasks.customerId],
+        references: [customers.id],
+    }),
+    deal: one(deals, {
+        fields: [tasks.dealId],
+        references: [deals.id],
+    }),
+}));
+
 export const conversationsRelations = relations(
   conversations,
   ({ one, many }) => ({
@@ -296,6 +358,16 @@ export const insertMessageSchema = createInsertSchema(messages).omit({
   timestamp: true,
 });
 export const insertCustomerSchema = createInsertSchema(customers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const insertDealSchema = createInsertSchema(deals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export const insertTaskSchema = createInsertSchema(tasks).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -376,6 +448,12 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 
 export type Customer = typeof customers.$inferSelect;
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>;
+
+export type Deal = typeof deals.$inferSelect;
+export type InsertDeal = z.infer<typeof insertDealSchema>;
+
+export type Task = typeof tasks.$inferSelect;
+export type InsertTask = z.infer<typeof insertTaskSchema>;
 
 export type Campaign = typeof campaigns.$inferSelect;
 export type InsertCampaign = z.infer<typeof insertCampaignSchema>;
