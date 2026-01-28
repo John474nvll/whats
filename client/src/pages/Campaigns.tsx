@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle, Activity, Loader2, Zap, Phone, LayoutDashboard, Users } from "lucide-react";
+import { Plus, Trash2, Megaphone, Send, Sparkles, Instagram, Facebook, MessageCircle, Activity, Loader2, Zap, Phone, LayoutDashboard, Users, Smartphone } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { Campaign, SocialAccount } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -22,6 +22,8 @@ export default function Campaigns() {
 
   const [selectedAccounts, setSelectedAccounts] = useState<number[]>([]);
   const [platform, setPlatform] = useState<string>("all");
+  const [bulkContent, setBulkContent] = useState("");
+  const [bulkPhones, setBulkPhones] = useState("");
 
   const createCampaign = useMutation({
     mutationFn: async (data: any) => {
@@ -38,6 +40,28 @@ export default function Campaigns() {
       const contentArea = document.getElementById('campaign-content') as HTMLTextAreaElement;
       if (contentArea) contentArea.value = "";
     },
+  });
+
+  const bulkSendMutation = useMutation({
+    mutationFn: async () => {
+      const phoneList = bulkPhones.split(",").map(p => p.trim()).filter(p => p);
+      if (phoneList.length === 0 || !bulkContent) {
+        throw new Error("Contenido y teléfonos requeridos");
+      }
+      return apiRequest("POST", "/api/whatsapp/bulk-send", {
+        content: bulkContent,
+        phoneNumbers: phoneList
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Envío Masivo", description: "Campaña de WhatsApp iniciada correctamente" });
+      setBulkPhones("");
+      setBulkContent("");
+      queryClient.invalidateQueries({ queryKey: ["/api/sync/status"] });
+    },
+    onError: (e: any) => {
+      toast({ title: "Error", description: e.message, variant: "destructive" });
+    }
   });
 
   const deleteCampaign = useMutation({
@@ -59,11 +83,11 @@ export default function Campaigns() {
   );
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl sm:text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(34,197,94,0.1)]">Marketing<span className="text-kiwi">Studio</span></h1>
-          <p className="text-slate-400 font-bold text-lg sm:text-xl tracking-tight">Centro de Orquestación y WhatsApp Business v3.0</p>
+          <p className="text-slate-400 font-bold text-lg sm:text-xl tracking-tight">Centro de Orquestación y WhatsApp Business v12.0</p>
         </div>
       </div>
 
@@ -73,7 +97,7 @@ export default function Campaigns() {
             <Megaphone className="w-4 h-4 mr-2" /> Campañas
           </TabsTrigger>
           <TabsTrigger value="whatsapp" className="rounded-xl data-[state=active]:bg-kiwi data-[state=active]:text-black font-bold">
-            <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Business
+            <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Masivo
           </TabsTrigger>
           <TabsTrigger value="automation" className="rounded-xl data-[state=active]:bg-kiwi data-[state=active]:text-black font-bold">
             <Zap className="w-4 h-4 mr-2" /> Automatización
@@ -220,47 +244,77 @@ export default function Campaigns() {
         </TabsContent>
 
         <TabsContent value="whatsapp" className="space-y-6 outline-none">
-          <Card className="rounded-[2.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl p-8">
-            <div className="flex flex-col items-center text-center space-y-6 max-w-2xl mx-auto">
-              <div className="w-20 h-20 rounded-3xl bg-emerald-500 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="rounded-[2.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl p-8">
+              <CardHeader className="p-0 pb-6">
+                <CardTitle className="text-2xl font-black flex items-center gap-3 text-white">
+                  <Smartphone className="h-6 w-6 text-kiwi" />
+                  Envío Masivo Directo
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 space-y-6">
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-500">Números (separados por coma)</label>
+                  <Textarea 
+                    placeholder="Ej: +54911223344, +54911556677..."
+                    value={bulkPhones}
+                    onChange={(e) => setBulkPhones(e.target.value)}
+                    className="bg-white/5 border-white/10 rounded-2xl min-h-[100px] p-4 focus:ring-kiwi/30"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-500">Mensaje</label>
+                  <Textarea 
+                    placeholder="Escribe el mensaje masivo..."
+                    value={bulkContent}
+                    onChange={(e) => setBulkContent(e.target.value)}
+                    className="bg-white/5 border-white/10 rounded-2xl min-h-[150px] p-4 focus:ring-kiwi/30"
+                  />
+                </div>
+                <Button 
+                  onClick={() => bulkSendMutation.mutate()}
+                  disabled={bulkSendMutation.isPending}
+                  className="w-full h-14 rounded-2xl bg-kiwi text-black font-black text-lg hover:bg-kiwi/90 shadow-lg shadow-kiwi/20"
+                >
+                  {bulkSendMutation.isPending ? <Loader2 className="h-6 w-6 animate-spin" /> : (
+                    <>
+                      Iniciar Envío Masivo
+                      <Send className="ml-2 h-5 w-5" />
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-[2.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl p-8 text-center flex flex-col items-center justify-center">
+              <div className="w-20 h-20 rounded-3xl bg-emerald-500 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.3)] mb-6">
                 <MessageCircle className="w-10 h-10 text-white" />
               </div>
-              <div className="space-y-2">
-                <h2 className="text-3xl font-black text-white">WhatsApp Business Central</h2>
-                <p className="text-slate-400 font-medium">Gestiona tu comunicación empresarial masiva y automatizada con la API oficial.</p>
-              </div>
+              <h2 className="text-3xl font-black text-white mb-2">WhatsApp Business API</h2>
+              <p className="text-slate-400 font-medium mb-8">Estado operativo del canal oficial Softgan.</p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full pt-4">
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-2">
-                  <Activity className="w-6 h-6 text-kiwi mx-auto" />
+              <div className="grid grid-cols-2 gap-4 w-full">
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5">
                   <p className="text-2xl font-black text-white">98%</p>
-                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-500">Entrega</p>
+                  <p className="text-[10px] font-black uppercase text-slate-500">Entrega</p>
                 </div>
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-2">
-                  <Users className="w-6 h-6 text-cyan-neon mx-auto" />
+                <div className="p-4 rounded-3xl bg-white/5 border border-white/5">
                   <p className="text-2xl font-black text-white">1.2k</p>
-                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-500">Contactos</p>
-                </div>
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-2">
-                  <Phone className="w-6 h-6 text-raspberry mx-auto" />
-                  <p className="text-2xl font-black text-white">15</p>
-                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-500">Plantillas</p>
+                  <p className="text-[10px] font-black uppercase text-slate-500">Contactos</p>
                 </div>
               </div>
-
-              <Button className="w-full h-16 rounded-2xl bg-emerald-500 text-white font-black text-xl hover:bg-emerald-600 shadow-xl transition-all">
-                Configurar Twilio / WhatsApp API
-              </Button>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="automation" className="outline-none">
-          <Card className="rounded-[2.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl p-8 text-center space-y-4">
-            <Zap className="w-12 h-12 text-kiwi mx-auto opacity-20" />
-            <h3 className="text-xl font-black text-white">Automatizaciones de Marketing</h3>
-            <p className="text-slate-400">Configura disparadores automáticos basados en el comportamiento de tus leads en CRM.</p>
-            <Button variant="outline" className="rounded-xl border-white/10 hover:bg-white/5">Explorar Recetas</Button>
+          <Card className="rounded-[2.5rem] border-white/5 bg-slate-900/40 backdrop-blur-3xl p-12 text-center space-y-6">
+            <Zap className="w-16 h-16 text-kiwi mx-auto opacity-20" />
+            <div className="space-y-2">
+              <h3 className="text-2xl font-black text-white">Automatizaciones de Marketing</h3>
+              <p className="text-slate-400 max-w-md mx-auto">Configura disparadores automáticos basados en el comportamiento de tus leads en CRM.</p>
+            </div>
+            <Button variant="outline" className="rounded-2xl border-white/10 hover:bg-white/5 px-8 h-12 font-bold">Explorar Recetas v12</Button>
           </Card>
         </TabsContent>
       </Tabs>

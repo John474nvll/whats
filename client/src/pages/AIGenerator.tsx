@@ -30,8 +30,28 @@ export default function AIGenerator() {
   const [contentType, setContentType] = useState<ContentType>("post");
   const [platform, setPlatform] = useState<Platform>("multi");
   const [topic, setTopic] = useState("");
-  const [generated, setGenerated] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const sendToWhatsApp = async () => {
+    if (!generated || !phoneNumber) {
+      toast({ title: "Error", description: "Genera contenido e ingresa un número de teléfono" });
+      return;
+    }
+
+    setSending(true);
+    try {
+      await apiRequest("POST", "/api/whatsapp/send-ia", {
+        content: generated,
+        phoneNumber
+      });
+      toast({ title: "Enviado", description: "Mensaje enviado por WhatsApp correctamente" });
+    } catch (e) {
+      toast({ title: "Error", description: "No se pudo enviar el mensaje", variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
+  };
   const [history, setHistory] = useState<GenerationHistory[]>([]);
   const [imageUrl, setImageUrl] = useState("");
   const { toast } = useToast();
@@ -64,38 +84,55 @@ export default function AIGenerator() {
 
     try {
       if (contentType === "image") {
-        const res = await apiRequest("POST", "/api/ai/generate-image", { prompt: topic });
+        const res = await apiRequest("POST", "/api/generate-image", { prompt: topic });
         const data = await res.json();
-        if (data.url) {
-          setImageUrl(data.url);
+        if (data.url || data.b64_json) {
+          setImageUrl(data.url || `data:image/png;base64,${data.b64_json}`);
           toast({ title: "Imagen generada", description: "Tu imagen ha sido creada con exito" });
         } else {
-          throw new Error("No image URL returned");
+          throw new Error("No image data returned");
         }
       } else {
-        const res = await apiRequest("POST", "/api/ai/generate-smart-content", {
+        const res = await apiRequest("POST", `/api/conversations/1/messages`, {
+          content: `Genera un ${contentType} para ${platform} sobre: ${topic}. Idioma: es.`,
+        });
+        
+        // Handle streaming response
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error("No reader");
+        
+        let fullContent = "";
+        const decoder = new TextDecoder();
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value);
+          const lines = chunk.split("\n");
+          
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.content) {
+                  fullContent += data.content;
+                  setGenerated(fullContent);
+                }
+              } catch (e) {}
+            }
+          }
+        }
+        
+        setHistory(prev => [{
+          id: Date.now(),
           type: contentType,
           topic,
-          platform: platform !== "multi" ? platform : undefined,
-          includeEmojis: true,
-          language: "es"
-        });
-        const data = await res.json();
+          result: fullContent,
+          timestamp: new Date()
+        }, ...prev].slice(0, 10));
         
-        if (data.generated || data.content) {
-          const content = data.generated || data.content;
-          setGenerated(content);
-          
-          setHistory(prev => [{
-            id: Date.now(),
-            type: contentType,
-            topic,
-            result: content,
-            timestamp: new Date()
-          }, ...prev].slice(0, 10));
-          
-          toast({ title: "Contenido generado", description: "Tu contenido esta listo para usar" });
-        }
+        toast({ title: "Contenido generado", description: "Tu contenido esta listo para usar" });
       }
     } catch (error) {
       console.error("Generation error:", error);
@@ -252,6 +289,29 @@ export default function AIGenerator() {
                       </>
                     )}
                   </Button>
+
+                  {generated && (
+                    <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase text-slate-500">Enviar por WhatsApp</label>
+                        <div className="flex gap-2">
+                          <Input 
+                            placeholder="Ej: +549..." 
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            className="bg-slate-800 border-white/10 rounded-xl h-10"
+                          />
+                          <Button 
+                            onClick={sendToWhatsApp}
+                            disabled={sending}
+                            className="bg-kiwi hover:bg-kiwi/90 text-black font-bold px-4 rounded-xl"
+                          >
+                            {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {contentType !== "image" && generated && (
                     <Button

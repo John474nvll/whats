@@ -3,6 +3,7 @@ import { pgTable, text, serial, integer, boolean, timestamp, jsonb } from "drizz
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
+export * from "./models/chat";
 
 // === TABLE DEFINITIONS ===
 
