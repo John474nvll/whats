@@ -2,12 +2,23 @@ import { OpenAI } from 'openai';
 import type { Express, Request, Response } from 'express';
 import { chatStorage } from './storage';
 
-const openai = new OpenAI({
-  apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-  baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-});
+let openai: OpenAI | undefined;
+
+// Initialize OpenAI only if the API key is available
+if (process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+    baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+  });
+} else {
+  console.warn(
+    'OpenAI API key is not configured. AI chat routes will be disabled.',
+  );
+}
 
 export function registerChatRoutes(app: Express): void {
+  // --- CHAT STORAGE ROUTES (available even without OpenAI) ---
+
   // Get all conversations
   app.get('/api/conversations', async (req: Request, res: Response) => {
     try {
@@ -61,10 +72,24 @@ export function registerChatRoutes(app: Express): void {
     }
   });
 
+  // --- OPENAI-POWERED ROUTES ---
+
+  // Guard middleware to check if OpenAI is available
+  const ensureOpenAI = (req: Request, res: Response, next: Function) => {
+    if (!openai) {
+      return res.status(503).json({
+        error: 'OpenAI integration is not configured on the server.',
+      });
+    }
+    next();
+  };
+
   // Send message and get AI response (streaming)
   app.post(
     '/api/conversations/:id/messages',
+    ensureOpenAI,
     async (req: Request, res: Response) => {
+      // This block will only execute if 'openai' is defined
       try {
         const conversationId = parseInt(req.params.id);
         const { content } = req.body;
@@ -86,11 +111,10 @@ export function registerChatRoutes(app: Express): void {
         res.setHeader('Connection', 'keep-alive');
 
         // Stream response from OpenAI
-        const stream = await openai.chat.completions.create({
-          model: 'gpt-5.1',
+        const stream = await openai!.chat.completions.create({
+          model: 'gpt-4-turbo',
           messages: chatMessages,
           stream: true,
-          max_completion_tokens: 2048,
         });
 
         let fullResponse = '';
@@ -114,7 +138,6 @@ export function registerChatRoutes(app: Express): void {
         res.end();
       } catch (error) {
         console.error('Error sending message:', error);
-        // Check if headers already sent (SSE streaming started)
         if (res.headersSent) {
           res.write(
             `data: ${JSON.stringify({ error: 'Failed to send message' })}\n\n`,
