@@ -118,8 +118,8 @@ export default function Dashboard() {
           <CardContent>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={activityData}>
-                  <defs>
+                  <AreaChart data={activityData}>
+                    <defs>
                     <linearGradient id="colorMensajes" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
                       <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
@@ -132,7 +132,7 @@ export default function Dashboard() {
                     contentStyle={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px' }}
                     labelStyle={{ color: '#fff' }}
                   />
-                  <Area type="monotone" dataKey="mensajes" stroke="#22c55e" fillOpacity={1} fill="url(#colorMensajes)" strokeWidth={3} />
+                  <Area type="monotone" dataKey="mensajes" stroke="#22c55e" fillOpacity={1} fill="url(#colorMensajes)" strokeWidth={3} isAnimationActive={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -200,7 +200,7 @@ export default function Dashboard() {
             <div className="h-[100px]">
               <ResponsiveContainer width="100%" height="100%">
                 <ReBarChart data={pipelineData}>
-                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]} isAnimationActive={false}>
                     {pipelineData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}

@@ -346,7 +346,7 @@ export async function registerRoutes(
       const widgetData = {
         ...req.body,
         config: req.body.config || {}
-      };
+      } as any;
       const widget = await db.insert(schema.widgets).values(widgetData).returning();
       res.status(201).json(widget[0]);
     } catch (e) {
