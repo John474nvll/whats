@@ -7,6 +7,7 @@ import { storage } from './storage';
 import { api } from '@shared/routes';
 import twilioRoutes from './routes/twilio';
 import aiRoutes from './routes/ai';
+import pythonRoutes from './routes/python';
 import { desc, eq } from 'drizzle-orm';
 
 import { registerChatRoutes } from './replit_integrations/chat';
@@ -23,6 +24,7 @@ export async function registerRoutes(
   // === Register route modules ===
   app.use('/api', aiRoutes);
   app.use('/api', twilioRoutes);
+  app.use('/api/python', pythonRoutes);
 
   // === Support Tickets API ===
   app.get('/api/tickets', async (_req, res) => {
