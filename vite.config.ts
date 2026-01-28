@@ -124,7 +124,7 @@ export default defineConfig({
       },
     },
     hmr: {
-      clientPort: 4003,
+      port: 4003,
     },
   },
 });
