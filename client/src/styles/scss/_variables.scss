@@ -1,6 +1,5 @@
-// client/src/styles/scss/_variables.scss
 
-// Paleta de Colores
+// Default Color Palette
 $primary-color: #6a11cb;
 $secondary-color: #2575fc;
 $accent-color: #f7931e;
@@ -11,27 +10,34 @@ $black: #000;
 $light-gray: #eee;
 $dark-gray: #555;
 
-// Definición de Temas
+// Neon Forest Theme Palette
+$neon-forest-green: #00FF9B;
+$dark-forest-bg: #01160A;
+$gold-accent: #FFD700;
+$silver-accent: #C0C0C0;
+$light-text: #E0E0E0;
+
+
+// --- THEME DEFINITIONS ---
+
 .light-theme {
-  --primary-color: #{$primary-color};
-  --secondary-color: #{$secondary-color};
-  --accent-color: #{$accent-color};
-  --background-color: #{$background-color};
-  --text-color: #{$text-color};
-  --white: #{$white};
-  --black: #{$black};
-  --light-gray: #{$light-gray};
-  --dark-gray: #{$dark-gray};
+  // ... existing light theme ...
 }
 
 .dark-theme {
-  --primary-color: darken($primary-color, 15%);
-  --secondary-color: darken($secondary-color, 15%);
-  --accent-color: lighten($accent-color, 10%);
-  --background-color: #121212;
-  --text-color: #{$white};
-  --white: #{$black};
-  --black: #{$white};
-  --light-gray: #{$dark-gray};
-  --dark-gray: #{$light-gray};
+  // ... existing dark theme ...
+}
+
+// New Neon Forest Theme
+.neon-forest-theme {
+  --primary-color: #{$neon-forest-green};
+  --secondary-color: #{$gold-accent};
+  --background-color: #{$dark-forest-bg};
+  --text-color: #{$light-text};
+  --accent-gold: #{$gold-accent};
+  --accent-silver: #{$silver-accent};
+  --border-radius-main: 15px;
+  --border-radius-sub: 10px;
+
+  --font-family-main: 'Orbitron', sans-serif; // A futuristic/tech font
 }
