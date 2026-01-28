@@ -1,10 +1,13 @@
-# SocialHub v11.0 - CRM & Redes Sociales (Softgam Edition)
+# SoftganHub v11.0 - CRM & Redes Sociales
 
 ## Overview
-SocialHub v11.0 es la plataforma definitiva de CRM y gestión de redes sociales para el mercado colombiano. Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, y una estructura PWA optimizada para movilidad total.
+SoftganHub v11.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, bot de ventas inteligente, y una estructura PWA optimizada para vendedores en movilidad.
 
 ## User Preferences
-Desarrollo iterativo con entrega funcional incremental. Documentación clara y código siguiendo mejores prácticas modernas.
+- Cliente: Softgan (softgan.com)
+- Idioma: Todo en español
+- Desarrollo iterativo con entrega funcional incremental
+- Documentación clara y código siguiendo mejores prácticas modernas
 
 ## Recent Changes (January 28, 2026)
 

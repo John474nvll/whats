@@ -90,7 +90,7 @@ const channelData = [
 
 export default function Dashboard() {
   const { toast } = useToast();
-  const { data: widgets, isLoading: isLoadingWidgets } = useQuery<Widget[]>({
+  const { data: widgets, isLoading: isLoadingWidgets } = useQuery<any[]>({
     queryKey: ["/api/widgets"],
   });
   const { data: accounts = [], isLoading: isLoadingAccounts } = useQuery<SocialAccount[]>({
@@ -118,7 +118,7 @@ export default function Dashboard() {
   const { data: tickets = [] } = useQuery<Ticket[]>({
     queryKey: ["/api/crm/tickets"],
   });
-  const { data: opportunities = [] } = useQuery<Opportunity[]>({
+  const { data: opportunities = [] } = useQuery<any[]>({
     queryKey: ["/api/crm/opportunities"],
   });
 
