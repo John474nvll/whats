@@ -1,15 +1,53 @@
-# SoftganHub v11.0 - CRM & Redes Sociales
+# SoftganHub v12.0 - CRM & Redes Sociales
 
 ## Overview
-SoftganHub v11.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, bot de ventas inteligente, y una estructura PWA optimizada para vendedores en movilidad.
+SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, bot de ventas inteligente, widgets dinámicos, y una estructura PWA optimizada para vendedores en movilidad con soporte v12 mejorado.
 
-## User Preferences
-- Cliente: Softgan (softgan.com)
-- Idioma: Todo en español
-- Desarrollo iterativo con entrega funcional incremental
-- Documentación clara y código siguiendo mejores prácticas modernas
+## Recent Changes (January 28, 2026) - v12 Update
 
-## Recent Changes (January 28, 2026)
+### Sincronización & Widgets (Nuevo)
+- Sistema de widgets dinámicos para el dashboard (gráficos, estadísticas, IA)
+- Endpoints de sincronización con GitHub para actualizaciones de versión
+- Registro de logs de sincronización para auditoría
+
+### Grupos de Ventas (Nuevo)
+- Gestión de equipos comerciales con líderes y miembros
+- Seguimiento de objetivos y progreso en tiempo real
+- Dashboard de rendimiento grupal
+
+### UI/UX Refinado
+- Main container optimizado para scroll suave y visualización en tarjetas
+- Branding Softgan V12.0 aplicado en toda la interfaz
+- Traducción y compactación mobile-first completada
+
+### Funnels de Ventas (Nuevo)
+- Página completa de gestión de embudos de conversión
+- 4 tipos de funnels: Ventas, Leads, Webinar, Producto
+- CRUD completo con etapas personalizables
+- Estadísticas: total, activos, visitantes, ingresos
+- Funciones: duplicar, pausar/activar, eliminar
+
+### Voz & Twilio Mejorado
+- Panel de llamadas con marcador numérico integrado
+- Configuración de Twilio (Account SID, Auth Token) desde UI
+- Integración Retell AI con gestión de agentes IA
+- Historial de llamadas con duración y estado
+- Pestañas: Marcador, Números, Agentes IA, Historial
+
+### Órdenes de Compra
+- Sistema completo de gestión de pedidos
+- Estados: pendiente, aprobada, en_proceso, completada, cancelada
+- Filtros por estado y búsqueda
+- Soporte dark/light completo
+
+### Base de Datos Ampliada
+- funnels: embudos de ventas con etapas JSON
+- voiceConfigs: configuración Twilio/Retell
+- voiceAgents: agentes de IA para llamadas
+- callLogs: registro de llamadas
+- widgets: widgets dinámicos para dashboard
+- sync_logs: registro de sincronización de versiones
+- sales_groups: gestión de equipos de ventas
 
 ### Funnels de Ventas (Nuevo)
 - Página completa de gestión de embudos de conversión

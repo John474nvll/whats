@@ -97,26 +97,26 @@ function AppContent() {
               
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1 mask-fade-right">
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/">Dash</Link>
+                  <Link href="/">Escritorio</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
                   <Link href="/platforms">Plat</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/ai-generator">AI</Link>
+                  <Link href="/ai-generator">IA</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/campaigns">Marketing</Link>
+                  <Link href="/campaigns">Campaña</Link>
                 </Button>
                 <Button variant="ghost" size="sm" className="rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 px-3 md:px-4 h-8" asChild>
-                  <Link href="/projects">Proyectos</Link>
+                  <Link href="/projects">Proy</Link>
                 </Button>
               </div>
 
               <div className="hidden lg:flex items-center gap-2">
                 <div className="h-4 w-px bg-white/10 mx-2" />
                 <Badge variant="outline" className="border-kiwi/30 text-kiwi bg-kiwi/5 font-black uppercase text-[9px] tracking-[0.15em] px-3 py-1 rounded-full whitespace-nowrap">
-                  V9.0 Softgan
+                  V12.0 Softgan
                 </Badge>
               </div>
             </div>
@@ -130,7 +130,7 @@ function AppContent() {
               <ThemeToggle />
             </div>
           </header>
-          <main className="flex-1 overflow-auto relative z-10 custom-scrollbar w-full">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 dark:bg-slate-950/20 p-4 md:p-6 lg:p-8 relative z-10 custom-scrollbar w-full">
             <Router />
           </main>
         </div>

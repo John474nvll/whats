@@ -343,10 +343,11 @@ export async function registerRoutes(
 
   app.post("/api/widgets", async (req, res) => {
     try {
-      const widget = await db.insert(schema.widgets).values({
+      const widgetData = {
         ...req.body,
         config: req.body.config || {}
-      }).returning();
+      };
+      const widget = await db.insert(schema.widgets).values(widgetData).returning();
       res.status(201).json(widget[0]);
     } catch (e) {
       res.status(400).json({ message: "Error al crear widget" });
