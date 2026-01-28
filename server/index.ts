@@ -38,6 +38,6 @@ setupRoutes(app, httpServer);
 //
 // Vite and server startup
 //
-ViteExpress.listen(app, 4002, () =>
-  console.log("Server is listening on port 4002...")
+ViteExpress.listen(app, 5000, () =>
+  console.log("Server is listening on port 5000...")
 );
