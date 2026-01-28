@@ -28,8 +28,9 @@ async function buildApp() {
         { cwd: root },
         (error, stdout, stderr) => {
           if (error) {
-            console.error('Server build failed:', error);
+            console.error('Server build failed:');
             console.error(stderr);
+            console.error(stdout);
             reject(error);
           } else {
             console.log(stdout);
