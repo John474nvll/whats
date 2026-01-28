@@ -1,8 +1,7 @@
 import { build } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { build as esbuild } from 'esbuild';
-import fs from 'fs';
+import { exec } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,17 +21,22 @@ async function buildApp() {
       }
     });
 
-    // Read package.json and parse it
-    const packageJson = JSON.parse(fs.readFileSync(path.resolve(root, 'package.json'), 'utf-8'));
-
     // Build server
-    await esbuild({
-      entryPoints: [path.resolve(root, 'server/index.ts')],
-      bundle: true,
-      platform: 'node',
-      outfile: path.resolve(root, 'dist/index.cjs'),
-      format: 'cjs',
-      external: Object.keys(packageJson.dependencies),
+    await new Promise((resolve, reject) => {
+      const tscProcess = exec(
+        'tsc --project tsconfig.server.json',
+        { cwd: root },
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error('Server build failed:', error);
+            console.error(stderr);
+            reject(error);
+          } else {
+            console.log(stdout);
+            resolve(undefined);
+          }
+        }
+      );
     });
 
     console.log('Build completed successfully!');
