@@ -1,10 +1,20 @@
-# SoftganHub v12.0 - CRM & Redes Sociales
+# SoftganHub v13.0 - CRM & Redes Sociales
 
 ## Overview
 
-SoftganHub v12.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-4o, bot de ventas inteligente, widgets dinámicos, y una estructura PWA optimizada para vendedores en movilidad con soporte v12 mejorado.
+SoftganHub v13.0 es la plataforma definitiva de CRM y gestión de redes sociales para Softgan (softgan.com). Integra capacidades de comunicación omnicanal en tiempo real (WhatsApp Business, Instagram, Facebook), automatización por IA con GPT-5.1, bot de ventas inteligente, widgets dinámicos, y una estructura PWA optimizada para vendedores en movilidad con soporte v13 mejorado.
 
-## Recent Changes (January 28, 2026) - v12 Update
+## Recent Changes (January 29, 2026) - v13 Update
+
+### Sincronización de Plataformas (Nuevo)
+- Implementación de vista de Plataformas sincronizada con v13.
+- Gestión de seguidores y engagement real para WhatsApp, Instagram y Facebook.
+- Conectores para Twitter, LinkedIn y YouTube listos para integración.
+
+### Generador IA & WhatsApp
+- Conectado generador IA real (GPT-5.1) para contenido y gpt-image-1 para imágenes.
+- Envío directo de contenido generado a WhatsApp.
+- Módulo de envío masivo (Bulk messaging) funcional.
 
 ### Sincronización & Widgets (Nuevo)
 
